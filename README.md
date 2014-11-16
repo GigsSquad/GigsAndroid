@@ -12,6 +12,11 @@ To co wiem na pewno to to że będziemy parsować stronę, [Przykład](http://ww
 * Zabawa z samym Androidem, okienka, przyciski, listy i inne
 * Google Maps API
 
+### Android 
+![Android lifecycle](http://developer.android.com/images/activity_lifecycle.png)
+
+[Więcej o lifecycle activity](http://developer.android.com/reference/android/app/Activity.html)
+
 ### Fajne linki
 
 [Instalacja pluginu do Eclipse](http://developer.android.com/…/installi…/installing-adt.html)
