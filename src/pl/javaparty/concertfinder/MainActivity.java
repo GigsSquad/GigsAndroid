@@ -4,9 +4,7 @@ import java.io.IOException;
 
 import pl.javaparty.jsoup.Concert;
 import pl.javaparty.jsoup.JsoupDownloader;
-import pl.javaparty.map.MapTest;
 import android.app.Activity;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -19,7 +17,7 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
-	Button downloadData, mapButton;
+	Button downloadData;
 	JsoupDownloader jsoupDownloader;
 	StringBuilder stringBuilder;
 	ConcertManager concertMgr;
@@ -34,7 +32,6 @@ public class MainActivity extends Activity {
 		downloadData = (Button) findViewById(R.id.downloadButton);
 		searchBox = (AutoCompleteTextView) findViewById(R.id.searchBox);
 		downloadText = (TextView) findViewById(R.id.downloadText);
-		mapButton = (Button) findViewById(R.id.mapButton);
 		
 		jsoupDownloader = new JsoupDownloader();
 		stringBuilder = new StringBuilder();
@@ -48,15 +45,7 @@ public class MainActivity extends Activity {
 				downloadText.setText(concertMgr.searchArtis(searchBox.getText().toString()));
 			}
 		});
-		
-		mapButton.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Intent mapActivity = new Intent(getApplicationContext(), MapTest.class);
-				startActivity(mapActivity);
-			}
-		});
+
 	}
 
 	private class DownloadTask extends AsyncTask<Void, Void, String> {

@@ -409,20 +409,18 @@ containing a value of this type.
         public static final int powered_by_google_light=0x7f020020;
     }
     public static final class id {
-        public static final int action_settings=0x7f0a001a;
+        public static final int action_settings=0x7f0a0018;
         public static final int book_now=0x7f0a000e;
         public static final int buyButton=0x7f0a000a;
         public static final int buy_now=0x7f0a000f;
         public static final int buy_with_google=0x7f0a0010;
         public static final int classic=0x7f0a0011;
-        public static final int downloadButton=0x7f0a0016;
-        public static final int downloadText=0x7f0a0018;
+        public static final int downloadButton=0x7f0a0015;
+        public static final int downloadText=0x7f0a0017;
         public static final int grayscale=0x7f0a0012;
         public static final int holo_dark=0x7f0a0005;
         public static final int holo_light=0x7f0a0006;
         public static final int hybrid=0x7f0a0000;
-        public static final int map=0x7f0a0019;
-        public static final int mapButton=0x7f0a0014;
         public static final int match_parent=0x7f0a000c;
         public static final int monochrome=0x7f0a0013;
         public static final int none=0x7f0a0001;
@@ -430,8 +428,8 @@ containing a value of this type.
         public static final int production=0x7f0a0007;
         public static final int sandbox=0x7f0a0008;
         public static final int satellite=0x7f0a0003;
-        public static final int scrollView1=0x7f0a0017;
-        public static final int searchBox=0x7f0a0015;
+        public static final int scrollView1=0x7f0a0016;
+        public static final int searchBox=0x7f0a0014;
         public static final int selectionDetails=0x7f0a000b;
         public static final int strict_sandbox=0x7f0a0009;
         public static final int terrain=0x7f0a0004;
@@ -442,7 +440,6 @@ containing a value of this type.
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
-        public static final int map_layout=0x7f030001;
     }
     public static final class menu {
         public static final int main=0x7f090000;
