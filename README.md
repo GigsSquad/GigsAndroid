@@ -33,6 +33,6 @@ To co wiem na pewno to to że będziemy parsować stronę, [Przykład](http://ww
 
 [SQLBrowser - do przeglądania baz danych](http://sqlitebrowser.org/)
 
-[Google Maps API Android](http://developer.android.com/google/play-services/maps.html)
+[Google Maps API Android - krok po kroku](https://developers.google.com/maps/documentation/android/start#getting_the_google_maps_android_api_v2)
 
 [Jak skonczymy](http://i.imgur.com/xgYL5Zc.gifv)
