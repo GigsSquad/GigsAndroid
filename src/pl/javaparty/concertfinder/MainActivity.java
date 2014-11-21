@@ -35,12 +35,12 @@ public class MainActivity extends Activity {
 		searchBox = (AutoCompleteTextView) findViewById(R.id.searchBox);
 		downloadText = (TextView) findViewById(R.id.downloadText);
 		mapButton = (Button) findViewById(R.id.mapButton);
-		
+
 		jsoupDownloader = new JsoupDownloader();
 		stringBuilder = new StringBuilder();
 		concertMgr = new ConcertManager();
 		new DownloadTask().execute();
-		
+
 		downloadData.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -48,15 +48,17 @@ public class MainActivity extends Activity {
 				downloadText.setText(concertMgr.searchArtis(searchBox.getText().toString()));
 			}
 		});
-		
+
 		mapButton.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				Intent mapActivity = new Intent(getApplicationContext(), MapTest.class);
 				startActivity(mapActivity);
+
 			}
 		});
+
 	}
 
 	private class DownloadTask extends AsyncTask<Void, Void, String> {
@@ -86,12 +88,12 @@ public class MainActivity extends Activity {
 		@Override
 		protected void onPostExecute(String result) { // zostanie wykonane po skoñczeniu doInBackground
 			super.onPostExecute(result);
-			downloadText.setText(stringBuilder.toString());			
-			
+			downloadText.setText(stringBuilder.toString());
+
 			String[] stockArr = new String[concertMgr.getArtists().size()];
 			stockArr = concertMgr.getArtists().toArray(stockArr);
-			
-			adapter = new ArrayAdapter<String>(MainActivity.this,android.R.layout.simple_dropdown_item_1line,stockArr);
+
+			adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_dropdown_item_1line, stockArr);
 
 			searchBox.setAdapter(adapter);
 			searchBox.setThreshold(1);
