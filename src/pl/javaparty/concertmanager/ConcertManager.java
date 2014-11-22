@@ -30,6 +30,20 @@ public class ConcertManager {
 		return artists;
 	}
 
+	public ArrayList<String> getConcerts(String artist)
+	{
+		ArrayList<String> list = new ArrayList<String>();
+		Iterator<Concert> iter = concerts.iterator();
+		while (iter.hasNext())
+		{
+			Concert c = iter.next();
+			if (c.getArtist().equals(artist))
+				list.add(c.getPlace() + " " + c.getDate());
+
+		}
+		return list;
+	}
+
 	public String searchArtis(String artist)
 	{
 		StringBuilder stringBuilder = new StringBuilder();
@@ -40,7 +54,7 @@ public class ConcertManager {
 			if (c.getArtist().equals(artist))
 				stringBuilder.append(c.getPlace() + " " + c.getDate() + "\n");
 		}
-		
+
 		return stringBuilder.toString();
 	}
 }

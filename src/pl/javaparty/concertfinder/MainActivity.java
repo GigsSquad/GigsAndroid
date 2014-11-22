@@ -13,6 +13,7 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,8 +24,9 @@ public class MainActivity extends Activity {
 	StringBuilder stringBuilder;
 	ConcertManager concertMgr;
 	AutoCompleteTextView searchBox;
-	ArrayAdapter<String> adapter;
-	TextView downloadText;
+	ArrayAdapter<String> adapter, adapterList;
+	ListView concertList;
+	TextView artistTextView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,19 +34,26 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main); // ustawiamy layout z "res > layouot > activity_main.xml"
 		downloadData = (Button) findViewById(R.id.downloadButton);
 		searchBox = (AutoCompleteTextView) findViewById(R.id.searchBox);
-		downloadText = (TextView) findViewById(R.id.downloadText);
-		
+		concertList = (ListView) findViewById(R.id.concertList);
+		artistTextView = (TextView) findViewById(R.id.artistName);
+
 		jsoupDownloader = new JsoupDownloader();
 		stringBuilder = new StringBuilder();
 		concertMgr = new ConcertManager();
+
 		new DownloadTask().execute();
-		
+
 		downloadData.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				downloadText.setText(searchBox.getText() + "\n\n" + concertMgr.searchArtis(searchBox.getText().toString()));
+
+				adapterList = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, concertMgr.getConcerts(searchBox.getText()
+						.toString()));
+				concertList.setAdapter(adapterList);
+				artistTextView.setText(searchBox.getText().toString());
 				searchBox.setText("");
+				
 			}
 		});
 	}
@@ -76,12 +85,11 @@ public class MainActivity extends Activity {
 		@Override
 		protected void onPostExecute(String result) { // zostanie wykonane po skoñczeniu doInBackground
 			super.onPostExecute(result);
-			downloadText.setText(stringBuilder.toString());			
-			
+
 			String[] stockArr = new String[concertMgr.getArtists().size()];
 			stockArr = concertMgr.getArtists().toArray(stockArr);
-			
-			adapter = new ArrayAdapter<String>(MainActivity.this,android.R.layout.simple_dropdown_item_1line,stockArr);
+
+			adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_dropdown_item_1line, stockArr);
 
 			searchBox.setAdapter(adapter);
 			searchBox.setThreshold(1);
