@@ -3,7 +3,6 @@ package pl.javaparty.concertmanager;
 
 public class Concert
 {
-	private int saasdfa;
 	public enum AgencyName {
 		GOAHEAD, INNE
 	}

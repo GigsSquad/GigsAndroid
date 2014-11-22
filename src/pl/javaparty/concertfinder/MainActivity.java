@@ -36,6 +36,7 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.activity_main); // ustawiamy layout z "res > layouot > activity_main.xml"
 		downloadData = (Button) findViewById(R.id.downloadButton);
 		searchBox = (AutoCompleteTextView) findViewById(R.id.searchBox);
