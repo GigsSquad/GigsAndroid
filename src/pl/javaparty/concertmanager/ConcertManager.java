@@ -1,9 +1,7 @@
-package pl.javaparty.concertfinder;
+package pl.javaparty.concertmanager;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import pl.javaparty.jsoup.Concert;
 
 public class ConcertManager {
 	public static ArrayList<Concert> concerts;
@@ -26,21 +24,23 @@ public class ConcertManager {
 		while (iter.hasNext())
 		{
 			Concert c = iter.next();
-			artists.add(c.getArtis());
+			if (!artists.contains(c.getArtist()))
+				artists.add(c.getArtist());
 		}
 		return artists;
 	}
-	
+
 	public String searchArtis(String artist)
 	{
 		StringBuilder stringBuilder = new StringBuilder();
 		Iterator<Concert> iter = concerts.iterator();
-		while(iter.hasNext())
+		while (iter.hasNext())
 		{
 			Concert c = iter.next();
-			if(c.getArtis().equals(artist))
-				stringBuilder.append(c.getPlace() + "\n");
+			if (c.getArtist().equals(artist))
+				stringBuilder.append(c.getPlace() + " " + c.getDate() + "\n");
 		}
+		
 		return stringBuilder.toString();
 	}
 }

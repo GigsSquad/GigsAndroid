@@ -7,7 +7,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import pl.javaparty.concertfinder.ConcertManager;
+import pl.javaparty.concertmanager.Concert;
+import pl.javaparty.concertmanager.Concert.AgencyName;
+import pl.javaparty.concertmanager.ConcertManager;
 
 //Nie bede zasmiecal gita biblioteka JSoup, trzeba ja sobie dopisac do projektu, zeby dzialalo.
 //TODO: dodac link do kazdego koncertu ktory zawiera szczegó³owe informacje, sam link, bedzie do zapisywane w Concert
@@ -36,7 +38,7 @@ public class JsoupDownloader
 			String conPlace = place.text();
 			Element date = el.getElementsByClass("b_c_d").first();
 			String conDate = date.text();
-			concertMgr.getList().add(new Concert(conName, conPlace, conDate));
+			concertMgr.getList().add(new Concert(conName, conPlace, conDate, AgencyName.GOAHEAD));
 		}
 	}
 }

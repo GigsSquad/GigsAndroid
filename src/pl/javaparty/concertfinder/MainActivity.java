@@ -2,7 +2,8 @@ package pl.javaparty.concertfinder;
 
 import java.io.IOException;
 
-import pl.javaparty.jsoup.Concert;
+import pl.javaparty.concertmanager.Concert;
+import pl.javaparty.concertmanager.ConcertManager;
 import pl.javaparty.jsoup.JsoupDownloader;
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -42,10 +43,10 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				downloadText.setText(concertMgr.searchArtis(searchBox.getText().toString()));
+				downloadText.setText(searchBox.getText() + "\n\n" + concertMgr.searchArtis(searchBox.getText().toString()));
+				searchBox.setText("");
 			}
 		});
-
 	}
 
 	private class DownloadTask extends AsyncTask<Void, Void, String> {

@@ -1,26 +1,27 @@
-package pl.javaparty.jsoup;
+package pl.javaparty.concertmanager;
+
 
 public class Concert
 {
+	public enum AgencyName {
+		GOAHEAD, INNE
+	}
+
 	private String artist; 
 	private String place; // to leci potem do google maps api
 	private String dateString;
 	private int day; // u¿y³bym tutaj czegoœ w stylu Date albo Calendar
 	private int month = 0;
 	private int year;
-	String[] stringArray;
+	private String[] stringArray;
 	private String dayOfWeek; // pi¹tek, sobota, etc.
 	private String[] months = { "st", "lu", "mar", "kw", "maj", "cz", "lip", "si", "wr", "pa", "lis", "gr" };
+	private String url; //url do strony ze szczegolowymi informacjami o danym koncercie 
+	private AgencyName agency;
 
-	Concert(String artist, String place, int day, int month, int year)
+	public Concert(String artist, String place, String dateString, AgencyName agency)
 	{
-		this.artist = artist;
-		this.place = place;
-		this.dateString = "";
-	}
-
-	Concert(String artist, String place, String dateString)
-	{
+		this.agency = agency;
 		this.artist = artist;
 		this.place = place;
 		this.dateString = dateString;
@@ -47,7 +48,7 @@ public class Concert
 		// jestli dzien albo miesiac jedno cyfrowy String.format("%02d", day)
 	}
 	
-	public String getArtis()
+	public String getArtist()
 	{
 		return artist;
 	}
@@ -55,6 +56,16 @@ public class Concert
 	public String getPlace()
 	{
 		return place;
+	}
+	
+	public AgencyName getAgency()
+	{
+		return agency;
+	}
+	
+	public String getDate()
+	{
+		return (String.format("%02d", day) + "." + String.format("%02d", month) + "." + year + " " + dayOfWeek);
 	}
 	
 	@Override
