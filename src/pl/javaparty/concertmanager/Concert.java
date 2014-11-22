@@ -6,7 +6,6 @@ public class Concert
 	public enum AgencyName {
 		GOAHEAD, INNE
 	}
-	private int rafal;
 	private String artist; 
 	private String place; // to leci potem do google maps api
 	private String dateString;
@@ -19,12 +18,13 @@ public class Concert
 	private String url; //url do strony ze szczegolowymi informacjami o danym koncercie 
 	private AgencyName agency;
 
-	public Concert(String artist, String place, String dateString, AgencyName agency)
+	public Concert(String artist, String place, String dateString, AgencyName agency, String url)
 	{
 		this.agency = agency;
 		this.artist = artist;
 		this.place = place;
 		this.dateString = dateString;
+		this.url = url;
 		parse();
 	}
 
