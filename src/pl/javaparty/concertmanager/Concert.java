@@ -6,15 +6,15 @@ public class Concert
 	public enum AgencyName {
 		GOAHEAD, INNE
 	}
-
+	private int rafal;
 	private String artist; 
 	private String place; // to leci potem do google maps api
 	private String dateString;
-	private int day; // uzylbym tutaj czegoœ w stylu Date albo Calendar
+	private int day; // uzylbym tutaj czegoï¿½ w stylu Date albo Calendar
 	private int month = 0;
 	private int year;
 	private String[] stringArray;
-	private String dayOfWeek; // pi¹tek, sobota, etc.
+	private String dayOfWeek; // piï¿½tek, sobota, etc.
 	private String[] months = { "st", "lu", "mar", "kw", "maj", "cz", "lip", "si", "wr", "pa", "lis", "gr" };
 	private String url; //url do strony ze szczegolowymi informacjami o danym koncercie 
 	private AgencyName agency;
@@ -28,7 +28,7 @@ public class Concert
 		parse();
 	}
 
-	private void parse() // niektóre koncery trwaj¹ kilka dni i s¹ oddzielone sa myœlnikami
+	private void parse() // niektï¿½re koncery trwajï¿½ kilka dni i sï¿½ oddzielone sa myï¿½lnikami
 	{
 		stringArray = dateString.split(" ");
 		day = Integer.parseInt(stringArray[0]);
@@ -44,7 +44,7 @@ public class Concert
 		if (stringArray[3].startsWith("("))
 			dayOfWeek = stringArray[3];
 
-		// TODO: przydalo by sie usunac nawiasy z nazw dni tygodnia i dodaæ zera
+		// TODO: przydalo by sie usunac nawiasy z nazw dni tygodnia i dodaï¿½ zera
 		// jestli dzien albo miesiac jedno cyfrowy String.format("%02d", day)
 	}
 	
