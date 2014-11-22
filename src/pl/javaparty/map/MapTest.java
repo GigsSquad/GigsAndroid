@@ -29,5 +29,4 @@ public class MapTest extends Activity {
 	    // Zoom in, animating the camera.
 	    map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
 	  }
-
 }
