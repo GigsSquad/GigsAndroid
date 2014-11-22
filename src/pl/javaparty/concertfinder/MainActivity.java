@@ -102,7 +102,6 @@ public class MainActivity extends Activity {
 		@Override
 		protected void onPostExecute(String result) { // zostanie wykonane po skoñczeniu doInBackground
 			super.onPostExecute(result);
-
 			String[] stockArr = new String[concertMgr.getArtists().size()];
 			stockArr = concertMgr.getArtists().toArray(stockArr);
 
