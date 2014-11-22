@@ -12,7 +12,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapTest extends Activity {
-	static final LatLng SZCZECIN = new LatLng(53.558, 9.927);
+	static final LatLng SZCZECIN = new LatLng(51.558, 16.927);
 	private GoogleMap map;
 	
 	 @Override
