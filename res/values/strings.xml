@@ -4,5 +4,8 @@
     <string name="app_name">ConcertFinder</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_info_page">InfoPage</string>
+    <string name="title_section1">Informacje</string>
+    <string name="title_section2">Mapa</string>
 
 </resources>

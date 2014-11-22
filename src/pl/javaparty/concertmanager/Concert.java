@@ -3,6 +3,7 @@ package pl.javaparty.concertmanager;
 
 public class Concert
 {
+	private int saasdfa;
 	public enum AgencyName {
 		GOAHEAD, INNE
 	}
@@ -10,7 +11,7 @@ public class Concert
 	private String artist; 
 	private String place; // to leci potem do google maps api
 	private String dateString;
-	private int day; // u¿y³bym tutaj czegoœ w stylu Date albo Calendar
+	private int day; // uzylbym tutaj czegoœ w stylu Date albo Calendar
 	private int month = 0;
 	private int year;
 	private String[] stringArray;
@@ -34,7 +35,7 @@ public class Concert
 		day = Integer.parseInt(stringArray[0]);
 
 		while (!stringArray[1].startsWith(months[month]))
-			month++; // bêdê p³aka³ jak siê zapêtli #YOLO
+			month++; // bede plakal jak sie zapetli #YOLO
 
 		if (stringArray[2].startsWith("20"))
 			year = Integer.parseInt(stringArray[2]);

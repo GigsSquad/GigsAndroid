@@ -6,13 +6,17 @@ import pl.javaparty.concertmanager.Concert;
 import pl.javaparty.concertmanager.ConcertManager;
 import pl.javaparty.jsoup.JsoupDownloader;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +31,7 @@ public class MainActivity extends Activity {
 	ArrayAdapter<String> adapter, adapterList;
 	ListView concertList;
 	TextView artistTextView;
+	CheckBox goaheadCheckbox;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +41,8 @@ public class MainActivity extends Activity {
 		searchBox = (AutoCompleteTextView) findViewById(R.id.searchBox);
 		concertList = (ListView) findViewById(R.id.concertList);
 		artistTextView = (TextView) findViewById(R.id.artistName);
-
+		goaheadCheckbox = (CheckBox) findViewById(R.id.checkBoxGoAhead);
+		
 		jsoupDownloader = new JsoupDownloader();
 		stringBuilder = new StringBuilder();
 		concertMgr = new ConcertManager();
@@ -53,9 +59,19 @@ public class MainActivity extends Activity {
 				concertList.setAdapter(adapterList);
 				artistTextView.setText(searchBox.getText().toString());
 				searchBox.setText("");
-				
 			}
 		});
+		
+		concertList.setOnItemClickListener(new OnItemClickListener() {
+	            @Override
+	            public void onItemClick(AdapterView<?> parent, View view, int position,
+	                    long id) {
+	                Intent intent = new Intent(MainActivity.this, InfoPage.class);
+	                //intent.putExtra("PLACE", );
+	                startActivity(intent);
+	            }
+	        });
+		
 	}
 
 	private class DownloadTask extends AsyncTask<Void, Void, String> {
