@@ -17,7 +17,12 @@ public class Concert
 	private String[] months = { "st", "lu", "mar", "kw", "maj", "cz", "lip", "si", "wr", "pa", "lis", "gr" };
 	private String url; //url do strony ze szczegolowymi informacjami o danym koncercie 
 	private AgencyName agency;
-
+	//additional info
+	private String adress; //uzupelnienie do place, tez moze isc do google maps api
+	private String entryHours; 
+	private String ticketsPrice;
+	//jeszcze sa adresy do stron gdzie mozna kupic bilet, ale na razie tego nie dodaje
+	
 	public Concert(String artist, String place, String dateString, AgencyName agency, String url)
 	{
 		this.agency = agency;
@@ -26,6 +31,9 @@ public class Concert
 		this.dateString = dateString;
 		this.url = url;
 		parse();
+		this.adress = "";
+		this.entryHours = "";
+		this.ticketsPrice = "";
 	}
 
 	private void parse() // niekt�re koncery trwaj� kilka dni i s� oddzielone sa my�lnikami
@@ -66,6 +74,23 @@ public class Concert
 	public String getDate()
 	{
 		return (String.format("%02d", day) + "." + String.format("%02d", month) + "." + year + " " + dayOfWeek);
+	}
+	
+	public String getURL()
+	{
+		return url;
+	}
+	
+	public void setMoreData(String adress, String entryHours, String ticketsPrice)
+	{
+		this.adress = adress;
+		this.entryHours = entryHours;
+		this.ticketsPrice = ticketsPrice; 
+	}
+	
+	public String getMoreData()//tymczasowe raczej, bo po co to komu? :D
+	{
+		return adress + " " + entryHours + " " + ticketsPrice;
 	}
 	
 	@Override
