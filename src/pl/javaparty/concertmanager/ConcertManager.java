@@ -38,7 +38,7 @@ public class ConcertManager {
 		{
 			Concert c = iter.next();
 			if (c.getArtist().equals(artist))
-				list.add(c.getPlace() + " " + c.getDate());
+				list.add(c.getPlace() + " " + c.dateToString());
 
 		}
 		return list;
@@ -52,7 +52,7 @@ public class ConcertManager {
 		{
 			Concert c = iter.next();
 			if (c.getArtist().equals(artist))
-				stringBuilder.append(c.getPlace() + " " + c.getDate() + "\n");
+				stringBuilder.append(c.getPlace() + " " + c.dateToString() + "\n");
 		}
 
 		return stringBuilder.toString();
