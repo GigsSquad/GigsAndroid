@@ -103,9 +103,5 @@ public class Concert
 	{
 		return artist + " " + place + " " + dateToString() + "\n";
 	}
-	
-	public static void main(String[] args){
-		Concert c = new Concert("Szymon", "Szymonowo", "11 maj 2014", AgencyName.GOAHEAD, "www.onet.pl");
-		System.out.println(c.toString());
-	}
+
 }
