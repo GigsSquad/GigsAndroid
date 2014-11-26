@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="pl.javaparty.concertfinder.MainActivity" >
+    tools:context=".MainActivity" >
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -25,21 +25,21 @@
                 android:layout_weight="1"
                 android:autoText="true"
                 android:ems="10"
-                android:hint="Wykonawca" />
+                android:hint="@string/searchBox" />
 
             <Button
                 android:id="@+id/downloadButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="OK" />
+                android:text="@string/downloadButton" />
         </LinearLayout>
 
         <CheckBox
             android:id="@+id/checkBoxGoAhead"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tylko go Go Ahead" />
+            android:text="@string/checkBoxGoAhead" />
 
         <TextView
             android:id="@+id/artistName"
