@@ -12,12 +12,12 @@ import pl.javaparty.concertmanager.Concert;
 import pl.javaparty.concertmanager.Concert.AgencyName;
 import pl.javaparty.concertmanager.ConcertManager;
 
-public class JsoupDownloader
+public class JDGoAhead implements JSoupDownloader
 {
 	private ConcertManager concertMgr;
 	private final static String URL_GOAHEAD = new String("http://www.go-ahead.pl/pl/koncerty.html");
 	
-	public JsoupDownloader()
+	public JDGoAhead()
 	{
 		concertMgr = new ConcertManager();
 	}
@@ -67,7 +67,7 @@ public class JsoupDownloader
 		return places;
 	}
 	
-	public void getMoreDataAboutConcert(Concert concert) throws IOException//GoAhead
+	public void getMoreData(Concert concert) throws IOException//GoAhead
 	{
 		Document doc = Jsoup.connect(concert.getURL()).get();
 		Elements concertData = doc.getElementsByClass("kk2");

@@ -8,7 +8,7 @@ import java.util.GregorianCalendar;
 public class Concert
 {
 	public enum AgencyName {
-		GOAHEAD, INNE
+		GOAHEAD, ALTERART, INNE
 	}
 	private String artist; 
 	private String place; // to leci potem do google maps api
@@ -37,12 +37,18 @@ public class Concert
 	}
 	
 	private void setDate(){
-		String[] arr = dateString.split(" ");
-		final String[] months = { "st", "lu", "mar", "kw", "maj", "cz", "lip", "si", "wr", "pa", "lis", "gr" };
-		int mon = 0;
-		while(!arr[1].startsWith(months[mon]))
-			mon++;
-		date.set(Integer.valueOf(arr[2]),mon,Integer.valueOf(arr[0]));
+		if(agency==AgencyName.GOAHEAD){
+			String[] arr = dateString.split(" ");
+			final String[] months = { "st", "lu", "mar", "kw", "maj", "cz", "lip", "si", "wr", "pa", "lis", "gr" };
+			int mon = 0;
+			while(!arr[1].startsWith(months[mon]))
+				mon++;
+			date.set(Integer.valueOf(arr[2]),mon,Integer.valueOf(arr[0])); 
+			}
+		else if(agency==AgencyName.ALTERART){
+			String[] arr = dateString.split("\\.");
+			date.set(Integer.valueOf(arr[2]), Integer.valueOf(arr[1]),Integer.valueOf(arr[0]));
+		}
 	}
 	
 	public String getArtist()
@@ -103,5 +109,6 @@ public class Concert
 	{
 		return artist + " " + place + " " + dateToString() + "\n";
 	}
+	
 
 }
