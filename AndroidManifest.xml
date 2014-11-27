@@ -42,13 +42,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="pl.javaparty.map.MapTest"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
             android:name=".InfoPage"
-            android:label="@string/title_activity_info_page" >
+            android:label="@string/title_activity_info_page" 
+            android:parentActivityName=".MainActivity" >
+            <!-- Support lower than 16 API -->
+            <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".MainActivity" />
         </activity>
     </application>
 

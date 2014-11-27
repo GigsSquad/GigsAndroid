@@ -454,8 +454,9 @@ containing a value of this type.
     }
     public static final class string {
         public static final int accept=0x7f050002;
-        public static final int action_settings=0x7f050025;
+        public static final int action_settings=0x7f050024;
         public static final int app_name=0x7f050023;
+        public static final int checkBoxGoAhead=0x7f05002a;
         /**   Text for notification shown when the Android Wear apps needs to be updated. Only shown on the wearable. [CHAR LIMIT=NONE] 
          */
         public static final int common_android_wear_notification_needs_update_text=0x7f050009;
@@ -558,12 +559,13 @@ containing a value of this type.
         public static final int create_calendar_message=0x7f050005;
         public static final int create_calendar_title=0x7f050004;
         public static final int decline=0x7f050003;
-        public static final int hello_world=0x7f050024;
+        public static final int downloadButton=0x7f050028;
+        public static final int searchBox=0x7f050029;
         public static final int store_picture_message=0x7f050001;
         public static final int store_picture_title=0x7f050000;
-        public static final int title_activity_info_page=0x7f050026;
-        public static final int title_section1=0x7f050027;
-        public static final int title_section2=0x7f050028;
+        public static final int title_activity_info_page=0x7f050025;
+        public static final int title_section1=0x7f050026;
+        public static final int title_section2=0x7f050027;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 
          */
