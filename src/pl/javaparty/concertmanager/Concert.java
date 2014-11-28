@@ -47,7 +47,7 @@ public class Concert
 			}
 		else if(agency==AgencyName.ALTERART){
 			String[] arr = dateString.split("\\.");
-			date.set(Integer.valueOf(arr[2]), Integer.valueOf(arr[1]),Integer.valueOf(arr[0]));
+			date.set(Integer.valueOf(arr[2]), Integer.valueOf(arr[1])-1,Integer.valueOf(arr[0]));//month:0,..,11
 		}
 	}
 	

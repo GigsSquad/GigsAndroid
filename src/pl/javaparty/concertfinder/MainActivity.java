@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import pl.javaparty.concertmanager.Concert;
 import pl.javaparty.concertmanager.ConcertManager;
-import pl.javaparty.jsoup.JsoupDownloader;
+import pl.javaparty.jsoup.JDAlterArt;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -24,7 +24,8 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 
 	Button downloadData;
-	JsoupDownloader jsoupDownloader;
+	//JDGoAhead jdGoAhead;
+	JDAlterArt jdAlterArt;
 	StringBuilder stringBuilder;
 	ConcertManager concertMgr;
 	AutoCompleteTextView searchBox;
@@ -44,7 +45,8 @@ public class MainActivity extends Activity {
 		artistTextView = (TextView) findViewById(R.id.artistName);
 		goaheadCheckbox = (CheckBox) findViewById(R.id.checkBoxGoAhead);
 		
-		jsoupDownloader = new JsoupDownloader();
+		//jdGoAhead = new JDGoAhead();
+		jdAlterArt = new JDAlterArt();
 		stringBuilder = new StringBuilder();
 		concertMgr = new ConcertManager();
 
@@ -82,7 +84,8 @@ public class MainActivity extends Activity {
 		protected String doInBackground(Void... params) {
 
 			try {
-				jsoupDownloader.getData(); // pobieramy dane
+				//jdGoAhead.getData(); // pobieramy dane
+				jdAlterArt.getData();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
