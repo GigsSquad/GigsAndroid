@@ -5,6 +5,8 @@ import java.io.IOException;
 import pl.javaparty.concertmanager.ConcertManager;
 import pl.javaparty.jsoup.JsoupDownloader;
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -22,7 +24,7 @@ public class SearchFragment extends Fragment {
 	AutoCompleteTextView searchBox;
 	ConcertManager concertMgr;
 	ListView concertList;
-	ArrayAdapter<String> adapterSearchBox, adapterList, adapterDrawer;
+	ArrayAdapter<String> adapterSearchBox, adapterList;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
@@ -56,6 +58,22 @@ public class SearchFragment extends Fragment {
 
 				getActivity().getActionBar().setTitle("Szukaj: " + searchBox.getText().toString());
 				searchBox.setText("");
+			}
+		});
+		
+		concertList.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position,
+					long id) {
+				
+				Fragment fragment = new ConcertFragment();
+				FragmentManager fragmentManager = getFragmentManager();
+				fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+				
+				//Intent intent = new Intent(MainActivity.this, InfoPage.class);
+				// intent.putExtra("URL", concert.getURL()); 
+				//intent.putExtra("URL", "Clicked: " + position); 
+				//startActivity(intent);
 			}
 		});
 

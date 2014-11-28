@@ -1,13 +1,14 @@
 package pl.javaparty.concertfinder;
 
 import java.io.IOException;
+import java.util.List;
 
+import pl.javaparty.concertmanager.Concert;
 import pl.javaparty.concertmanager.ConcertManager;
 import pl.javaparty.jsoup.JsoupDownloader;
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,16 +19,18 @@ public class RecentFragment extends Fragment {
 	JsoupDownloader jsoupDownloader;
 	ConcertManager concertMgr;
 	ArrayAdapter<String> adapterSearchBox, adapterList, adapterDrawer;
-	CardView cards;
-
+	List<Concert> concerts;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
-		View view = inflater.inflate(R.layout.search_fragment, container, false);
+		View view = inflater.inflate(R.layout.recent_fragment, container, false);
 		jsoupDownloader = new JsoupDownloader();
 		concertMgr = new ConcertManager();
 
 		getActivity().getActionBar().setTitle("Ostatnie koncerty");
 		
+		//ListView lv = (ListView) findViewById(R.id.myList);
+		//rowItems = new ArrayList<rowitem>();
 
 		new DownloadTask().execute();
 

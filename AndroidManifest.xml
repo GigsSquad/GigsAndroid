@@ -34,7 +34,8 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Bluetheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -50,10 +51,6 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
-        </activity>
-        <activity
-            android:name=".TestNav"
-            android:label="@string/title_activity_test_nav" >
         </activity>
     </application>
 

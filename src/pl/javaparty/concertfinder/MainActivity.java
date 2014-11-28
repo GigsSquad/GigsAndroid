@@ -1,11 +1,11 @@
 package pl.javaparty.concertfinder;
 
-import android.app.ActionBar.OnMenuVisibilityListener;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -18,50 +18,52 @@ public class MainActivity extends Activity {
 
 	ArrayAdapter<String> adapterDrawer;
 	String[] menu;
-	DrawerLayout dLayout;
-	ListView dList;
+	DrawerLayout drawerLayout;
+	ListView drawerList;
+	ActionBarDrawerToggle mDrawerToggle;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		setContentView(R.layout.activity_main);
 
-		getActionBar().addOnMenuVisibilityListener(new OnMenuVisibilityListener() {
-
-			@Override
-			public void onMenuVisibilityChanged(boolean isVisible) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-
 		menu = new String[] { "Szukaj", "Ostatnie koncerty", "Twoje koncerty", "Preferencje", "Informacje" };
-		dLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		dList = (ListView) findViewById(R.id.left_drawer);
+		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		drawerList = (ListView) findViewById(R.id.left_drawer);
 		adapterDrawer = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, menu);
-		dList.setAdapter(adapterDrawer);
-		dList.setSelector(android.R.color.holo_blue_dark);
-		dList.setOnItemClickListener(new OnItemClickListener() {
+		drawerList.setAdapter(adapterDrawer);
+		drawerList.setSelector(android.R.color.holo_blue_dark);
+		drawerList.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
-				dLayout.closeDrawers();
+				drawerLayout.closeDrawers();
+
+				Bundle args = new Bundle();
+				args.putString("Menu", menu[position]);
+				
 
 				Fragment fragment = null;
 				if (position == 0)
 					fragment = new SearchFragment();
 				else if (position == 1)
 					fragment = new RecentFragment();
-
+				else if (position == 2)
+					fragment = new FavoriteFragment();
+				else if (position == 3)
+					fragment = new SettingsFragment();
+				else if (position == 4)
+					fragment = new InformationFragment();
+				
+				fragment.setArguments(args);
 				FragmentManager fragmentManager = getFragmentManager();
 				fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-				/*
-				 * Bundle args = new Bundle(); args.putString("Menu", menu[position]); Fragment detail = new
-				 * RecentFragment(); detail.setArguments(args); FragmentManager fragmentManager = getFragmentManager();
-				 * fragmentManager.beginTransaction().replace(R.id.content_frame, detail).commit();
-				 */
+
 			}
 		});
+		
+		FragmentManager fragmentManager = getFragmentManager();
+		Fragment fragment = new RecentFragment();
+		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 	}
 
 	// Od action bar, ikonka szukaj, ta z 3 kropkami co otwiera menu w którym s¹ ustawienia etc.
