@@ -3,14 +3,23 @@ ConcertFinder
 
 ### O co chodzi
 To co wiem na pewno to to że będziemy parsować stronę, [Przykład](http://www.go-ahead.pl/pl/koncerty.html), przez JSOUP i wyciągamy z niej na początek daty, nazwy i miejsca, wyświetlamy to na ekranie. Do tego wyszukiwarka z 3 opcjami: 
-* po wykonawcy
-* miejscu (+promień)
-* koncert z [GoAhead](http://www.go-ahead.pl/pl/)
+* po wykonawcy i dacie 
+* miejscu (+promień) i dacie
+* filtr dla konkretnej agencji np tylko z [GoAhead](http://www.go-ahead.pl/pl/)
 
 ### 3 podzialy
 * Zabawa z parsowaniem stron przez JSOUP + ewentualnie SQLite 
 * Zabawa z samym Androidem, okienka, przyciski, listy i inne
 * Google Maps API
+
+### Linki do parsowania 
+[Go Ahead](http://www.go-ahead.pl/pl/)
+[Presige MJM](http://www.imprezyprestige.com/)
+[Ebilet](http://www.ebilet.pl/)
+[Songkick](http://www.songkick.com/)
+[TicketPro](http://www.ticketpro.pl/jnp/home/index.html)
+[Eventim](http://www.eventim.pl/)
+[Live Nation](http://www.livenation.pl/)
 
 ### Android 
 ![Android lifecycle](http://developer.android.com/images/activity_lifecycle.png)
