@@ -1,118 +1,75 @@
 package pl.javaparty.concertfinder;
 
-import java.io.IOException;
-
-import pl.javaparty.concertmanager.Concert;
-import pl.javaparty.concertmanager.ConcertManager;
-import pl.javaparty.jsoup.JsoupDownloader;
+import android.app.ActionBar.OnMenuVisibilityListener;
 import android.app.Activity;
-import android.content.Intent;
-import android.os.AsyncTask;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.CheckBox;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
-	JsoupDownloader jsoupDownloader;
-	StringBuilder stringBuilder;
-	ConcertManager concertMgr;
-	AutoCompleteTextView searchBox;
-	ArrayAdapter<String> adapter, adapterList;
-	ListView concertList;
-	TextView artistTextView;
-	CheckBox goaheadCheckbox;
-	String[] links;
+	ArrayAdapter<String> adapterDrawer;
+	String[] menu;
+	DrawerLayout dLayout;
+	ListView dList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.activity_main); // ustawiamy layout z "res > layouot > activity_main.xml"
-		searchBox = (AutoCompleteTextView) findViewById(R.id.searchBox);
-		concertList = (ListView) findViewById(R.id.concertList);
-		artistTextView = (TextView) findViewById(R.id.artistName);
-		goaheadCheckbox = (CheckBox) findViewById(R.id.checkBoxGoAhead);
+		setContentView(R.layout.activity_main);
 
-		jsoupDownloader = new JsoupDownloader();
-		stringBuilder = new StringBuilder();
-		concertMgr = new ConcertManager();
+		getActionBar().addOnMenuVisibilityListener(new OnMenuVisibilityListener() {
 
-		new DownloadTask().execute();
-
-		concertList.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position,
-					long id) {
-				Intent intent = new Intent(MainActivity.this, InfoPage.class);
-				// intent.putExtra("URL", concert.getURL()); //bêdziemy wysy³aæ konkretny url koncertu
-				intent.putExtra("URL", "Clicked: " + position); // bêdziemy wysy³aæ konkretny url koncertu
-				startActivity(intent);
+			public void onMenuVisibilityChanged(boolean isVisible) {
+				// TODO Auto-generated method stub
+
 			}
 		});
 
-		searchBox.setOnItemClickListener(new OnItemClickListener() {
+		menu = new String[] { "Szukaj", "Ostatnie koncerty", "Twoje koncerty", "Preferencje", "Informacje" };
+		dLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		dList = (ListView) findViewById(R.id.left_drawer);
+		adapterDrawer = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, menu);
+		dList.setAdapter(adapterDrawer);
+		dList.setSelector(android.R.color.holo_blue_dark);
+		dList.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position,
-					long id) {
+			public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
+				dLayout.closeDrawers();
 
-				adapterList = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, concertMgr.getConcerts(searchBox.getText()
-						.toString()));
-				concertList.setAdapter(adapterList);
+				Fragment fragment = null;
+				if (position == 0)
+					fragment = new SearchFragment();
+				else if (position == 1)
+					fragment = new RecentFragment();
 
-				links = new String[adapterList.getCount()];
-				// /for (Concert c : concertMgr.getConcerts(searchBox.getText().toString()))
-				// {
-				// c.getURL();
-				// }
-
-				artistTextView.setText(searchBox.getText().toString());
-				searchBox.setText("");
+				FragmentManager fragmentManager = getFragmentManager();
+				fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+				/*
+				 * Bundle args = new Bundle(); args.putString("Menu", menu[position]); Fragment detail = new
+				 * RecentFragment(); detail.setArguments(args); FragmentManager fragmentManager = getFragmentManager();
+				 * fragmentManager.beginTransaction().replace(R.id.content_frame, detail).commit();
+				 */
 			}
 		});
-
 	}
 
-	private class DownloadTask extends AsyncTask<Void, Void, String> {
-		// TODO: zrobiæ informacje ze stanem pobierania
-
-		@Override
-		protected String doInBackground(Void... params) {
-
-			try {
-				jsoupDownloader.getData(); // pobieramy dane
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			for (Concert c : concertMgr.getList())
-				stringBuilder.append(c.toString()); // dodajemy informacjê o ka¿dym koncercie do stringa
-
-			return null;
-		}
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-		}
-
-		@Override
-		protected void onPostExecute(String result) { // zostanie wykonane po skoñczeniu doInBackground
-			super.onPostExecute(result);
-			String[] stockArr = new String[concertMgr.getArtists().size()];
-			stockArr = concertMgr.getArtists().toArray(stockArr);
-
-			adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_dropdown_item_1line, stockArr);
-
-			searchBox.setAdapter(adapter);
-			searchBox.setThreshold(1);
-		}
+	// Od action bar, ikonka szukaj, ta z 3 kropkami co otwiera menu w którym s¹ ustawienia etc.
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu items for use in the action bar
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.activity_main_actions, menu);
+		return super.onCreateOptionsMenu(menu);
 	}
 }

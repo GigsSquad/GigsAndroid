@@ -21,7 +21,7 @@ public class MapTest extends Activity {
 	    setContentView(R.layout.map_activity);
 	    map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
 	        .getMap();
-	    Marker szczecin = map.addMarker(new MarkerOptions().position(SZCZECIN).title("dzifki koks fajerfoks, dzifki, seks na molo to nie dla mnie ja mam polo trolololo"));
+	    Marker szczecin = map.addMarker(new MarkerOptions().position(SZCZECIN).title("sdfasd"));
 
 	    // Move the camera instantly to hamburg with a zoom of 15.
 	    map.moveCamera(CameraUpdateFactory.newLatLngZoom(SZCZECIN, 15));

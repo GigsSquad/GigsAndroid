@@ -21,7 +21,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!--
      The following two permissions are not required to use
-     Google Maps Android API v2, but are recommended.
+     Google Maps Android API v2, but are recommended.
     -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -43,12 +43,17 @@
         </activity>
         <activity
             android:name=".InfoPage"
-            android:label="@string/title_activity_info_page" 
+            android:label="@string/title_activity_info_page"
             android:parentActivityName=".MainActivity" >
+
             <!-- Support lower than 16 API -->
             <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value=".MainActivity" />
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".TestNav"
+            android:label="@string/title_activity_test_nav" >
         </activity>
     </application>
 
