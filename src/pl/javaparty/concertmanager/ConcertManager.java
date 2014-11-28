@@ -44,7 +44,7 @@ public class ConcertManager {
 		return list;
 	}
 
-	public String searchArtis(String artist)
+	public String searchArtist(String artist)
 	{
 		StringBuilder stringBuilder = new StringBuilder();
 		Iterator<Concert> iter = concerts.iterator();

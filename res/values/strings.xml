@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">ConcertFinder</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name">Wyszukiwarka koncertów</string>
     <string name="title_activity_info_page">InfoPage</string>
-    <string name="title_section1">Informacje</string>
-    <string name="title_section2">Mapa</string>
     <string name="downloadButton">OK</string>
     <string name="searchBox">Wykonawca</string>
     <string name="checkBoxGoAhead">Tylko z Go Ahead</string>

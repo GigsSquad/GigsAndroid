@@ -76,11 +76,11 @@ public class JsoupDownloader
 		String date = concertData.get(index++).text();
 		String city = concertData.get(index++).text();
 		String place = concertData.get(index++).text();
-		String adress = concertData.get(index++).text();
+		String address = concertData.get(index++).text();
 		String entry = concertData.get(index++).text();
 		String ticketsPrice = concertData.get(index++).text();
 		String whereToBuy = concertData.get(index++).text();
-		concert.setMoreData(adress, entry, ticketsPrice);
-		//return String.format("%s%n%s%n%s %s %s%n%s%n%s%n%s", name, date, city, place, adress,entry,ticketsPrice,whereToBuy);
+		concert.setMoreData(address, entry, ticketsPrice);
+		//return String.format("%s%n%s%n%s %s %s%n%s%n%s%n%s", name, date, city, place, address,entry,ticketsPrice,whereToBuy);
 	}
 }

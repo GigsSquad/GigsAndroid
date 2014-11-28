@@ -10,12 +10,10 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,7 +21,6 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
-	Button downloadData;
 	JsoupDownloader jsoupDownloader;
 	StringBuilder stringBuilder;
 	ConcertManager concertMgr;
@@ -32,47 +29,55 @@ public class MainActivity extends Activity {
 	ListView concertList;
 	TextView artistTextView;
 	CheckBox goaheadCheckbox;
+	String[] links;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		setContentView(R.layout.activity_main); // ustawiamy layout z "res > layouot > activity_main.xml"
-		downloadData = (Button) findViewById(R.id.downloadButton);
 		searchBox = (AutoCompleteTextView) findViewById(R.id.searchBox);
 		concertList = (ListView) findViewById(R.id.concertList);
 		artistTextView = (TextView) findViewById(R.id.artistName);
 		goaheadCheckbox = (CheckBox) findViewById(R.id.checkBoxGoAhead);
-		
+
 		jsoupDownloader = new JsoupDownloader();
 		stringBuilder = new StringBuilder();
 		concertMgr = new ConcertManager();
 
 		new DownloadTask().execute();
 
-		downloadData.setOnClickListener(new OnClickListener() {
-
+		concertList.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onClick(View v) {
+			public void onItemClick(AdapterView<?> parent, View view, int position,
+					long id) {
+				Intent intent = new Intent(MainActivity.this, InfoPage.class);
+				// intent.putExtra("URL", concert.getURL()); //bêdziemy wysy³aæ konkretny url koncertu
+				intent.putExtra("URL", "Clicked: " + position); // bêdziemy wysy³aæ konkretny url koncertu
+				startActivity(intent);
+			}
+		});
+
+		searchBox.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position,
+					long id) {
 
 				adapterList = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, concertMgr.getConcerts(searchBox.getText()
 						.toString()));
 				concertList.setAdapter(adapterList);
+
+				links = new String[adapterList.getCount()];
+				// /for (Concert c : concertMgr.getConcerts(searchBox.getText().toString()))
+				// {
+				// c.getURL();
+				// }
+
 				artistTextView.setText(searchBox.getText().toString());
 				searchBox.setText("");
 			}
 		});
-		
-		concertList.setOnItemClickListener(new OnItemClickListener() {
-	            @Override
-	            public void onItemClick(AdapterView<?> parent, View view, int position,
-	                    long id) {
-	                Intent intent = new Intent(MainActivity.this, InfoPage.class);
-	                //intent.putExtra("PLACE", );
-	                startActivity(intent);
-	            }
-	        });
-		
+
 	}
 
 	private class DownloadTask extends AsyncTask<Void, Void, String> {
@@ -95,7 +100,6 @@ public class MainActivity extends Activity {
 
 		@Override
 		protected void onPreExecute() {
-			Toast.makeText(getApplicationContext(), "Pobieram...", Toast.LENGTH_SHORT).show();
 			super.onPreExecute();
 		}
 
@@ -109,8 +113,6 @@ public class MainActivity extends Activity {
 
 			searchBox.setAdapter(adapter);
 			searchBox.setThreshold(1);
-
-			Toast.makeText(getApplicationContext(), "Pobrano!", Toast.LENGTH_LONG).show(); // wyœwietlanie powiadomienia
 		}
 	}
 }
