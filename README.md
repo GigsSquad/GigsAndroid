@@ -13,13 +13,13 @@ To co wiem na pewno to to że będziemy parsować stronę, [Przykład](http://ww
 * Google Maps API
 
 ### Linki do parsowania 
-[Go Ahead](http://www.go-ahead.pl/pl/)
-[Presige MJM](http://www.imprezyprestige.com/)
-[Ebilet](http://www.ebilet.pl/)
-[Songkick](http://www.songkick.com/)
-[TicketPro](http://www.ticketpro.pl/jnp/home/index.html)
-[Eventim](http://www.eventim.pl/)
-[Live Nation](http://www.livenation.pl/)
+* [Go Ahead](http://www.go-ahead.pl/pl/)
+* [Presige MJM](http://www.imprezyprestige.com/)
+* [Ebilet](http://www.ebilet.pl/)
+* [Songkick](http://www.songkick.com/)
+* [TicketPro](http://www.ticketpro.pl/jnp/home/index.html)
+* [Eventim](http://www.eventim.pl/)
+* [Live Nation](http://www.livenation.pl/)
 
 ### Android 
 ![Android lifecycle](http://developer.android.com/images/activity_lifecycle.png)
