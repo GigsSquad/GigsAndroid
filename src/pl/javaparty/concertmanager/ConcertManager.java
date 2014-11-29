@@ -43,6 +43,22 @@ public class ConcertManager {
 		}
 		return list;
 	}
+	
+	public ArrayList<Concert> getConcertList(String artist)
+	{
+		ArrayList<Concert> list = new ArrayList<Concert>();
+		Iterator<Concert> iter = concerts.iterator();
+		while (iter.hasNext())
+		{
+			Concert c = iter.next();
+			if (c.getArtist().equals(artist))
+				list.add(c);
+		}
+		
+		return list;
+	}
+	
+	
 
 	public String searchArtist(String artist)
 	{

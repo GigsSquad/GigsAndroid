@@ -607,7 +607,7 @@ containing a value of this type.
         public static final int holo_light=0x7f0c0006;
         public static final int hybrid=0x7f0c0000;
         public static final int left_drawer=0x7f0c0016;
-        public static final int list_image=0x7f0c001d;
+        public static final int list_image=0x7f0c001c;
         public static final int map=0x7f0c001f;
         public static final int match_parent=0x7f0c000c;
         public static final int monochrome=0x7f0c0013;
@@ -624,7 +624,7 @@ containing a value of this type.
         public static final int textView1=0x7f0c0017;
         public static final int textView2=0x7f0c0018;
         public static final int textView3=0x7f0c0019;
-        public static final int title=0x7f0c001c;
+        public static final int title=0x7f0c001d;
         public static final int wrap_content=0x7f0c000d;
     }
     public static final class integer {

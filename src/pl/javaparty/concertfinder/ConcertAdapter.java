@@ -11,7 +11,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class ConcertAdapter extends ArrayAdapter<Concert> {
@@ -27,7 +27,7 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 		ImageView image;
 		TextView title;
 		TextView description;
-		LinearLayout card;
+		RelativeLayout card;
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -38,7 +38,7 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 		if (convertView == null) {
 			convertView = mInflater.inflate(R.layout.list_row, null);
 			holder = new ViewHolder();
-			holder.card = (LinearLayout) convertView.findViewById(R.id.card);
+			holder.card = (RelativeLayout) convertView.findViewById(R.id.card);
 			holder.image = (ImageView) convertView.findViewById(R.id.list_image);
 			holder.title = (TextView) convertView.findViewById(R.id.title);
 			holder.description = (TextView) convertView.findViewById(R.id.description);
@@ -47,8 +47,8 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 		} else
 			holder = (ViewHolder) convertView.getTag();
 
-		holder.title.setText(rowItem.getPlace());
-		holder.description.setText(rowItem.getPlace());
+		holder.title.setText(rowItem.getArtist()); 
+		holder.description.setText(rowItem.getPlace() + " " + rowItem.dateToString());
 
 		Animation animation = AnimationUtils.loadAnimation(context, R.anim.card_animation);
 		holder.card.startAnimation(animation);

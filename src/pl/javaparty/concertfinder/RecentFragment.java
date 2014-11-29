@@ -1,9 +1,7 @@
 package pl.javaparty.concertfinder;
 
 import java.io.IOException;
-import java.util.List;
 
-import pl.javaparty.concertmanager.Concert;
 import pl.javaparty.concertmanager.ConcertManager;
 import pl.javaparty.jsoup.JsoupDownloader;
 import android.app.Fragment;

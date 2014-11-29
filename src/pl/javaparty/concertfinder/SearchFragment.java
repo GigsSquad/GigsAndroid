@@ -2,11 +2,11 @@ package pl.javaparty.concertfinder;
 
 import java.io.IOException;
 
+import pl.javaparty.concertmanager.Concert;
 import pl.javaparty.concertmanager.ConcertManager;
 import pl.javaparty.jsoup.JsoupDownloader;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,6 +25,7 @@ public class SearchFragment extends Fragment {
 	ConcertManager concertMgr;
 	ListView concertList;
 	ArrayAdapter<String> adapterSearchBox, adapterList;
+	ConcertAdapter adapter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
@@ -46,9 +47,12 @@ public class SearchFragment extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
 
-				adapterList = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_list_item_1, concertMgr.getConcerts(searchBox.getText()
-						.toString()));
-				concertList.setAdapter(adapterList);
+				//adapter = new ConcertAdapter(getActivity(), R.layout.list_row, concertMgr.getList());
+				//lv.setAdapter(adapter);
+				
+				
+				adapter =  new ConcertAdapter(getActivity(), R.layout.list_row, concertMgr.getConcertList(searchBox.getText().toString()));
+				concertList.setAdapter(adapter);
 
 				// links = new String[adapterList.getCount()];
 				// /for (Concert c : concertMgr.getConcerts(searchBox.getText().toString()))
