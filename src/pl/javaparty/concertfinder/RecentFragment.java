@@ -13,14 +13,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 public class RecentFragment extends Fragment {
 
 	JsoupDownloader jsoupDownloader;
 	ConcertManager concertMgr;
 	ArrayAdapter<String> adapterSearchBox, adapterList, adapterDrawer;
-	List<Concert> concerts;
-	
+	ConcertAdapter adapter;
+	ListView lv;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
 		View view = inflater.inflate(R.layout.recent_fragment, container, false);
@@ -28,11 +30,9 @@ public class RecentFragment extends Fragment {
 		concertMgr = new ConcertManager();
 
 		getActivity().getActionBar().setTitle("Ostatnie koncerty");
-		
-		//ListView lv = (ListView) findViewById(R.id.myList);
-		//rowItems = new ArrayList<rowitem>();
-
 		new DownloadTask().execute();
+
+		lv = (ListView) view.findViewById(R.id.recentList);
 
 		return view;
 	}
@@ -59,6 +59,8 @@ public class RecentFragment extends Fragment {
 
 		@Override
 		protected void onPostExecute(String result) { // zostanie wykonane po skoñczeniu doInBackground
+			adapter = new ConcertAdapter(getActivity(), R.layout.list_row, concertMgr.getList());
+			lv.setAdapter(adapter);
 			super.onPostExecute(result);
 		}
 	}
