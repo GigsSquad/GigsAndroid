@@ -1,9 +1,15 @@
 package pl.javaparty.concertfinder;
 
+import java.io.File;
 import java.util.List;
 
 import pl.javaparty.concertmanager.Concert;
+import pl.javaparty.jsoup.ImageDownloader;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +23,8 @@ import android.widget.TextView;
 public class ConcertAdapter extends ArrayAdapter<Concert> {
 
 	Context context;
+	Concert rowItem;
+	ViewHolder holder;
 
 	public ConcertAdapter(Context context, int resourceId, List<Concert> items) {
 		super(context, resourceId, items);
@@ -31,8 +39,7 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ViewHolder holder;
-		Concert rowItem = getItem(position);
+		rowItem = getItem(position);
 
 		LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		if (convertView == null) {
@@ -42,17 +49,53 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 			holder.image = (ImageView) convertView.findViewById(R.id.list_image);
 			holder.title = (TextView) convertView.findViewById(R.id.title);
 			holder.description = (TextView) convertView.findViewById(R.id.description);
-
+			
 			convertView.setTag(holder);
-		} else
 			holder = (ViewHolder) convertView.getTag();
-
+		
 		holder.title.setText(rowItem.getArtist()); 
 		holder.description.setText(rowItem.getPlace() + " " + rowItem.dateToString());
+		
+		new DownloadTask().execute();
 
 		Animation animation = AnimationUtils.loadAnimation(context, R.anim.card_animation);
 		holder.card.startAnimation(animation);
-
+		}
 		return convertView;
+	}
+	
+	private class DownloadTask extends AsyncTask<Void, Void, String> 
+	{
+
+		@Override
+		protected String doInBackground(Void... params)
+		{
+			ImageDownloader.bandImage(Environment.getExternalStorageDirectory(), rowItem.getArtist());
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(String result)
+		{
+			if (holder!=null)
+			{
+				String bandName = holder.title.getText().toString();
+				int index = bandName.indexOf(" ");
+				if(index != -1)
+					bandName = bandName.substring(0, index);
+				
+				String extention[] = {".jpg", ".png"};
+				for(int i = 0;i<extention.length; i++) 
+				{
+					File image = new File(Environment.getExternalStorageDirectory(), "/downloadedImages/"+ bandName + extention[i]);
+					if(image.exists())
+					{
+						Bitmap picture = BitmapFactory.decodeFile(image.getAbsolutePath());
+						holder.image.setImageBitmap(picture);
+						break;//olaboga niestrukutralne gowno!!!11ONEONE!
+					}
+				}
+			}
+		}
 	}
 }

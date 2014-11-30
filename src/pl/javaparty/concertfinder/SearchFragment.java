@@ -1,14 +1,19 @@
 package pl.javaparty.concertfinder;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Iterator;
 
 import pl.javaparty.concertmanager.Concert;
 import pl.javaparty.concertmanager.ConcertManager;
+import pl.javaparty.jsoup.ImageDownloader;
 import pl.javaparty.jsoup.JsoupDownloader;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,18 +31,19 @@ public class SearchFragment extends Fragment {
 	ListView concertList;
 	ArrayAdapter<String> adapterSearchBox, adapterList;
 	ConcertAdapter adapter;
+	Context context;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
 		View view = inflater.inflate(R.layout.search_fragment, container, false);
 		// String menu = getArguments().getString("Menu");
-
+		context = inflater.getContext();
 		jsoupDownloader = new JsoupDownloader();
 		concertMgr = new ConcertManager();
 
 		searchBox = (AutoCompleteTextView) view.findViewById(R.id.searchBox);
 		concertList = (ListView) view.findViewById(R.id.concertList);
-
+		
 		getActivity().getActionBar().setTitle("Szukaj");
 
 		new DownloadTask().execute();
@@ -92,6 +98,16 @@ public class SearchFragment extends Fragment {
 
 			try {
 				jsoupDownloader.getData(); // pobieramy dane
+				
+				/*//pobieramy obrazki do artystow
+				HashSet<String> artists = jsoupDownloader.getArtists();
+				Iterator<String> it = artists.iterator();
+				while(it.hasNext())
+				{
+					String artist = it.next();
+					ImageDownloader.bandImage(Environment.getExternalStorageDirectory(), artist);//downloadedImages/<firstBandWord>.png/jpg
+				}*/
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
