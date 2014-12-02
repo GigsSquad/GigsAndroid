@@ -15,7 +15,7 @@ import org.jsoup.nodes.Element;
 public class ImageDownloader
 {
 	private final static String LASTFM_URL = new String("http://www.lastfm.pl/music/"/*i tu nazwa zespolu*/);
-	private static final String IMAGES_DIR = new String("/downloadedImages/");	
+	public static final String IMAGES_DIR = new String("/downloadedImages/");	
 	public static void bandImage(File fileDir, String bandName)
 	{
 		String bandNameEdited = bandName;
