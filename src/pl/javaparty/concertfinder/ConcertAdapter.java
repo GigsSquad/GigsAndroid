@@ -83,17 +83,11 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 				int index = bandName.indexOf(" ");
 				if(index != -1)
 					bandName = bandName.substring(0, index);
-				
-				String extention[] = {".jpg", ".png"};
-				for(int i = 0;i<extention.length; i++) 
+				String path = ImageDownloader.exists(Environment.getExternalStorageDirectory(), bandName);
+				if (path != null)
 				{
-					File image = new File(Environment.getExternalStorageDirectory(), "/downloadedImages/"+ bandName + extention[i]);
-					if(image.exists())
-					{
-						Bitmap picture = BitmapFactory.decodeFile(image.getAbsolutePath());
-						holder.image.setImageBitmap(picture);
-						break;//olaboga niestrukutralne gowno!!!11ONEONE!
-					}
+					Bitmap picture = BitmapFactory.decodeFile(path);
+					holder.image.setImageBitmap(picture);
 				}
 			}
 		}

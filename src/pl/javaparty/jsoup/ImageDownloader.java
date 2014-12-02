@@ -15,7 +15,9 @@ import org.jsoup.nodes.Element;
 public class ImageDownloader
 {
 	private final static String LASTFM_URL = new String("http://www.lastfm.pl/music/"/*i tu nazwa zespolu*/);
-	public static final String IMAGES_DIR = new String("/downloadedImages/");	
+	public static final String IMAGES_DIR = new String("/downloadedImages/");
+	private static String[] extentions = {".jpg", ".png", ".gif", ".bmp"};
+	
 	public static void bandImage(File fileDir, String bandName)
 	{
 		String bandNameEdited = bandName;
@@ -39,19 +41,25 @@ public class ImageDownloader
 		if(indexOfWS != -1)
 			fileName = bandName.substring(0, indexOfWS);
 		
-		try
+		if(exists(fileDir, fileName)==null)
 		{
-			String bandImgUrl = getBandPictureAdress(bandNameEdited);
-			saveImage(fileDir, bandImgUrl, fileName);
-		} catch (IOException e)
-		{
-			e.printStackTrace();
+			System.out.println("File don't exist, downloading...");
+			try
+			{
+				String bandImgUrl = getBandPictureAdress(bandNameEdited);
+				saveImage(fileDir, bandImgUrl, fileName);
+			} catch (IOException e)
+			{
+				e.printStackTrace();
+			}
 		}
+		else
+			System.out.println(fileName + " exists.");
 	}
 	
 	private static String getBandPictureAdress(String bandName) throws IOException
 	{
-		Document doc = Jsoup.connect(LASTFM_URL+bandName).get();
+		Document doc = Jsoup.connect(LASTFM_URL+bandName).timeout(10000).get();
 		Element imgClass = doc.getElementsByClass("resource-images").first();
 		Element imgTag = imgClass.select("img").first();
 		return imgTag.attr("src");
@@ -64,11 +72,11 @@ public class ImageDownloader
 		try
 		{
 			URL link = new URL(url);
-			BufferedInputStream is = new BufferedInputStream(link.openStream());
 			(new File(fileDir, IMAGES_DIR)).mkdir();//nowy folder, nie trzeba sprawdzac czy istnieje
 			File toSave = new File(fileDir, IMAGES_DIR+fileName+"."+imgContainer);
 			if(!toSave.exists())
 			{
+				BufferedInputStream is = new BufferedInputStream(link.openStream());
 				BufferedOutputStream os = new BufferedOutputStream (new FileOutputStream(toSave));
 			
 				///byte[] buffer = new byte[8192];
@@ -96,8 +104,25 @@ public class ImageDownloader
 		}
 	}
 	
-	/*public static void main(String[] args)
+	/*
+	 * if file doesn't exist returns null
+	 */
+	public static String exists(File fileDir, String fileName)
 	{
-		ImageDownloader.bandImage(null,"CHELSEA GRIN / VEIL OF MAYA");
-	}*/
+		String path = null;
+		for(int i = 0;i<extentions.length && path==null; i++) 
+		{
+			File image = new File(fileDir, IMAGES_DIR+ fileName + extentions[i]);
+			if(image.exists())
+			{
+				path = image.getAbsolutePath();
+			}
+		}
+		return path;
+	}
+	
+	public static void main(String[] args)
+	{
+		ImageDownloader.bandImage(null,"BRYAN ADAMS");
+	}
 }
