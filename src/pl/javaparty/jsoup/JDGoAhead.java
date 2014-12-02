@@ -8,18 +8,21 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.google.android.gms.internal.db;
+
 import pl.javaparty.concertmanager.Concert;
 import pl.javaparty.concertmanager.Concert.AgencyName;
-import pl.javaparty.concertmanager.ConcertManager;
+import sql.dbManager;
+import android.content.Context;
 
 public class JDGoAhead implements JSoupDownloader
 {
-	private ConcertManager concertMgr;
+	private dbManager dbm;
 	private final static String URL_GOAHEAD = new String("http://www.go-ahead.pl/pl/koncerty.html");
 	
-	public JDGoAhead()
+	public JDGoAhead(Context context)
 	{
-		concertMgr = new ConcertManager();
+		dbm = new dbManager(context);
 	}
 	
 	public void getData() throws IOException
@@ -33,41 +36,22 @@ public class JDGoAhead implements JSoupDownloader
 			String conName = el.getElementsByClass("b_c_b").first().text();
 			String conPlace = el.getElementsByClass("b_c_cp").first().text();
 			String conDate = el.getElementsByClass("b_c_d").first().text();
-			concertMgr.getList().add(new Concert(conName, conPlace, conDate, AgencyName.GOAHEAD,conUrl));
+			String conCity = conDate.split(" ")[0];
+			String conSpot = conDate.split(conCity+" ")[0];
+			int conDay = Integer.valueOf(conDate.split(" ")[0]);
+			String[] months = { "st", "lu", "mar", "kw", "maj", "cz", "lip", "si", "wr", "pa", "lis", "gr" };
+			int conMonth = 0;
+			while (!conDate.split(" ")[1].startsWith(months[conMonth]))
+				conMonth++;
+			conMonth++;
+			int conYear = Integer.valueOf(conDate.split(" ")[2]);
+			dbm.addConcert(conName, conDay, conMonth, conYear, conCity, conSpot, "GOAHEAD", conUrl);
+			System.out.println("Dodano");
 		}
 	}
+
 	
-	//pobiera wykonawcow, nie dubluje wpisow
-	public HashSet<String> getArtists() throws IOException
-	{
-		HashSet<String> artists = new HashSet<String>();
-		Document doc = Jsoup.connect(URL_GOAHEAD).get();
-		Elements concertData = doc.getElementsByClass("b_c_left");
-		for (Element el : concertData)
-		{
-			Element name = el.getElementsByClass("b_c_b").first();
-			String conName = name.text();
-			artists.add(conName);
-		}
-		return artists;
-	}
-	
-	//pobiera same miejsca koncertow, nie dubluje wpisow
-	public HashSet<String> getPlaces() throws IOException
-	{
-		HashSet<String> places = new HashSet<String>();
-		Document doc = Jsoup.connect(URL_GOAHEAD).get();
-		Elements concertData = doc.getElementsByClass("b_c_left");
-		for (Element el : concertData)
-		{
-			Element place = el.getElementsByClass("b_c_cp").first();
-			String conPlace = place.text();
-			places.add(conPlace);
-		}
-		return places;
-	}
-	
-	public void getMoreData(Concert concert) throws IOException//GoAhead
+	/*public void getMoreData(Concert concert) throws IOException//GoAhead
 	{
 		Document doc = Jsoup.connect(concert.getURL()).get();
 		Elements concertData = doc.getElementsByClass("kk2");
@@ -82,5 +66,5 @@ public class JDGoAhead implements JSoupDownloader
 		String whereToBuy = concertData.get(index++).text();
 		concert.setMoreData(adress, entry, ticketsPrice);
 		//return String.format("%s%n%s%n%s %s %s%n%s%n%s%n%s", name, date, city, place, adress,entry,ticketsPrice,whereToBuy);
-	}
+	}*/
 }

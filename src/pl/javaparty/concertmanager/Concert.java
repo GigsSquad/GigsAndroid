@@ -22,33 +22,17 @@ public class Concert
 	private String ticketsPrice;
 	//jeszcze sa adresy do stron gdzie mozna kupic bilet, ale na razie tego nie dodaje
 	
-	public Concert(String artist, String place, String dateString, AgencyName agency, String url)
+	public Concert(String artist, String place, int day, int month,int year, AgencyName agency, String url)
 	{
 		this.agency = agency;
 		this.artist = artist;
 		this.place = place;
 		this.dateString = dateString;
-		date = new GregorianCalendar(); 
-		setDate();
+		date = new GregorianCalendar(year,month-1,day); 
 		this.url = url;
 		this.adress = "";
 		this.entryHours = "";
 		this.ticketsPrice = "";
-	}
-	
-	private void setDate(){
-		if(agency==AgencyName.GOAHEAD){
-			String[] arr = dateString.split(" ");
-			final String[] months = { "st", "lu", "mar", "kw", "maj", "cz", "lip", "si", "wr", "pa", "lis", "gr" };
-			int mon = 0;
-			while(!arr[1].startsWith(months[mon]))
-				mon++;
-			date.set(Integer.valueOf(arr[2]),mon,Integer.valueOf(arr[0])); 
-			}
-		else if(agency==AgencyName.ALTERART){
-			String[] arr = dateString.split("\\.");
-			date.set(Integer.valueOf(arr[2]), Integer.valueOf(arr[1])-1,Integer.valueOf(arr[0]));//month:0,..,11
-		}
 	}
 	
 	public String getArtist()

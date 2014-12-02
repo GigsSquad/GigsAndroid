@@ -4,7 +4,8 @@ import java.io.IOException;
 
 import pl.javaparty.concertmanager.Concert;
 import pl.javaparty.concertmanager.ConcertManager;
-import pl.javaparty.jsoup.JDAlterArt;
+import pl.javaparty.jsoup.JDGoAhead;
+import sql.dbManager;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -24,8 +25,7 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 
 	Button downloadData;
-	//JDGoAhead jdGoAhead;
-	JDAlterArt jdAlterArt;
+	JDGoAhead jdGoAhead;
 	StringBuilder stringBuilder;
 	ConcertManager concertMgr;
 	AutoCompleteTextView searchBox;
@@ -44,11 +44,11 @@ public class MainActivity extends Activity {
 		concertList = (ListView) findViewById(R.id.concertList);
 		artistTextView = (TextView) findViewById(R.id.artistName);
 		goaheadCheckbox = (CheckBox) findViewById(R.id.checkBoxGoAhead);
-		
-		//jdGoAhead = new JDGoAhead();
-		jdAlterArt = new JDAlterArt();
+		dbManager dbm = new dbManager(this);
+
+		jdGoAhead = new JDGoAhead(this);
 		stringBuilder = new StringBuilder();
-		concertMgr = new ConcertManager();
+		concertMgr = new ConcertManager(dbm);
 
 		new DownloadTask().execute();
 
@@ -84,8 +84,7 @@ public class MainActivity extends Activity {
 		protected String doInBackground(Void... params) {
 
 			try {
-				//jdGoAhead.getData(); // pobieramy dane
-				jdAlterArt.getData();
+				jdGoAhead.getData(); // pobieram dane i wrzucam do bazy
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -113,7 +112,7 @@ public class MainActivity extends Activity {
 			searchBox.setAdapter(adapter);
 			searchBox.setThreshold(1);
 
-			Toast.makeText(getApplicationContext(), "Pobrano!", Toast.LENGTH_LONG).show(); // wyœwietlanie powiadomienia
+			Toast.makeText(getApplicationContext(), "Pobrano "+concertMgr.getList().size()+" koncertow", Toast.LENGTH_LONG).show(); // wyœwietlanie powiadomienia
 		}
 	}
 }

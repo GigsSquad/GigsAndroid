@@ -1,5 +1,5 @@
 package pl.javaparty.jsoup;
-
+/*
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -67,10 +67,8 @@ public class JDAlterArt implements JSoupDownloader{
 
 	@Override
 	public void getMoreData(Concert c) throws IOException {
-		/*
-		 * potem
-		 */
+			 
 	}
 
 
-}
+}*/

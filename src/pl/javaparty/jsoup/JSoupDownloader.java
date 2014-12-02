@@ -7,7 +7,7 @@ import pl.javaparty.concertmanager.Concert;
 
 public interface JSoupDownloader {
 	void getData() throws IOException;
-	HashSet<String> getArtists() throws IOException;
-	HashSet<String> getPlaces() throws IOException;
-	void getMoreData(Concert c) throws IOException;
+	//HashSet<String> getArtists() throws IOException;
+	//HashSet<String> getPlaces() throws IOException;
+	//void getMoreData(Concert c) throws IOException;
 }
