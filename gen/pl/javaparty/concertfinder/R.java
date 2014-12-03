@@ -452,15 +452,15 @@ containing a value of this type.
     }
     public static final class id {
         public static final int RelativeLayout1=0x7f0c001a;
-        public static final int action_search=0x7f0c0023;
-        public static final int action_settings=0x7f0c0024;
+        public static final int action_search=0x7f0c0024;
+        public static final int action_settings=0x7f0c0025;
         public static final int book_now=0x7f0c000e;
         public static final int buyButton=0x7f0c000a;
         public static final int buy_now=0x7f0c000f;
         public static final int buy_with_google=0x7f0c0010;
         public static final int card=0x7f0c001b;
         public static final int classic=0x7f0c0011;
-        public static final int concertList=0x7f0c0022;
+        public static final int concertList=0x7f0c0023;
         public static final int content_frame=0x7f0c0015;
         public static final int description=0x7f0c001e;
         public static final int drawer_layout=0x7f0c0014;
@@ -470,16 +470,17 @@ containing a value of this type.
         public static final int hybrid=0x7f0c0000;
         public static final int left_drawer=0x7f0c0016;
         public static final int list_image=0x7f0c001c;
-        public static final int map=0x7f0c001f;
+        public static final int map=0x7f0c0020;
         public static final int match_parent=0x7f0c000c;
         public static final int monochrome=0x7f0c0013;
         public static final int none=0x7f0c0001;
         public static final int normal=0x7f0c0002;
         public static final int production=0x7f0c0007;
-        public static final int recentList=0x7f0c0020;
+        public static final int progress_bar=0x7f0c001f;
+        public static final int recentList=0x7f0c0021;
         public static final int sandbox=0x7f0c0008;
         public static final int satellite=0x7f0c0003;
-        public static final int searchBox=0x7f0c0021;
+        public static final int searchBox=0x7f0c0022;
         public static final int selectionDetails=0x7f0c000b;
         public static final int strict_sandbox=0x7f0c0009;
         public static final int terrain=0x7f0c0004;

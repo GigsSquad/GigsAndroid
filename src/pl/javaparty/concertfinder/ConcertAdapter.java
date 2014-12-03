@@ -1,6 +1,5 @@
 package pl.javaparty.concertfinder;
 
-import java.io.File;
 import java.util.List;
 
 import pl.javaparty.concertmanager.Concert;
@@ -17,6 +16,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -36,6 +36,7 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 		TextView title;
 		TextView description;
 		RelativeLayout card;
+		ProgressBar pb;
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -49,22 +50,23 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 			holder.image = (ImageView) convertView.findViewById(R.id.list_image);
 			holder.title = (TextView) convertView.findViewById(R.id.title);
 			holder.description = (TextView) convertView.findViewById(R.id.description);
-			
+			holder.pb = (ProgressBar) convertView.findViewById(R.id.progress_bar);
+
 			convertView.setTag(holder);
 			holder = (ViewHolder) convertView.getTag();
-		
-		holder.title.setText(rowItem.getArtist()); 
-		holder.description.setText(rowItem.getPlace() + " " + rowItem.dateToString());
-		
-		new DownloadTask().execute();
 
-		Animation animation = AnimationUtils.loadAnimation(context, R.anim.card_animation);
-		holder.card.startAnimation(animation);
+			holder.title.setText(rowItem.getArtist());
+			holder.description.setText(rowItem.getPlace() + " " + rowItem.dateToString());
+
+			new DownloadTask().execute();
+
+			Animation animation = AnimationUtils.loadAnimation(context, R.anim.card_animation);
+			holder.card.startAnimation(animation);
 		}
 		return convertView;
 	}
-	
-	private class DownloadTask extends AsyncTask<Void, Void, String> 
+
+	private class DownloadTask extends AsyncTask<Void, Void, String>
 	{
 
 		@Override
@@ -73,21 +75,22 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 			ImageDownloader.bandImage(Environment.getExternalStorageDirectory(), rowItem.getArtist());
 			return null;
 		}
-		
+
 		@Override
 		protected void onPostExecute(String result)
 		{
-			if (holder!=null)
+			if (holder != null)
 			{
 				String bandName = holder.title.getText().toString();
 				int index = bandName.indexOf(" ");
-				if(index != -1)
+				if (index != -1)
 					bandName = bandName.substring(0, index);
 				String path = ImageDownloader.exists(Environment.getExternalStorageDirectory(), bandName);
 				if (path != null)
 				{
 					Bitmap picture = BitmapFactory.decodeFile(path);
 					holder.image.setImageBitmap(picture);
+					holder.pb.setVisibility(View.GONE);
 				}
 			}
 		}

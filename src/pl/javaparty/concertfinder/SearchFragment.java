@@ -1,19 +1,14 @@
 package pl.javaparty.concertfinder;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Iterator;
 
-import pl.javaparty.concertmanager.Concert;
 import pl.javaparty.concertmanager.ConcertManager;
-import pl.javaparty.jsoup.ImageDownloader;
 import pl.javaparty.jsoup.JsoupDownloader;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
