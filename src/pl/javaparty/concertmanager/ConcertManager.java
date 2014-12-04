@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import pl.javaparty.concertmanager.Concert.AgencyName;
-import pl.javaparty.jsoup.JDGoAhead;
 import sql.dbManager;
-import android.content.Context;
 import android.database.Cursor;
 
 public class ConcertManager {
@@ -17,20 +15,20 @@ public class ConcertManager {
 	{
 		concerts = new ArrayList<Concert>();
 		this.dbm = dbm;
-		collect();
 	}
 
-	private void collect(){
+	public void collect(){
 		Cursor c = dbm.getData();
 		while(c.moveToNext()){
 			String name = c.getString(0);
-			int day = c.getInt(1);
-			int month = c.getInt(2);
-			int year = c.getInt(3);
-			String place = c.getString(4)+c.getString(5);
-			AgencyName agency = c.getString(6).equals("GOAHEAD")?AgencyName.GOAHEAD:null;
+			String city = c.getString(1);
+			String spot = c.getString(2);
+			int day = c.getInt(3);
+			int month = c.getInt(4);
+			int year = c.getInt(5);
+			AgencyName agency = getAgency(c.getString(6));
 			String url = c.getString(7);
-			concerts.add(new Concert(name,place,day,month,year,agency,url));
+			concerts.add(new Concert(name,city,spot,day,month,year,agency,url));
 		}
 	}
 	
@@ -79,5 +77,14 @@ public class ConcertManager {
 		}
 
 		return stringBuilder.toString();
+	}
+	
+	private AgencyName getAgency(String s){
+		AgencyName agency = null;
+		if(s.equals("GOAHEAD"))
+			agency = AgencyName.GOAHEAD;
+		else if (s.equals("ALTERART"))
+			agency = AgencyName.ALTERART;
+		return agency;
 	}
 }

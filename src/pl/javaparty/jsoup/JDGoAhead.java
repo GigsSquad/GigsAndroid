@@ -1,56 +1,67 @@
 package pl.javaparty.jsoup;
 
 import java.io.IOException;
-import java.util.HashSet;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.google.android.gms.internal.db;
-
-import pl.javaparty.concertmanager.Concert;
-import pl.javaparty.concertmanager.Concert.AgencyName;
 import sql.dbManager;
-import android.content.Context;
 
-public class JDGoAhead implements JSoupDownloader
-{
+public class JDGoAhead{
 	private dbManager dbm;
 	private final static String URL_GOAHEAD = new String("http://www.go-ahead.pl/pl/koncerty.html");
 	
-	public JDGoAhead(Context context)
-	{
-		dbm = new dbManager(context);
+	public JDGoAhead(dbManager dbm){
+		this.dbm = dbm;
 	}
 	
-	public void getData() throws IOException
-	{
-		
+	public void getData() throws IOException{
 		Document doc = Jsoup.connect(URL_GOAHEAD).get();
 		Elements concertData = doc.getElementsByClass("b_c");
-		for (Element el : concertData)
-		{
-			String conUrl = el.attr("href");
-			String conName = el.getElementsByClass("b_c_b").first().text();
-			String conPlace = el.getElementsByClass("b_c_cp").first().text();
-			String conDate = el.getElementsByClass("b_c_d").first().text();
-			String conCity = conDate.split(" ")[0];
-			String conSpot = conDate.split(conCity+" ")[0];
-			int conDay = Integer.valueOf(conDate.split(" ")[0]);
-			String[] months = { "st", "lu", "mar", "kw", "maj", "cz", "lip", "si", "wr", "pa", "lis", "gr" };
-			int conMonth = 0;
-			while (!conDate.split(" ")[1].startsWith(months[conMonth]))
+		int currentHash = concertData.first().hashCode();
+		if(needsToBeUpdated(currentHash)){
+			System.out.println("UPDATING GA");
+			dbm.updateHash("GOAHEAD", currentHash);
+			for (Element el : concertData){
+				String conUrl = el.attr("href");
+				String conName = el.getElementsByClass("b_c_b").first().text();
+				String conPlace = el.getElementsByClass("b_c_cp").first().text();
+				String conDate = el.getElementsByClass("b_c_d").first().text();
+				String conCity = conPlace.split(" ")[0];
+				String conSpot = conPlace.split(conCity+" ")[0];
+				int conDay = Integer.valueOf(conDate.split(" ")[0]);
+				String[] months = { "st", "lu", "mar", "kw", "maj", "cz", "lip", "si", "wr", "pa", "lis", "gr" };
+				int conMonth = 0;
+				while (!conDate.split(" ")[1].startsWith(months[conMonth]))
 				conMonth++;
-			conMonth++;
-			int conYear = Integer.valueOf(conDate.split(" ")[2]);
-			dbm.addConcert(conName, conDay, conMonth, conYear, conCity, conSpot, "GOAHEAD", conUrl);
-			System.out.println("Dodano");
+				conMonth++;
+				int conYear = Integer.valueOf(conDate.split(" ")[2]);
+				dbm.addConcert(conName,conCity, conSpot,  conDay, conMonth, conYear, "GOAHEAD", conUrl);
+			}
 		}
 	}
-
 	
+	/*
+	 * Bazê nale¿y aktualizowaæ je¿eli:
+	 *  - jeszcze nie mamy danych z tej strony
+	 *  - dane tej strony s¹ przestarza³e (dodano nowe koncerty)
+	 *       - sprawdzamy to porównuj¹c hashcody najnowszych koncertów
+	 */
+	private boolean needsToBeUpdated(int currentHash){
+		boolean check = false;
+		if(!dbm.agencyHashCodeExists("GOAHEAD"))
+			check = true;
+		else 
+			if(dbm.getHash("GOAHEAD")!=currentHash)
+				check = true;
+		if(!check)
+			System.out.println("No need to update");
+		else System.out.println("UPDAAATE!");
+		return check;
+	}
+
 	/*public void getMoreData(Concert concert) throws IOException//GoAhead
 	{
 		Document doc = Jsoup.connect(concert.getURL()).get();
@@ -67,4 +78,5 @@ public class JDGoAhead implements JSoupDownloader
 		concert.setMoreData(adress, entry, ticketsPrice);
 		//return String.format("%s%n%s%n%s %s %s%n%s%n%s%n%s", name, date, city, place, adress,entry,ticketsPrice,whereToBuy);
 	}*/
+
 }

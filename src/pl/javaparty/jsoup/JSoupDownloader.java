@@ -1,13 +1,19 @@
 package pl.javaparty.jsoup;
 
 import java.io.IOException;
-import java.util.HashSet;
 
-import pl.javaparty.concertmanager.Concert;
+import sql.dbManager;
 
-public interface JSoupDownloader {
-	void getData() throws IOException;
-	//HashSet<String> getArtists() throws IOException;
-	//HashSet<String> getPlaces() throws IOException;
-	//void getMoreData(Concert c) throws IOException;
+public class JSoupDownloader {
+	
+	dbManager dbm;
+	
+	public JSoupDownloader(dbManager dbm){
+		this.dbm = dbm;
+	}
+	
+	public void getData() throws IOException{
+		new JDGoAhead(dbm).getData();
+		new JDAlterArt(dbm).getData();
+	}
 }

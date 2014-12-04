@@ -11,8 +11,8 @@ public class Concert
 		GOAHEAD, ALTERART, INNE
 	}
 	private String artist; 
-	private String place; // to leci potem do google maps api
-	private String dateString;
+	private String city; // to leci potem do google maps api
+	private String spot; // lokalizacja w mieœcie, jakiœ klub czy coœ
 	private Calendar date; // sam wyliczy dzieñ tygodnia, mo¿na mu dodaæ godzinê etc.
 	private String url; //url do strony ze szczegolowymi informacjami o danym koncercie 
 	private AgencyName agency;
@@ -22,12 +22,12 @@ public class Concert
 	private String ticketsPrice;
 	//jeszcze sa adresy do stron gdzie mozna kupic bilet, ale na razie tego nie dodaje
 	
-	public Concert(String artist, String place, int day, int month,int year, AgencyName agency, String url)
+	public Concert(String artist, String city,String spot, int day, int month,int year, AgencyName agency, String url)
 	{
 		this.agency = agency;
 		this.artist = artist;
-		this.place = place;
-		this.dateString = dateString;
+		this.city = city;
+		this.spot = spot;
 		date = new GregorianCalendar(year,month-1,day); 
 		this.url = url;
 		this.adress = "";
@@ -40,9 +40,17 @@ public class Concert
 		return artist;
 	}
 
-	public String getPlace()
+	public String getCity()
 	{
-		return place;
+		return city;
+	}
+	
+	public String getSpot(){
+		return spot;
+	}
+	
+	public String getPlace(){
+		return city+" "+spot;
 	}
 	
 	public AgencyName getAgency()
@@ -91,7 +99,7 @@ public class Concert
 	@Override
 	public String toString()
 	{
-		return artist + " " + place + " " + dateToString() + "\n";
+		return artist + " " + getPlace() + " " + dateToString() + "\n";
 	}
 	
 

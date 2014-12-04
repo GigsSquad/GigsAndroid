@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import pl.javaparty.concertmanager.Concert;
 import pl.javaparty.concertmanager.ConcertManager;
-import pl.javaparty.jsoup.JDGoAhead;
+import pl.javaparty.jsoup.JSoupDownloader;
 import sql.dbManager;
 import android.app.Activity;
 import android.content.Intent;
@@ -25,7 +25,7 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 
 	Button downloadData;
-	JDGoAhead jdGoAhead;
+	JSoupDownloader jsoupDl;
 	StringBuilder stringBuilder;
 	ConcertManager concertMgr;
 	AutoCompleteTextView searchBox;
@@ -45,12 +45,12 @@ public class MainActivity extends Activity {
 		artistTextView = (TextView) findViewById(R.id.artistName);
 		goaheadCheckbox = (CheckBox) findViewById(R.id.checkBoxGoAhead);
 		dbManager dbm = new dbManager(this);
-
-		jdGoAhead = new JDGoAhead(this);
+		jsoupDl = new JSoupDownloader(dbm);
 		stringBuilder = new StringBuilder();
+		new DownloadTask().execute();
 		concertMgr = new ConcertManager(dbm);
 
-		new DownloadTask().execute();
+
 
 		downloadData.setOnClickListener(new OnClickListener() {
 
@@ -84,7 +84,7 @@ public class MainActivity extends Activity {
 		protected String doInBackground(Void... params) {
 
 			try {
-				jdGoAhead.getData(); // pobieram dane i wrzucam do bazy
+				jsoupDl.getData(); // pobieram dane i wrzucam do bazy
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -104,6 +104,7 @@ public class MainActivity extends Activity {
 		@Override
 		protected void onPostExecute(String result) { // zostanie wykonane po skoñczeniu doInBackground
 			super.onPostExecute(result);
+			concertMgr.collect();
 			String[] stockArr = new String[concertMgr.getArtists().size()];
 			stockArr = concertMgr.getArtists().toArray(stockArr);
 
