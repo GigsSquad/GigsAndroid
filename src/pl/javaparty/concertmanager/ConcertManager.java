@@ -13,7 +13,8 @@ public class ConcertManager {
 
 	public ConcertManager(dbManager dbm)
 	{
-		concerts = new ArrayList<Concert>();
+		if(concerts==null)
+			concerts = new ArrayList<Concert>();
 		this.dbm = dbm;
 	}
 
@@ -77,6 +78,20 @@ public class ConcertManager {
 		}
 
 		return stringBuilder.toString();
+	}
+	
+	public ArrayList<Concert> getConcertList(String artist)
+	{
+		ArrayList<Concert> list = new ArrayList<Concert>();
+		Iterator<Concert> iter = concerts.iterator();
+		while (iter.hasNext())
+		{
+			Concert c = iter.next();
+			if (c.getArtist().equals(artist))
+				list.add(c);
+		}
+		
+		return list;
 	}
 	
 	private AgencyName getAgency(String s){

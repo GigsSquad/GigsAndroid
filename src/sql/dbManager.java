@@ -5,8 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.text.style.SuperscriptSpan;
 
 public class dbManager extends SQLiteOpenHelper {
+	
+	public final static String DATABASE_NAME = "baza.db";
 	
 	private static String CreateConcertTable =
 		"CREATE TABLE Concerts(" +
@@ -27,7 +30,7 @@ public class dbManager extends SQLiteOpenHelper {
 					"HASH INTEGER)";
 	
 	public dbManager(Context context){
-		super(context,"baza.db",null,1);
+		super(context,DATABASE_NAME,null,1);
 	}
 
 	@Override
