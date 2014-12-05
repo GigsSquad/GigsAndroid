@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import pl.javaparty.concertmanager.Concert.AgencyName;
-import sql.dbManager;
+import pl.javaparty.sql.dbManager;
 import android.database.Cursor;
 
 public class ConcertManager {

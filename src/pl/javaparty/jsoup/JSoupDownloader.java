@@ -2,7 +2,7 @@ package pl.javaparty.jsoup;
 
 import java.io.IOException;
 
-import sql.dbManager;
+import pl.javaparty.sql.dbManager;
 
 public class JSoupDownloader {
 	

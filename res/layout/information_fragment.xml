@@ -11,12 +11,12 @@
     android:paddingTop="@dimen/activity_vertical_margin" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/distanceTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="JavaParty and shit"
+        android:text="JavaParty"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>

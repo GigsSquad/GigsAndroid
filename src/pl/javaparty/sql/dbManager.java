@@ -1,11 +1,10 @@
-package sql;
+package pl.javaparty.sql;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.text.style.SuperscriptSpan;
 
 public class dbManager extends SQLiteOpenHelper {
 	

@@ -1,19 +1,13 @@
 package pl.javaparty.concertfinder;
 
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Iterator;
-
-import pl.javaparty.concertmanager.Concert;
 import pl.javaparty.concertmanager.ConcertManager;
-import pl.javaparty.jsoup.ImageDownloader;
-import sql.dbManager;
+import pl.javaparty.sql.dbManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +16,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class SearchFragment extends Fragment {
 
@@ -36,14 +31,14 @@ public class SearchFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
 		View view = inflater.inflate(R.layout.search_fragment, container, false);
 		// String menu = getArguments().getString("Menu");
+		getActivity().getActionBar().setTitle("Szukaj");
+
 		context = inflater.getContext();
 		concertMgr = new ConcertManager(new dbManager(context));
 
 		searchBox = (AutoCompleteTextView) view.findViewById(R.id.searchBox);
 		concertList = (ListView) view.findViewById(R.id.concertList);
 		
-		getActivity().getActionBar().setTitle("Szukaj");
-
 		new DownloadTask().execute();
 
 		searchBox.setOnItemClickListener(new OnItemClickListener() {
@@ -93,6 +88,7 @@ public class SearchFragment extends Fragment {
 
 		@Override
 		protected String doInBackground(Void... params) {
+			
 			return null;
 		}
 
@@ -107,6 +103,8 @@ public class SearchFragment extends Fragment {
 			
 			String[] stockArr = new String[concertMgr.getArtists().size()];
 			stockArr = concertMgr.getArtists().toArray(stockArr);
+			
+			Log.d("ARTIST", "Lista: "+stockArr);
 
 			adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, stockArr);
 

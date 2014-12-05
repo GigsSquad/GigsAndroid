@@ -1,9 +1,7 @@
 package pl.javaparty.concertfinder;
 
-import java.io.IOException;
-
 import pl.javaparty.concertmanager.ConcertManager;
-import sql.dbManager;
+import pl.javaparty.sql.dbManager;
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -23,16 +21,19 @@ public class RecentFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
 		View view = inflater.inflate(R.layout.recent_fragment, container, false);
+		getActivity().getActionBar().setTitle("Ostatnie koncerty");
 		
+
 		concertMgr = new ConcertManager(new dbManager(view.getContext()));
 		adapter = new ConcertAdapter(getActivity(), R.layout.list_row, concertMgr.getList());
-		//lv.setAdapter(adapter);
 		
-		getActivity().getActionBar().setTitle("Ostatnie koncerty");
-		//new DownloadTask().execute();
+		new DownloadTask().execute();
 
 		lv = (ListView) view.findViewById(R.id.recentList);
 		lv.setAdapter(adapter);
+		
+
+//		lv = (ListView) view.findViewById(R.id.recentList);
 		return view;
 	}
 

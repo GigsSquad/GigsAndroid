@@ -7,7 +7,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import sql.dbManager;
+import pl.javaparty.sql.dbManager;
 
 public class JDGoAhead{
 	private dbManager dbm;
