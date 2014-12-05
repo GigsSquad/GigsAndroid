@@ -103,32 +103,27 @@ public class MainActivity extends Activity {
 		{
 			dbManager database = new dbManager(context);
 			JSoupDownloader downloader = new JSoupDownloader(database);
-			if(isOnline())
+			try
 			{
-				Toast.makeText(getApplicationContext(), "Jestem podlaczony internetem", Toast.LENGTH_SHORT).show();
-				try
-				{
-					downloader.getData();
-					new ConcertManager(database).collect();
-					Log.i("DB", "Tworzenie nowej bazy i pobieranie");
-					System.out.println("Pobieranie...");
-				} catch (IOException e)
-				{
-					Log.i("DB", "Nie powiniene� wiedzie� tego tekstu");
-					e.printStackTrace();
-				}
-			}else
-				Toast.makeText(getApplicationContext(), "Brak połączenia z internetem", Toast.LENGTH_SHORT).show();
+				downloader.getData();
+				new ConcertManager(database).collect();
+				Log.i("DB", "Tworzenie nowej bazy i pobieranie");
+				System.out.println("Pobieranie...");
+			} catch (IOException e)
+			{
+				Log.i("DB", "Nie powiniene� wiedzie� tego tekstu");
+				e.printStackTrace();
+			}
 			return null;
 		}
-		
+
 		public boolean isOnline() {
-		    ConnectivityManager cm =
-		        (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-		    NetworkInfo netInfo = cm.getActiveNetworkInfo();
-		    return netInfo != null && netInfo.isConnectedOrConnecting();
+			ConnectivityManager cm =
+					(ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo netInfo = cm.getActiveNetworkInfo();
+			return netInfo != null && netInfo.isConnectedOrConnecting();
 		}
-		
+
 		@Override
 		protected void onPreExecute() {
 			Log.i("DB", "Baza nie istnieje");

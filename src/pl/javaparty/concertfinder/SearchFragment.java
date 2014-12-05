@@ -69,9 +69,11 @@ public class SearchFragment extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
 				
-				Fragment fragment = new ConcertFragment();
-				FragmentManager fragmentManager = getFragmentManager();
-				fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+				//Fragment fragment = new ConcertFragment();
+				//FragmentManager fragmentManager = getFragmentManager();
+				//fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+				
+				Toast.makeText(getActivity(), "fragment lub activity", Toast.LENGTH_SHORT).show();
 				
 				//Intent intent = new Intent(MainActivity.this, InfoPage.class);
 				// intent.putExtra("URL", concert.getURL()); 

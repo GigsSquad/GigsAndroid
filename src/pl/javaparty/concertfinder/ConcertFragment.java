@@ -11,8 +11,10 @@ public class ConcertFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
 		View view = inflater.inflate(R.layout.concert_information_fragment, container, false);
-		
+		getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		return view;
 	}
+	
+	
 }

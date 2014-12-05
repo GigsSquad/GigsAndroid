@@ -1,10 +1,13 @@
 package pl.javaparty.concertfinder;
 
+import pl.javaparty.concertmanager.Concert;
 import pl.javaparty.concertmanager.ConcertManager;
 import pl.javaparty.sql.dbManager;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,23 +20,17 @@ public class RecentFragment extends Fragment {
 	ArrayAdapter<String> adapterSearchBox, adapterList, adapterDrawer;
 	ConcertAdapter adapter;
 	ListView lv;
+	Context context;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
 		View view = inflater.inflate(R.layout.recent_fragment, container, false);
 		getActivity().getActionBar().setTitle("Ostatnie koncerty");
-		
+		context = inflater.getContext();
+		lv = (ListView) view.findViewById(R.id.recentList);
 
-		concertMgr = new ConcertManager(new dbManager(view.getContext()));
-		adapter = new ConcertAdapter(getActivity(), R.layout.list_row, concertMgr.getList());
-		
 		new DownloadTask().execute();
 
-		lv = (ListView) view.findViewById(R.id.recentList);
-		lv.setAdapter(adapter);
-		
-
-//		lv = (ListView) view.findViewById(R.id.recentList);
 		return view;
 	}
 
@@ -42,6 +39,8 @@ public class RecentFragment extends Fragment {
 
 		@Override
 		protected String doInBackground(Void... params) {
+			concertMgr = new ConcertManager(new dbManager(context));
+			adapter = new ConcertAdapter(getActivity(), R.layout.list_row, concertMgr.getList());
 			return null;
 		}
 
@@ -52,8 +51,18 @@ public class RecentFragment extends Fragment {
 
 		@Override
 		protected void onPostExecute(String result) { // zostanie wykonane po skoñczeniu doInBackground
-			adapter = new ConcertAdapter(getActivity(), R.layout.list_row, concertMgr.getList());
+
+			for (Concert c : concertMgr.getList())
+				Log.i("ARRAY", c.getArtist());
+
+			for (int i = 0; i < concertMgr.getList().size(); i++)
+				Log.i("ADAPTER", adapter.getItem(i).getArtist());
+
 			lv.setAdapter(adapter);
+
+			for (int i = 0; i < concertMgr.getList().size(); i++)
+				Log.i("LIST", lv.getItemAtPosition(i).toString());
+
 			super.onPostExecute(result);
 		}
 	}
