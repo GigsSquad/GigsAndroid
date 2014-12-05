@@ -10,6 +10,8 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -101,20 +103,32 @@ public class MainActivity extends Activity {
 		{
 			dbManager database = new dbManager(context);
 			JSoupDownloader downloader = new JSoupDownloader(database);
-			try
+			if(isOnline())
 			{
-				downloader.getData();
-				new ConcertManager(database).collect();
-				Log.i("DB", "Tworzenie nowej bazy i pobieranie");
-				System.out.println("Pobieranie...");
-			} catch (IOException e)
-			{
-				Log.i("DB", "Nie powinieneœ wiedzieæ tego tekstu");
-				e.printStackTrace();
-			}
+				Toast.makeText(getApplicationContext(), "Jestem podlaczony internetem", Toast.LENGTH_SHORT).show();
+				try
+				{
+					downloader.getData();
+					new ConcertManager(database).collect();
+					Log.i("DB", "Tworzenie nowej bazy i pobieranie");
+					System.out.println("Pobieranie...");
+				} catch (IOException e)
+				{
+					Log.i("DB", "Nie powinieneï¿½ wiedzieï¿½ tego tekstu");
+					e.printStackTrace();
+				}
+			}else
+				Toast.makeText(getApplicationContext(), "Brak poÅ‚Ä…czenia z internetem", Toast.LENGTH_SHORT).show();
 			return null;
 		}
-
+		
+		public boolean isOnline() {
+		    ConnectivityManager cm =
+		        (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		    NetworkInfo netInfo = cm.getActiveNetworkInfo();
+		    return netInfo != null && netInfo.isConnectedOrConnecting();
+		}
+		
 		@Override
 		protected void onPreExecute() {
 			Log.i("DB", "Baza nie istnieje");
