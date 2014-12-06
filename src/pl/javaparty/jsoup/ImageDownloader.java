@@ -25,8 +25,8 @@ public class ImageDownloader
 	public static void bandImage(File fileDir2, String bandName)
 	{
 		bandNameEdited = bandName;
-		fileDir1 = fileDir2;
-
+		fileDir1 = fileDir2; // bez komentarza, wiem, ale potrzebowalem tego
+		
 		int indexOfHyphen = bandNameEdited.indexOf(" - "); // w goAhead dodatkowe info po myslniku tu nie potrzebne
 		if (indexOfHyphen != -1)
 			bandNameEdited = bandNameEdited.substring(0, indexOfHyphen);
@@ -48,8 +48,9 @@ public class ImageDownloader
 
 		if (exists(fileDir1, fileName) == null)
 		{
-			new Thread(new Runnable() {
-
+			new Thread(new Runnable() { // uruchamiam w¹tek do pobrania zdjecia  i ustawienia go
+				//Threadów u¿ywa siê do ciê¿szych zadan
+				//AsyncTasków do czegoœ co trwa krótko
 				@Override
 				public void run() {
 					String bandImgUrl;
@@ -57,7 +58,6 @@ public class ImageDownloader
 						bandImgUrl = getBandPictureAdress(bandNameEdited);
 						saveImage(fileDir1, bandImgUrl, fileName);
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					

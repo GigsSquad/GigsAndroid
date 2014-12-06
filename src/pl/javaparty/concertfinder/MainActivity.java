@@ -1,6 +1,5 @@
 package pl.javaparty.concertfinder;
 
-import java.io.File;
 import java.io.IOException;
 
 import pl.javaparty.concertmanager.ConcertManager;
@@ -32,7 +31,7 @@ public class MainActivity extends Activity {
 	DrawerLayout drawerLayout;
 	ListView drawerList;
 	Context context;
-	int currentFragment = 2;
+	int currentFragment = 1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +39,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		context = getApplicationContext();
 
-		File db = getDatabasePath(dbManager.DATABASE_NAME);
+		//File db = getDatabasePath(dbManager.DATABASE_NAME);
 		Log.i("DB", "Sprawdzam czy baza istnieje");
 		// if (!db.exists()) TODO: nie zawsze dziala
 		new DownloadTask().execute();
@@ -59,7 +58,7 @@ public class MainActivity extends Activity {
 				drawerLayout.closeDrawers();
 
 				if (currentFragment != position) {
-					Fragment fragment = null;
+					Fragment fragment = null; 
 					if (position == 0)
 						fragment = new SearchFragment();
 					else if (position == 1)

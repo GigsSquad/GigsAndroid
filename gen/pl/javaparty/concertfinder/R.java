@@ -453,6 +453,7 @@ containing a value of this type.
     public static final class id {
         public static final int LinearLayout1=0x7f0c0024;
         public static final int RelativeLayout1=0x7f0c001a;
+        public static final int artistTextView=0x7f0c0017;
         public static final int book_now=0x7f0c000e;
         public static final int buyButton=0x7f0c000a;
         public static final int buy_now=0x7f0c000f;
@@ -464,7 +465,7 @@ containing a value of this type.
         public static final int content_frame=0x7f0c0015;
         public static final int description=0x7f0c001e;
         public static final int distanceSeekBar=0x7f0c0026;
-        public static final int distanceTextView=0x7f0c0017;
+        public static final int distanceTextView=0x7f0c0019;
         public static final int drawer_layout=0x7f0c0014;
         public static final int grayscale=0x7f0c0012;
         public static final int holo_dark=0x7f0c0005;
@@ -477,6 +478,7 @@ containing a value of this type.
         public static final int monochrome=0x7f0c0013;
         public static final int none=0x7f0c0001;
         public static final int normal=0x7f0c0002;
+        public static final int placeTextView=0x7f0c0018;
         public static final int production=0x7f0c0007;
         public static final int progress_bar=0x7f0c001f;
         public static final int recentList=0x7f0c0021;
@@ -487,8 +489,6 @@ containing a value of this type.
         public static final int selectionDetails=0x7f0c000b;
         public static final int strict_sandbox=0x7f0c0009;
         public static final int terrain=0x7f0c0004;
-        public static final int textView2=0x7f0c0018;
-        public static final int textView3=0x7f0c0019;
         public static final int title=0x7f0c001d;
         public static final int wrap_content=0x7f0c000d;
     }

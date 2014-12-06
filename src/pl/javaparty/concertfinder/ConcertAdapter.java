@@ -54,25 +54,24 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 			holder.pb = (ProgressBar) convertView.findViewById(R.id.progress_bar);
 
 			convertView.setTag(holder);
+		} else
 			holder = (ViewHolder) convertView.getTag();
 
-			holder.title.setText(rowItem.getArtist());
-			Log.i("ROW", rowItem.getArtist());
-			holder.description.setText(rowItem.getPlace() + " " + rowItem.dateToString());
+		holder.title.setText(rowItem.getArtist());
+		Log.i("ROW", rowItem.getArtist());
+		holder.description.setText(rowItem.getPlace() + " " + rowItem.dateToString());
 
-			// new DownloadTask().execute();
-			//test();
+		// new DownloadTask().execute();
+		test();
 
-
-			Animation animation = AnimationUtils.loadAnimation(context, R.anim.card_animation);
-			holder.card.startAnimation(animation);
-		}
+		Animation animation = AnimationUtils.loadAnimation(context, R.anim.card_animation);
+		holder.card.startAnimation(animation);
 		return convertView;
 	}
 
 	private void test()
 	{
-		
+
 		ImageDownloader.bandImage(Environment.getExternalStorageDirectory(), rowItem.getArtist());
 		if (holder != null)
 		{
