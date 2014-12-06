@@ -13,7 +13,8 @@ public class FavoriteFragment extends Fragment {
 		View view = inflater.inflate(R.layout.favorite_fragment, container, false);
 
 		getActivity().getActionBar().setTitle("Twoje koncerty");
-
+		//nie mozna zapisywac uzywajac samego id bo z bazy bedziemy usuwac i dodawac wiec moze sie pozmieniuac
+		
 		return view;
 	}
 }

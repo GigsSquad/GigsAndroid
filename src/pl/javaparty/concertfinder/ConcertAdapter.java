@@ -7,7 +7,6 @@ import pl.javaparty.jsoup.ImageDownloader;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,6 +25,7 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 	Context context;
 	Concert rowItem;
 	ViewHolder holder;
+	int ID; // unikalne id koncertu, nie jest wyœwietlane ale bêdzie przydatne przy
 
 	public ConcertAdapter(Context context, int resourceId, List<Concert> items) {
 		super(context, resourceId, items);
@@ -62,13 +62,18 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 		holder.description.setText(rowItem.getPlace() + " " + rowItem.dateToString());
 
 		// new DownloadTask().execute();
-		test();
+		test(); // w ImageDownlaoder tworzony jest thread, dlatego nie korzystam z asyncTaska
 
 		Animation animation = AnimationUtils.loadAnimation(context, R.anim.card_animation);
 		holder.card.startAnimation(animation);
 		return convertView;
 	}
-
+	
+	public int getID()
+	{
+		return ID;
+	}
+	
 	private void test()
 	{
 
@@ -85,36 +90,6 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 				Bitmap picture = BitmapFactory.decodeFile(path);
 				holder.image.setImageBitmap(picture);
 				holder.pb.setVisibility(View.GONE);
-			}
-		}
-	}
-
-	private class DownloadTask extends AsyncTask<Void, Void, String>
-	{
-
-		@Override
-		protected String doInBackground(Void... params)
-		{
-			ImageDownloader.bandImage(Environment.getExternalStorageDirectory(), rowItem.getArtist());
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(String result)
-		{
-			if (holder != null)
-			{
-				String bandName = holder.title.getText().toString();
-				int index = bandName.indexOf(" ");
-				if (index != -1)
-					bandName = bandName.substring(0, index);
-				String path = ImageDownloader.exists(Environment.getExternalStorageDirectory(), bandName);
-				if (path != null)
-				{
-					Bitmap picture = BitmapFactory.decodeFile(path);
-					holder.image.setImageBitmap(picture);
-					holder.pb.setVisibility(View.GONE);
-				}
 			}
 		}
 	}

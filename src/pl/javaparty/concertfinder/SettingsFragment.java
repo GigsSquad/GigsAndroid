@@ -1,6 +1,8 @@
 package pl.javaparty.concertfinder;
 
+import pl.javaparty.concertmanager.ConcertManager;
 import pl.javaparty.prefs.Prefs;
+import pl.javaparty.sql.dbManager;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,12 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.SeekBar;
-import android.widget.Toast;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SettingsFragment extends Fragment {
 
@@ -21,6 +24,8 @@ public class SettingsFragment extends Fragment {
 	SeekBar distanceSeekBar;
 	TextView distanceTextView;
 	Button saveButton;
+	ArrayAdapter<String> adapter;
+	ConcertManager cm;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
@@ -31,6 +36,12 @@ public class SettingsFragment extends Fragment {
 		distanceSeekBar = (SeekBar) view.findViewById(R.id.distanceSeekBar);
 		distanceTextView = (TextView) view.findViewById(R.id.distanceTextView);
 		saveButton = (Button) view.findViewById(R.id.saveSettingsButton);
+
+		cm = new ConcertManager(new dbManager(getActivity()));
+
+		adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, cm.getCities());
+		citySearchBox.setAdapter(adapter);
+		citySearchBox.setThreshold(1);
 
 		if (Prefs.getCity(getActivity()) != null)
 			citySearchBox.setText(Prefs.getCity(getActivity()));

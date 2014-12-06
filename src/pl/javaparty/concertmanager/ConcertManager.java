@@ -13,43 +13,45 @@ public class ConcertManager {
 
 	public ConcertManager(dbManager dbm)
 	{
-		if(concerts==null)
+		if (concerts == null)
 			concerts = new ArrayList<Concert>();
 		this.dbm = dbm;
 	}
 
-	public void collect(){
+	public void collect() {
 		Cursor c = dbm.getData();
-		while(c.moveToNext()){
-			String name = c.getString(0);
-			String city = c.getString(1);
-			String spot = c.getString(2);
-			int day = c.getInt(3);
-			int month = c.getInt(4);
-			int year = c.getInt(5);
-			AgencyName agency = getAgency(c.getString(6));
-			String url = c.getString(7);
-			concerts.add(new Concert(name,city,spot,day,month,year,agency,url));
+		while (c.moveToNext()) {
+			int id = c.getInt(0); // daje mi unikanlne id kazdego kocnertu, zaczyna liczyc od 1, a nie od 0!!
+			String name = c.getString(1);
+			String city = c.getString(2);
+			String spot = c.getString(3);
+			int day = c.getInt(4);
+			int month = c.getInt(5);
+			int year = c.getInt(6);
+			AgencyName agency = getAgency(c.getString(7));
+			String url = c.getString(8);
+			concerts.add(new Concert(id, name, city, spot, day, month, year, agency, url));
 		}
 	}
-	
+
 	public ArrayList<Concert> getList()
 	{
 		return concerts;
 	}
 
-	public ArrayList<String> getArtists()
+	public ArrayList<String> getCities()
 	{
-		ArrayList<String> artists = new ArrayList<String>();
-		Iterator<Concert> iter = concerts.iterator();
+		ArrayList<String> cities = new ArrayList<String>();
 
+		Iterator<Concert> iter = concerts.iterator();
 		while (iter.hasNext())
 		{
 			Concert c = iter.next();
-			if (!artists.contains(c.getArtist()))
-				artists.add(c.getArtist());
+			if (!cities.contains(c.getCity()))
+				cities.add(c.getCity());
 		}
-		return artists;
+
+		return cities;
 	}
 
 	public ArrayList<String> getConcerts(String artist)
@@ -79,7 +81,7 @@ public class ConcertManager {
 
 		return stringBuilder.toString();
 	}
-	
+
 	public ArrayList<Concert> getConcertList(String artist)
 	{
 		ArrayList<Concert> list = new ArrayList<Concert>();
@@ -90,13 +92,13 @@ public class ConcertManager {
 			if (c.getArtist().equals(artist))
 				list.add(c);
 		}
-		
+
 		return list;
 	}
-	
-	private AgencyName getAgency(String s){
+
+	private AgencyName getAgency(String s) {
 		AgencyName agency = null;
-		if(s.equals("GOAHEAD"))
+		if (s.equals("GOAHEAD"))
 			agency = AgencyName.GOAHEAD;
 		else if (s.equals("ALTERART"))
 			agency = AgencyName.ALTERART;

@@ -70,7 +70,7 @@ public class ImageDownloader
 
 	private static String getBandPictureAdress(String bandName) throws IOException
 	{
-		Document doc = Jsoup.connect(LASTFM_URL + bandName).timeout(2000).get();
+		Document doc = Jsoup.connect(LASTFM_URL + bandName).timeout(5000).get();
 		Element imgClass = doc.getElementsByClass("resource-images").first();
 		Element imgTag = imgClass.select("img").first();
 		return imgTag.attr("src");
