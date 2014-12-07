@@ -9,8 +9,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -115,13 +113,13 @@ public class MainActivity extends Activity {
 			}
 			return null;
 		}
-
-		public boolean isOnline() {
-			ConnectivityManager cm =
-					(ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-			NetworkInfo netInfo = cm.getActiveNetworkInfo();
-			return netInfo != null && netInfo.isConnectedOrConnecting();
-		}
+//
+//		public boolean isOnline() {
+//			ConnectivityManager cm =
+//					(ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+//			NetworkInfo netInfo = cm.getActiveNetworkInfo();
+//			return netInfo != null && netInfo.isConnectedOrConnecting();
+//		}
 
 		@Override
 		protected void onPreExecute() {

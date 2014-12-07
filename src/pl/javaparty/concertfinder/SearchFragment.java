@@ -1,5 +1,8 @@
 package pl.javaparty.concertfinder;
 
+import java.util.ArrayList;
+
+import pl.javaparty.concertmanager.Concert;
 import pl.javaparty.concertmanager.ConcertManager;
 import pl.javaparty.sql.dbManager;
 import android.app.Fragment;
@@ -16,21 +19,19 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class SearchFragment extends Fragment {
 
 	AutoCompleteTextView searchBox;
-	ConcertManager concertMgr;
 	ListView concertList;
 	ArrayAdapter<String> adapterSearchBox, adapterList;
 	ConcertAdapter adapter;
 	Context context;
+	ConcertManager concertMgr;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
 		View view = inflater.inflate(R.layout.search_fragment, container, false);
-		// String menu = getArguments().getString("Menu");
 		getActivity().getActionBar().setTitle("Szukaj");
 
 		context = inflater.getContext();
@@ -38,7 +39,7 @@ public class SearchFragment extends Fragment {
 
 		searchBox = (AutoCompleteTextView) view.findViewById(R.id.searchBox);
 		concertList = (ListView) view.findViewById(R.id.concertList);
-		
+
 		new DownloadTask().execute();
 
 		searchBox.setOnItemClickListener(new OnItemClickListener() {
@@ -46,39 +47,28 @@ public class SearchFragment extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
 
-				//adapter = new ConcertAdapter(getActivity(), R.layout.list_row, concertMgr.getList());
-				//lv.setAdapter(adapter);
-				
-				
-				adapter =  new ConcertAdapter(getActivity(), R.layout.list_row, concertMgr.getConcertList(searchBox.getText().toString()));
+				adapter = new ConcertAdapter(getActivity(), R.layout.list_row, concertMgr.getConcertList(searchBox.getText().toString()));
 				concertList.setAdapter(adapter);
-
-				// links = new String[adapterList.getCount()];
-				// /for (Concert c : concertMgr.getConcerts(searchBox.getText().toString()))
-				// {
-				// c.getURL();
-				// }
 
 				getActivity().getActionBar().setTitle("Szukaj: " + searchBox.getText().toString());
 				searchBox.setText("");
 			}
 		});
-		
+
 		concertList.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
-				
-				//Fragment fragment = new ConcertFragment();
-				//FragmentManager fragmentManager = getFragmentManager();
-				//fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-				
-				Toast.makeText(getActivity(), "fragment lub activity", Toast.LENGTH_SHORT).show();
-				
-				//Intent intent = new Intent(MainActivity.this, InfoPage.class);
-				// intent.putExtra("URL", concert.getURL()); 
-				//intent.putExtra("URL", "Clicked: " + position); 
-				//startActivity(intent);
+
+				Fragment fragment = new ConcertFragment();
+				Bundle args = new Bundle();
+
+				Concert item = (Concert) parent.getAdapter().getItem(position);
+				args.putInt("ID", item.getID()); // przesylam unikalne id koncertu
+
+				fragment.setArguments(args);
+				FragmentManager fragmentManager = getFragmentManager();
+				fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).addToBackStack(getTag()).commit();
 			}
 		});
 
@@ -90,7 +80,7 @@ public class SearchFragment extends Fragment {
 
 		@Override
 		protected String doInBackground(Void... params) {
-			
+
 			return null;
 		}
 
@@ -102,11 +92,11 @@ public class SearchFragment extends Fragment {
 		@Override
 		protected void onPostExecute(String result) { // zostanie wykonane po skoñczeniu doInBackground
 			super.onPostExecute(result);
-			
-			String[] stockArr = new String[concertMgr.getArtists().size()];
-			stockArr = concertMgr.getArtists().toArray(stockArr);
-			
-			Log.d("ARTIST", "Lista: "+stockArr);
+			dbManager dbm = new dbManager(getActivity());
+			String[] stockArr = new String[dbm.getSize()];
+			stockArr = dbm.getArtist().toArray(stockArr);
+
+			Log.i("ARTIST", "Lista: " + stockArr);
 
 			adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, stockArr);
 
