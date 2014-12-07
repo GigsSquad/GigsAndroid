@@ -1,7 +1,9 @@
 package pl.javaparty.concertfinder;
 
+import pl.javaparty.imageloader.FileExplorer;
 import pl.javaparty.prefs.Prefs;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,17 +22,20 @@ public class SettingsFragment extends Fragment {
 	AutoCompleteTextView citySearchBox;
 	SeekBar distanceSeekBar;
 	TextView distanceTextView;
-	Button saveButton;
+	Button saveButton, clearButton;
+	Context context;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
 		View view = inflater.inflate(R.layout.settings_fragment, container, false);
+		context = inflater.getContext();
 		getActivity().getActionBar().setTitle("Preferencje");
 
 		citySearchBox = (AutoCompleteTextView) view.findViewById(R.id.cityAutoComplete);
 		distanceSeekBar = (SeekBar) view.findViewById(R.id.distanceSeekBar);
 		distanceTextView = (TextView) view.findViewById(R.id.distanceTextView);
 		saveButton = (Button) view.findViewById(R.id.saveSettingsButton);
+		clearButton = (Button) view.findViewById(R.id.clearFilesButton);
 
 		if (Prefs.getCity(getActivity()) != null)
 			citySearchBox.setText(Prefs.getCity(getActivity()));
@@ -69,6 +74,18 @@ public class SettingsFragment extends Fragment {
 				Log.i("SETTINGS", "Miasto: " + citySearchBox.getText().toString());
 				Log.i("SETTINGS", "Dystans: " + distanceSeekBar.getProgress());
 				Toast.makeText(getActivity(), "Zapisano!", Toast.LENGTH_SHORT).show();
+			}
+		});
+		
+		clearButton.setOnClickListener(new OnClickListener()
+		{
+			
+			@Override
+			public void onClick(View v)
+			{
+				FileExplorer f = new FileExplorer(context);	
+				f.clear();
+				Log.i("SETTINGS", "Usunieto obrazki z dysku");
 			}
 		});
 

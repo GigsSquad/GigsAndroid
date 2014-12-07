@@ -3,12 +3,8 @@ package pl.javaparty.concertfinder;
 import java.util.List;
 
 import pl.javaparty.concertmanager.Concert;
-import pl.javaparty.jsoup.ImageDownloader;
+import pl.javaparty.imageloader.ImageLoader;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
-import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,10 +22,12 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 	Context context;
 	Concert rowItem;
 	ViewHolder holder;
+	ImageLoader imageLoader;
 
 	public ConcertAdapter(Context context, int resourceId, List<Concert> items) {
 		super(context, resourceId, items);
 		this.context = context;
+		imageLoader = new ImageLoader(context);
 	}
 
 	public class ViewHolder {
@@ -52,7 +50,8 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 			holder.title = (TextView) convertView.findViewById(R.id.title);
 			holder.description = (TextView) convertView.findViewById(R.id.description);
 			holder.pb = (ProgressBar) convertView.findViewById(R.id.progress_bar);
-
+			
+			
 			convertView.setTag(holder);
 		} else
 			holder = (ViewHolder) convertView.getTag();
@@ -61,61 +60,11 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 		Log.i("ROW", rowItem.getArtist());
 		holder.description.setText(rowItem.getPlace() + " " + rowItem.dateToString());
 
-		// new DownloadTask().execute();
-		test();
+		//holder.pb.setVisibility(View.GONE); 
+		imageLoader.DisplayImage(rowItem.getArtist(), holder.image, holder.pb);
 
 		Animation animation = AnimationUtils.loadAnimation(context, R.anim.card_animation);
 		holder.card.startAnimation(animation);
 		return convertView;
-	}
-
-	private void test()
-	{
-
-		ImageDownloader.bandImage(Environment.getExternalStorageDirectory(), rowItem.getArtist());
-		if (holder != null)
-		{
-			String bandName = holder.title.getText().toString();
-			int index = bandName.indexOf(" ");
-			if (index != -1)
-				bandName = bandName.substring(0, index);
-			String path = ImageDownloader.exists(Environment.getExternalStorageDirectory(), bandName);
-			if (path != null)
-			{
-				Bitmap picture = BitmapFactory.decodeFile(path);
-				holder.image.setImageBitmap(picture);
-				holder.pb.setVisibility(View.GONE);
-			}
-		}
-	}
-
-	private class DownloadTask extends AsyncTask<Void, Void, String>
-	{
-
-		@Override
-		protected String doInBackground(Void... params)
-		{
-			ImageDownloader.bandImage(Environment.getExternalStorageDirectory(), rowItem.getArtist());
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(String result)
-		{
-			if (holder != null)
-			{
-				String bandName = holder.title.getText().toString();
-				int index = bandName.indexOf(" ");
-				if (index != -1)
-					bandName = bandName.substring(0, index);
-				String path = ImageDownloader.exists(Environment.getExternalStorageDirectory(), bandName);
-				if (path != null)
-				{
-					Bitmap picture = BitmapFactory.decodeFile(path);
-					holder.image.setImageBitmap(picture);
-					holder.pb.setVisibility(View.GONE);
-				}
-			}
-		}
 	}
 }

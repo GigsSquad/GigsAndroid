@@ -461,6 +461,7 @@ containing a value of this type.
         public static final int card=0x7f0c001b;
         public static final int cityAutoComplete=0x7f0c0025;
         public static final int classic=0x7f0c0011;
+        public static final int clearFilesButton=0x7f0c0028;
         public static final int concertList=0x7f0c0023;
         public static final int content_frame=0x7f0c0015;
         public static final int description=0x7f0c001e;
