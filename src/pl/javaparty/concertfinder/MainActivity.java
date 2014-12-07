@@ -30,12 +30,18 @@ public class MainActivity extends Activity {
 	ListView drawerList;
 	Context context;
 	int currentFragment = 1;
+	dbManager dbMgr;
+	ConcertManager concertMgr;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		context = getApplicationContext();
+		dbMgr = new dbManager(context);
+		concertMgr = new ConcertManager(dbMgr);
+		concertMgr.collect();
 
 		//File db = getDatabasePath(dbManager.DATABASE_NAME);
 		Log.i("DB", "Sprawdzam czy baza istnieje");
@@ -98,12 +104,11 @@ public class MainActivity extends Activity {
 		@Override
 		protected String doInBackground(Void... params)
 		{
-			dbManager database = new dbManager(context);
-			JSoupDownloader downloader = new JSoupDownloader(database);
+			JSoupDownloader downloader = new JSoupDownloader(dbMgr);
 			try
 			{
 				downloader.getData();
-				new ConcertManager(database).collect();
+				concertMgr.collect();
 				Log.i("DB", "Tworzenie nowej bazy i pobieranie");
 				System.out.println("Pobieranie...");
 			} catch (IOException e)
@@ -129,6 +134,7 @@ public class MainActivity extends Activity {
 
 		protected void onPostExecute(String result) {
 			Log.i("DB", "Koniec pobierania");
+			concertMgr.collect();
 			Toast.makeText(getApplicationContext(), "Zaaktualizowano!", Toast.LENGTH_SHORT).show();
 			super.onPostExecute(result);
 		}
