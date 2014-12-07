@@ -1,6 +1,7 @@
 package pl.javaparty.concertmanager;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import pl.javaparty.concertmanager.Concert.AgencyName;
@@ -8,13 +9,13 @@ import pl.javaparty.sql.dbManager;
 import android.database.Cursor;
 
 public class ConcertManager {
-	public static ArrayList<Concert> concerts;
+	public static HashSet<Concert> concerts;
 	dbManager dbm;
 
 	public ConcertManager(dbManager dbm)
 	{
 		if (concerts == null)
-			concerts = new ArrayList<Concert>();
+			concerts = new HashSet<Concert>();
 		this.dbm = dbm;
 	}
 
@@ -36,7 +37,7 @@ public class ConcertManager {
 
 	public ArrayList<Concert> getList()
 	{
-		return concerts;
+		return new ArrayList<Concert>(concerts); //
 	}
 
 	public ArrayList<String> getCities()

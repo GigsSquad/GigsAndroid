@@ -8,6 +8,49 @@ import android.util.Log;
 
 public class Concert
 {
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((artist == null) ? 0 : artist.hashCode());
+		result = prime * result + ((city == null) ? 0 : city.hashCode());
+		result = prime * result + ((date == null) ? 0 : date.hashCode());
+		result = prime * result + ((spot == null) ? 0 : spot.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Concert other = (Concert) obj;
+		if (artist == null) {
+			if (other.artist != null)
+				return false;
+		} else if (!artist.equals(other.artist))
+			return false;
+		if (city == null) {
+			if (other.city != null)
+				return false;
+		} else if (!city.equals(other.city))
+			return false;
+		if (date == null) {
+			if (other.date != null)
+				return false;
+		} else if (!date.equals(other.date))
+			return false;
+		if (spot == null) {
+			if (other.spot != null)
+				return false;
+		} else if (!spot.equals(other.spot))
+			return false;
+		return true;
+	}
+
 	public enum AgencyName {
 		GOAHEAD, ALTERART, INNE
 	}
@@ -15,12 +58,11 @@ public class Concert
 	private final int ID; //unikalne id ka¿dego koncertu
 	private String artist;
 	private String city; // to leci potem do google maps api
-	private String spot; // lokalizacja w mieœcie, jakiœ klub czy coœ
+	private String spot; // lokalizacja w mieœcie, jakiœ klub czy coœ (ulica?)
 	private Calendar date; // sam wyliczy dzieñ tygodnia, mo¿na mu dodaæ godzinê etc.
 	private String url; // url do strony ze szczegolowymi informacjami o danym koncercie
 	private AgencyName agency;
 	// additional info
-	private String adress; // uzupelnienie do place, tez moze isc do google maps api
 	private String entryHours;
 	private String ticketsPrice;
 
@@ -36,7 +78,6 @@ public class Concert
 		this.spot = spot;
 		date = new GregorianCalendar(year, month - 1, day);
 		this.url = url;
-		this.adress = "";
 		this.entryHours = "";
 		this.ticketsPrice = "";
 	}
@@ -112,14 +153,13 @@ public class Concert
 
 	public void setMoreData(String adress, String entryHours, String ticketsPrice)
 	{
-		this.adress = adress;
 		this.entryHours = entryHours;
 		this.ticketsPrice = ticketsPrice;
 	}
 
 	public String getMoreData()// tymczasowe raczej, bo po co to komu? :D
 	{
-		return adress + " " + entryHours + " " + ticketsPrice;
+		return entryHours + " " + ticketsPrice;
 	}
 
 	@Override
