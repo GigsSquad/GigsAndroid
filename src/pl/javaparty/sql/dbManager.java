@@ -187,21 +187,23 @@ public class dbManager extends SQLiteOpenHelper {
 		return deleteDuplicates(universalGetter3000("CITY"));
 	}
 	
-	
 	public String getArtist(int ID){
-		
+		return fieldGetter(ID,"ARTIST");
 	}
 	
 	public String getCity (int ID){
-		
+		return fieldGetter(ID,"CITY");
 	}
 	
-	public String getPlace (int ID){
-		
+	public String getSpot (int ID){
+		return fieldGetter(ID,"SPOT");	
 	}
 	
 	private String fieldGetter (int ID, String fieldName){
 		String [] columns = {"ORD",fieldName};
-		Cursor c = database.query("Concerts", columns, null,null,null,null,null);
+		Cursor c = database.query("Concerts", columns, "ORD = "+ID,null,null,null,null);
+		String res = c.moveToFirst()? c.getString(1) : null;
+		c.close();
+		return res;
 	}
 }
