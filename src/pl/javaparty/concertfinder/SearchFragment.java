@@ -1,9 +1,6 @@
 package pl.javaparty.concertfinder;
 
-import java.util.ArrayList;
-
 import pl.javaparty.concertmanager.Concert;
-import pl.javaparty.concertmanager.ConcertManager;
 import pl.javaparty.sql.dbManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -27,15 +24,16 @@ public class SearchFragment extends Fragment {
 	ArrayAdapter<String> adapterSearchBox, adapterList;
 	ConcertAdapter adapter;
 	Context context;
-	ConcertManager concertMgr;
+	dbManager dbm;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
 		View view = inflater.inflate(R.layout.search_fragment, container, false);
 		getActivity().getActionBar().setTitle("Szukaj");
-
+		
+		dbm = (dbManager) getArguments().getSerializable("dbManager");//przekazujemy dbm od mainActivity
+		
 		context = inflater.getContext();
-		concertMgr = new ConcertManager(new dbManager(context));
 
 		searchBox = (AutoCompleteTextView) view.findViewById(R.id.searchBox);
 		concertList = (ListView) view.findViewById(R.id.concertList);
@@ -46,8 +44,8 @@ public class SearchFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
-
-				adapter = new ConcertAdapter(getActivity(), R.layout.list_row, concertMgr.getConcertList(searchBox.getText().toString()));
+				String artist = searchBox.getText().toString();
+				adapter = new ConcertAdapter(getActivity(), R.layout.list_row, dbm.getConcertsByArtist(artist)); //concertMgr.getConcertList(searchBox.getText().toString()));
 				concertList.setAdapter(adapter);
 
 				getActivity().getActionBar().setTitle("Szukaj: " + searchBox.getText().toString());
@@ -62,7 +60,6 @@ public class SearchFragment extends Fragment {
 
 				Fragment fragment = new ConcertFragment();
 				Bundle args = new Bundle();
-
 				Concert item = (Concert) parent.getAdapter().getItem(position);
 				args.putInt("ID", item.getID()); // przesylam unikalne id koncertu
 
@@ -76,7 +73,6 @@ public class SearchFragment extends Fragment {
 	}
 
 	private class DownloadTask extends AsyncTask<Void, Void, String> {
-		// TODO: zrobiæ informacje ze stanem pobierania
 
 		@Override
 		protected String doInBackground(Void... params) {
@@ -92,7 +88,6 @@ public class SearchFragment extends Fragment {
 		@Override
 		protected void onPostExecute(String result) { // zostanie wykonane po skoñczeniu doInBackground
 			super.onPostExecute(result);
-			dbManager dbm = new dbManager(getActivity());
 			String[] stockArr =  dbm.getArtists();
 
 			Log.i("ARTIST", "Lista: " + stockArr);

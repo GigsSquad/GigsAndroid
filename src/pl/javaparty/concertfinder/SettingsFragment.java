@@ -1,7 +1,6 @@
 package pl.javaparty.concertfinder;
 
 import pl.javaparty.imageloader.FileExplorer;
-import pl.javaparty.concertmanager.ConcertManager;
 import pl.javaparty.prefs.Prefs;
 import pl.javaparty.sql.dbManager;
 import android.app.Fragment;
@@ -28,23 +27,21 @@ public class SettingsFragment extends Fragment {
 	Button saveButton, clearButton;
 	Context context;
 	ArrayAdapter<String> adapter;
-	ConcertManager cm;
+	dbManager dbm;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
 		View view = inflater.inflate(R.layout.settings_fragment, container, false);
 		context = inflater.getContext();
 		getActivity().getActionBar().setTitle("Preferencje");
-
+		dbm = (dbManager) getArguments().getSerializable("dbManager");//przekazujemy dbm od mainActivity
 		citySearchBox = (AutoCompleteTextView) view.findViewById(R.id.cityAutoComplete);
 		distanceSeekBar = (SeekBar) view.findViewById(R.id.distanceSeekBar);
 		distanceTextView = (TextView) view.findViewById(R.id.distanceTextView);
 		saveButton = (Button) view.findViewById(R.id.saveSettingsButton);
 		clearButton = (Button) view.findViewById(R.id.clearFilesButton);
 
-		cm = new ConcertManager(new dbManager(getActivity()));
-
-		adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, cm.getCities());
+		adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, dbm.getCities());
 		citySearchBox.setAdapter(adapter);
 		citySearchBox.setThreshold(1);
 

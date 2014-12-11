@@ -1,7 +1,5 @@
 package pl.javaparty.concertfinder;
 
-import java.util.List;
-
 import pl.javaparty.concertmanager.Concert;
 import pl.javaparty.imageloader.ImageLoader;
 import android.content.Context;
@@ -25,7 +23,7 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 	ImageLoader imageLoader;
 	int ID; // unikalne id koncertu, nie jest wyœwietlane ale bêdzie przydatne przy
 
-	public ConcertAdapter(Context context, int resourceId, List<Concert> items) {
+	public ConcertAdapter(Context context, int resourceId, Concert[] items) {
 		super(context, resourceId, items);
 		this.context = context;
 		imageLoader = new ImageLoader(context);
