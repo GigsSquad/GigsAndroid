@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
+import pl.javaparty.concertmanager.Concert;
+import pl.javaparty.concertmanager.Concert.AgencyName;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -205,5 +207,45 @@ public class dbManager extends SQLiteOpenHelper {
 		String res = c.moveToFirst()? c.getString(1) : null;
 		c.close();
 		return res;
+	}
+	
+	private AgencyName getAgency(String s) {
+		AgencyName agency = null;
+		if (s.equals("GOAHEAD"))
+			agency = AgencyName.GOAHEAD;
+		else if (s.equals("ALTERART"))
+			agency = AgencyName.ALTERART;
+		return agency;
+	}
+	
+	private Concert[] getConcertsBy(String condition){
+		String[] columns = { "ORD", "ARTIST", "CITY", "SPOT", "DAY", "MONTH", "YEAR", "AGENCY", "URL" };
+		Cursor c = database.query("Concerts", columns, condition, null, null, null, null);
+		Concert[] concerts =  new Concert[c.getCount()];
+		for(int i=0; c.moveToNext(); i++){
+			concerts[i] = new Concert(c.getInt(0), c.getString(1), c.getString(2), c.getString(3),
+					c.getInt(4), c.getInt(5), c.getInt(6), getAgency(c.getString(7)), c.getString(8));
+		}
+		c.close();
+		return concerts;
+	}
+	
+	public Concert [] getAllConcerts(){
+		return getConcertsBy(null);
+	}
+	
+	public Concert[] getConcertsByArtist(String artist){
+		String condition = "ARTIST = '" + artist +"'";
+		return getConcertsBy(condition);
+	}
+	
+	public Concert[] getConcertsByCity(String city){
+		String condition = "CITY = '"+city+"'";
+		return getConcertsBy(condition);
+	}
+	
+	public Concert[] getConcertsByDate(int day,int month,int year){
+		String condition = "DAY = "+day+" AND MONTH = "+month+" AND YEAR = "+year;
+		return getConcertsBy(condition);
 	}
 }
