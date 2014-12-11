@@ -41,7 +41,7 @@ public class MainActivity extends Activity {
 		context = getApplicationContext();
 		dbMgr = new dbManager(context);
 		concertMgr = new ConcertManager(dbMgr);
-		concertMgr.collect();
+		//concertMgr.collect();
 
 		//File db = getDatabasePath(dbManager.DATABASE_NAME);
 		Log.i("DB", "Sprawdzam czy baza istnieje");

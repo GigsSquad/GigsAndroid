@@ -93,8 +93,7 @@ public class SearchFragment extends Fragment {
 		protected void onPostExecute(String result) { // zostanie wykonane po skoñczeniu doInBackground
 			super.onPostExecute(result);
 			dbManager dbm = new dbManager(getActivity());
-			String[] stockArr = new String[dbm.getSize()];
-			stockArr = dbm.getArtist().toArray(stockArr);
+			String[] stockArr =  dbm.getArtists();
 
 			Log.i("ARTIST", "Lista: " + stockArr);
 

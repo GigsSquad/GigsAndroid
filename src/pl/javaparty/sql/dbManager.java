@@ -2,6 +2,7 @@ package pl.javaparty.sql;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashSet;
 
 import android.content.ContentValues;
@@ -9,6 +10,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class dbManager extends SQLiteOpenHelper {
 
@@ -157,6 +159,28 @@ public class dbManager extends SQLiteOpenHelper {
 		}
 	}
 	
+	public void deleteOldConcerts()
+	{
+		Log.i("Deleter", "Szukam starych koncertow");
+		Calendar calendar = Calendar.getInstance();
+		int day = calendar.get(Calendar.DAY_OF_MONTH);
+		int month = calendar.get(Calendar.MONTH) + 1;
+		int year = calendar.get(Calendar.YEAR);
+		String selection = new String("YEAR < ? OR (YEAR = ? AND MONTH < ?) OR (YEAR = ? AND MONTH = ? AND DAY < ?)");
+		String selectionArgs[] = new String[] 
+				{
+				String.valueOf(year),
+				String.valueOf(year),
+				String.valueOf(month),
+				String.valueOf(year),
+				String.valueOf(month),
+				String.valueOf(day),
+				};
+		int deleted = database.delete("Concerts", selection, selectionArgs);
+		Log.i("Deleter", "Wyjebano " + deleted + " przestarzalych koncertow!");
+	}
+	
+	
 	/*
 	 *  METODY ZASTÊPUJ¥CE CMa:
 	 */
@@ -187,7 +211,7 @@ public class dbManager extends SQLiteOpenHelper {
 		return deleteDuplicates(universalGetter3000("CITY"));
 	}
 	
-	
+	/*
 	public String getArtist(int ID){
 		
 	}
@@ -203,5 +227,5 @@ public class dbManager extends SQLiteOpenHelper {
 	private String fieldGetter (int ID, String fieldName){
 		String [] columns = {"ORD",fieldName};
 		Cursor c = database.query("Concerts", columns, null,null,null,null,null);
-	}
+	}*/
 }
