@@ -188,11 +188,6 @@ public class dbManager extends SQLiteOpenHelper implements Serializable{
 		Log.i("Deleter", "Wyjebano " + deleted + " przestarzalych koncertow!");
 	}
 	
-	
-	/*
-	 *  METODY ZASTÊPUJ¥CE CMa:
-	 */
-
 	private String[] universalGetter3000(String columnName){
 		String [] column = {columnName};
 		Cursor c = database.query("Concerts",column,null,null,null,null,null);
@@ -250,7 +245,7 @@ public class dbManager extends SQLiteOpenHelper implements Serializable{
 	
 	private Concert[] getConcertsBy(String condition){
 		String[] columns = { "ORD", "ARTIST", "CITY", "SPOT", "DAY", "MONTH", "YEAR", "AGENCY", "URL" };
-		Cursor c = database.query("Concerts", columns, condition, null, null, null, null);
+		Cursor c = database.query("Concerts", columns, condition, null, null, null,"YEAR,MONTH,DAY");
 		Concert[] concerts =  new Concert[c.getCount()];
 		for(int i=0; c.moveToNext(); i++){
 			concerts[i] = new Concert(c.getInt(0), c.getString(1), c.getString(2), c.getString(3),
