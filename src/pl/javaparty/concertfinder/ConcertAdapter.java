@@ -52,7 +52,6 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 			holder.description = (TextView) convertView.findViewById(R.id.description);
 			holder.pb = (ProgressBar) convertView.findViewById(R.id.progress_bar);
 			
-			
 			convertView.setTag(holder);
 		} else
 			holder = (ViewHolder) convertView.getTag();

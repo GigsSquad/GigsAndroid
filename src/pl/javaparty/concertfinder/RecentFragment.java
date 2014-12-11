@@ -6,7 +6,6 @@ import pl.javaparty.sql.dbManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,12 +17,10 @@ import android.widget.ListView;
 
 public class RecentFragment extends Fragment {
 
-	ConcertManager concertMgr;
 	ArrayAdapter<String> adapterSearchBox, adapterList, adapterDrawer;
 	ConcertAdapter adapter;
 	ListView lv;
 	Context context;
-	dbManager dbm;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
@@ -31,8 +28,11 @@ public class RecentFragment extends Fragment {
 		getActivity().getActionBar().setTitle("Ostatnie koncerty");
 		context = inflater.getContext();
 		lv = (ListView) view.findViewById(R.id.recentList);
-
-		new DownloadTask().execute();
+		
+		ConcertManager concertMgr = new ConcertManager(new dbManager(context));
+		adapter = new ConcertAdapter(getActivity(), R.layout.list_row, concertMgr.getList());
+		
+		lv.setAdapter(adapter);
 
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -51,27 +51,5 @@ public class RecentFragment extends Fragment {
 			}
 		});
 		return view;
-	}
-
-	private class DownloadTask extends AsyncTask<Void, Void, String> {
-		// TODO: zrobiæ informacje ze stanem pobierania
-
-		@Override
-		protected String doInBackground(Void... params) {
-			concertMgr = new ConcertManager(new dbManager(context));
-			adapter = new ConcertAdapter(getActivity(), R.layout.list_row, concertMgr.getList());
-			return null;
-		}
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-		}
-
-		@Override
-		protected void onPostExecute(String result) { // zostanie wykonane po skoñczeniu doInBackground
-			lv.setAdapter(adapter);
-			super.onPostExecute(result);
-		}
 	}
 }

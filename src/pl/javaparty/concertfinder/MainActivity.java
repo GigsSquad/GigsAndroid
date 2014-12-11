@@ -43,10 +43,7 @@ public class MainActivity extends Activity {
 		concertMgr = new ConcertManager(dbMgr);
 		concertMgr.collect();
 
-		//File db = getDatabasePath(dbManager.DATABASE_NAME);
-		Log.i("DB", "Sprawdzam czy baza istnieje");
-		// if (!db.exists()) TODO: nie zawsze dziala
-		new DownloadTask().execute();
+		//new DownloadTask().execute();TODO za kazdym razem aktualizuje, a mialo tak nie robic
 
 		menu = new String[] { "Szukaj", "Ostatnie koncerty", "Twoje koncerty", "Aktualizuj", "Preferencje", "Informacje" };
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -75,7 +72,7 @@ public class MainActivity extends Activity {
 						fragment = new SettingsFragment();
 					else if (position == 5)
 						fragment = new InformationFragment();
-					currentFragment = position;
+					currentFragment = position;//TODO luka, przy wyborze 3 nie zmienia sie fragment
 
 					if (fragment != null)
 					{
@@ -128,7 +125,7 @@ public class MainActivity extends Activity {
 
 		@Override
 		protected void onPreExecute() {
-			Log.i("DB", "Baza nie istnieje");
+			Log.i("DB", "Baza nie istnieje");//z tym ze nie koniecznie
 			super.onPreExecute();
 		}
 

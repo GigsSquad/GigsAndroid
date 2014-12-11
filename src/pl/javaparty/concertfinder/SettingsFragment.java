@@ -97,6 +97,7 @@ public class SettingsFragment extends Fragment {
 				FileExplorer f = new FileExplorer(context);	
 				f.clear();
 				Log.i("SETTINGS", "Usunieto obrazki z dysku");
+				Toast.makeText(getActivity(), "Wyczyszczono pamiec!", Toast.LENGTH_SHORT).show();
 			}
 		});
 
