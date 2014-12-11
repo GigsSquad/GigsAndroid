@@ -2,7 +2,6 @@ package pl.javaparty.concertfinder;
 
 import java.io.IOException;
 
-import pl.javaparty.concertmanager.ConcertManager;
 import pl.javaparty.jsoup.JSoupDownloader;
 import pl.javaparty.sql.dbManager;
 import android.app.Activity;
@@ -31,8 +30,7 @@ public class MainActivity extends Activity {
 	Context context;
 	int currentFragment = 1;
 	dbManager dbMgr;
-	ConcertManager concertMgr;
-	
+	Bundle arguments;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +38,12 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		context = getApplicationContext();
 		dbMgr = new dbManager(context);
-		concertMgr = new ConcertManager(dbMgr);
-		concertMgr.collect();
 
-		//new DownloadTask().execute();TODO za kazdym razem aktualizuje, a mialo tak nie robic
+		arguments = new Bundle();
+		arguments.putSerializable("dbManager", dbMgr);
+		Log.i("DB", "Sprawdzam czy baza istnieje");
+		//TODO tego mialo nie byc
+		new DownloadTask().execute();
 
 		menu = new String[] { "Szukaj", "Ostatnie koncerty", "Twoje koncerty", "Aktualizuj", "Preferencje", "Informacje" };
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -54,22 +54,33 @@ public class MainActivity extends Activity {
 		drawerList.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
-				// Bundle args = new Bundle();
-				// args.putString("Menu", menu[position]);
+				
 				drawerLayout.closeDrawers();
-
+				
 				if (currentFragment != position) {
 					Fragment fragment = null; 
 					if (position == 0)
+					{
 						fragment = new SearchFragment();
+						//przekazuje managera, mozna to w sumie uogolnic ;)
+						fragment.setArguments(arguments);
+					}
 					else if (position == 1)
+					{
 						fragment = new RecentFragment();
+						//przekazuje managera
+						fragment.setArguments(arguments);
+					}
 					else if (position == 2)
 						fragment = new FavoriteFragment();
 					else if (position == 3)
 						new DownloadTask().execute();
 					else if (position == 4)
+					{
 						fragment = new SettingsFragment();
+						//przekazuje managera
+						fragment.setArguments(arguments);
+					}
 					else if (position == 5)
 						fragment = new InformationFragment();
 					currentFragment = position;//TODO luka, przy wyborze 3 nie zmienia sie fragment
@@ -86,6 +97,8 @@ public class MainActivity extends Activity {
 
 		FragmentManager fragmentManager = getFragmentManager();
 		Fragment fragment = new RecentFragment();
+		//przekazuje managera
+		fragment.setArguments(arguments);
 		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 	}
 
@@ -105,9 +118,7 @@ public class MainActivity extends Activity {
 			try
 			{
 				downloader.getData();
-				concertMgr.collect();
 				Log.i("DB", "Tworzenie nowej bazy i pobieranie");
-				System.out.println("Pobieranie...");
 			} catch (IOException e)
 			{
 				Log.i("DB", "Nie powiniene� wiedzie� tego tekstu");
@@ -115,24 +126,17 @@ public class MainActivity extends Activity {
 			}
 			return null;
 		}
-//
-//		public boolean isOnline() {
-//			ConnectivityManager cm =
-//					(ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-//			NetworkInfo netInfo = cm.getActiveNetworkInfo();
-//			return netInfo != null && netInfo.isConnectedOrConnecting();
-//		}
 
 		@Override
 		protected void onPreExecute() {
-			Log.i("DB", "Baza nie istnieje");//z tym ze nie koniecznie
+
+			Log.i("DB", "Baza nie istnieje");//TODO wcale ze nie prawda, moze istniec
 			super.onPreExecute();
 		}
 
 		protected void onPostExecute(String result) {
 			Log.i("DB", "Koniec pobierania");
-			concertMgr.collect();
-			Toast.makeText(getApplicationContext(), "Zaaktualizowano!", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), "Zaktualizowano!", Toast.LENGTH_SHORT).show();
 			super.onPostExecute(result);
 		}
 	}

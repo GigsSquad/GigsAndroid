@@ -1,7 +1,6 @@
 package pl.javaparty.concertfinder;
 
 import pl.javaparty.concertmanager.Concert;
-import pl.javaparty.concertmanager.ConcertManager;
 import pl.javaparty.sql.dbManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -21,6 +20,7 @@ public class RecentFragment extends Fragment {
 	ConcertAdapter adapter;
 	ListView lv;
 	Context context;
+	dbManager dbm;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
@@ -29,9 +29,9 @@ public class RecentFragment extends Fragment {
 		context = inflater.getContext();
 		lv = (ListView) view.findViewById(R.id.recentList);
 		
-		ConcertManager concertMgr = new ConcertManager(new dbManager(context));
-		adapter = new ConcertAdapter(getActivity(), R.layout.list_row, concertMgr.getList());
+		dbm = (dbManager)getArguments().getSerializable("dbManager");
 		
+		adapter = new ConcertAdapter(getActivity(), R.layout.list_row, dbm.getAllConcerts());
 		lv.setAdapter(adapter);
 
 		lv.setOnItemClickListener(new OnItemClickListener() {
@@ -44,6 +44,7 @@ public class RecentFragment extends Fragment {
 
 				Concert item = (Concert) parent.getAdapter().getItem(position);
 				args.putInt("ID", item.getID()); // przesylam unikalne id koncertu
+				args.putSerializable("dbManager", dbm);
 
 				fragment.setArguments(args);
 				FragmentManager fragmentManager = getFragmentManager();
