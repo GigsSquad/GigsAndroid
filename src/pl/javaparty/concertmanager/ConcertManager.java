@@ -69,6 +69,18 @@ public class ConcertManager {
 		return list;
 	}
 
+	public Concert getById (int ID){
+		ArrayList<Concert> concerts = getList();
+		Concert res = null;
+		for(Concert c :concerts){
+			if (c.getID()==ID){
+				res = c;
+				break;
+			}
+		}
+		return res;
+	}
+	
 	public String searchArtis(String artist)
 	{
 		StringBuilder stringBuilder = new StringBuilder();

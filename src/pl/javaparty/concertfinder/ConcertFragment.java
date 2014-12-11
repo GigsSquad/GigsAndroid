@@ -21,10 +21,10 @@ public class ConcertFragment extends Fragment {
 		place = (TextView) view.findViewById(R.id.placeTextView);
 
 		ConcertManager cm = new ConcertManager(new dbManager(getActivity()));
-		int ID = (this.getArguments().getInt("ID", -1) - 1); // -1 bo bazadanych numeruje od 1 a nie od 0
+		int ID = (this.getArguments().getInt("ID", -1)); // -1 bo bazadanych numeruje od 1 a nie od 0
 		Log.i("KURWA", "Przes³ane id: " + ID);
-		getActivity().getActionBar().setTitle(cm.getList().get(ID).getArtist());
-		artist.setText(cm.getList().get(ID).getArtist());
+		getActivity().getActionBar().setTitle(cm.getById(ID).getArtist());
+		artist.setText(cm.getById(ID).getArtist());
 
 		place.setText(cm.getList().get(ID).getPlace());
 
