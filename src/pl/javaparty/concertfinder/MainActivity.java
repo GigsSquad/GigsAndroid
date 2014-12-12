@@ -105,13 +105,13 @@ public class MainActivity extends Activity {
 		@Override
 		protected String doInBackground(Void... params)
 		{
-			Toast.makeText(getApplicationContext(), "Aktualizowanie...", Toast.LENGTH_SHORT).show();
 			dbMgr.updateDatabase();
 			return null;
 		}
 
 		@Override
 		protected void onPreExecute() {
+			Toast.makeText(getApplicationContext(), "Aktualizowanie...", Toast.LENGTH_SHORT).show();
 			Log.i("DB", "Baza nie istnieje");//TODO wcale ze nie prawda, moze istniec
 			super.onPreExecute();
 		}
