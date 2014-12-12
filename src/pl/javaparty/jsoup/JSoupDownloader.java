@@ -15,6 +15,7 @@ public class JSoupDownloader {
 	public void getData() throws IOException{
 		new JDGoAhead(dbm).getData();
 		new JDAlterArt(dbm).getData();
+		new JDTicketPro(dbm).getData();
 		dbm.deleteOldConcerts();
 	}
 }
