@@ -34,7 +34,6 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 		TextView title;
 		TextView description;
 		RelativeLayout card;
-		ProgressBar pb;
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -48,7 +47,6 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 			holder.image = (ImageView) convertView.findViewById(R.id.list_image);
 			holder.title = (TextView) convertView.findViewById(R.id.title);
 			holder.description = (TextView) convertView.findViewById(R.id.description);
-			holder.pb = (ProgressBar) convertView.findViewById(R.id.progress_bar);
 			
 			convertView.setTag(holder);
 		} else
@@ -59,7 +57,7 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 		holder.description.setText(rowItem.getPlace() + " " + rowItem.dateToString());
 
 		//holder.pb.setVisibility(View.GONE); 
-		imageLoader.DisplayImage(rowItem.getArtist(), holder.image, holder.pb);
+		imageLoader.DisplayImage(rowItem.getArtist(), holder.image);
 
 		Animation animation = AnimationUtils.loadAnimation(context, R.anim.card_animation);
 		holder.card.startAnimation(animation);

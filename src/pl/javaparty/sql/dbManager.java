@@ -23,7 +23,7 @@ public class dbManager extends SQLiteOpenHelper implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	public final static String DATABASE_NAME = "baza.db";
-	SQLiteDatabase database;
+	private static SQLiteDatabase database;
 
 	private static String CreateConcertTable =
 			"CREATE TABLE Concerts(" +
@@ -226,6 +226,23 @@ public class dbManager extends SQLiteOpenHelper implements Serializable{
 		return fieldGetter(ID,"SPOT");	
 	}
 	
+	public String getUrl(int ID) {
+		return fieldGetter(ID,"URL");
+	}
+	
+	public String getDate(int ID){
+		String [] columns = {"ORD","DAY","MONTH","YEAR"};
+		Cursor c = database.query("Concerts", columns, "ORD = "+ID, null,null,null,null);
+		c.moveToFirst();
+		int day = c.getInt(1);
+		String dayS = day<10? "0"+day : ""+day;
+		int month = c.getInt(2);
+		String monthS = month<10? "0"+month : ""+month;
+		String res = dayS+"."+monthS+"."+c.getInt(3);
+		c.close();
+		return res;
+	}
+	
 	private String fieldGetter (int ID, String fieldName){
 		String [] columns = {"ORD",fieldName};
 		Cursor c = database.query("Concerts", columns, "ORD = "+ID,null,null,null,null);
@@ -273,4 +290,6 @@ public class dbManager extends SQLiteOpenHelper implements Serializable{
 		String condition = "DAY = "+day+" AND MONTH = "+month+" AND YEAR = "+year;
 		return getConcertsBy(condition);
 	}
+
+
 }

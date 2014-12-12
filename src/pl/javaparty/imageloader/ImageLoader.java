@@ -45,7 +45,7 @@ public class ImageLoader
 
 	 }
 	 
-	 public void DisplayImage(String bandName, ImageView imageView, ProgressBar progressBar)
+	 public void DisplayImage(String bandName, ImageView imageView)
 	    {
 		 	Log.i(TAG, "Proces ladowania obrazka: " + bandName);
 	        imageViews.put(imageView, bandName);
@@ -54,20 +54,18 @@ public class ImageLoader
 	        {
 	        	//najszybsze
 	        	imageView.setImageBitmap(bitmap);
-	        	progressBar.setVisibility(View.INVISIBLE);
 	        	Log.i(TAG, "Obrazek "+ bandName + " zaladowany z pamieci podrecznej.");
 	        }
 	        else
 	        {
-	            queuePhoto(bandName, imageView, progressBar);
+	            queuePhoto(bandName, imageView);
 	            imageView.setImageResource(DEF_IMG_ID);
-	            progressBar.setVisibility(View.VISIBLE);
 	        }
 	    }
 	 
-	 public void queuePhoto(String bandName, ImageView imageView, ProgressBar progressBar)
+	 public void queuePhoto(String bandName, ImageView imageView)
 	 {
-		 PhotoToLoad p = new PhotoToLoad(bandName, imageView, progressBar);
+		 PhotoToLoad p = new PhotoToLoad(bandName, imageView);
 		 executorService.submit(new LoadPhoto(p));
 	 }
 	 
@@ -75,12 +73,10 @@ public class ImageLoader
 	 {
 		 public String bandName;
 		 public ImageView imageView;
-		 public ProgressBar progressBar;
-		 public PhotoToLoad(String bandName, ImageView imageView, ProgressBar progressBar)
+		 public PhotoToLoad(String bandName, ImageView imageView)
 		 {
 			 this.bandName = bandName;
 			 this.imageView = imageView;
-			 this.progressBar = progressBar;
 		 }
 	 }
 	 
@@ -213,7 +209,6 @@ public class ImageLoader
             {
             	Log.i(TAG, "LADOWANIE...");
                 photoToLoad.imageView.setImageBitmap(bitmap);
-                photoToLoad.progressBar.setVisibility(View.INVISIBLE);
             }
 		}
 	}
