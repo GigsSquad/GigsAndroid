@@ -27,5 +27,7 @@ public class Prefs {
 	public static void setCity(Context context, String value) {
 		getPrefs(context).edit().putString("CITY", value).commit();
 	}
+	
+	
 
 }

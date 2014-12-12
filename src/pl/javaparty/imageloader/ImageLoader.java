@@ -5,12 +5,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import pl.javaparty.concertfinder.MainActivity;
+
+
 import pl.javaparty.concertfinder.R;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -30,7 +32,7 @@ public class ImageLoader
 	 Handler handler; //bedzie wrzucal Runnable do kolejki wykonania sie
 	 private Map<ImageView, String> imageViews; //do tej pory uzyte ImageView i nazwa zespolu do niego przypisana
 	 Context context;
-	 private final int DEF_IMG_ID = R.drawable.dummy_img;
+	 private final int DEF_IMG_ID = R.drawable.stock_pic;
 	 
 	 public ImageLoader(Context context)
 	 {
@@ -39,30 +41,31 @@ public class ImageLoader
 		// handler = new Handler();
 		 fileExplorer = new FileExplorer(context);
 		 memoryCache = new MemoryCache();
-		 executorService = Executors.newFixedThreadPool(4);
+		 executorService = Executors.newFixedThreadPool(5);
+
 	 }
 	 
-	 public void DisplayImage(String bandName, ImageView imageView, ProgressBar progressBar)
+	 public void DisplayImage(String bandName, ImageView imageView)
 	    {
 		 	Log.i(TAG, "Proces ladowania obrazka: " + bandName);
 	        imageViews.put(imageView, bandName);
 	        Bitmap bitmap=memoryCache.get(bandName);
 	        if(bitmap!=null)
 	        {
+	        	//najszybsze
 	        	imageView.setImageBitmap(bitmap);
-	        	progressBar.setVisibility(View.GONE);
 	        	Log.i(TAG, "Obrazek "+ bandName + " zaladowany z pamieci podrecznej.");
 	        }
 	        else
 	        {
-	            queuePhoto(bandName, imageView, progressBar);
+	            queuePhoto(bandName, imageView);
 	            imageView.setImageResource(DEF_IMG_ID);
 	        }
 	    }
 	 
-	 public void queuePhoto(String bandName, ImageView imageView, ProgressBar progressBar)
+	 public void queuePhoto(String bandName, ImageView imageView)
 	 {
-		 PhotoToLoad p = new PhotoToLoad(bandName, imageView, progressBar);
+		 PhotoToLoad p = new PhotoToLoad(bandName, imageView);
 		 executorService.submit(new LoadPhoto(p));
 	 }
 	 
@@ -70,12 +73,10 @@ public class ImageLoader
 	 {
 		 public String bandName;
 		 public ImageView imageView;
-		 public ProgressBar progressBar;
-		 public PhotoToLoad(String bandName, ImageView imageView, ProgressBar progressBar)
+		 public PhotoToLoad(String bandName, ImageView imageView)
 		 {
 			 this.bandName = bandName;
 			 this.imageView = imageView;
-			 this.progressBar = progressBar;
 		 }
 	 }
 	 
@@ -90,13 +91,16 @@ public class ImageLoader
 		@Override
 		public void run()
 		{
-			if(imageViewReused(photoToLoad))
-                return;
-            Bitmap bmp=getBitmap(photoToLoad.bandName);
-            memoryCache.put(photoToLoad.bandName, bmp);
-            BitmapDisplayer bd=new BitmapDisplayer(bmp, photoToLoad);
-            photoToLoad.imageView.post(bd);
-            //handler.post(bd);
+			if (imageViewReused(photoToLoad))
+				return;
+			Bitmap bmp = getBitmap(photoToLoad.bandName);
+			memoryCache.put(photoToLoad.bandName, bmp);// TODO czasem wrzuca niepotrzebnie
+			Log.i(TAG, "Wrzucanie obrazka do pamiêci podrêcznej.");
+
+			// if (imageViewReused(photoToLoad))
+			// return;
+			BitmapDisplayer bd = new BitmapDisplayer(bmp, photoToLoad);
+			photoToLoad.imageView.post(bd);
 		}
 		 
 	 }
@@ -104,57 +108,41 @@ public class ImageLoader
 	private boolean imageViewReused(PhotoToLoad photoToLoad)//rowniez wylacza progressBara
 	{
 		String tag = imageViews.get(photoToLoad.imageView);
-		if(tag==null || !tag.equals(photoToLoad.bandName))
+		/*if(tag==null || !tag.equals(photoToLoad.bandName))
 		{
-			//photoToLoad.progressBar.setVisibility(View.GONE);//TODO sprawdzam czy zadziala xD
 			return true;
 		}
-		return false;
-		//return tag==null || !tag.equals(photoToLoad.bandName);
+		return false;*/
+		return tag==null || !tag.equals(photoToLoad.bandName);
 	}
 
 	private Bitmap getBitmap(String bandName)
 	{
+		
 		bandName = parseName(bandName);
-		File bandPictureFile=fileExplorer.getFile(bandName);
-		Bitmap bitmap = null;
-		
-		//jesli plik nie istnieje najpierw sciaga obrazek
-		if(!bandPictureFile.exists())
-			ImageDownloader.bandImage(bandPictureFile, bandName);//sciaga obrazek
-		
-		//dekoduje obrazek
-		bitmap = decodeFile(bandPictureFile);
-		
-        return bitmap;
+		synchronized (bandName.intern())//jesli jakis watek w danej chwili pracuje nad tym to ten czeka
+		{
+			File bandPictureFile = fileExplorer.getFile(bandName);
+
+			Bitmap bitmap = null;
+
+			if (!bandPictureFile.exists())
+			{
+				ImageDownloader.bandImage(bandPictureFile, bandName);// sciaga
+																		// obrazek
+			}
+
+			// dekoduje obrazek
+			bitmap = decodeFile(bandPictureFile);
+
+			return bitmap;
+		}
 	}
 	
 	//dekoduje obrazek i skaluje go (oszczedzanie ramu)
     private Bitmap decodeFile(File f){
         try 
-        {
-        	/*
-            //decode image size
-            BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inJustDecodeBounds = true; //nie zwraca bitmapy
-            FileInputStream stream1=new FileInputStream(f);
-            BitmapFactory.decodeStream(stream1,null,o);
-            stream1.close();
-            
-            //Find the correct scale value. It should be the power of 2.
-            final int REQUIRED_SIZE=300;
-            int width_tmp=o.outWidth, height_tmp=o.outHeight;
-            int scale=1;
-            while(true)
-            {
-                if(width_tmp/2<REQUIRED_SIZE || height_tmp/2<REQUIRED_SIZE)
-                    break;
-                width_tmp/=2;
-                height_tmp/=2;
-                scale*=2;
-            }*/ 
-        	//Skalowanie niepotrzebne, gdyz rozmiar niewiele mniejszy od obrazka
-            
+        {            
             //decode with inSampleSize
             FileInputStream stream =new FileInputStream(f);
             Bitmap bitmap=BitmapFactory.decodeStream(stream);
@@ -188,6 +176,17 @@ public class ImageLoader
 		
 		edited = edited.trim();
 		edited = edited.replace(' ', '+');// w last fm spacja zastepowana plusem
+		//zmiana polskich znakow
+		edited = edited.toUpperCase(Locale.ENGLISH);
+		edited = edited.replace('¥', 'A');
+		edited = edited.replace('Æ', 'C');
+		edited = edited.replace('Ê', 'E');
+		edited = edited.replace('£', 'L');
+		edited = edited.replace('Ñ', 'N');
+		edited = edited.replace('Ó', 'O');
+		edited = edited.replace('Œ', 'S');
+		edited = edited.replace('¯', 'Z');
+		edited = edited.replace('', 'Z');
 		return edited;
 	}
 	
@@ -208,9 +207,8 @@ public class ImageLoader
                 return;
             if(bitmap!=null)
             {
-            	Log.i(TAG, "Obrazek nie byl w pamieci podrecznej, LADOWANIE...");
+            	Log.i(TAG, "LADOWANIE...");
                 photoToLoad.imageView.setImageBitmap(bitmap);
-                photoToLoad.progressBar.setVisibility(View.GONE);
             }
 		}
 	}
