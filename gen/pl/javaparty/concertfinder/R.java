@@ -479,7 +479,8 @@ containing a value of this type.
         public static final int hybrid=0x7f0c0000;
         public static final int left_drawer=0x7f0c0016;
         public static final int list_image=0x7f0c0023;
-        public static final int location_map=0x7f0c002b;
+        public static final int location_map=0x7f0c002c;
+        public static final int mapLayout=0x7f0c002b;
         public static final int match_parent=0x7f0c000c;
         public static final int monochrome=0x7f0c0013;
         public static final int none=0x7f0c0001;

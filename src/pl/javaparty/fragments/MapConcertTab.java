@@ -10,10 +10,10 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -52,7 +52,17 @@ public class MapConcertTab extends Fragment {
 			e.printStackTrace();
 		}
 
-		view = inflater.inflate(R.layout.tab_fragment_concert_map, container, false);
+		if (view != null) {
+			ViewGroup parent = (ViewGroup) view.getParent();
+			if (parent != null)
+				parent.removeView(view);
+		}
+		try {
+			view = inflater.inflate(R.layout.tab_fragment_concert_map, container, false);
+		} catch (InflateException e) {
+			/* map is already there, just return view as it is */
+		}
+
 		fragmentManager = getChildFragmentManager();
 
 		setUpMapIfNeeded();
@@ -71,7 +81,7 @@ public class MapConcertTab extends Fragment {
 	private static void setUpMap() {
 		mMap.setMyLocationEnabled(true); // pokazuje nasz¹ pozycje
 		mMap.addMarker(new MarkerOptions().position(new LatLng(loc.getLatitude(), loc.getLongitude())).title(dbm.getSpot(ID)).snippet(dbm.getArtist(ID))); // ustawia
-																																				// marker
+		// marker
 		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(loc.getLatitude(), loc.getLongitude()), 12.0f)); // przybliza
 																															// do
 																															// tego
@@ -96,8 +106,9 @@ public class MapConcertTab extends Fragment {
 		super.onDestroyView();
 		if (mMap != null) {
 			// fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-			fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.location_map)).commit();
+			// fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.location_map)).commit();
 			mMap = null;
+
 		}
 	}
 }
