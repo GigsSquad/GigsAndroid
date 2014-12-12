@@ -3,8 +3,8 @@ package pl.javaparty.concertfinder;
 import java.io.IOException;
 
 import pl.javaparty.concertmanager.ConcertManager;
-import pl.javaparty.fragments.FavoriteFragment;
 import pl.javaparty.fragments.AboutFragment;
+import pl.javaparty.fragments.FavoriteFragment;
 import pl.javaparty.fragments.RecentFragment;
 import pl.javaparty.fragments.SearchFragment;
 import pl.javaparty.fragments.SettingsFragment;
@@ -40,16 +40,18 @@ public class MainActivity extends FragmentActivity {
 	dbManager dbMgr;
 	ConcertManager concertMgr;
 	private ActionBarDrawerToggle mDrawerToggle;
+	public static FragmentManager fragmentManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
 		context = getApplicationContext();
 		dbMgr = new dbManager(context);
 		concertMgr = new ConcertManager(dbMgr);
 		concertMgr.collect();
-
+		fragmentManager = getSupportFragmentManager();
 		new DownloadTask().execute();
 
 		// getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -87,7 +89,6 @@ public class MainActivity extends FragmentActivity {
 					if (fragment != null)
 					{
 						// fragment.setArguments(args);
-						FragmentManager fragmentManager = getSupportFragmentManager();
 						fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 					}
 				}

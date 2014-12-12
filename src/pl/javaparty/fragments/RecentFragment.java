@@ -30,7 +30,7 @@ public class RecentFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
 		View view = inflater.inflate(R.layout.fragment_recent, container, false);
-		getActivity().getActionBar().setTitle("Ostatnie koncerty");
+		getActivity().getActionBar().setTitle("Najbli¿sze koncerty");
 		context = inflater.getContext();
 		lv = (ListView) view.findViewById(R.id.recentList);
 
