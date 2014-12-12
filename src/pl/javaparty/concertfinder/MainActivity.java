@@ -1,7 +1,6 @@
 package pl.javaparty.concertfinder;
 
 import java.io.IOException;
-
 import pl.javaparty.jsoup.JSoupDownloader;
 import pl.javaparty.sql.dbManager;
 import android.app.Activity;
@@ -57,37 +56,28 @@ public class MainActivity extends Activity {
 			public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
 				
 				drawerLayout.closeDrawers();
-				if (currentFragment != position) {
+				if (currentFragment != position) 
+				{
 					Fragment fragment = null; 
 					if (position == 0)
-					{
 						fragment = new SearchFragment();
-						//przekazuje managera, mozna to w sumie uogolnic ;)
-						fragment.setArguments(arguments);
-					}
 					else if (position == 1)
-					{
 						fragment = new RecentFragment();
-						//przekazuje managera
-						fragment.setArguments(arguments);
-					}
 					else if (position == 2)
 						fragment = new FavoriteFragment();
 					else if (position == 3)
-						new DownloadTask().execute();
-					else if (position == 4)
 					{
-						fragment = new SettingsFragment();
-						//przekazuje managera
-						fragment.setArguments(arguments);
+						new DownloadTask().execute();
 					}
+					else if (position == 4)
+						fragment = new SettingsFragment();						
 					else if (position == 5)
 						fragment = new InformationFragment();
 					currentFragment = position;//TODO luka, przy wyborze 3 nie zmienia sie fragment
 
 					if (fragment != null)
 					{
-						// fragment.setArguments(args);
+						fragment.setArguments(arguments);
 						FragmentManager fragmentManager = getFragmentManager();
 						fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 					}
@@ -115,22 +105,13 @@ public class MainActivity extends Activity {
 		@Override
 		protected String doInBackground(Void... params)
 		{
-			JSoupDownloader downloader = new JSoupDownloader(dbMgr);
-			try
-			{
-				downloader.getData();
-				Log.i("DB", "Tworzenie nowej bazy i pobieranie");
-			} catch (IOException e)
-			{
-				Log.i("DB", "Nie powiniene� wiedzie� tego tekstu");
-				e.printStackTrace();
-			}
+			Toast.makeText(getApplicationContext(), "Aktualizowanie...", Toast.LENGTH_SHORT).show();
+			dbMgr.updateDatabase();
 			return null;
 		}
 
 		@Override
 		protected void onPreExecute() {
-
 			Log.i("DB", "Baza nie istnieje");//TODO wcale ze nie prawda, moze istniec
 			super.onPreExecute();
 		}
@@ -138,6 +119,12 @@ public class MainActivity extends Activity {
 		protected void onPostExecute(String result) {
 			Log.i("DB", "Koniec pobierania");
 			Toast.makeText(getApplicationContext(), "Zaktualizowano!", Toast.LENGTH_SHORT).show();
+			
+			Fragment fragment = MainActivity.this.getFragmentManager().findFragmentById(R.id.content_frame);
+			if(fragment instanceof RecentFragment)
+			{
+				((RecentFragment)fragment).refresh();
+			}
 			super.onPostExecute(result);
 		}
 	}

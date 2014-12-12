@@ -14,7 +14,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class RecentFragment extends Fragment {
+public class RecentFragment extends Fragment{
 
 	ArrayAdapter<String> adapterSearchBox, adapterList, adapterDrawer;
 	ConcertAdapter adapter;
@@ -54,12 +54,18 @@ public class RecentFragment extends Fragment {
 		});
 		return view;
 	}
-
+	
 	@Override
 	public void onResume()
 	{
 		super.onResume();
 		lv.setSelection(lastPosition);
+	}
+	
+	public void refresh()
+	{
+		adapter = new ConcertAdapter(getActivity(), R.layout.list_row, dbm.getAllConcerts());
+		lv.setAdapter(adapter);
 	}
 	
 }

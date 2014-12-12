@@ -15,7 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
 
-public class SearchFragment extends Fragment {
+public class SearchFragment extends Fragment{
 
 	AutoCompleteTextView searchBox;
 	ListView concertList;

@@ -19,7 +19,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends Fragment{
 
 	AutoCompleteTextView citySearchBox;
 	SeekBar distanceSeekBar;
