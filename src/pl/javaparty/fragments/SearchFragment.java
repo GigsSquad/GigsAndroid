@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTabHost;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,23 @@ public class SearchFragment extends Fragment {
 	Context context;
 	ConcertManager concertMgr;
 
+	private FragmentTabHost mTabHost;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
+		getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActivity().getActionBar().setHomeButtonEnabled(true);
+
+		mTabHost = new FragmentTabHost(getActivity());
+		mTabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabhost);
+
+		mTabHost.addTab(mTabHost.newTabSpec("fragmentb").setIndicator("Artysta"), InfoConcertTab.class, null);
+		mTabHost.addTab(mTabHost.newTabSpec("fragmenta").setIndicator("Mapa"), MapConcertTab.class, null);
+
+		return (View) mTabHost;
+	}
+	
+	/*
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
 		View view = inflater.inflate(R.layout.fragment_search, container, false);
@@ -104,5 +122,5 @@ public class SearchFragment extends Fragment {
 			searchBox.setThreshold(1);
 
 		}
-	}
+	}*/
 }
