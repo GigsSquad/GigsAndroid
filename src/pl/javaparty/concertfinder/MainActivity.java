@@ -3,15 +3,20 @@ package pl.javaparty.concertfinder;
 import java.io.IOException;
 
 import pl.javaparty.concertmanager.ConcertManager;
+import pl.javaparty.fragments.FavoriteFragment;
+import pl.javaparty.fragments.AboutFragment;
+import pl.javaparty.fragments.RecentFragment;
+import pl.javaparty.fragments.SearchFragment;
+import pl.javaparty.fragments.SettingsFragment;
 import pl.javaparty.jsoup.JSoupDownloader;
 import pl.javaparty.sql.dbManager;
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
@@ -24,7 +29,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity {
 
 	ArrayAdapter<String> adapterDrawer;
 	String[] menu;
@@ -47,7 +52,7 @@ public class MainActivity extends Activity {
 
 		new DownloadTask().execute();
 
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		// getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 
 		menu = new String[] { "Szukaj", "Ostatnie koncerty", "Twoje koncerty", "Aktualizuj", "Preferencje", "Informacje" };
@@ -76,13 +81,13 @@ public class MainActivity extends Activity {
 					else if (position == 4)
 						fragment = new SettingsFragment();
 					else if (position == 5)
-						fragment = new InformationFragment();
+						fragment = new AboutFragment();
 					currentFragment = position;
 
 					if (fragment != null)
 					{
 						// fragment.setArguments(args);
-						FragmentManager fragmentManager = getFragmentManager();
+						FragmentManager fragmentManager = getSupportFragmentManager();
 						fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 					}
 				}
@@ -108,7 +113,7 @@ public class MainActivity extends Activity {
 		};
 
 		// drawerLayout.openDrawer(new View(getApplicationContext()));
-		FragmentManager fragmentManager = getFragmentManager();
+		FragmentManager fragmentManager = getSupportFragmentManager();
 		Fragment fragment = new RecentFragment();
 		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 	}
@@ -119,7 +124,7 @@ public class MainActivity extends Activity {
 		inflater.inflate(R.menu.activity_main_actions, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// toggle nav drawer on selecting action bar app icon/title

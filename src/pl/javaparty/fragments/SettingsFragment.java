@@ -1,12 +1,13 @@
-package pl.javaparty.concertfinder;
+package pl.javaparty.fragments;
 
-import pl.javaparty.imageloader.FileExplorer;
+import pl.javaparty.concertfinder.R;
 import pl.javaparty.concertmanager.ConcertManager;
+import pl.javaparty.imageloader.FileExplorer;
 import pl.javaparty.prefs.Prefs;
 import pl.javaparty.sql.dbManager;
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +33,7 @@ public class SettingsFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
-		View view = inflater.inflate(R.layout.settings_fragment, container, false);
+		View view = inflater.inflate(R.layout.fragment_settings, container, false);
 		context = inflater.getContext();
 		getActivity().getActionBar().setTitle("Preferencje");
 

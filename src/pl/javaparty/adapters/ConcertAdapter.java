@@ -1,7 +1,11 @@
-package pl.javaparty.concertfinder;
+package pl.javaparty.adapters;
 
 import java.util.List;
 
+import pl.javaparty.concertfinder.R;
+import pl.javaparty.concertfinder.R.anim;
+import pl.javaparty.concertfinder.R.id;
+import pl.javaparty.concertfinder.R.layout;
 import pl.javaparty.concertmanager.Concert;
 import pl.javaparty.imageloader.ImageLoader;
 import android.content.Context;

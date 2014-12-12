@@ -1,13 +1,15 @@
-package pl.javaparty.concertfinder;
+package pl.javaparty.fragments;
 
+import pl.javaparty.adapters.ConcertAdapter;
+import pl.javaparty.concertfinder.R;
 import pl.javaparty.concertmanager.Concert;
 import pl.javaparty.concertmanager.ConcertManager;
 import pl.javaparty.sql.dbManager;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +29,7 @@ public class RecentFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
-		View view = inflater.inflate(R.layout.recent_fragment, container, false);
+		View view = inflater.inflate(R.layout.fragment_recent, container, false);
 		getActivity().getActionBar().setTitle("Ostatnie koncerty");
 		context = inflater.getContext();
 		lv = (ListView) view.findViewById(R.id.recentList);
@@ -47,7 +49,7 @@ public class RecentFragment extends Fragment {
 
 				fragment.setArguments(args);
 				FragmentManager fragmentManager = getFragmentManager();
-				fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).addToBackStack(getTag()).commit();
+				fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 			}
 		});
 		return view;

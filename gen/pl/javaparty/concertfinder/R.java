@@ -69,27 +69,28 @@ public final class R {
         public static final int tab_unselected_pressed_bluetheme=0x7f020025;
     }
     public static final class id {
-        public static final int LinearLayout1=0x7f0b0010;
-        public static final int RelativeLayout1=0x7f0b0006;
-        public static final int artistTextView=0x7f0b0003;
-        public static final int card=0x7f0b0007;
-        public static final int cityAutoComplete=0x7f0b0011;
-        public static final int clearFilesButton=0x7f0b0014;
-        public static final int concertList=0x7f0b000f;
+        public static final int LinearLayout1=0x7f0b0009;
+        public static final int RelativeLayout1=0x7f0b0003;
+        public static final int artistTextView=0x7f0b0013;
+        public static final int card=0x7f0b000e;
+        public static final int cityAutoComplete=0x7f0b000a;
+        public static final int clearFilesButton=0x7f0b000d;
+        public static final int concertList=0x7f0b0008;
         public static final int content_frame=0x7f0b0001;
-        public static final int description=0x7f0b000a;
-        public static final int distanceSeekBar=0x7f0b0012;
-        public static final int distanceTextView=0x7f0b0005;
+        public static final int description=0x7f0b0011;
+        public static final int distanceSeekBar=0x7f0b000b;
+        public static final int distanceTextView=0x7f0b0004;
         public static final int drawer_layout=0x7f0b0000;
         public static final int left_drawer=0x7f0b0002;
-        public static final int list_image=0x7f0b0008;
-        public static final int map=0x7f0b000c;
-        public static final int placeTextView=0x7f0b0004;
-        public static final int progress_bar=0x7f0b000b;
-        public static final int recentList=0x7f0b000d;
-        public static final int saveSettingsButton=0x7f0b0013;
-        public static final int searchBox=0x7f0b000e;
-        public static final int title=0x7f0b0009;
+        public static final int list_image=0x7f0b000f;
+        public static final int placeTextView=0x7f0b0014;
+        public static final int progress_bar=0x7f0b0012;
+        public static final int realtabcontent=0x7f0b0005;
+        public static final int recentList=0x7f0b0006;
+        public static final int saveSettingsButton=0x7f0b000c;
+        public static final int searchBox=0x7f0b0007;
+        public static final int textView1=0x7f0b0015;
+        public static final int title=0x7f0b0010;
     }
     public static final class integer {
         public static final int card_flip_time_full=0x7f070001;
@@ -101,14 +102,15 @@ public final class R {
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
-        public static final int concert_information_fragment=0x7f030001;
-        public static final int favorite_fragment=0x7f030002;
-        public static final int information_fragment=0x7f030003;
-        public static final int list_row=0x7f030004;
-        public static final int map_activity=0x7f030005;
-        public static final int recent_fragment=0x7f030006;
-        public static final int search_fragment=0x7f030007;
-        public static final int settings_fragment=0x7f030008;
+        public static final int fragment_about=0x7f030001;
+        public static final int fragment_concert=0x7f030002;
+        public static final int fragment_favorite=0x7f030003;
+        public static final int fragment_recent=0x7f030004;
+        public static final int fragment_search=0x7f030005;
+        public static final int fragment_settings=0x7f030006;
+        public static final int list_row=0x7f030007;
+        public static final int tab_fragment_concert_info=0x7f030008;
+        public static final int tab_fragment_concert_map=0x7f030009;
     }
     public static final class menu {
         public static final int activity_main_actions=0x7f0a0000;
