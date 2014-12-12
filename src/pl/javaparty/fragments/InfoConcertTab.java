@@ -39,11 +39,13 @@ public class InfoConcertTab extends Fragment {
 		getActivity().getActionBar().setTitle(artistName);
 		artist.setText(artistName);
 		place.setText(dbm.getCity(ID) + " " + dbm.getSpot(ID));
-		date.setText(dbm.getDate(ID));
+		Log.i("DMB", "City: " + dbm.getCity(ID));
+		Log.i("DMB", "Spot: " + dbm.getSpot(ID));
+		date.setText(dbm.getDate(ID)); 
 		// price.setText(concert.get);
 		final String URL = dbm.getUrl(ID);
 		new ImageLoader(inflater.getContext()).DisplayImage(artistName, image);
-		connect.setOnClickListener(new OnClickListener() { //otwiera przegladarkê z linkiem do koncertu
+		connect.setOnClickListener(new OnClickListener() { // otwiera przegladarkê z linkiem do koncertu
 			@Override
 			public void onClick(View arg0) {
 				Log.i("KLIK", "KLIK");

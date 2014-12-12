@@ -52,8 +52,6 @@ public class MainActivity extends FragmentActivity {
 		fragmentManager = getSupportFragmentManager();
 		arguments = new Bundle();
 		arguments.putSerializable("dbManager", dbMgr);
-		Log.i("DB", "Sprawdzam czy baza istnieje");
-		// TODO tego mialo nie byc
 		new DownloadTask().execute();
 
 		getActionBar().setHomeButtonEnabled(true);

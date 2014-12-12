@@ -60,7 +60,7 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 		//holder.pb.setVisibility(View.GONE); 
 		imageLoader.DisplayImage(rowItem.getArtist(), holder.image);
 
-		Animation animation = AnimationUtils.loadAnimation(context, R.anim.card_animation);
+		Animation animation = AnimationUtils.loadAnimation(context, R.anim.slide_in_right);
 		holder.card.startAnimation(animation);
 		return convertView;
 	}
