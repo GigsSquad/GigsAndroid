@@ -23,6 +23,7 @@ public class RecentFragment extends Fragment {
 	ListView lv;
 	Context context;
 	dbManager dbm;
+
 	private int lastPosition = 0;
 
 	@Override
@@ -31,25 +32,24 @@ public class RecentFragment extends Fragment {
 		getActivity().getActionBar().setTitle("Najbli¿sze koncerty");
 		context = inflater.getContext();
 		lv = (ListView) view.findViewById(R.id.recentList);
-		
-		dbm = (dbManager)getArguments().getSerializable("dbManager");
-		
+
+		dbm = (dbManager) getArguments().getSerializable("dbManager");
+
 		adapter = new ConcertAdapter(getActivity(), R.layout.list_row, dbm.getAllConcerts());
 		lv.setAdapter(adapter);
 
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position,
-					long id) {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				lastPosition = position;
 				Fragment fragment = new ConcertFragment();
-				Bundle args = new Bundle();
-				
-				Concert item = (Concert) parent.getAdapter().getItem(position);
-				args.putInt("ID", item.getID()); // przesylam unikalne id koncertu
-				args.putSerializable("dbManager", dbm);
+				Bundle b = new Bundle();
 
-				fragment.setArguments(args);
+				Concert item = (Concert) parent.getAdapter().getItem(position);
+				b.putInt("ID", item.getID()); // przesylam unikalne id koncertu
+				b.putSerializable("dbManager", dbm);
+
+				fragment.setArguments(b);
 				FragmentManager fragmentManager = getFragmentManager();
 				fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 			}
@@ -63,5 +63,5 @@ public class RecentFragment extends Fragment {
 		super.onResume();
 		lv.setSelection(lastPosition);
 	}
-	
+
 }

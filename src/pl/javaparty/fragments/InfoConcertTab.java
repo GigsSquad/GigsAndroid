@@ -22,7 +22,7 @@ public class InfoConcertTab extends Fragment {
 	TextView artist, place, date, price, url;
 	ImageView image;
 	Button connect;
-
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
 		View view = inflater.inflate(R.layout.tab_fragment_concert_info, container, false);
@@ -34,7 +34,7 @@ public class InfoConcertTab extends Fragment {
 		connect = (Button) view.findViewById(R.id.connect);
 		
 
-		int ID = (this.getArguments().getInt("ID", -1)); // -1 bo bazadanych numeruje od 1 a nie od 0
+		int ID = (getArguments().getInt("ID", -1)); // -1 bo bazadanych numeruje od 1 a nie od 0
 		dbManager dbm = (dbManager) getArguments().getSerializable("dbManager");
 		Log.i("KURWA", "Przes³ane id: " + ID);
 		String artistName = dbm.getArtist(ID);

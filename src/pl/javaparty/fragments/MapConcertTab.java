@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import pl.javaparty.concertfinder.R;
+import pl.javaparty.sql.dbManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -28,6 +29,8 @@ public class MapConcertTab extends Fragment {
 	private Geocoder geoCoder;
 	private List<Address> address;
 	private static Address loc;
+	static int ID;
+	static dbManager dbm;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
@@ -35,9 +38,12 @@ public class MapConcertTab extends Fragment {
 			return null;
 		}
 
+		ID = getArguments().getInt("ID", -1);
+		dbm = (dbManager) getArguments().getSerializable("dbManager");
+
 		try {
 			geoCoder = new Geocoder(getActivity());
-			address = geoCoder.getFromLocationName("Szczecin", 1);
+			address = geoCoder.getFromLocationName(dbm.getCity(ID) + " " + dbm.getSpot(ID), 1);
 			loc = address.get(0); // pierwsze co znajdzie i bedzie najlepiej dopasowane
 			loc.getLatitude();
 			loc.getLongitude();
@@ -64,8 +70,12 @@ public class MapConcertTab extends Fragment {
 
 	private static void setUpMap() {
 		mMap.setMyLocationEnabled(true); // pokazuje nasz¹ pozycje
-		mMap.addMarker(new MarkerOptions().position(new LatLng(loc.getLatitude(), loc.getLongitude())).title("Artist").snippet("Nazwa klubu")); // ustawia marker 
-		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(loc.getLatitude(), loc.getLongitude()), 12.0f)); //przybliza do tego markera
+		mMap.addMarker(new MarkerOptions().position(new LatLng(loc.getLatitude(), loc.getLongitude())).title(dbm.getSpot(ID)).snippet(dbm.getArtist(ID))); // ustawia
+																																				// marker
+		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(loc.getLatitude(), loc.getLongitude()), 12.0f)); // przybliza
+																															// do
+																															// tego
+																															// markera
 	}
 
 	@Override

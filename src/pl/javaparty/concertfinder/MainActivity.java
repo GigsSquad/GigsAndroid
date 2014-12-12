@@ -123,7 +123,6 @@ public class MainActivity extends FragmentActivity {
 			}
 		};
 
-		FragmentManager fragmentManager = getSupportFragmentManager();
 		Fragment fragment = new RecentFragment();
 		// przekazuje managera
 		fragment.setArguments(arguments);
