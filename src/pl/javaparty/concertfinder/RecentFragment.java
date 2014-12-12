@@ -21,6 +21,7 @@ public class RecentFragment extends Fragment {
 	ListView lv;
 	Context context;
 	dbManager dbm;
+	private int lastPosition = 0;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
@@ -38,10 +39,10 @@ public class RecentFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
-
+				lastPosition = position;
 				Fragment fragment = new ConcertFragment();
 				Bundle args = new Bundle();
-
+				
 				Concert item = (Concert) parent.getAdapter().getItem(position);
 				args.putInt("ID", item.getID()); // przesylam unikalne id koncertu
 				args.putSerializable("dbManager", dbm);
@@ -53,4 +54,12 @@ public class RecentFragment extends Fragment {
 		});
 		return view;
 	}
+
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		lv.setSelection(lastPosition);
+	}
+	
 }

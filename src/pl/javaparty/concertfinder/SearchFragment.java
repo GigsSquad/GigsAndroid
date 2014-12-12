@@ -5,9 +5,7 @@ import pl.javaparty.sql.dbManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +23,8 @@ public class SearchFragment extends Fragment {
 	ConcertAdapter adapter;
 	Context context;
 	dbManager dbm;
+	private String lastSearching;
+	private int lastPosition;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
@@ -37,8 +37,12 @@ public class SearchFragment extends Fragment {
 
 		searchBox = (AutoCompleteTextView) view.findViewById(R.id.searchBox);
 		concertList = (ListView) view.findViewById(R.id.concertList);
+		
+		adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, dbm.getArtists());
 
-		new DownloadTask().execute();
+		searchBox.setAdapter(adapterSearchBox);
+		searchBox.setThreshold(1);
+		//new DownloadTask().execute();
 
 		searchBox.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -47,7 +51,8 @@ public class SearchFragment extends Fragment {
 				String artist = searchBox.getText().toString();
 				adapter = new ConcertAdapter(getActivity(), R.layout.list_row, dbm.getConcertsByArtist(artist)); //concertMgr.getConcertList(searchBox.getText().toString()));
 				concertList.setAdapter(adapter);
-
+				//zapisywanie danych, coby potem przywrocic
+				lastSearching = searchBox.getText().toString();
 				getActivity().getActionBar().setTitle("Szukaj: " + searchBox.getText().toString());
 				searchBox.setText("");
 			}
@@ -57,7 +62,7 @@ public class SearchFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
-
+				lastPosition = position;
 				Fragment fragment = new ConcertFragment();
 				Bundle args = new Bundle();
 				Concert item = (Concert) parent.getAdapter().getItem(position);
@@ -72,31 +77,17 @@ public class SearchFragment extends Fragment {
 		return view;
 	}
 
-	private class DownloadTask extends AsyncTask<Void, Void, String> {
-
-		@Override
-		protected String doInBackground(Void... params) {
-
-			return null;
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		if(adapter!=null)
+		{
+			concertList.setAdapter(adapter);
+			concertList.setSelection(lastPosition);
 		}
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-		}
-
-		@Override
-		protected void onPostExecute(String result) { // zostanie wykonane po skoñczeniu doInBackground
-			super.onPostExecute(result);
-			String[] stockArr =  dbm.getArtists();
-
-			Log.i("ARTIST", "Lista: " + stockArr);
-
-			adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, stockArr);
-
-			searchBox.setAdapter(adapterSearchBox);
-			searchBox.setThreshold(1);
-
-		}
+		if(lastSearching!=null)
+			getActivity().getActionBar().setTitle("Szukaj: " + lastSearching);
+		
 	}
 }

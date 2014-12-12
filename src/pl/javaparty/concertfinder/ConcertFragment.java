@@ -26,7 +26,7 @@ public class ConcertFragment extends Fragment {
 		getActivity().getActionBar().setTitle(dbm.getArtist(ID));
 		artist.setText(dbm.getArtist(ID));
 
-		place.setText(dbm.getSpot(ID));
+		place.setText(dbm.getCity(ID));
 
 		return view;
 	}

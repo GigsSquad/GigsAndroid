@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		context = getApplicationContext();
 		dbMgr = new dbManager(context);
-
+		
 		arguments = new Bundle();
 		arguments.putSerializable("dbManager", dbMgr);
 		Log.i("DB", "Sprawdzam czy baza istnieje");
@@ -47,6 +47,7 @@ public class MainActivity extends Activity {
 
 		menu = new String[] { "Szukaj", "Ostatnie koncerty", "Twoje koncerty", "Aktualizuj", "Preferencje", "Informacje" };
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		
 		drawerList = (ListView) findViewById(R.id.left_drawer);
 		adapterDrawer = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, menu);
 		drawerList.setAdapter(adapterDrawer);
@@ -56,7 +57,6 @@ public class MainActivity extends Activity {
 			public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
 				
 				drawerLayout.closeDrawers();
-				
 				if (currentFragment != position) {
 					Fragment fragment = null; 
 					if (position == 0)
@@ -100,6 +100,7 @@ public class MainActivity extends Activity {
 		//przekazuje managera
 		fragment.setArguments(arguments);
 		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+		drawerLayout.openDrawer(drawerList);
 	}
 
 	@Override
@@ -108,7 +109,7 @@ public class MainActivity extends Activity {
 		inflater.inflate(R.menu.activity_main_actions, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
-
+	
 	private class DownloadTask extends AsyncTask<Void, Void, String> {
 
 		@Override
