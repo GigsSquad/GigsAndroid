@@ -3,10 +3,8 @@ package pl.javaparty.fragments;
 import pl.javaparty.adapters.ConcertAdapter;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.concertmanager.Concert;
-import pl.javaparty.concertmanager.ConcertManager;
 import pl.javaparty.sql.dbManager;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,12 +18,12 @@ import android.widget.ListView;
 
 public class RecentFragment extends Fragment {
 
-	ConcertManager concertMgr;
 	ArrayAdapter<String> adapterSearchBox, adapterList, adapterDrawer;
 	ConcertAdapter adapter;
 	ListView lv;
 	Context context;
 	dbManager dbm;
+	private int lastPosition = 0;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
@@ -33,19 +31,23 @@ public class RecentFragment extends Fragment {
 		getActivity().getActionBar().setTitle("Najbli¿sze koncerty");
 		context = inflater.getContext();
 		lv = (ListView) view.findViewById(R.id.recentList);
-
-		new DownloadTask().execute();
+		
+		dbm = (dbManager)getArguments().getSerializable("dbManager");
+		
+		adapter = new ConcertAdapter(getActivity(), R.layout.list_row, dbm.getAllConcerts());
+		lv.setAdapter(adapter);
 
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
-
+				lastPosition = position;
 				Fragment fragment = new ConcertFragment();
 				Bundle args = new Bundle();
-
+				
 				Concert item = (Concert) parent.getAdapter().getItem(position);
 				args.putInt("ID", item.getID()); // przesylam unikalne id koncertu
+				args.putSerializable("dbManager", dbm);
 
 				fragment.setArguments(args);
 				FragmentManager fragmentManager = getFragmentManager();
@@ -55,25 +57,11 @@ public class RecentFragment extends Fragment {
 		return view;
 	}
 
-	private class DownloadTask extends AsyncTask<Void, Void, String> {
-		// TODO: zrobiæ informacje ze stanem pobierania
-
-		@Override
-		protected String doInBackground(Void... params) {
-			concertMgr = new ConcertManager(new dbManager(context));
-			adapter = new ConcertAdapter(getActivity(), R.layout.list_row, concertMgr.getList());
-			return null;
-		}
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-		}
-
-		@Override
-		protected void onPostExecute(String result) { // zostanie wykonane po skoñczeniu doInBackground
-			lv.setAdapter(adapter);
-			super.onPostExecute(result);
-		}
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		lv.setSelection(lastPosition);
 	}
+	
 }

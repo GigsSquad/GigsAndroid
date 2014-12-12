@@ -13,10 +13,13 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+import android.util.Log;
+
 public class ImageDownloader
 {
 	private final static String LASTFM_URL = new String("http://www.lastfm.pl/music/"/* i tu nazwa zespolu */);
 	private final static int BUFFER_SIZE = 4096;
+	private final static String TAG = "ImageDownloader";
 	
 	public static void bandImage(File fileDir, String bandName)
 	{
@@ -26,7 +29,7 @@ public class ImageDownloader
 			saveImage(fileDir, bandImgUrl);
 		} catch (IOException e)
 		{
-			e.printStackTrace();
+			Log.e(TAG, "Przekroczono czas polaczenia. Nic nie pobrano.");
 		}
 	}
 	
@@ -40,27 +43,37 @@ public class ImageDownloader
 	
 	private static void saveImage(File fileDir, String url) throws IOException
 	{
-		try
+		//synchronized (url)
 		{
-			URL link = new URL(url);
-			HttpURLConnection connection = (HttpURLConnection)link.openConnection();
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
-            connection.setInstanceFollowRedirects(true);
-			BufferedInputStream is = new BufferedInputStream(connection.getInputStream());
-			BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(fileDir));
-			
-			byte[] buffer = new byte[BUFFER_SIZE];
-			int readedBytes;
+			//if (!fileDir.exists())
+			{
+				Log.i(TAG, "Pobieranie obrazka z: " + url);
+				try
+				{
+					URL link = new URL(url);
+					HttpURLConnection connection = (HttpURLConnection) link
+							.openConnection();
+					connection.setConnectTimeout(40000);
+					connection.setReadTimeout(40000);
+					connection.setInstanceFollowRedirects(true);
+					BufferedInputStream is = new BufferedInputStream(
+							connection.getInputStream());
+					BufferedOutputStream os = new BufferedOutputStream(
+							new FileOutputStream(fileDir));
 
-			while ((readedBytes = is.read(buffer, 0, BUFFER_SIZE)) != -1)
-				os.write(buffer, 0, readedBytes);
+					byte[] buffer = new byte[BUFFER_SIZE];
+					int readedBytes;
 
-			is.close();
-			os.close();
-		} catch (MalformedURLException e)
-		{
-			e.printStackTrace();
+					while ((readedBytes = is.read(buffer, 0, BUFFER_SIZE)) != -1)
+						os.write(buffer, 0, readedBytes);
+
+					is.close();
+					os.close();
+				} catch (MalformedURLException e)
+				{
+					Log.e(TAG, "Bledny adres obrazka do pobrania.");
+				}
+			}
 		}
 	}
 }

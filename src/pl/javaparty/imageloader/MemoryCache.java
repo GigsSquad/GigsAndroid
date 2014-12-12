@@ -14,6 +14,7 @@ public class MemoryCache
 	private Map<String, Bitmap> cache;//Last argument true for LRU ordering
 	private long size=0;//current allocated size
 	private long limit=1000000;//max memory in bytes
+	private final String TAG = "MemoryCache";
 	
 	public MemoryCache()
 	{
@@ -26,6 +27,11 @@ public class MemoryCache
 	{
 	    limit=new_limit;
 	    //Log.i(TAG, "MemoryCache will use up to "+limit/1024./1024.+"MB");
+	}
+	
+	public boolean contains(String s)
+	{
+		return cache.containsKey(s);
 	}
 	
 	public Bitmap get(String id)
@@ -74,7 +80,7 @@ public class MemoryCache
                 size-=getSizeInBytes(entry.getValue());
                 iter.remove();
             }
-            //Log.i(TAG, "Clean cache. New size "+cache.size());
+            Log.i(TAG, "Clean cache. New size "+cache.size());
         }
     }
 	

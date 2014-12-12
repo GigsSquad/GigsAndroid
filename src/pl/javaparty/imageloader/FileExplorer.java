@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Locale;
 
 import android.content.Context;
 
@@ -29,7 +30,7 @@ public class FileExplorer
 	
 	private String hashName(String bandName)
 	{
-		bandName = bandName.toUpperCase();
+		bandName = bandName.toUpperCase(Locale.ENGLISH);
 		try {
 	        MessageDigest digest = MessageDigest.getInstance("MD5");
 	        byte[] hashedBytes = digest.digest(bandName.getBytes("UTF-8"));

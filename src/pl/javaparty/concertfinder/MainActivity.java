@@ -2,7 +2,6 @@ package pl.javaparty.concertfinder;
 
 import java.io.IOException;
 
-import pl.javaparty.concertmanager.ConcertManager;
 import pl.javaparty.fragments.AboutFragment;
 import pl.javaparty.fragments.FavoriteFragment;
 import pl.javaparty.fragments.RecentFragment;
@@ -19,6 +18,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -38,26 +38,29 @@ public class MainActivity extends FragmentActivity {
 	Context context;
 	int currentFragment = 1;
 	dbManager dbMgr;
-	ConcertManager concertMgr;
 	private ActionBarDrawerToggle mDrawerToggle;
 	public static FragmentManager fragmentManager;
+	Bundle arguments;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		context = getApplicationContext();
 		dbMgr = new dbManager(context);
-		concertMgr = new ConcertManager(dbMgr);
-		concertMgr.collect();
 		fragmentManager = getSupportFragmentManager();
+		arguments = new Bundle();
+		arguments.putSerializable("dbManager", dbMgr);
+		Log.i("DB", "Sprawdzam czy baza istnieje");
+		// TODO tego mialo nie byc
 		new DownloadTask().execute();
 
 		getActionBar().setHomeButtonEnabled(true);
 
 		menu = new String[] { "Szukaj", "Ostatnie koncerty", "Twoje koncerty", "Aktualizuj", "Preferencje", "Informacje" };
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
 		drawerList = (ListView) findViewById(R.id.left_drawer);
 		adapterDrawer = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, menu);
 		drawerList.setAdapter(adapterDrawer);
@@ -66,19 +69,30 @@ public class MainActivity extends FragmentActivity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
 				drawerLayout.closeDrawers();
-
 				if (currentFragment != position) {
 					Fragment fragment = null;
 					if (position == 0)
+					{
 						fragment = new SearchFragment();
+						// przekazuje managera, mozna to w sumie uogolnic ;)
+						fragment.setArguments(arguments);
+					}
 					else if (position == 1)
+					{
 						fragment = new RecentFragment();
+						// przekazuje managera
+						fragment.setArguments(arguments);
+					}
 					else if (position == 2)
 						fragment = new FavoriteFragment();
 					else if (position == 3)
 						new DownloadTask().execute();
 					else if (position == 4)
+					{
 						fragment = new SettingsFragment();
+						// przekazuje managera
+						fragment.setArguments(arguments);
+					}
 					else if (position == 5)
 						fragment = new AboutFragment();
 					currentFragment = position;
@@ -111,7 +125,24 @@ public class MainActivity extends FragmentActivity {
 
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		Fragment fragment = new RecentFragment();
+		// przekazuje managera
+		fragment.setArguments(arguments);
 		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+		drawerLayout.openDrawer(drawerList);
+	}
+
+	@Override
+	public boolean onKeyDown(int keycode, KeyEvent e) {
+		switch (keycode) {
+		case KeyEvent.KEYCODE_MENU:
+			if (drawerLayout.isDrawerOpen(drawerList))
+				drawerLayout.closeDrawer(drawerList);
+			else
+				drawerLayout.openDrawer(drawerList);
+			return true;
+		}
+
+		return super.onKeyDown(keycode, e);
 	}
 
 	@Override
@@ -145,9 +176,7 @@ public class MainActivity extends FragmentActivity {
 			try
 			{
 				downloader.getData();
-				concertMgr.collect();
-				Log.i("DB", "Tworzenie nowej bazy i pobieranie");
-				System.out.println("Pobieranie...");
+				Log.i("DB", "Pobieranie");
 			} catch (IOException e)
 			{
 				Log.i("DB", "Nie powiniene� wiedzie� tego tekstu");
@@ -158,14 +187,12 @@ public class MainActivity extends FragmentActivity {
 
 		@Override
 		protected void onPreExecute() {
-			Log.i("DB", "Baza nie istnieje");
 			super.onPreExecute();
 		}
 
 		protected void onPostExecute(String result) {
 			Log.i("DB", "Koniec pobierania");
-			concertMgr.collect();
-			Toast.makeText(getApplicationContext(), "Zaaktualizowano!", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), "Zaktualizowano!", Toast.LENGTH_SHORT).show();
 			super.onPostExecute(result);
 		}
 	}

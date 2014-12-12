@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/location_map"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="60dp" >
-
-    <fragment
-        android:id="@+id/location_map"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        class="com.google.android.gms.maps.SupportMapFragment" />
-
-</LinearLayout>
+    android:layout_marginTop="50dp"
+    class="com.google.android.gms.maps.SupportMapFragment"
+    map:cameraTargetLat="52.0170506"
+    map:cameraTargetLng="19.2112829"
+     map:cameraZoom="7" />

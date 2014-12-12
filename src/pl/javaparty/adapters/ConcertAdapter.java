@@ -1,11 +1,6 @@
 package pl.javaparty.adapters;
 
-import java.util.List;
-
 import pl.javaparty.concertfinder.R;
-import pl.javaparty.concertfinder.R.anim;
-import pl.javaparty.concertfinder.R.id;
-import pl.javaparty.concertfinder.R.layout;
 import pl.javaparty.concertmanager.Concert;
 import pl.javaparty.imageloader.ImageLoader;
 import android.content.Context;
@@ -17,9 +12,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 
 public class ConcertAdapter extends ArrayAdapter<Concert> {
 
@@ -29,7 +24,7 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 	ImageLoader imageLoader;
 	int ID; // unikalne id koncertu, nie jest wyœwietlane ale bêdzie przydatne przy
 
-	public ConcertAdapter(Context context, int resourceId, List<Concert> items) {
+	public ConcertAdapter(Context context, int resourceId, Concert[] items) {
 		super(context, resourceId, items);
 		this.context = context;
 		imageLoader = new ImageLoader(context);
@@ -40,7 +35,6 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 		TextView title;
 		TextView description;
 		RelativeLayout card;
-		ProgressBar pb;
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -54,8 +48,6 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 			holder.image = (ImageView) convertView.findViewById(R.id.list_image);
 			holder.title = (TextView) convertView.findViewById(R.id.title);
 			holder.description = (TextView) convertView.findViewById(R.id.description);
-			holder.pb = (ProgressBar) convertView.findViewById(R.id.progress_bar);
-			
 			
 			convertView.setTag(holder);
 		} else
@@ -66,7 +58,7 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 		holder.description.setText(rowItem.getPlace() + " " + rowItem.dateToString());
 
 		//holder.pb.setVisibility(View.GONE); 
-		imageLoader.DisplayImage(rowItem.getArtist(), holder.image, holder.pb);
+		imageLoader.DisplayImage(rowItem.getArtist(), holder.image);
 
 		Animation animation = AnimationUtils.loadAnimation(context, R.anim.card_animation);
 		holder.card.startAnimation(animation);

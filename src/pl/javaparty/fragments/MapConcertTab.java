@@ -46,7 +46,7 @@ public class MapConcertTab extends Fragment {
 			e.printStackTrace();
 		}
 
-		view = (LinearLayout) inflater.inflate(R.layout.tab_fragment_concert_map, container, false);
+		view = inflater.inflate(R.layout.tab_fragment_concert_map, container, false);
 		fragmentManager = getChildFragmentManager();
 
 		setUpMapIfNeeded();
