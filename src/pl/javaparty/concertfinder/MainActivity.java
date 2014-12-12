@@ -54,7 +54,6 @@ public class MainActivity extends FragmentActivity {
 		fragmentManager = getSupportFragmentManager();
 		new DownloadTask().execute();
 
-		// getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 
 		menu = new String[] { "Szukaj", "Ostatnie koncerty", "Twoje koncerty", "Aktualizuj", "Preferencje", "Informacje" };
@@ -66,8 +65,6 @@ public class MainActivity extends FragmentActivity {
 		drawerList.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
-				// Bundle args = new Bundle();
-				// args.putString("Menu", menu[position]);
 				drawerLayout.closeDrawers();
 
 				if (currentFragment != position) {
@@ -88,7 +85,6 @@ public class MainActivity extends FragmentActivity {
 
 					if (fragment != null)
 					{
-						// fragment.setArguments(args);
 						fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 					}
 				}
@@ -113,7 +109,6 @@ public class MainActivity extends FragmentActivity {
 			}
 		};
 
-		// drawerLayout.openDrawer(new View(getApplicationContext()));
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		Fragment fragment = new RecentFragment();
 		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();

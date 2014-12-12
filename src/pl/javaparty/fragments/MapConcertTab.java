@@ -1,13 +1,18 @@
 package pl.javaparty.fragments;
 
+import java.io.IOException;
+import java.util.List;
+
 import pl.javaparty.concertfinder.R;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,52 +24,48 @@ public class MapConcertTab extends Fragment {
 
 	private static View view;
 	private static GoogleMap mMap;
-	private static Double latitude, longitude;
-	static FragmentManager fragmentManager;
+	private static FragmentManager fragmentManager;
+	private Geocoder geoCoder;
+	private List<Address> address;
+	private static Address loc;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
 		if (container == null) {
 			return null;
 		}
-		view = (RelativeLayout) inflater.inflate(R.layout.tab_fragment_concert_map, container, false);
-		// Passing harcoded values for latitude & longitude. Please change as per your need. This is just used to drop a
-		// Marker on the Map
-		latitude = 26.78;
-		longitude = 72.56;
 
+		try {
+			geoCoder = new Geocoder(getActivity());
+			address = geoCoder.getFromLocationName("Szczecin", 1);
+			loc = address.get(0); // pierwsze co znajdzie i bedzie najlepiej dopasowane
+			loc.getLatitude();
+			loc.getLongitude();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		view = (LinearLayout) inflater.inflate(R.layout.tab_fragment_concert_map, container, false);
 		fragmentManager = getChildFragmentManager();
 
-		setUpMapIfNeeded(); // For setting up the MapFragment
+		setUpMapIfNeeded();
 
 		return view;
 	}
 
-	/***** Sets up the map if it is possible to do so *****/
 	public static void setUpMapIfNeeded() {
-		// Do a null check to confirm that we have not already instantiated the map.
 		if (mMap == null) {
-			// Try to obtain the map from the SupportMapFragment.
 			mMap = ((SupportMapFragment) fragmentManager.findFragmentById(R.id.location_map)).getMap();
-			// Check if we were successful in obtaining the map.
 			if (mMap != null)
 				setUpMap();
 		}
 	}
 
-	/**
-	 * This is where we can add markers or lines, add listeners or move the camera.
-	 * <p>
-	 * This should only be called once and when we are sure that {@link #mMap} is not null.
-	 */
 	private static void setUpMap() {
-		// For showing a move to my loction button
-		mMap.setMyLocationEnabled(true);
-		// For dropping a marker at a point on the Map
-		mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("My Home").snippet("Home Address"));
-		// For zooming automatically to the Dropped PIN Location
-		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude,
-				longitude), 12.0f));
+		mMap.setMyLocationEnabled(true); // pokazuje nasz¹ pozycje
+		mMap.addMarker(new MarkerOptions().position(new LatLng(loc.getLatitude(), loc.getLongitude())).title("Artist").snippet("Nazwa klubu")); // ustawia marker 
+		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(loc.getLatitude(), loc.getLongitude()), 12.0f)); //przybliza do tego markera
 	}
 
 	@Override
@@ -74,22 +75,17 @@ public class MapConcertTab extends Fragment {
 			setUpMap();
 
 		if (mMap == null) {
-			// Try to obtain the map from the SupportMapFragment.
 			mMap = ((SupportMapFragment) fragmentManager.findFragmentById(R.id.location_map)).getMap();
-			// Check if we were successful in obtaining the map.
 			if (mMap != null)
 				setUpMap();
 		}
 	}
 
-	/****
-	 * The mapfragment's id must be removed from the FragmentManager or else if the same it is passed on the next time
-	 * then app will crash
-	 ****/
 	@Override
-	public void onDestroyView() {
+	public void onDestroyView() { // TODO: problem
 		super.onDestroyView();
 		if (mMap != null) {
+			// fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 			fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.location_map)).commit();
 			mMap = null;
 		}
