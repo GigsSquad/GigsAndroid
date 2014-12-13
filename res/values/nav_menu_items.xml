@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="nav_menu">
+        <item>Szukaj</item>
+        <item>Najbliższe koncerty</item>
+        <item>Twoje koncerty</item>
+        <item>Aktualizuj</item>
+        <item>Preferencje</item>
+        <item>Informacje</item>
+    </string-array>
+
+</resources>
