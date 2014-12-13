@@ -6,7 +6,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
 import pl.javaparty.sql.dbManager;
 
 public class JDGoAhead{
@@ -30,7 +29,7 @@ public class JDGoAhead{
 				String conPlace = el.getElementsByClass("b_c_cp").first().text();
 				String conDate = el.getElementsByClass("b_c_d").first().text();
 				String conCity = conPlace.split(" ")[0];
-				String conSpot = conPlace.split(conCity+" ")[0];
+				String conSpot = conPlace.substring(conPlace.indexOf(" ")+1);//jesli jakims cudem nie ma spota to wezmie nazwe miasta
 				int conDay = Integer.valueOf(conDate.split(" ")[0]);
 				String[] months = { "st", "lu", "mar", "kw", "maj", "cz", "lip", "si", "wr", "pa", "lis", "gr" };
 				int conMonth = 0;
