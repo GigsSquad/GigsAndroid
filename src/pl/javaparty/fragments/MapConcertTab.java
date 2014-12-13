@@ -28,7 +28,8 @@ public class MapConcertTab extends Fragment {
 	private static GoogleMap mMap;
 	private static FragmentManager fragmentManager;
 	private Geocoder geoCoder;
-	private List<Address> address;
+	private List<Address> addressList;
+	static Address address;
 	private static LatLng destLatLng;
 	static int ID;
 	static dbManager dbm;
@@ -53,15 +54,28 @@ public class MapConcertTab extends Fragment {
 			/* map is already there, just return view as it is */
 		}
 
+		geoCoder = new Geocoder(getActivity());
+
 		try {
-			geoCoder = new Geocoder(getActivity());
-			address = geoCoder.getFromLocationName(dbm.getCity(ID) + " " + dbm.getSpot(ID), 1);
-			Address loc = address.get(0); // pierwsze co znajdzie i bedzie najlepiej dopasowane
-			destLatLng = new LatLng(loc.getLatitude(), loc.getLongitude());
-			Log.i("LATLNG", "Lat: " + loc.getLatitude() + "Long: " + loc.getLongitude());
+			addressList = geoCoder.getFromLocationName(dbm.getCity(ID) + " " + dbm.getSpot(ID), 1);
+			Log.i("DBM", "City: " + dbm.getCity(ID) + " Spot: " + dbm.getSpot(ID));
+			address = addressList.get(0); // pierwsze co znajdzie i bedzie najlepiej dopasowane
+		} catch (IndexOutOfBoundsException e) {
+
+			try {
+				addressList = geoCoder.getFromLocationName(dbm.getCity(ID), 1);
+				address = addressList.get(0); // pierwsze co znajdzie i bedzie najlepiej dopasowane
+			} catch (IOException e1) {
+			} catch (IndexOutOfBoundsException e2)
+			{
+			}
+
 		} catch (IOException e) {
-			e.printStackTrace();
+		} finally {
 		}
+
+		destLatLng = new LatLng(address.getLatitude(), address.getLongitude());
+		Log.i("LATLNG", "Lat: " + address.getLatitude() + "Long: " + address.getLongitude());
 
 		fragmentManager = getChildFragmentManager();
 
@@ -85,30 +99,6 @@ public class MapConcertTab extends Fragment {
 		mMap.animateCamera(CameraUpdateFactory
 				.newLatLngZoom(new LatLng(destLatLng.latitude, destLatLng.longitude), 19.0f)); // przybliza do markera
 	}
-
-	//
-	// public double CalculationByDistance(GeoPoint StartP, GeoPoint EndP) {
-	// int Radius = 6371;// radius of earth in Km
-	// double lat1 = StartP.getLatitudeE6() / 1E6;
-	// double lat2 = EndP.getLatitudeE6() / 1E6;
-	// double lon1 = StartP.getLongitudeE6() / 1E6;
-	// double lon2 = EndP.getLongitudeE6() / 1E6;
-	// double dLat = Math.toRadians(lat2 - lat1);
-	// double dLon = Math.toRadians(lon2 - lon1);
-	// double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-	// Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
-	// Math.sin(dLon / 2) * Math.sin(dLon / 2);
-	// double c = 2 * Math.asin(Math.sqrt(a));
-	// double valueResult = Radius * c;
-	// double km = valueResult / 1;
-	// DecimalFormat newFormat = new DecimalFormat("####");
-	// kmInDec = Integer.valueOf(newFormat.format(km));
-	// meter = valueResult % 1000;
-	// meterInDec = Integer.valueOf(newFormat.format(meter));
-	// Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec + " Meter   " + meterInDec);
-	//
-	// return Radius * c;
-	// }
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {

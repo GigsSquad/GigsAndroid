@@ -8,6 +8,7 @@ import pl.javaparty.fragments.RecentFragment;
 import pl.javaparty.fragments.SearchFragment;
 import pl.javaparty.fragments.SettingsFragment;
 import pl.javaparty.jsoup.JSoupDownloader;
+import pl.javaparty.map.MapHelper;
 import pl.javaparty.sql.dbManager;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -53,6 +54,10 @@ public class MainActivity extends FragmentActivity {
 		arguments = new Bundle();
 		arguments.putSerializable("dbManager", dbMgr);
 		new DownloadTask().execute();
+		
+		
+		MapHelper mapHelper = new MapHelper(context);
+		mapHelper.distance("Szczecin", 0);
 
 		getActionBar().setHomeButtonEnabled(true);
 
