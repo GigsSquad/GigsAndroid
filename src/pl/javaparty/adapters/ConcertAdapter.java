@@ -1,5 +1,6 @@
-package pl.javaparty.concertfinder;
+package pl.javaparty.adapters;
 
+import pl.javaparty.concertfinder.R;
 import pl.javaparty.concertmanager.Concert;
 import pl.javaparty.imageloader.ImageLoader;
 import android.content.Context;
@@ -11,9 +12,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 
 public class ConcertAdapter extends ArrayAdapter<Concert> {
 
@@ -59,7 +60,7 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 		//holder.pb.setVisibility(View.GONE); 
 		imageLoader.DisplayImage(rowItem.getArtist(), holder.image);
 
-		Animation animation = AnimationUtils.loadAnimation(context, R.anim.card_animation);
+		Animation animation = AnimationUtils.loadAnimation(context, R.anim.slide_in_right);
 		holder.card.startAnimation(animation);
 		return convertView;
 	}
