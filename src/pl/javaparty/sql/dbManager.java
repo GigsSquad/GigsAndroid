@@ -1,5 +1,6 @@
 package pl.javaparty.sql;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,6 +9,7 @@ import java.util.HashSet;
 
 import pl.javaparty.concertmanager.Concert;
 import pl.javaparty.concertmanager.Concert.AgencyName;
+import pl.javaparty.jsoup.JSoupDownloader;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -41,7 +43,9 @@ public class dbManager extends SQLiteOpenHelper implements Serializable{
 	private static String CreateHashcodeTable =
 			"CREATE TABLE Hashcodes(" +
 					"AGENCY TEXT PRIMARY KEY," +
-					"HASH INTEGER)"; // hash jest INTem?
+					"HASH INTEGER)"; 
+	
+	public Thread download;
 
 	public dbManager(Context context) {
 		super(context, DATABASE_NAME, null, 1);
@@ -61,6 +65,34 @@ public class dbManager extends SQLiteOpenHelper implements Serializable{
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// TODO Auto-generated method stub
+	}
+	
+	public void updateDatabase()
+	{
+		download = new Thread(new Runnable()
+		{
+			
+			@Override
+			public void run()
+			{
+				downloadConcerts();
+			}
+		});
+		download.start();
+	}
+	
+	private synchronized void downloadConcerts()
+	{
+		JSoupDownloader js = new JSoupDownloader(this);
+		try
+		{
+			js.getData();
+			deleteOldConcerts();
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void addConcert(String artistName,String city,String spot,
@@ -184,6 +216,11 @@ public class dbManager extends SQLiteOpenHelper implements Serializable{
 				String.valueOf(month),
 				String.valueOf(day),
 				};
+		Cursor c = database.query("Concerts", new String[]{"ORD"}, selection, selectionArgs, null, null, null);
+		while(c.moveToNext())
+		{
+			Log.i("Deleter", c.getString(0));
+		}
 		int deleted = database.delete("Concerts", selection, selectionArgs);
 		Log.i("Deleter", "Wyjebano " + deleted + " przestarzalych koncertow!");
 	}
@@ -261,6 +298,14 @@ public class dbManager extends SQLiteOpenHelper implements Serializable{
 	}
 	
 	private Concert[] getConcertsBy(String condition){
+		try
+		{
+			if(download!=null)
+				download.join();
+		} catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
 		String[] columns = { "ORD", "ARTIST", "CITY", "SPOT", "DAY", "MONTH", "YEAR", "AGENCY", "URL" };
 		Cursor c = database.query("Concerts", columns, condition, null, null, null,"YEAR,MONTH,DAY");
 		Concert[] concerts =  new Concert[c.getCount()];
