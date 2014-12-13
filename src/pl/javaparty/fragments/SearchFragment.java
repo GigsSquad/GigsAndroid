@@ -17,7 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
 
-public class SearchFragment extends Fragment{
+public class SearchFragment extends Fragment {
 
 	AutoCompleteTextView searchBox;
 	ListView concertList;
@@ -32,28 +32,28 @@ public class SearchFragment extends Fragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
 		View view = inflater.inflate(R.layout.fragment_search, container, false);
 		getActivity().getActionBar().setTitle("Szukaj");
-		
-		dbm = (dbManager) getArguments().getSerializable("dbManager");//przekazujemy dbm od mainActivity
-		
+
+		dbm = (dbManager) getArguments().getSerializable("dbManager");// przekazujemy dbm od mainActivity
+
 		context = inflater.getContext();
 
 		searchBox = (AutoCompleteTextView) view.findViewById(R.id.searchBox);
 		concertList = (ListView) view.findViewById(R.id.concertList);
-		
+
 		adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, dbm.getArtists());
 
 		searchBox.setAdapter(adapterSearchBox);
 		searchBox.setThreshold(1);
-		//new DownloadTask().execute();
+		// new DownloadTask().execute();
 
 		searchBox.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
 				String artist = searchBox.getText().toString();
-				adapter = new ConcertAdapter(getActivity(), R.layout.list_row, dbm.getConcertsByArtist(artist)); //concertMgr.getConcertList(searchBox.getText().toString()));
+				adapter = new ConcertAdapter(getActivity(), R.layout.list_row, dbm.getConcertsByArtist(artist)); // concertMgr.getConcertList(searchBox.getText().toString()));
 				concertList.setAdapter(adapter);
-				//zapisywanie danych, coby potem przywrocic
+				// zapisywanie danych, coby potem przywrocic
 				lastSearching = searchBox.getText().toString();
 				getActivity().getActionBar().setTitle("Szukaj: " + searchBox.getText().toString());
 				searchBox.setText("");
@@ -72,7 +72,8 @@ public class SearchFragment extends Fragment{
 				args.putSerializable("dbManager", dbm);
 				fragment.setArguments(args);
 				FragmentManager fragmentManager = getFragmentManager();
-				fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).addToBackStack(getTag()).commit();
+				fragmentManager.beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
+						android.R.anim.slide_out_right).replace(R.id.content_frame, fragment).addToBackStack(getTag()).commit();
 			}
 		});
 
@@ -83,13 +84,13 @@ public class SearchFragment extends Fragment{
 	public void onResume()
 	{
 		super.onResume();
-		if(adapter!=null)
+		if (adapter != null)
 		{
 			concertList.setAdapter(adapter);
 			concertList.setSelection(lastPosition);
 		}
-		if(lastSearching!=null)
+		if (lastSearching != null)
 			getActivity().getActionBar().setTitle("Szukaj: " + lastSearching);
-		
+
 	}
 }

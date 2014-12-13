@@ -74,7 +74,8 @@ public class RecentFragment extends Fragment {
 
 				fragment.setArguments(b);
 				FragmentManager fragmentManager = getFragmentManager();
-				fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+				fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right,
+						R.anim.slide_out_left).replace(R.id.content_frame, fragment).addToBackStack(null).commit();
 			}
 		});
 		return view;

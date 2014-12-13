@@ -97,7 +97,7 @@ public class MapConcertTab extends Fragment {
 		mMap.addMarker(new MarkerOptions().position(destLatLng).title(dbm.getCity(ID) + " " + dbm.getSpot(ID))
 				.snippet(dbm.getArtist(ID) + " " + dbm.getDate(ID))); // ustawia marker
 		mMap.animateCamera(CameraUpdateFactory
-				.newLatLngZoom(new LatLng(destLatLng.latitude, destLatLng.longitude), 19.0f)); // przybliza do markera
+				.newLatLngZoom(new LatLng(destLatLng.latitude, destLatLng.longitude), 17.0f)); // przybliza do markera
 	}
 
 	@Override

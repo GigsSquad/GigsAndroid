@@ -109,7 +109,8 @@ public class MainActivity extends FragmentActivity {
 					if (fragment != null)
 					{
 						fragment.setArguments(arguments);
-						fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+						fragmentManager.beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
+								android.R.anim.slide_out_right).replace(R.id.content_frame, fragment).addToBackStack(null).commit();
 					}
 				}
 			}
@@ -118,7 +119,8 @@ public class MainActivity extends FragmentActivity {
 		Fragment fragment = new RecentFragment();
 		// przekazuje managera
 		fragment.setArguments(arguments);
-		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+		fragmentManager.beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
+				android.R.anim.slide_out_right).replace(R.id.content_frame, fragment).addToBackStack(null).commit();
 		drawerLayout.openDrawer(drawerList);
 	}
 
