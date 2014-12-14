@@ -17,6 +17,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class InfoConcertTab extends Fragment {
 
@@ -62,7 +63,8 @@ public class InfoConcertTab extends Fragment {
 		image.setOnClickListener(new OnClickListener() {
 		    public void onClick(View v) {
 		       dbm.addFavouriteConcert(ID);		
-		       Log.i("TUTAJ","TUTAJ");
+		   //    Log.i("TUTAJ",Integer.toString(ID));
+		       Toast.makeText(getActivity(), "Dodano do Twoich koncertow!", Toast.LENGTH_SHORT).show();
 		    }
 		});
 		
