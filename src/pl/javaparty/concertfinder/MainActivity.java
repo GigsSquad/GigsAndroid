@@ -1,5 +1,9 @@
 package pl.javaparty.concertfinder;
 
+import java.util.ArrayList;
+
+import pl.javaparty.adapters.NavDrawerAdapter;
+import pl.javaparty.adapters.NavDrawerItem;
 import pl.javaparty.fragments.AboutFragment;
 import pl.javaparty.fragments.FavoriteFragment;
 import pl.javaparty.fragments.RecentFragment;
@@ -8,6 +12,7 @@ import pl.javaparty.fragments.SettingsFragment;
 import pl.javaparty.sql.dbManager;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.content.res.TypedArray;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -39,6 +44,11 @@ public class MainActivity extends FragmentActivity {
 	private ActionBarDrawerToggle drawerToggle;
 	FragmentManager fragmentManager;
 
+	private String[] navMenuTitles;
+	private TypedArray navMenuIcons;
+	private ArrayList<NavDrawerItem> navDrawerItems;
+	private NavDrawerAdapter adapter;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -52,11 +62,24 @@ public class MainActivity extends FragmentActivity {
 		arguments.putSerializable("dbManager", dbMgr);
 		new DownloadTask().execute();
 
+		navMenuTitles = getResources().getStringArray(R.array.nav_menu);
+		navMenuIcons = getResources().obtainTypedArray(R.array.nav_menu_icons);
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
 		drawerList = (ListView) findViewById(R.id.left_drawer);
-		adapterDrawer = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.nav_menu));
-		drawerList.setAdapter(adapterDrawer);
+
+		navDrawerItems = new ArrayList<NavDrawerItem>();
+
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1)));
+		navMenuIcons.recycle();
+
+		// setting the nav drawer list adapter
+		adapter = new NavDrawerAdapter(getApplicationContext(), navDrawerItems);
+		drawerList.setAdapter(adapter);
 
 		// ustawianie actionbara by mozna go bylo wcisnac
 		getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -65,16 +88,18 @@ public class MainActivity extends FragmentActivity {
 		drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
 				R.drawable.ic_drawer, // nav menu toggle icon
 				R.string.app_name
-		) {
-			public void onDrawerClosed(View view) {
-				invalidateOptionsMenu();
-			}
+				) {
+					public void onDrawerClosed(View view) {
+						invalidateOptionsMenu();
+					}
 
-			public void onDrawerOpened(View drawerView) {
-				invalidateOptionsMenu();
-			}
-		};
+					public void onDrawerOpened(View drawerView) {
+						invalidateOptionsMenu();
+					}
+				};
+
 		drawerLayout.setDrawerListener(drawerToggle);
+
 		drawerList.setSelector(android.R.color.holo_blue_dark);
 		drawerList.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -182,11 +207,11 @@ public class MainActivity extends FragmentActivity {
 			Log.i("DB", "Koniec pobierania");
 			Toast.makeText(getApplicationContext(), "Zaktualizowano!", Toast.LENGTH_SHORT).show();
 
-//			Fragment fragment = fragmentManager.findFragmentById(R.id.content_frame);
-//			if (fragment instanceof RecentFragment)
-//			{
-//				((RecentFragment) fragment).refresh();
-//			}
+			// Fragment fragment = fragmentManager.findFragmentById(R.id.content_frame);
+			// if (fragment instanceof RecentFragment)
+			// {
+			// ((RecentFragment) fragment).refresh();
+			// }
 			super.onPostExecute(result);
 		}
 	}

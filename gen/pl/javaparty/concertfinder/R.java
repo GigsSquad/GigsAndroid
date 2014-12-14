@@ -16,12 +16,12 @@ public final class R {
         public static final int abc_slide_out_bottom=0x7f040004;
         public static final int abc_slide_out_top=0x7f040005;
         public static final int card_animation=0x7f040006;
-        public static final int decelerate_quint=0x7f040007;
-        public static final int slide_in_right=0x7f040008;
-        public static final int slide_out_left=0x7f040009;
+        public static final int slide_in_right=0x7f040007;
+        public static final int slide_out_left=0x7f040008;
     }
     public static final class array {
         public static final int nav_menu=0x7f0d0000;
+        public static final int nav_menu_icons=0x7f0d0001;
     }
     public static final class attr {
         /**  Custom divider drawable to use for elements in the action bar. 
@@ -2208,8 +2208,8 @@ containing a value of this type.
         public static final int tab_unselected_pressed_bluetheme=0x7f02007f;
     }
     public static final class id {
-        public static final int LinearLayout1=0x7f0a0061;
-        public static final int RelativeLayout1=0x7f0a005b;
+        public static final int LinearLayout1=0x7f0a0062;
+        public static final int RelativeLayout1=0x7f0a005c;
         public static final int action_bar=0x7f0a0042;
         public static final int action_bar_activity_content=0x7f0a0003;
         public static final int action_bar_container=0x7f0a0041;
@@ -2225,8 +2225,8 @@ containing a value of this type.
         public static final int action_mode_close_button=0x7f0a0031;
         public static final int activity_chooser_view_content=0x7f0a0032;
         public static final int always=0x7f0a0014;
-        public static final int artist_image=0x7f0a0066;
-        public static final int artist_name=0x7f0a0067;
+        public static final int artist_image=0x7f0a0067;
+        public static final int artist_name=0x7f0a0068;
         public static final int beginning=0x7f0a001b;
         public static final int book_now=0x7f0a0029;
         public static final int buyButton=0x7f0a0026;
@@ -2235,22 +2235,23 @@ containing a value of this type.
         public static final int card=0x7f0a0053;
         public static final int card_view=0x7f0a0054;
         public static final int checkbox=0x7f0a003a;
-        public static final int cityAutoComplete=0x7f0a0062;
+        public static final int cityAutoComplete=0x7f0a0063;
         public static final int classic=0x7f0a002c;
-        public static final int clearFilesButton=0x7f0a0065;
+        public static final int clearFilesButton=0x7f0a0066;
         public static final int collapseActionView=0x7f0a0015;
-        public static final int con_date=0x7f0a0069;
-        public static final int concertList=0x7f0a0060;
-        public static final int connect=0x7f0a006a;
+        public static final int con_date=0x7f0a006a;
+        public static final int concertList=0x7f0a0061;
+        public static final int connect=0x7f0a006b;
         public static final int content_frame=0x7f0a0051;
+        public static final int counter=0x7f0a005b;
         public static final int dark=0x7f0a0056;
         public static final int dateTV=0x7f0a005a;
         public static final int decor_content_parent=0x7f0a0040;
         public static final int default_activity_button=0x7f0a0035;
         public static final int dialog=0x7f0a0019;
         public static final int disableHome=0x7f0a000d;
-        public static final int distanceSeekBar=0x7f0a0063;
-        public static final int distanceTextView=0x7f0a005c;
+        public static final int distanceSeekBar=0x7f0a0064;
+        public static final int distanceTextView=0x7f0a005d;
         public static final int drawer_layout=0x7f0a0050;
         public static final int dropdown=0x7f0a001a;
         public static final int edit_query=0x7f0a0044;
@@ -2272,8 +2273,8 @@ containing a value of this type.
         public static final int listMode=0x7f0a000a;
         public static final int list_image=0x7f0a0055;
         public static final int list_item=0x7f0a0036;
-        public static final int location_map=0x7f0a006c;
-        public static final int mapLayout=0x7f0a006b;
+        public static final int location_map=0x7f0a006d;
+        public static final int mapLayout=0x7f0a006c;
         public static final int match_parent=0x7f0a0028;
         public static final int middle=0x7f0a001d;
         public static final int monochrome=0x7f0a002e;
@@ -2281,17 +2282,17 @@ containing a value of this type.
         public static final int none=0x7f0a000f;
         public static final int normal=0x7f0a000b;
         public static final int placeTV=0x7f0a0058;
-        public static final int place_name=0x7f0a0068;
+        public static final int place_name=0x7f0a0069;
         public static final int production=0x7f0a0023;
         public static final int progress_circular=0x7f0a0007;
         public static final int progress_horizontal=0x7f0a0008;
         public static final int radio=0x7f0a003c;
-        public static final int realtabcontent=0x7f0a005d;
-        public static final int recentList=0x7f0a005e;
+        public static final int realtabcontent=0x7f0a005e;
+        public static final int recentList=0x7f0a005f;
         public static final int sandbox=0x7f0a0024;
         public static final int satellite=0x7f0a001f;
-        public static final int saveSettingsButton=0x7f0a0064;
-        public static final int searchBox=0x7f0a005f;
+        public static final int saveSettingsButton=0x7f0a0065;
+        public static final int searchBox=0x7f0a0060;
         public static final int search_badge=0x7f0a0046;
         public static final int search_bar=0x7f0a0045;
         public static final int search_button=0x7f0a0047;
@@ -2376,15 +2377,16 @@ containing a value of this type.
         public static final int abc_simple_dropdown_hint=0x7f030016;
         public static final int activity_main=0x7f030017;
         public static final int card_layout=0x7f030018;
-        public static final int fragment_about=0x7f030019;
-        public static final int fragment_concert=0x7f03001a;
-        public static final int fragment_favorite=0x7f03001b;
-        public static final int fragment_recent=0x7f03001c;
-        public static final int fragment_search=0x7f03001d;
-        public static final int fragment_settings=0x7f03001e;
-        public static final int support_simple_spinner_dropdown_item=0x7f03001f;
-        public static final int tab_fragment_concert_info=0x7f030020;
-        public static final int tab_fragment_concert_map=0x7f030021;
+        public static final int drawer_list_item=0x7f030019;
+        public static final int fragment_about=0x7f03001a;
+        public static final int fragment_concert=0x7f03001b;
+        public static final int fragment_favorite=0x7f03001c;
+        public static final int fragment_recent=0x7f03001d;
+        public static final int fragment_search=0x7f03001e;
+        public static final int fragment_settings=0x7f03001f;
+        public static final int support_simple_spinner_dropdown_item=0x7f030020;
+        public static final int tab_fragment_concert_info=0x7f030021;
+        public static final int tab_fragment_concert_map=0x7f030022;
     }
     public static final class menu {
         public static final int activity_main_actions=0x7f0e0000;
