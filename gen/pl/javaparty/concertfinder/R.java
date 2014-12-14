@@ -461,6 +461,7 @@ containing a value of this type.
         public static final int artist_image=0x7f0d0026;
         public static final int artist_name=0x7f0d0027;
         public static final int book_now=0x7f0d000e;
+        public static final int btn_navigate=0x7f0d002d;
         public static final int buyButton=0x7f0d000a;
         public static final int buy_now=0x7f0d000f;
         public static final int buy_with_google=0x7f0d0010;

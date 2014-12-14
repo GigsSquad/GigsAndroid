@@ -1,10 +1,13 @@
 package pl.javaparty.concertfinder;
 
+import java.io.IOException;
+
 import pl.javaparty.fragments.AboutFragment;
 import pl.javaparty.fragments.FavoriteFragment;
 import pl.javaparty.fragments.RecentFragment;
 import pl.javaparty.fragments.SearchFragment;
 import pl.javaparty.fragments.SettingsFragment;
+import pl.javaparty.map.MapHelper;
 import pl.javaparty.sql.dbManager;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -14,7 +17,6 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -31,7 +33,6 @@ import android.widget.Toast;
 public class MainActivity extends FragmentActivity {
 
 	ArrayAdapter<String> adapterDrawer;
-	String[] menu;
 	DrawerLayout drawerLayout;
 	ListView drawerList;
 	Context context;
@@ -40,6 +41,7 @@ public class MainActivity extends FragmentActivity {
 	Bundle arguments;
 	private ActionBarDrawerToggle drawerToggle;
 	FragmentManager fragmentManager;
+	MapHelper mapHelper;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,9 @@ public class MainActivity extends FragmentActivity {
 		setContentView(R.layout.activity_main);
 		context = getApplicationContext();
 		dbMgr = new dbManager(context);
+		mapHelper = new MapHelper(context);
+
+		mapHelper.distanceTo("Szczecin");
 
 		fragmentManager = getSupportFragmentManager();
 
@@ -56,11 +61,10 @@ public class MainActivity extends FragmentActivity {
 		// TODO tego mialo nie byc
 		new DownloadTask().execute();
 
-		menu = new String[] { "Szukaj", "Ostatnie koncerty", "Twoje koncerty", "Aktualizuj", "Preferencje", "Informacje" };
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
 		drawerList = (ListView) findViewById(R.id.left_drawer);
-		adapterDrawer = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, menu);
+		adapterDrawer = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.nav_menu));
 		drawerList.setAdapter(adapterDrawer);
 
 		// ustawianie actionbara by mozna go bylo wcisnac

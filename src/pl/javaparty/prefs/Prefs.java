@@ -21,13 +21,25 @@ public class Prefs {
 
 	// Miasto
 	public static String getCity(Context context) {
-		return getPrefs(context).getString("CITY", null);
+		return getPrefs(context).getString("CITY", "Warszawa");
 	}
 
 	public static void setCity(Context context, String value) {
 		getPrefs(context).edit().putString("CITY", value).commit();
 	}
-	
-	
+
+	// Wspolrzedne
+	public static double getLat(Context context) {
+		return getPrefs(context).getFloat("LAT", -1);
+	}
+
+	public static double getLng(Context context) {
+		return getPrefs(context).getFloat("LNG", -1);
+	}
+
+	public static void setLatLng(Context context, double lat, double lng) {
+		getPrefs(context).edit().putFloat("LAT", (float) lat).commit();
+		getPrefs(context).edit().putFloat("LNG", (float) lng).commit();
+	}
 
 }

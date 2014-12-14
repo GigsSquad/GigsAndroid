@@ -4,9 +4,13 @@ import java.io.IOException;
 import java.util.List;
 
 import pl.javaparty.concertfinder.R;
+import pl.javaparty.map.MapHelper;
+import pl.javaparty.prefs.Prefs;
 import pl.javaparty.sql.dbManager;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,7 +18,9 @@ import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,17 +33,15 @@ public class MapConcertTab extends Fragment {
 	private static View view;
 	private static GoogleMap mMap;
 	private static FragmentManager fragmentManager;
-	private Geocoder geoCoder;
-	private List<Address> addressList;
-	static Address address;
-	private static LatLng destLatLng;
 	static int ID;
 	static dbManager dbm;
+	private static MapHelper mapHelper;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
 		ID = getArguments().getInt("ID", -1);
 		dbm = (dbManager) getArguments().getSerializable("dbManager");
+		mapHelper = new MapHelper(getActivity());
 
 		if (container == null)
 			return null;
@@ -54,28 +58,15 @@ public class MapConcertTab extends Fragment {
 			/* map is already there, just return view as it is */
 		}
 
-		geoCoder = new Geocoder(getActivity());
+		((Button) view.findViewById(R.id.btn_navigate)).setOnClickListener(new OnClickListener() {
 
-		try {
-			addressList = geoCoder.getFromLocationName(dbm.getCity(ID) + " " + dbm.getSpot(ID), 1);
-			Log.i("DBM", "City: " + dbm.getCity(ID) + " Spot: " + dbm.getSpot(ID));
-			address = addressList.get(0); // pierwsze co znajdzie i bedzie najlepiej dopasowane
-		} catch (IndexOutOfBoundsException e) {
-
-			try {
-				addressList = geoCoder.getFromLocationName(dbm.getCity(ID), 1);
-				address = addressList.get(0); // pierwsze co znajdzie i bedzie najlepiej dopasowane
-			} catch (IOException e1) {
-			} catch (IndexOutOfBoundsException e2)
-			{
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+						Uri.parse("http://maps.google.com/maps?saddr=" + Prefs.getCity(getActivity()) + "&daddr=" + dbm.getCity(ID) + " " + dbm.getSpot(ID)));
+				startActivity(intent);
 			}
-
-		} catch (IOException e) {
-		} finally {
-		}
-
-		destLatLng = new LatLng(address.getLatitude(), address.getLongitude());
-		Log.i("LATLNG", "Lat: " + address.getLatitude() + "Long: " + address.getLongitude());
+		});
 
 		fragmentManager = getChildFragmentManager();
 
@@ -94,10 +85,10 @@ public class MapConcertTab extends Fragment {
 
 	private static void setUpMap() {
 		mMap.setMyLocationEnabled(true); // pokazuje nasz¹ pozycje
-		mMap.addMarker(new MarkerOptions().position(destLatLng).title(dbm.getCity(ID) + " " + dbm.getSpot(ID))
+		mMap.addMarker(new MarkerOptions().position(mapHelper.getLatLng(dbm.getCity(ID))).title(dbm.getCity(ID) + " " + dbm.getSpot(ID))
 				.snippet(dbm.getArtist(ID) + " " + dbm.getDate(ID))); // ustawia marker
 		mMap.animateCamera(CameraUpdateFactory
-				.newLatLngZoom(new LatLng(destLatLng.latitude, destLatLng.longitude), 17.0f)); // przybliza do markera
+				.newLatLngZoom(mapHelper.getLatLng(dbm.getCity(ID)), 17.0f)); // przybliza do markera
 	}
 
 	@Override

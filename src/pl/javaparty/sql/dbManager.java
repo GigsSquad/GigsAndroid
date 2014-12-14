@@ -19,11 +19,7 @@ import android.util.Log;
 
 public class dbManager extends SQLiteOpenHelper implements Serializable{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = -1641692594177112448L;
 	public final static String DATABASE_NAME = "baza.db";
 	private static SQLiteDatabase database;
 
