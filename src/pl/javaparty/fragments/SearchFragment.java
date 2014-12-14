@@ -1,95 +1,32 @@
 package pl.javaparty.fragments;
 
-import pl.javaparty.adapters.ConcertAdapter;
+
 import pl.javaparty.concertfinder.R;
-import pl.javaparty.concertmanager.Concert;
-import pl.javaparty.sql.dbManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.ListView;
 
 public class SearchFragment extends Fragment {
 
-	AutoCompleteTextView searchBox;
-	ListView concertList;
-	ArrayAdapter<String> adapterSearchBox, adapterList;
-	ConcertAdapter adapter;
-	Context context;
-	dbManager dbm;
-	private String lastSearching;
-	private int lastPosition;
+		private FragmentTabHost mTabHost;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
-		View view = inflater.inflate(R.layout.fragment_search, container, false);
-		getActivity().getActionBar().setTitle("Szukaj");
-		
-		dbm = (dbManager) getArguments().getSerializable("dbManager");//przekazujemy dbm od mainActivity
-		
-		context = inflater.getContext();
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
+			getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+			getActivity().getActionBar().setHomeButtonEnabled(true);
 
-		searchBox = (AutoCompleteTextView) view.findViewById(R.id.searchBox);
-		concertList = (ListView) view.findViewById(R.id.concertList);
-		
-		adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, dbm.getArtists());
+			mTabHost = new FragmentTabHost(getActivity());
+			mTabHost.setup(getActivity(), getChildFragmentManager(), R.id.tab_host);
 
-		searchBox.setAdapter(adapterSearchBox);
-		searchBox.setThreshold(1);
-		//new DownloadTask().execute();
-
-		searchBox.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position,
-					long id) {
-				String artist = searchBox.getText().toString();
-				adapter = new ConcertAdapter(getActivity(), R.layout.list_row, dbm.getConcertsByArtist(artist)); //concertMgr.getConcertList(searchBox.getText().toString()));
-				concertList.setAdapter(adapter);
-				//zapisywanie danych, coby potem przywrocic
-				lastSearching = searchBox.getText().toString();
-				getActivity().getActionBar().setTitle("Szukaj: " + searchBox.getText().toString());
-				searchBox.setText("");
-			}
-		});
-
-		concertList.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position,
-					long id) {
-				lastPosition = position;
-				Fragment fragment = new ConcertFragment();
-				Bundle args = new Bundle();
-				Concert item = (Concert) parent.getAdapter().getItem(position);
-				args.putInt("ID", item.getID()); // przesylam unikalne id koncertu
-				args.putSerializable("dbManager", dbm);
-				fragment.setArguments(args);
-				FragmentManager fragmentManager = getFragmentManager();
-				fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).addToBackStack(getTag()).commit();
-			}
-		});
-
-		return view;
-	}
-
-	@Override
-	public void onResume()
-	{
-		super.onResume();
-		if(adapter!=null)
-		{
-			concertList.setAdapter(adapter);
-			concertList.setSelection(lastPosition);
+			mTabHost.addTab(mTabHost.newTabSpec("fragmenta").setIndicator("Artysta"), ArtistSearch.class, getArguments());
+			mTabHost.addTab(mTabHost.newTabSpec("fragmentb").setIndicator("Miejsce"), PlaceSearch.class, getArguments());
+			mTabHost.addTab(mTabHost.newTabSpec("fragmentc").setIndicator("Data"), DateSearch.class, getArguments());
+			for(int i=0;i<3;i++)
+				mTabHost.getTabWidget().getChildAt(i).setFocusable(false);
+			
+			return (View) mTabHost;
 		}
-		if(lastSearching!=null)
-			getActivity().getActionBar().setTitle("Szukaj: " + lastSearching);
-		
-	}
 }

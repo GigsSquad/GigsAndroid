@@ -286,6 +286,35 @@ public class dbManager extends SQLiteOpenHelper implements Serializable{
 		return getConcertsBy(condition);
 	}
 	
+	
+	public Concert[] getConcertsByDateRange(int dF,int mF,int yF,int dT,int mT, int yT){
+		String[] columns = { "ORD", "ARTIST", "CITY", "SPOT", "DAY", "MONTH", "YEAR", "AGENCY", "URL" };
+		String condition = "(YEAR > ? OR (YEAR = ? AND MONTH > ?) OR (YEAR = ? AND MONTH = ? AND DAY >= ?))"
+				+ "AND (YEAR < ? OR (YEAR = ? AND MONTH < ?) OR (YEAR = ? AND MONTH = ? AND DAY <= ?))";
+		String[] selectionArgs = {
+				String.valueOf(yF),
+				String.valueOf(yF),
+				String.valueOf(mF),
+				String.valueOf(yF),
+				String.valueOf(mF),
+				String.valueOf(dF),
+				String.valueOf(yT),
+				String.valueOf(yT),
+				String.valueOf(mT),
+				String.valueOf(yT),
+				String.valueOf(mT),
+				String.valueOf(dT)
+		};
+		Cursor c = database.query("Concerts", columns, condition, selectionArgs, null, null, null);
+		Concert[] concerts =  new Concert[c.getCount()];
+		for(int i=0; c.moveToNext(); i++){
+			concerts[i] = new Concert(c.getInt(0), c.getString(1), c.getString(2), c.getString(3),
+					c.getInt(4), c.getInt(5), c.getInt(6), getAgency(c.getString(7)), c.getString(8));
+		}
+		c.close();
+		return concerts;
+	}
+	
 	public Concert[] getConcertsByDate(int day,int month,int year){
 		String condition = "DAY = "+day+" AND MONTH = "+month+" AND YEAR = "+year;
 		return getConcertsBy(condition);
