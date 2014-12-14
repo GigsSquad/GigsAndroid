@@ -4,11 +4,14 @@ import java.util.ArrayList;
 
 import pl.javaparty.adapters.NavDrawerAdapter;
 import pl.javaparty.adapters.NavDrawerItem;
+import java.io.IOException;
+
 import pl.javaparty.fragments.AboutFragment;
 import pl.javaparty.fragments.FavoriteFragment;
 import pl.javaparty.fragments.RecentFragment;
 import pl.javaparty.fragments.SearchFragment;
 import pl.javaparty.fragments.SettingsFragment;
+import pl.javaparty.map.MapHelper;
 import pl.javaparty.sql.dbManager;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -43,6 +46,7 @@ public class MainActivity extends FragmentActivity {
 	Bundle arguments;
 	private ActionBarDrawerToggle drawerToggle;
 	FragmentManager fragmentManager;
+	MapHelper mapHelper;
 
 	private String[] navMenuTitles;
 	private TypedArray navMenuIcons;
@@ -55,17 +59,17 @@ public class MainActivity extends FragmentActivity {
 		setContentView(R.layout.activity_main);
 		context = getApplicationContext();
 		dbMgr = new dbManager(context);
+		mapHelper = new MapHelper(context);
+
+		mapHelper.distanceTo("Szczecin");
 
 		fragmentManager = getSupportFragmentManager();
 
 		arguments = new Bundle();
 		arguments.putSerializable("dbManager", dbMgr);
 		new DownloadTask().execute();
-
 		navMenuTitles = getResources().getStringArray(R.array.nav_menu);
 		navMenuIcons = getResources().obtainTypedArray(R.array.nav_menu_icons);
-		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		drawerList = (ListView) findViewById(R.id.left_drawer);
 
 		navDrawerItems = new ArrayList<NavDrawerItem>();
 
@@ -80,7 +84,6 @@ public class MainActivity extends FragmentActivity {
 		// setting the nav drawer list adapter
 		adapter = new NavDrawerAdapter(getApplicationContext(), navDrawerItems);
 		drawerList.setAdapter(adapter);
-
 		// ustawianie actionbara by mozna go bylo wcisnac
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
@@ -208,8 +211,8 @@ public class MainActivity extends FragmentActivity {
 
 			navDrawerItems.get(1).setCount("" + dbMgr.getSize());
 			navDrawerItems.get(1).setCounterVisibility(true);
-			
-			navDrawerItems.get(2).setCount("0"); //TODO licznik ulubionych koncertów
+
+			navDrawerItems.get(2).setCount("0"); // TODO licznik ulubionych koncertów
 			navDrawerItems.get(2).setCounterVisibility(true);
 			// Fragment fragment = fragmentManager.findFragmentById(R.id.content_frame);
 			// if (fragment instanceof RecentFragment)

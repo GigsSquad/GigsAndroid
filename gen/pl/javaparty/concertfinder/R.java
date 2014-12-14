@@ -2234,6 +2234,7 @@ containing a value of this type.
         public static final int artist_name=0x7f0a0068;
         public static final int beginning=0x7f0a001b;
         public static final int book_now=0x7f0a0029;
+        public static final int btn_navigate=0x7f0a006e;
         public static final int buyButton=0x7f0a0026;
         public static final int buy_now=0x7f0a002a;
         public static final int buy_with_google=0x7f0a002b;

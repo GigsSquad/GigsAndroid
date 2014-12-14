@@ -3,60 +3,85 @@ package pl.javaparty.map;
 import java.io.IOException;
 import java.util.List;
 
+import pl.javaparty.prefs.Prefs;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationManager;
-import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
-import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.maps.model.LatLng;
 
 public class MapHelper {
 
-	Context context;
+	private Context context;
 	private Geocoder geoCoder;
-	private List<Address> address;
-	LocationManager locationManager;
+	private List<Address> addressList;
+	private Address cityAddress; // to zadane
+	private Address myCityAddress; // to z ustawieñ
+	private String myCity;
 
 	public MapHelper(Context context) {
 		this.context = context;
 		geoCoder = new Geocoder(context);
-		locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+		myCity = Prefs.getCity(context);
+		myCityAddress = getAddress(myCity);
 	}
 
-	public void distance(final String city, int rage)
+	/**
+	 * Powinno byc wywolywane po zmianie miasta w ustawieniach
+	 */
+	public void updateMyCity()
 	{
+		myCityAddress = getAddress(Prefs.getCity(context));
+		Prefs.setLatLng(context, myCityAddress.getLatitude(), myCityAddress.getLongitude());
+	}
+
+	/**
+	 * Oblicza odleglosc miedzy zadanym miastem w stringu a miastem ktore zostalo zapisane w ustawieniach.
+	 * 
+	 * @param city
+	 *            - nazwa miasta
+	 * @return zwraca odleglosc w kilometrach
+	 * @throws IOException
+	 */
+
+	public int distanceTo(final String city)
+	{
+		cityAddress = getAddress(city);
+
+		float[] distanceFloat = new float[3];
+		Location.distanceBetween(myCityAddress.getLatitude(), myCityAddress.getLongitude(), cityAddress.getLatitude(), cityAddress.getLongitude(),
+				distanceFloat);
+
+		Log.i("MAP", "Dystans w km: " + (int) (distanceFloat[0] / 1000));
+		return (int) (distanceFloat[0] / 1000);
+	}
+
+	public Address getAddress(String city)
+	{
+		Address address = null;
 		try {
-			address = geoCoder.getFromLocationName(city, 1);
+			addressList = geoCoder.getFromLocationName(city, 1);
 		} catch (IOException e) {
+			Toast.makeText(context, "Nie mo¿na za³adowaæ, brak internetu", Toast.LENGTH_SHORT).show();
 			e.printStackTrace();
 		}
 
-		LocationListener locationListener = new LocationListener() {
-			public void onLocationChanged(Location location) {
-				float[] distance = new float[4];
-
-				Address loc = address.get(0); // pierwsze co znajdzie i bedzie najlepiej dopasowane
-				Location.distanceBetween(location.getLatitude(), location.getLongitude(), loc.getLatitude(), loc.getLongitude(), distance);
-				for (float f : distance)
-					Log.i("DIST", "distance: " + f);
-
-				Log.i("DIST", "Dystans w km: " + distance[0] / 1000);
-			}
-
-			public void onStatusChanged(String provider, int status, Bundle extras) {
-			}
-
-			public void onProviderEnabled(String provider) {
-			}
-
-			public void onProviderDisabled(String provider) {
-			}
-		};
-
-		// locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+		try {
+			address = addressList.get(0);
+		} catch (IndexOutOfBoundsException e)
+		{
+			getAddress("Warszawa"); // TODO: tymczasowo
+			Log.e("MAP", "Nie znaleziono ¿adneog miasta dla stringa: " + city);
+		}
+		return address;
 	}
 
+	public LatLng getLatLng(String city)
+	{
+		Address address = getAddress(city);
+		return new LatLng(address.getLatitude(), address.getLongitude());
+	}
 }
