@@ -72,7 +72,6 @@ public class RecentFragment extends Fragment {
 
 				Concert item = (Concert) parent.getAdapter().getItem(position);
 				b.putInt("ID", item.getID()); // przesylam unikalne id koncertu
-				b.putSerializable("dbManager", dbm);
 
 				fragment.setArguments(b);
 				FragmentManager fragmentManager = getFragmentManager();

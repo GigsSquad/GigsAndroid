@@ -70,7 +70,6 @@ public class SearchFragment extends Fragment {
 				Bundle args = new Bundle();
 				Concert item = (Concert) parent.getAdapter().getItem(position);
 				args.putInt("ID", item.getID()); // przesylam unikalne id koncertu
-				args.putSerializable("dbManager", dbm);
 				fragment.setArguments(args);
 				FragmentManager fragmentManager = getFragmentManager();
 				fragmentManager.beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
