@@ -9,6 +9,7 @@ import org.jsoup.select.Elements;
 
 
 
+
 import pl.javaparty.sql.dbManager;
 /*
  * Klasa do parsowania strony TicketPro 
@@ -72,10 +73,15 @@ public class JDTicketPro {
 					
 				}
 			
-			System.out.println(urlParse);
-			urlParse = doc.getElementsByClass("normal").last().attr("href");
-			urlParse = "http://www.ticketpro.pl"+urlParse;
-			urlParseName = doc.getElementsByClass("normal").last().text();
+			
+		
+			try {
+				urlParse = doc.getElementsByClass("normal").last().attr("href");
+				urlParse = "http://www.ticketpro.pl"+urlParse;
+				urlParseName = doc.getElementsByClass("normal").last().text();
+			} catch (Exception e) {
+				break;				
+			}
 			
 		}while(urlParseName.equals("Następny"));
 		

@@ -27,6 +27,7 @@ public class FavoriteFragment extends Fragment{
 		list = (ListView) view.findViewById(R.id.FavouriteList);
 		
 		adapter = new ConcertAdapter(getActivity(), R.layout.list_row,dbm.getAllFavouriteConcert());
+		list.setAdapter(adapter);
 		
 		return view;
 	}

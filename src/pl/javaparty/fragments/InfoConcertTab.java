@@ -1,5 +1,7 @@
 package pl.javaparty.fragments;
 
+import com.google.android.gms.internal.db;
+
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.imageloader.ImageLoader;
 import pl.javaparty.sql.dbManager;
@@ -32,9 +34,9 @@ public class InfoConcertTab extends Fragment {
 		image = (ImageView) view.findViewById(R.id.artist_image);
 		connect = (Button) view.findViewById(R.id.connect);
 
-		int ID = (getArguments().getInt("ID", -1)); // -1 bo bazadanych numeruje od 1 a nie od 0
-		dbManager dbm = (dbManager) getArguments().getSerializable("dbManager");
-		Log.i("KURWA", "Przes³ane id: " + ID);
+		final int ID = (getArguments().getInt("ID", -1)); // -1 bo bazadanych numeruje od 1 a nie od 0
+		final dbManager dbm = (dbManager) getArguments().getSerializable("dbManager");
+		Log.i("KURWA", "Przesï¿½ane id: " + ID);
 		String artistName = dbm.getArtist(ID);
 		getActivity().getActionBar().setTitle(artistName);
 		artist.setText(artistName);
@@ -46,7 +48,7 @@ public class InfoConcertTab extends Fragment {
 		final String URL = dbm.getUrl(ID);
 		new ImageLoader(inflater.getContext()).DisplayImage(artistName, image);
 		
-		connect.setOnClickListener(new OnClickListener() { // otwiera przegladarkê z linkiem do koncertu
+		connect.setOnClickListener(new OnClickListener() { // otwiera przegladarkï¿½ z linkiem do koncertu
 			@Override
 			public void onClick(View arg0) {
 				Log.i("KLIK", "KLIK");
@@ -56,7 +58,14 @@ public class InfoConcertTab extends Fragment {
 			}
 
 		});
-
+		
+		image.setOnClickListener(new OnClickListener() {
+		    public void onClick(View v) {
+		       dbm.addFavouriteConcert(ID);		
+		       Log.i("TUTAJ","TUTAJ");
+		    }
+		});
+		
 		return view;
 	}
 }

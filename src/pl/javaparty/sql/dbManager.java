@@ -44,11 +44,11 @@ public class dbManager extends SQLiteOpenHelper implements Serializable{
 			"CREATE TABLE Hashcodes(" +
 					"AGENCY TEXT PRIMARY KEY," +
 					"HASH INTEGER)"; 
-	
-//nowa tabela zawieraj¹ca ulubione koncerty
+
+//nowa tabela zawierajï¿½ca ulubione koncerty
 	private static String CreateFavouriteTable =
-			"CREATE TABLE Favouries(" +
-					"ID INTEGER PRIMARY KEY AUTOINCREMENT," ; 
+			"CREATE TABLE Favourites(" +
+					"ID INTEGER PRIMARY KEY AUTOINCREMENT)" ; 
 	
 	public Thread download;
 
@@ -63,9 +63,11 @@ public class dbManager extends SQLiteOpenHelper implements Serializable{
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
+		Log.i("Rafal","W EXECSQL");
 		db.execSQL(CreateConcertTable);
 		db.execSQL(CreateHashcodeTable);
 		db.execSQL(CreateFavouriteTable);
+		
 	}
 
 	@Override
@@ -133,10 +135,24 @@ public class dbManager extends SQLiteOpenHelper implements Serializable{
 		c.close();
 		return contains;
 	}
-
+	
+	public boolean contains(int id){
+		boolean contains = false;
+		//int h1 = id.hashCode();
+		String[] columns = {"ID"};
+		Cursor c = database.query("Favourites",columns,null,null,null,null,null);
+		int h2;
+		while(c.moveToNext()&&!contains){
+			h2 = c.getInt(0);
+			contains = id==h2;
+		}
+		c.close();
+		return contains;
+	}
+	
 	public Cursor getData() {
 		String[] columns = { "ORD", "ARTIST", "CITY", "SPOT", "DAY", "MONTH", "YEAR", "AGENCY", "URL" };
-		// dodane pobieranie ID na pocz¹tku
+		// dodane pobieranie ID na poczï¿½tku
 		Cursor c = database.query("Concerts", columns, null, null, null, null, null);
 		return c;
 	}
@@ -293,21 +309,23 @@ public class dbManager extends SQLiteOpenHelper implements Serializable{
 	 */
 	public void addFavouriteConcert(int id)
 	{
-		
+		if(!contains(id)){
 		ContentValues cv = new ContentValues();
 		cv.put("ID",id);
 		database.insertOrThrow("Favourites",null,cv);
+		}
+		
 	}
 	
 	/*
-	 * Metoda uzyskuj¹ca ulubione koncerty z tabeli Favourite
+	 * Metoda uzyskujï¿½ca ulubione koncerty z tabeli Favourite
 	 * 
 	 * @return tablica concertow awierajaca ulubione koncerty  
 	 */
 	public Concert[] getAllFavouriteConcert()
 	{
 		String [] columns = {"ID"};
-		Cursor c = database.query("Favouries", columns, null, null,null,null,null);
+		Cursor c = database.query("Favourites", columns, null, null,null,null,null);
 		c.moveToFirst();
 		
 		int size = c.getCount();
@@ -379,7 +397,7 @@ public class dbManager extends SQLiteOpenHelper implements Serializable{
 	}
 	
 	public Concert getConcertsByID(int id){
-		String condition = "ID = "+id;
+		String condition = "ORD = "+id;
 		return getConcertsBy(condition)[0]; // id jest unuikalne wiec bedzie to zawsze tablica jednoelementowa
 	}
 
