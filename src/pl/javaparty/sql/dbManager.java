@@ -45,6 +45,11 @@ public class dbManager extends SQLiteOpenHelper implements Serializable{
 					"AGENCY TEXT PRIMARY KEY," +
 					"HASH INTEGER)"; 
 	
+//nowa tabela zawieraj¹ca ulubione koncerty
+	private static String CreateFavouriteTable =
+			"CREATE TABLE Favouries(" +
+					"ID INTEGER PRIMARY KEY AUTOINCREMENT," ; 
+	
 	public Thread download;
 
 	public dbManager(Context context) {
@@ -60,6 +65,7 @@ public class dbManager extends SQLiteOpenHelper implements Serializable{
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(CreateConcertTable);
 		db.execSQL(CreateHashcodeTable);
+		db.execSQL(CreateFavouriteTable);
 	}
 
 	@Override
@@ -228,6 +234,7 @@ public class dbManager extends SQLiteOpenHelper implements Serializable{
 	private String[] universalGetter3000(String columnName){
 		String [] column = {columnName};
 		Cursor c = database.query("Concerts",column,null,null,null,null,null);
+		
 		int size = c.getCount();
 		String[] array = new String[size];
 		for(int i =0; c.moveToNext();i++)
@@ -278,6 +285,20 @@ public class dbManager extends SQLiteOpenHelper implements Serializable{
 		String res = dayS+"."+monthS+"."+c.getInt(3);
 		c.close();
 		return res;
+	}
+	
+	public String[] getFavourite()
+	{
+		String [] columns = {"ID"};
+		Cursor c = database.query("Favouries", columns, null, null,null,null,null);
+		c.moveToFirst();
+		
+		int size = c.getCount();
+		String[] array = new String[size];
+		for(int i =0; c.moveToNext();i++)
+			array[i] = c.getString(0);
+		c.close();
+		return array;
 	}
 	
 	private String fieldGetter (int ID, String fieldName){
@@ -335,6 +356,10 @@ public class dbManager extends SQLiteOpenHelper implements Serializable{
 		String condition = "DAY = "+day+" AND MONTH = "+month+" AND YEAR = "+year;
 		return getConcertsBy(condition);
 	}
-
+	
+	public Concert[] getConcertsByID(int id){
+		String condition = "ID = "+id;
+		return getConcertsBy(condition);
+	}
 
 }
