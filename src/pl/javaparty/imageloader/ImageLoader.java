@@ -25,7 +25,7 @@ import android.widget.ProgressBar;
 
 public class ImageLoader
 {
-	private final String TAG = "ImageLoader";
+	private final static String TAG = "ImageLoader";
 	 FileExplorer fileExplorer;//bedzie pobieral pliki obrazkow zapisanych w pamieci
 	 MemoryCache memoryCache; //przechowuje bitmapy w pamieci podrecznej
 	 ExecutorService executorService;
@@ -125,17 +125,26 @@ public class ImageLoader
 			File bandPictureFile = fileExplorer.getFile(bandName);
 
 			Bitmap bitmap = null;
-
-			if (!bandPictureFile.exists())
+			try
 			{
-				ImageDownloader.bandImage(bandPictureFile, bandName);// sciaga
-																		// obrazek
+				if (!bandPictureFile.exists())
+				{
+					ImageDownloader.bandImage(bandPictureFile, bandName);// sciaga
+																			// obrazek
+				}
+
+				// dekoduje obrazek
+				bitmap = decodeFile(bandPictureFile);
+
+				return bitmap;
+			} catch (Throwable ex) //gdy zabraknie nam pamieci
+			{
+				if (ex instanceof OutOfMemoryError)
+					memoryCache.clear();
+				else
+					ex.printStackTrace();
+				return null;
 			}
-
-			// dekoduje obrazek
-			bitmap = decodeFile(bandPictureFile);
-
-			return bitmap;
 		}
 	}
 	
@@ -162,6 +171,10 @@ public class ImageLoader
 	private static String parseName(String bandName)
 	{
 		String edited = bandName;
+		int indexOfColon = edited.indexOf(": "); // w goAhead dodatkowe info po myslniku tu nie potrzebne
+		if (indexOfColon != -1)
+			edited = edited.substring(indexOfColon+1, edited.length());
+		
 		int indexOfHyphen = edited.indexOf(" - "); // w goAhead dodatkowe info po myslniku tu nie potrzebne
 		if (indexOfHyphen != -1)
 			edited = edited.substring(0, indexOfHyphen);
@@ -173,6 +186,14 @@ public class ImageLoader
 		int indexOfSlash = edited.indexOf(" / "); // w goAhead jak jest kilka zespolow
 		if (indexOfSlash != -1)
 			edited = edited.substring(0, indexOfSlash);
+		
+		int indexOfPlus = edited.indexOf(" + "); // w ticketPro jak jest kilka zespolow
+		if (indexOfPlus != -1)
+			edited = edited.substring(0, indexOfPlus);
+		
+		int indexOfComa = edited.indexOf(", "); //w ticketPro jak jest kilka zespolow
+		if (indexOfComa != -1)
+			edited = edited.substring(0, indexOfComa);
 		
 		edited = edited.trim();
 		edited = edited.replace(' ', '+');// w last fm spacja zastepowana plusem
@@ -187,6 +208,7 @@ public class ImageLoader
 		edited = edited.replace('å', 'S');
 		edited = edited.replace('Ø', 'Z');
 		edited = edited.replace('è', 'Z');
+		Log.i(TAG, "po parsie: " + edited);
 		return edited;
 	}
 	
