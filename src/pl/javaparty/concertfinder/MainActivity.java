@@ -12,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -95,12 +96,28 @@ public class MainActivity extends Activity {
 			}
 		});
 
+		
+		
 		FragmentManager fragmentManager = getFragmentManager();
 		Fragment fragment = new RecentFragment();
 		//przekazuje managera
 		fragment.setArguments(arguments);
 		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 		drawerLayout.openDrawer(drawerList);
+	}
+	
+	@Override
+	public boolean onKeyDown(int keycode, KeyEvent e) {
+	    switch(keycode) {
+	        case KeyEvent.KEYCODE_MENU:
+	        	if(drawerLayout.isDrawerOpen(drawerList))
+	        		drawerLayout.closeDrawer(drawerList);
+	        	else
+	        		drawerLayout.openDrawer(drawerList);
+	            return true;
+	    }
+
+	    return super.onKeyDown(keycode, e);
 	}
 
 	@Override
