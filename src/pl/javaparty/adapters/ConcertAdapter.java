@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -16,7 +18,6 @@ import android.widget.TextView;
 
 public class ConcertAdapter extends ArrayAdapter<Concert> {
 
-	Context context;
 	Concert rowItem;
 	ViewHolder holder;
 	ImageLoader imageLoader;
@@ -25,9 +26,8 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 
 	public ConcertAdapter(Context context, int resourceId, Concert[] items) {
 		super(context, resourceId, items);
-		this.context = context;
 		imageLoader = new ImageLoader(context);
-		tf = Typeface.createFromAsset(context.getAssets(), "font/robotocondensed-light.ttf");
+		tf = Typeface.createFromAsset(getContext().getAssets(), "font/robotocondensed-light.ttf");
 	}
 
 	public class ViewHolder {
@@ -40,7 +40,7 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		rowItem = getItem(position);
 
-		LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater mInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		if (convertView == null) {
 			convertView = mInflater.inflate(R.layout.card_layout, null);
 			holder = new ViewHolder();
@@ -57,14 +57,13 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 			holder = (ViewHolder) convertView.getTag();
 
 		holder.title.setText(rowItem.getArtist());
-		Log.i("ROW", rowItem.getArtist());
 		holder.description.setText(rowItem.getPlace() + " " + rowItem.dateToString());
 
 		// holder.pb.setVisibility(View.GONE);
 		imageLoader.DisplayImage(rowItem.getArtist(), holder.image);
 
-		// Animation animation = AnimationUtils.loadAnimation(context, R.anim.slide_in_right);
-		// holder.card.startAnimation(animation);
+		Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_right);
+		holder.card.startAnimation(animation);
 		return convertView;
 	}
 

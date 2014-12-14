@@ -31,7 +31,6 @@ import android.widget.Toast;
 public class MainActivity extends FragmentActivity {
 
 	ArrayAdapter<String> adapterDrawer;
-	String[] menu;
 	DrawerLayout drawerLayout;
 	ListView drawerList;
 	Context context;
@@ -52,15 +51,12 @@ public class MainActivity extends FragmentActivity {
 
 		arguments = new Bundle();
 		arguments.putSerializable("dbManager", dbMgr);
-		Log.i("DB", "Sprawdzam czy baza istnieje");
-		// TODO tego mialo nie byc
 		new DownloadTask().execute();
 
-		menu = new String[] { "Szukaj", "Ostatnie koncerty", "Twoje koncerty", "Aktualizuj", "Preferencje", "Informacje" };
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
 		drawerList = (ListView) findViewById(R.id.left_drawer);
-		adapterDrawer = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, menu);
+		adapterDrawer = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.nav_menu));
 		drawerList.setAdapter(adapterDrawer);
 
 		// ustawianie actionbara by mozna go bylo wcisnac
@@ -188,11 +184,11 @@ public class MainActivity extends FragmentActivity {
 			Log.i("DB", "Koniec pobierania");
 			Toast.makeText(getApplicationContext(), "Zaktualizowano!", Toast.LENGTH_SHORT).show();
 
-			Fragment fragment = fragmentManager.findFragmentById(R.id.content_frame);
-			if (fragment instanceof RecentFragment)
-			{
-				((RecentFragment) fragment).refresh();
-			}
+//			Fragment fragment = fragmentManager.findFragmentById(R.id.content_frame);
+//			if (fragment instanceof RecentFragment)
+//			{
+//				((RecentFragment) fragment).refresh();
+//			}
 			super.onPostExecute(result);
 		}
 	}

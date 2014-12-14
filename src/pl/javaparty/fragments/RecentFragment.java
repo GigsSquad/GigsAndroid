@@ -10,6 +10,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -64,6 +65,7 @@ public class RecentFragment extends Fragment {
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Log.i("LV", "KLIK");
 				lastPosition = position;
 				Fragment fragment = new ConcertFragment();
 				Bundle b = new Bundle();
