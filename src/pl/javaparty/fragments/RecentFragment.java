@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import pl.javaparty.adapters.ConcertAdapter;
 import pl.javaparty.concertfinder.R;
-import pl.javaparty.concertmanager.Concert;
+import pl.javaparty.items.Concert;
 import pl.javaparty.sql.dbManager;
 import android.content.Context;
 import android.os.Bundle;

@@ -1,4 +1,4 @@
-package pl.javaparty.adapters;
+package pl.javaparty.items;
 
 public class NavDrawerItem {
 

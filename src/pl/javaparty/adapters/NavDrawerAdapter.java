@@ -3,6 +3,7 @@ package pl.javaparty.adapters;
 import java.util.ArrayList;
 
 import pl.javaparty.concertfinder.R;
+import pl.javaparty.items.NavDrawerItem;
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;

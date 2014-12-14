@@ -1,10 +1,9 @@
 package pl.javaparty.adapters;
 
 import pl.javaparty.concertfinder.R;
-import pl.javaparty.concertmanager.Concert;
 import pl.javaparty.imageloader.ImageLoader;
+import pl.javaparty.items.Concert;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;

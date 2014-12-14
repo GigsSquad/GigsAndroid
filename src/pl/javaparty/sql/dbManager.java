@@ -7,8 +7,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashSet;
 
-import pl.javaparty.concertmanager.Concert;
-import pl.javaparty.concertmanager.Concert.AgencyName;
+import pl.javaparty.items.Concert;
+import pl.javaparty.items.Concert.AgencyName;
 import pl.javaparty.jsoup.JSoupDownloader;
 import android.content.ContentValues;
 import android.content.Context;

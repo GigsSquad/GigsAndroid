@@ -1,4 +1,4 @@
-package pl.javaparty.concertmanager;
+package pl.javaparty.items;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
