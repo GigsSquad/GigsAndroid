@@ -102,6 +102,8 @@ public class ConcertManager {
 			agency = AgencyName.GOAHEAD;
 		else if (s.equals("ALTERART"))
 			agency = AgencyName.ALTERART;
+		else if(s.equals("LIVENATION"))
+			agency=AgencyName.LIVENATION;
 		return agency;
 	}
 }

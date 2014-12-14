@@ -9,7 +9,7 @@ import android.util.Log;
 public class Concert
 {
 	public enum AgencyName {
-		GOAHEAD, ALTERART, INNE
+		GOAHEAD, ALTERART, LIVENATION ,INNE
 	}
 
 	private final int ID; //unikalne id ka¿dego koncertu
