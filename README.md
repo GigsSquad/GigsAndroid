@@ -7,6 +7,19 @@ To co wiem na pewno to to że będziemy parsować stronę, [Przykład](http://ww
 * miejscu (+promień) i dacie
 * filtr dla konkretnej agencji np tylko z [GoAhead](http://www.go-ahead.pl/pl/)
 
+### Supportowe biblioteki etc
+###### Jako projekty 
+Te trzeba zaimportować jako osobne projekty Project -> import -> Projekt androidowy 
+i pamiętajcie o zaznaczaniu "Copy projects into workspace" 
+* ~android-sdk\extras\android\support\v7\appcompat 
+* ~android-sdk\extras\android\support\v7\cardview 
+później właściwości projektu -> Android -> Add.. 
+Jeśli niewidać projektu na liście wyboru to trzeba zaznaczyć na projekcie którego nie wiadć "Is library" we właściwościach
+
+###### JAR
+Właściwości projektu -> Java Build Path -> add external Jars... 
+* ~android-sdk\extras\android\support\v7\appcompat\libs
+
 ### 3 podzialy
 * Zabawa z parsowaniem stron przez JSOUP + ewentualnie SQLite 
 * Zabawa z samym Androidem, okienka, przyciski, listy i inne
