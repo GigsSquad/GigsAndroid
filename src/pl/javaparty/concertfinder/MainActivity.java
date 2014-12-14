@@ -50,9 +50,6 @@ public class MainActivity extends FragmentActivity {
 
 		fragmentManager = getSupportFragmentManager();
 
-		arguments = new Bundle();
-		arguments.putSerializable("dbManager", dbMgr);
-		Log.i("DB", "Sprawdzam czy baza istnieje");
 		// TODO tego mialo nie byc
 		new DownloadTask().execute();
 
@@ -108,7 +105,6 @@ public class MainActivity extends FragmentActivity {
 
 					if (fragment != null)
 					{
-						fragment.setArguments(arguments);
 						fragmentManager.beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
 								android.R.anim.slide_out_right).replace(R.id.content_frame, fragment).addToBackStack(null).commit();
 					}
@@ -117,8 +113,6 @@ public class MainActivity extends FragmentActivity {
 		});
 
 		Fragment fragment = new RecentFragment();
-		// przekazuje managera
-		fragment.setArguments(arguments);
 		fragmentManager.beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
 				android.R.anim.slide_out_right).replace(R.id.content_frame, fragment).addToBackStack(null).commit();
 		drawerLayout.openDrawer(drawerList);
@@ -167,7 +161,13 @@ public class MainActivity extends FragmentActivity {
 		// Pass any configuration change to the drawer toggls
 		drawerToggle.onConfigurationChanged(newConfig);
 	}
-
+	
+	//przekazuje DBmanagera
+	public dbManager getDBManager()
+	{
+		return dbMgr;
+	}
+	
 	private class DownloadTask extends AsyncTask<Void, Void, String> {
 
 		@Override

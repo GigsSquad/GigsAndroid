@@ -3,6 +3,7 @@ package pl.javaparty.fragments;
 import java.io.IOException;
 import java.util.List;
 
+import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.sql.dbManager;
 import android.location.Address;
@@ -37,7 +38,7 @@ public class MapConcertTab extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
 		ID = getArguments().getInt("ID", -1);
-		dbm = (dbManager) getArguments().getSerializable("dbManager");
+		dbm = ((MainActivity)getActivity()).getDBManager();
 
 		if (container == null)
 			return null;
