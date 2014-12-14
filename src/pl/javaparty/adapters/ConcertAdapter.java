@@ -4,7 +4,8 @@ import pl.javaparty.concertfinder.R;
 import pl.javaparty.concertmanager.Concert;
 import pl.javaparty.imageloader.ImageLoader;
 import android.content.Context;
-import android.util.Log;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,57 +16,68 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
 public class ConcertAdapter extends ArrayAdapter<Concert> {
 
-	Context context;
 	Concert rowItem;
 	ViewHolder holder;
 	ImageLoader imageLoader;
+	private Typeface tf;
 	int ID; // unikalne id koncertu, nie jest wyœwietlane ale bêdzie przydatne przy
 
 	public ConcertAdapter(Context context, int resourceId, Concert[] items) {
 		super(context, resourceId, items);
-		this.context = context;
 		imageLoader = new ImageLoader(context);
+		tf = Typeface.createFromAsset(getContext().getAssets(), "font/robotocondensed-light.ttf");
 	}
 
 	public class ViewHolder {
 		ImageView image;
 		TextView title;
-		TextView description;
+		TextView place;
+		TextView date;
 		RelativeLayout card;
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		rowItem = getItem(position);
 
-		LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater mInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		if (convertView == null) {
-			convertView = mInflater.inflate(R.layout.list_row, null);
+			convertView = mInflater.inflate(R.layout.card_layout, null);
 			holder = new ViewHolder();
 			holder.card = (RelativeLayout) convertView.findViewById(R.id.card);
 			holder.image = (ImageView) convertView.findViewById(R.id.list_image);
 			holder.title = (TextView) convertView.findViewById(R.id.title);
-			holder.description = (TextView) convertView.findViewById(R.id.description);
-			
+			holder.place = (TextView) convertView.findViewById(R.id.placeTV);
+			holder.date = (TextView) convertView.findViewById(R.id.dateTV);
+
+			holder.title.setTypeface(tf);
+			holder.place.setTypeface(tf);
+			holder.date.setTypeface(tf);
+
 			convertView.setTag(holder);
 		} else
 			holder = (ViewHolder) convertView.getTag();
 
-		holder.title.setText(rowItem.getArtist());
-		Log.i("ROW", rowItem.getArtist());
-		holder.description.setText(rowItem.getPlace() + " " + rowItem.dateToString());
+		String titleString = rowItem.getArtist();
 
-		//holder.pb.setVisibility(View.GONE); 
+		titleString = titleString.replace(" - ", "\n");
+		titleString = titleString.replace(": ", "\n");
+
+		int length = titleString.length();
+
+		holder.title.setText(titleString);
+		holder.title.setTextSize(50 - (length / 3));
+		holder.place.setText(rowItem.getPlace());
+		holder.date.setText(rowItem.dateToString());
+
+		// holder.pb.setVisibility(View.GONE);
 		imageLoader.DisplayImage(rowItem.getArtist(), holder.image);
-
-		Animation animation = AnimationUtils.loadAnimation(context, R.anim.slide_in_right);
+		Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_right);
 		holder.card.startAnimation(animation);
 		return convertView;
 	}
 
-	
 	public int getID()
 	{
 		return ID;

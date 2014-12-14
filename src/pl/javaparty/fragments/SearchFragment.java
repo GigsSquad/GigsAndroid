@@ -51,7 +51,7 @@ public class SearchFragment extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
 				String artist = searchBox.getText().toString();
-				adapter = new ConcertAdapter(getActivity(), R.layout.list_row, dbm.getConcertsByArtist(artist)); // concertMgr.getConcertList(searchBox.getText().toString()));
+				adapter = new ConcertAdapter(getActivity(), R.layout.card_layout, dbm.getConcertsByArtist(artist)); // concertMgr.getConcertList(searchBox.getText().toString()));
 				concertList.setAdapter(adapter);
 				// zapisywanie danych, coby potem przywrocic
 				lastSearching = searchBox.getText().toString();
