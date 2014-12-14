@@ -286,19 +286,40 @@ public class dbManager extends SQLiteOpenHelper implements Serializable{
 		c.close();
 		return res;
 	}
+	/*
+	 * metoda dodajaca id ulubionego koncertu do tabeli Favourite 
+	 * 
+	 * 
+	 */
+	public void addFavouriteConcert(int id)
+	{
+		
+		ContentValues cv = new ContentValues();
+		cv.put("ID",id);
+		database.insertOrThrow("Favourites",null,cv);
+	}
 	
-	public String[] getFavourite()
+	/*
+	 * Metoda uzyskuj¹ca ulubione koncerty z tabeli Favourite
+	 * 
+	 * @return tablica concertow awierajaca ulubione koncerty  
+	 */
+	public Concert[] getAllFavouriteConcert()
 	{
 		String [] columns = {"ID"};
 		Cursor c = database.query("Favouries", columns, null, null,null,null,null);
 		c.moveToFirst();
 		
 		int size = c.getCount();
-		String[] array = new String[size];
+		Concert[] favouriteConcert = new Concert[size];
+		//Integer[] array = new Integer[size];
 		for(int i =0; c.moveToNext();i++)
-			array[i] = c.getString(0);
+			favouriteConcert[i] = getConcertsByID(c.getInt(0));
+			;
 		c.close();
-		return array;
+		
+		
+		return favouriteConcert;
 	}
 	
 	private String fieldGetter (int ID, String fieldName){
@@ -357,9 +378,9 @@ public class dbManager extends SQLiteOpenHelper implements Serializable{
 		return getConcertsBy(condition);
 	}
 	
-	public Concert[] getConcertsByID(int id){
+	public Concert getConcertsByID(int id){
 		String condition = "ID = "+id;
-		return getConcertsBy(condition);
+		return getConcertsBy(condition)[0]; // id jest unuikalne wiec bedzie to zawsze tablica jednoelementowa
 	}
 
 }

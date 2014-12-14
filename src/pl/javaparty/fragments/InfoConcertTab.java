@@ -45,6 +45,7 @@ public class InfoConcertTab extends Fragment {
 		// price.setText(concert.get);
 		final String URL = dbm.getUrl(ID);
 		new ImageLoader(inflater.getContext()).DisplayImage(artistName, image);
+		
 		connect.setOnClickListener(new OnClickListener() { // otwiera przegladarkê z linkiem do koncertu
 			@Override
 			public void onClick(View arg0) {

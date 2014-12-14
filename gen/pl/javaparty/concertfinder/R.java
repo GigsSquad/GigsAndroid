@@ -2117,7 +2117,7 @@ containing a value of this type.
         public static final int tab_unselected_pressed_bluetheme=0x7f020078;
     }
     public static final class id {
-        public static final int FavouriteListView=0x7f0d0059;
+        public static final int FavouriteList=0x7f0d0059;
         public static final int LinearLayout1=0x7f0d005d;
         public static final int RelativeLayout1=0x7f0d0056;
         public static final int action_bar=0x7f0d0045;
