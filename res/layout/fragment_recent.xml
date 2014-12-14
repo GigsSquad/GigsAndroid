@@ -10,10 +10,13 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:divider="@android:color/transparent"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="@null"
         android:dividerHeight="10dp"
+        android:footerDividersEnabled="true"
+        android:listSelector="@android:color/transparent"
         android:paddingLeft="10dip"
         android:paddingRight="10dip"
         android:paddingTop="1dip" />
- 
-</LinearLayout>
+
+</LinearLayout> 
