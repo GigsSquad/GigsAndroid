@@ -199,7 +199,6 @@ public class MainActivity extends FragmentActivity {
 		@Override
 		protected void onPreExecute() {
 			Toast.makeText(getApplicationContext(), "Aktualizowanie...", Toast.LENGTH_SHORT).show();
-			Log.i("DB", "Baza nie istnieje");// TODO wcale ze nie prawda, moze istniec
 			super.onPreExecute();
 		}
 
@@ -207,6 +206,11 @@ public class MainActivity extends FragmentActivity {
 			Log.i("DB", "Koniec pobierania");
 			Toast.makeText(getApplicationContext(), "Zaktualizowano!", Toast.LENGTH_SHORT).show();
 
+			navDrawerItems.get(1).setCount("" + dbMgr.getSize());
+			navDrawerItems.get(1).setCounterVisibility(true);
+			
+			navDrawerItems.get(2).setCount("0"); //TODO licznik ulubionych koncertów
+			navDrawerItems.get(2).setCounterVisibility(true);
 			// Fragment fragment = fragmentManager.findFragmentById(R.id.content_frame);
 			// if (fragment instanceof RecentFragment)
 			// {
