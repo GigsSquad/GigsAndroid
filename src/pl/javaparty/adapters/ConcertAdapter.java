@@ -33,7 +33,8 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 	public class ViewHolder {
 		ImageView image;
 		TextView title;
-		TextView description;
+		TextView place;
+		TextView date;
 		RelativeLayout card;
 	}
 
@@ -47,17 +48,28 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 			holder.card = (RelativeLayout) convertView.findViewById(R.id.card);
 			holder.image = (ImageView) convertView.findViewById(R.id.list_image);
 			holder.title = (TextView) convertView.findViewById(R.id.title);
-			holder.description = (TextView) convertView.findViewById(R.id.description);
+			holder.place = (TextView) convertView.findViewById(R.id.placeTV);
+			holder.date = (TextView) convertView.findViewById(R.id.dateTV);
 
 			holder.title.setTypeface(tf);
-			holder.description.setTypeface(tf);
+			holder.place.setTypeface(tf);
+			holder.date.setTypeface(tf);
 
 			convertView.setTag(holder);
 		} else
 			holder = (ViewHolder) convertView.getTag();
 
-		holder.title.setText(rowItem.getArtist());
-		holder.description.setText(rowItem.getPlace() + " " + rowItem.dateToString());
+		String titleString = rowItem.getArtist();
+
+		titleString = titleString.replace(" - ", "\n");
+		titleString = titleString.replace(": ", "\n");
+
+		int length = titleString.length();
+
+		holder.title.setText(titleString);
+		holder.title.setTextSize(50 - (length / 3));
+		holder.place.setText(rowItem.getPlace());
+		holder.date.setText(rowItem.dateToString());
 
 		// holder.pb.setVisibility(View.GONE);
 		imageLoader.DisplayImage(rowItem.getArtist(), holder.image);
