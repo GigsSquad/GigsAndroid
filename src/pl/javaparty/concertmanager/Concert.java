@@ -55,7 +55,7 @@ public class Concert
 		GOAHEAD, ALTERART, INNE
 	}
 
-	private final int ID; //unikalne id ka¿dego koncertu
+	private final int ID; // unikalne id ka¿dego koncertu
 	private String artist;
 	private String city; // to leci potem do google maps api
 	private String spot; // lokalizacja w mieœcie, jakiœ klub czy coœ (ulica?)
@@ -73,11 +73,11 @@ public class Concert
 		Log.i("ID", "ID: " + ID);
 		this.ID = ID;
 		this.agency = agency;
-		this.artist = artist;
-		this.city = city;
-		this.spot = spot;
+		this.artist = artist.trim();
+		this.city = city.trim();
+		this.spot = spot.trim();
 		date = new GregorianCalendar(year, month - 1, day);
-		this.url = url;
+		this.url = url.trim();
 		this.entryHours = "";
 		this.ticketsPrice = "";
 	}
@@ -108,7 +108,7 @@ public class Concert
 	public Calendar getDate() {
 		return date;
 	}
-	
+
 	public int getID()
 	{
 		return ID;
