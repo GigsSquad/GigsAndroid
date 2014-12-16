@@ -10,6 +10,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -94,7 +95,9 @@ public class RecentFragment extends Fragment {
 		{
 			showedConcerts = dbm.getSize() - 1;
 			nextButton.setVisibility(View.GONE);
+			return array;
 		}
+		Log.i("Cuter", String.valueOf(showedConcerts));
 		return Arrays.copyOfRange(array, 0, showedConcerts);
 	}
 

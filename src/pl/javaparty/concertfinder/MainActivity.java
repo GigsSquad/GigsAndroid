@@ -5,10 +5,10 @@ import pl.javaparty.fragments.FavoriteFragment;
 import pl.javaparty.fragments.RecentFragment;
 import pl.javaparty.fragments.SearchFragment;
 import pl.javaparty.fragments.SettingsFragment;
+import pl.javaparty.sql.DatabaseUpdater;
 import pl.javaparty.sql.dbManager;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -52,9 +52,6 @@ public class MainActivity extends FragmentActivity {
 
 		arguments = new Bundle();
 		arguments.putSerializable("dbManager", dbMgr);
-		Log.i("DB", "Sprawdzam czy baza istnieje");
-		// TODO tego mialo nie byc
-		new DownloadTask().execute();
 
 		menu = new String[] { "Szukaj", "Ostatnie koncerty", "Twoje koncerty", "Aktualizuj", "Preferencje", "Informacje" };
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -87,41 +84,25 @@ public class MainActivity extends FragmentActivity {
 			public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
 
 				drawerLayout.closeDrawers();
-				if (currentFragment != position)
-				{
-					Fragment fragment = null;
-					if (position == 0)
-						fragment = new SearchFragment();
-					else if (position == 1)
-						fragment = new RecentFragment();
-					else if (position == 2)
-						fragment = new FavoriteFragment();
-					else if (position == 3)
-					{
-						new DownloadTask().execute();
-					}
-					else if (position == 4)
-						fragment = new SettingsFragment();
-					else if (position == 5)
-						fragment = new AboutFragment();
-					currentFragment = position;// TODO luka, przy wyborze 3 nie zmienia sie fragment
-
-					if (fragment != null)
-					{
-						fragment.setArguments(arguments);
-						fragmentManager.beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
-								android.R.anim.slide_out_right).replace(R.id.content_frame, fragment).addToBackStack(null).commit();
-					}
-				}
+				
+				if(position==3)
+					update();
+				else if (currentFragment != position)
+					changeFragment(position);
 			}
 		});
-
+		//pierwsza inicjalizacja
 		Fragment fragment = new RecentFragment();
 		// przekazuje managera
 		fragment.setArguments(arguments);
 		fragmentManager.beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
 				android.R.anim.slide_out_right).replace(R.id.content_frame, fragment).addToBackStack(null).commit();
 		drawerLayout.openDrawer(drawerList);
+		
+		//jak bazy nie ma to update, a tak chuj, niech sami aktualizuja
+		if(!getDatabasePath(dbManager.DATABASE_NAME).exists());
+			update();
+		
 	}
 
 	@Override
@@ -167,33 +148,52 @@ public class MainActivity extends FragmentActivity {
 		// Pass any configuration change to the drawer toggls
 		drawerToggle.onConfigurationChanged(newConfig);
 	}
-
-	private class DownloadTask extends AsyncTask<Void, Void, String> {
-
-		@Override
-		protected String doInBackground(Void... params)
-		{
-			dbMgr.updateDatabase();
-			return null;
-		}
-
-		@Override
-		protected void onPreExecute() {
-			Toast.makeText(getApplicationContext(), "Aktualizowanie...", Toast.LENGTH_SHORT).show();
-			Log.i("DB", "Baza nie istnieje");// TODO wcale ze nie prawda, moze istniec
-			super.onPreExecute();
-		}
-
-		protected void onPostExecute(String result) {
-			Log.i("DB", "Koniec pobierania");
-			Toast.makeText(getApplicationContext(), "Zaktualizowano!", Toast.LENGTH_SHORT).show();
-
-			Fragment fragment = fragmentManager.findFragmentById(R.id.content_frame);
-			if (fragment instanceof RecentFragment)
+	
+	public void update()
+	{
+		DatabaseUpdater db = new DatabaseUpdater(dbMgr, this);
+		db.update(new Refresh());
+	}
+	
+	private void changeFragment(int position)
+	{
+			Fragment fragment = null;
+			if (position == 0)
+				fragment = new SearchFragment();
+			else if (position == 1)
+				fragment = new RecentFragment();
+			else if (position == 2)
+				fragment = new FavoriteFragment();
+			else if (position == 3)
+				Log.e("MainActivity", "IMPOSSIBRUUU! Zaminia fragment z pozycji Aktualizuj :O");
+			else if (position == 4)
+				fragment = new SettingsFragment();
+			else if (position == 5)
+				fragment = new AboutFragment();
+			
+			if(position!=3)//takie zabezpieczenie choc to sie nie powinno wydarzyc
+				currentFragment = position;
+			
+			if (fragment != null)
 			{
-				((RecentFragment) fragment).refresh();
-			}
-			super.onPostExecute(result);
-		}
+				fragment.setArguments(arguments);
+				fragmentManager
+					.beginTransaction()
+					.setCustomAnimations(android.R.anim.slide_in_left,android.R.anim.slide_out_right)
+					.replace(R.id.content_frame, fragment)
+					.addToBackStack(null).commit();
+			}	
+	}
+	
+	//odswieza aktualny fragment (laduje go od nowa)
+	private class Refresh implements Runnable
+	{
+		@Override
+		public void run()
+		{
+			Log.i("RF", "Olaboga, refreshyk.");
+			changeFragment(currentFragment);//odswieza dany fragment
+			Log.i("RF", "To tez wyszlo.");
+		}	
 	}
 }
