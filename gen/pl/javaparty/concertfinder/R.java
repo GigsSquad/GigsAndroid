@@ -20,9 +20,10 @@ public final class R {
         public static final int slide_out_left=0x7f040008;
     }
     public static final class array {
-        public static final int DŚ=0x7f0d0008;
+        public static final int DS=0x7f0d0008;
         public static final int KP=0x7f0d0003;
         public static final int LB=0x7f0d0009;
+        public static final int LD=0x7f0d0001;
         public static final int LS=0x7f0d0004;
         public static final int MP=0x7f0d0002;
         public static final int MZ=0x7f0d0005;
@@ -30,14 +31,13 @@ public final class R {
         public static final int PK=0x7f0d000d;
         public static final int PL=0x7f0d000e;
         public static final int PM=0x7f0d000f;
+        public static final int SK=0x7f0d0006;
+        public static final int SL=0x7f0d0007;
         public static final int WM=0x7f0d000a;
         public static final int WP=0x7f0d000c;
         public static final int ZP=0x7f0d000b;
         public static final int nav_menu=0x7f0d0010;
         public static final int nav_menu_icons=0x7f0d0011;
-        public static final int ŁD=0x7f0d0001;
-        public static final int ŚK=0x7f0d0006;
-        public static final int ŚL=0x7f0d0007;
     }
     public static final class attr {
         /**  Custom divider drawable to use for elements in the action bar. 

@@ -38,7 +38,7 @@
 		<item>Zdzieszowice</item>
 	</string-array>
 
-	<string-array name="ŁD">
+	<string-array name="LD">
 		<item>Aleksandrów Łódzki</item>
 		<item>Bełchatów</item>
 		<item>Biała Rawska</item>
@@ -338,7 +338,7 @@
 		<item>Żyrardów</item>
 	</string-array>
 
-	<string-array name="ŚK">
+	<string-array name="SK">
 		<item>Bodzentyn</item>
 		<item>Busko-Zdrój</item>
 		<item>Chęciny</item>
@@ -372,7 +372,7 @@
 		<item>Zawichost</item>
 	</string-array>
 
-	<string-array name="ŚL">
+	<string-array name="SL">
 		<item>Będzin</item>
 		<item>Bielsko-Biała</item>
 		<item>Bieruń</item>
@@ -446,7 +446,7 @@
 		<item>Żywiec</item>
 	</string-array>
 
-	<string-array name="DŚ">
+	<string-array name="DS">
 		<item>Bardo</item>
 		<item>Bielawa</item>
 		<item>Bierutów</item>
