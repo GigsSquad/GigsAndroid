@@ -16,6 +16,8 @@ public class JSoupDownloader {
 		new JDGoAhead(dbm).getData();
 		new JDAlterArt(dbm).getData();
 		new JDTicketPro(dbm).getData();
+		new JDLiveNation(dbm).getData();
+		new JDEBilet(dbm).getData();
 		dbm.deleteOldConcerts();
 	}
 }
