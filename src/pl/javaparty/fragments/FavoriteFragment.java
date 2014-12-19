@@ -14,7 +14,7 @@ import android.widget.ListView;
 
 public class FavoriteFragment extends Fragment{
 	private dbManager dbm;
-	private ArrayAdapter<String> adapterDrawer;
+
 	private ListView list;
 	private ConcertAdapter adapter;
 	private Context context;

@@ -22,7 +22,7 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 	Concert rowItem;
 	ViewHolder holder;
 	ImageLoader imageLoader;
-	int ID; // unikalne id koncertu, nie jest wyœwietlane ale bêdzie przydatne przy
+	int ID; // unikalne id koncertu, nie jest wyï¿½wietlane ale bï¿½dzie przydatne przy
 
 	public ConcertAdapter(Context context, int resourceId, Concert[] items) {
 		super(context, resourceId, items);
@@ -60,8 +60,8 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 		//holder.pb.setVisibility(View.GONE); 
 		imageLoader.DisplayImage(rowItem.getArtist(), holder.image);
 
-		Animation animation = AnimationUtils.loadAnimation(context, R.anim.slide_in_right);
-		holder.card.startAnimation(animation);
+	//	Animation animation = AnimationUtils.loadAnimation(context, R.anim.slide_in_right);
+		//holder.card.startAnimation(animation);
 		return convertView;
 	}
 
