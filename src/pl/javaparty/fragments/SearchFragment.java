@@ -1,6 +1,7 @@
 package pl.javaparty.fragments;
 
 import pl.javaparty.adapters.ConcertAdapter;
+import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.items.Concert;
 import pl.javaparty.sql.dbManager;
@@ -33,7 +34,7 @@ public class SearchFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_search, container, false);
 		getActivity().getActionBar().setTitle("Szukaj");
 
-		dbm = (dbManager) getArguments().getSerializable("dbManager");// przekazujemy dbm od mainActivity
+		dbm = ((MainActivity)getActivity()).getDBManager();// przekazujemy dbm od mainActivity
 
 		context = inflater.getContext();
 
@@ -69,7 +70,6 @@ public class SearchFragment extends Fragment {
 				Bundle args = new Bundle();
 				Concert item = (Concert) parent.getAdapter().getItem(position);
 				args.putInt("ID", item.getID()); // przesylam unikalne id koncertu
-				args.putSerializable("dbManager", dbm);
 				fragment.setArguments(args);
 				FragmentManager fragmentManager = getFragmentManager();
 				fragmentManager.beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,

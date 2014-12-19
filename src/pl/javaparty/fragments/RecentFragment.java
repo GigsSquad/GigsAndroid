@@ -3,6 +3,7 @@ package pl.javaparty.fragments;
 import java.util.Arrays;
 
 import pl.javaparty.adapters.ConcertAdapter;
+import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.items.Concert;
 import pl.javaparty.sql.dbManager;
@@ -39,7 +40,8 @@ public class RecentFragment extends Fragment {
 		context = inflater.getContext();
 		lv = (ListView) view.findViewById(R.id.recentList);
 
-		dbm = (dbManager) getArguments().getSerializable("dbManager");
+		//dbm = (dbManager) getArguments().getSerializable("dbManager");
+		dbm = ((MainActivity)getActivity()).getDBManager();
 
 		// button na koncu listy ktory rozwija liste o wincyj jesli sie da
 		nextButton = new Button(context);
@@ -72,7 +74,6 @@ public class RecentFragment extends Fragment {
 
 				Concert item = (Concert) parent.getAdapter().getItem(position);
 				b.putInt("ID", item.getID()); // przesylam unikalne id koncertu
-				b.putSerializable("dbManager", dbm);
 
 				fragment.setArguments(b);
 				FragmentManager fragmentManager = getFragmentManager();
@@ -100,7 +101,7 @@ public class RecentFragment extends Fragment {
 		}
 		return Arrays.copyOfRange(array, 0, showedConcerts);
 	}
-
+	
 	public void refresh()
 	{
 		adapter = new ConcertAdapter(getActivity(), R.layout.card_layout, cutArray(dbm.getAllConcerts()));

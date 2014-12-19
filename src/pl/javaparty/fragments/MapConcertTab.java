@@ -1,5 +1,7 @@
 package pl.javaparty.fragments;
 
+
+import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.map.MapHelper;
 import pl.javaparty.prefs.Prefs;
@@ -33,8 +35,8 @@ public class MapConcertTab extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
 		ID = getArguments().getInt("ID", -1);
-		dbm = (dbManager) getArguments().getSerializable("dbManager");
-		mapHelper = new MapHelper(getActivity());
+
+		dbm = ((MainActivity)getActivity()).getDBManager();
 
 		if (container == null)
 			return null;

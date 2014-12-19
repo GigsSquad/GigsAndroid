@@ -1,6 +1,6 @@
 package pl.javaparty.sql;
 
-import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -15,9 +15,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class dbManager extends SQLiteOpenHelper implements Serializable{
 
-	private static final long serialVersionUID = -1641692594177112448L;
+public class dbManager extends SQLiteOpenHelper {
+	
+
 	public final static String DATABASE_NAME = "baza.db";
 	private static SQLiteDatabase database;
 

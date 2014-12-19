@@ -58,9 +58,6 @@ public class MainActivity extends FragmentActivity {
 
 		fragmentManager = getSupportFragmentManager();
 
-		arguments = new Bundle();
-		arguments.putSerializable("dbManager", dbMgr);
-
 		navMenuTitles = getResources().getStringArray(R.array.nav_menu);
 		navMenuIcons = getResources().obtainTypedArray(R.array.nav_menu_icons);
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -112,19 +109,17 @@ public class MainActivity extends FragmentActivity {
 					update();
 				else if (currentFragment != position)
 					changeFragment(position);
+
 			}
 		});
 		//pierwsza inicjalizacja
 		Fragment fragment = new RecentFragment();
-		// przekazuje managera
-		fragment.setArguments(arguments);
 		fragmentManager.beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
 				android.R.anim.slide_out_right).replace(R.id.content_frame, fragment).addToBackStack(null).commit();
 		drawerLayout.openDrawer(drawerList);
 		
-		//jak bazy nie ma to update, a tak chuj, niech sami aktualizuja
-		if(!getDatabasePath(dbManager.DATABASE_NAME).exists());
-			update();
+		//TODO jak bazy nie ma to update, a tak chuj, niech sami aktualizuja
+		//update();
 		
 	}
 
@@ -207,6 +202,11 @@ public class MainActivity extends FragmentActivity {
 			}	
 	}
 	
+	//przekazuje DBmanagera
+	public dbManager getDBManager()
+	{
+		return dbMgr;
+	}
 	//odswieza aktualny fragment (laduje go od nowa)
 	private class Refresh implements Runnable
 	{

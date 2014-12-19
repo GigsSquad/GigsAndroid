@@ -1,5 +1,6 @@
 package pl.javaparty.fragments;
 
+import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.imageloader.ImageLoader;
 import pl.javaparty.sql.dbManager;
@@ -33,7 +34,7 @@ public class InfoConcertTab extends Fragment {
 		connect = (Button) view.findViewById(R.id.connect);
 
 		int ID = (getArguments().getInt("ID", -1)); // -1 bo bazadanych numeruje od 1 a nie od 0
-		dbManager dbm = (dbManager) getArguments().getSerializable("dbManager");
+		dbManager dbm = ((MainActivity)getActivity()).getDBManager();
 		Log.i("KURWA", "Przes³ane id: " + ID);
 		String artistName = dbm.getArtist(ID);
 		getActivity().getActionBar().setTitle(artistName);
