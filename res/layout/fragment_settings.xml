@@ -12,10 +12,15 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin" >
 
+    <Spinner
+        android:id="@+id/countySpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <AutoCompleteTextView
         android:id="@+id/cityAutoComplete"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:ems="10"
         android:hint="Wpisz tu swoje miasto" >
 
@@ -25,13 +30,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
-
-        <SeekBar
-            android:id="@+id/distanceSeekBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="100"
-            android:progress="0" />
 
         <TextView
             android:id="@+id/distanceTextView"
@@ -63,7 +61,18 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
+            android:layout_marginTop="28dp"
             android:text="Wyczyść pamięć" />
+
+        <SeekBar
+            android:id="@+id/distanceSeekBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_weight="100"
+            android:progress="0" />
 
     </RelativeLayout>
 
