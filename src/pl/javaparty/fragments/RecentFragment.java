@@ -96,6 +96,7 @@ public class RecentFragment extends Fragment {
 		{
 			showedConcerts = dbm.getSize() - 1;
 			nextButton.setVisibility(View.GONE);
+			return array;
 		}
 		return Arrays.copyOfRange(array, 0, showedConcerts);
 	}
