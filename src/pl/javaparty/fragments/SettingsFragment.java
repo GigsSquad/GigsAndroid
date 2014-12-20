@@ -82,6 +82,17 @@ public class SettingsFragment extends Fragment {
 
 		if (Prefs.getCity(getActivity()) != null)
 			citySearchBox.setText(Prefs.getCity(getActivity()));
+		
+		if(Prefs.getCounty(getActivity()) != null)
+		{
+			int positionOfCounty = -1;
+			for(int i = 0; i<countySpinner.getCount() && positionOfCounty == -1; i++)
+			{
+				if(Prefs.getCounty(getActivity()).equals((String)countySpinner.getItemAtPosition(i)))
+					positionOfCounty = i;
+			}
+			countySpinner.setSelection(positionOfCounty);
+		}
 
 		if (Prefs.getDistance(getActivity()) != 0) {
 			distanceTextView.setText(Prefs.getDistance(getActivity()) + "km");
@@ -111,7 +122,7 @@ public class SettingsFragment extends Fragment {
 		saveButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Prefs.setCity(getActivity(), citySearchBox.getText().toString());
+				Prefs.setCity(getActivity(), citySearchBox.getText().toString(), countySpinner.getSelectedItem().toString());
 				Prefs.setDistance(getActivity(), distanceSeekBar.getProgress());
 				Log.i("SETTINGS", "Zapisano");
 				Log.i("SETTINGS", "Miasto: " + citySearchBox.getText().toString());
