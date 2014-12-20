@@ -1,6 +1,5 @@
 package pl.javaparty.sql;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -16,11 +15,15 @@ import android.util.Log;
 
 public class dbManager extends SQLiteOpenHelper {
 
-	public final static String DATABASE_NAME = "baza.db";
+	private final static String DATABASE_NAME = "baza.db";
 	private static SQLiteDatabase database;
+	public final static String CONCERTS_TABLE = "Concerts";
+	public final static String FAVOURITES_TABLE = "Favourites";
+	public final static String HASHCODES_TABLE = "Hashcodes";
+	public Thread download;
 
 	private static String CreateConcertTable =
-			"CREATE TABLE Concerts(" +
+			"CREATE TABLE " + CONCERTS_TABLE + "(" +
 					"ORD INTEGER PRIMARY KEY AUTOINCREMENT," +
 					"ARTIST TEXT," +
 					"CITY TEXT," +
@@ -33,16 +36,14 @@ public class dbManager extends SQLiteOpenHelper {
 
 	// tablica hash odpowiada za hashcode najnowszego eventu danej agencji
 	private static String CreateHashcodeTable =
-			"CREATE TABLE Hashcodes(" +
+			"CREATE TABLE " + HASHCODES_TABLE + "(" +
 					"AGENCY TEXT PRIMARY KEY," +
 					"HASH INTEGER)";
 
 	// nowa tabela zawierajï¿½ca ulubione koncerty
 	private static String CreateFavouriteTable =
-			"CREATE TABLE Favourites(" +
-					"ID INTEGER PRIMARY KEY)";
-
-	public Thread download;
+			"CREATE TABLE " + FAVOURITES_TABLE + "(" +
+					"ID INTEGER)";
 
 	public dbManager(Context context) {
 		super(context, DATABASE_NAME, null, 1);
@@ -59,7 +60,6 @@ public class dbManager extends SQLiteOpenHelper {
 		db.execSQL(CreateConcertTable);
 		db.execSQL(CreateHashcodeTable);
 		db.execSQL(CreateFavouriteTable);
-
 	}
 
 	@Override
@@ -89,7 +89,7 @@ public class dbManager extends SQLiteOpenHelper {
 		boolean contains = false;
 		int h1 = (artistName + city + spot + String.valueOf(day) + String.valueOf(month) + String.valueOf(year)).hashCode();
 		String[] columns = { "ARTIST", "CITY", "SPOT", "DAY", "MONTH", "YEAR" };
-		Cursor c = database.query("Concerts", columns, null, null, null, null, null);
+		Cursor c = database.query(CONCERTS_TABLE, columns, null, null, null, null, null);
 		int h2;
 		while (c.moveToNext() && !contains) {
 			h2 = (c.getString(0) + c.getString(1) + c.getString(2) + String.valueOf(c.getInt(3)) +
@@ -102,9 +102,8 @@ public class dbManager extends SQLiteOpenHelper {
 
 	public boolean contains(int id) {
 		boolean contains = false;
-		// int h1 = id.hashCode();
 		String[] columns = { "ID" };
-		Cursor c = database.query("Favourites", columns, null, null, null, null, null);
+		Cursor c = database.query(FAVOURITES_TABLE, columns, null, null, null, null, null);
 		int h2;
 		while (c.moveToNext() && !contains) {
 			h2 = c.getInt(0);
@@ -117,34 +116,25 @@ public class dbManager extends SQLiteOpenHelper {
 	public Cursor getData() {
 		String[] columns = { "ORD", "ARTIST", "CITY", "SPOT", "DAY", "MONTH", "YEAR", "AGENCY", "URL" };
 		// dodane pobieranie ID na poczï¿½tku
-		Cursor c = database.query("Concerts", columns, null, null, null, null, null);
+		Cursor c = database.query(CONCERTS_TABLE, columns, null, null, null, null, null);
 		return c;
 	}
 
-	public int getSize() // pobiera ilosc rekordow w bazie
+	public int getSize(String table) // pobiera ilosc rekordow w bazie
 	{
 		int count = -1;
 		SQLiteDatabase db = getReadableDatabase();
-		Cursor cursor = db.rawQuery("SELECT count(*) FROM Concerts", null);
+		Cursor cursor = db.rawQuery("SELECT count(*) FROM " + table, null);
 		cursor.moveToFirst();
 		count = cursor.getInt(0);
 		cursor.close();
 		return count;
 	}
 
-	public ArrayList<String> getArtist()
-	{
-		ArrayList<String> artist = new ArrayList<String>();
-		Cursor c = getData();
-		while (c.moveToNext())
-			artist.add(c.getString(1));
-		return artist;
-	}
-
 	public boolean agencyHashCodeExists(String agencyName) {
 		String column[] = { "AGENCY" };
 		SQLiteDatabase db = getReadableDatabase();
-		Cursor c = db.query("Hashcodes", column, null, null, null, null, null);
+		Cursor c = db.query(HASHCODES_TABLE, column, null, null, null, null, null);
 		boolean check = false;
 		while (c.moveToNext() && !check) {
 			if (c.getString(0).equals(agencyName))
@@ -159,7 +149,7 @@ public class dbManager extends SQLiteOpenHelper {
 		if (agencyHashCodeExists(agencyName)) {
 			SQLiteDatabase db = getReadableDatabase();
 			String[] column = { "AGENCY", "HASH" };
-			Cursor c = db.query("Hashcodes", column, null, null, null, null, null);
+			Cursor c = db.query(HASHCODES_TABLE, column, null, null, null, null, null);
 			while (c.moveToNext()) {
 				if (c.getString(0).equals(agencyName)) {
 					res = c.getInt(1);
@@ -177,15 +167,15 @@ public class dbManager extends SQLiteOpenHelper {
 		if (!agencyHashCodeExists(agencyName)) {
 			cv.put("AGENCY", agencyName);
 			cv.put("HASH", hash);
-			db.insertOrThrow("Hashcodes", null, cv);
+			db.insertOrThrow(HASHCODES_TABLE, null, cv);
 		}
 		else {
-			String update = "UPDATE Hashcodes SET HASH = '" + hash + "' WHERE AGENCY = '" + agencyName + "'";
+			String update = "UPDATE " + HASHCODES_TABLE + " SET HASH = '" + hash + "' WHERE AGENCY = '" + agencyName + "'";
 			db.execSQL(update);
 		}
 	}
 
-	public void deleteOldConcerts()
+	public void deleteOldConcerts() // wypierdalator starch koncertów
 	{
 		Log.i("Deleter", "Szukam starych koncertow");
 		Calendar calendar = Calendar.getInstance();
@@ -202,18 +192,18 @@ public class dbManager extends SQLiteOpenHelper {
 				String.valueOf(month),
 				String.valueOf(day),
 		};
-		Cursor c = database.query("Concerts", new String[] { "ORD" }, selection, selectionArgs, null, null, null);
+		Cursor c = database.query(CONCERTS_TABLE, new String[] { "ORD" }, selection, selectionArgs, null, null, null);
 		while (c.moveToNext())
 		{
 			Log.i("Deleter", c.getString(0));
 		}
-		int deleted = database.delete("Concerts", selection, selectionArgs);
+		int deleted = database.delete(CONCERTS_TABLE, selection, selectionArgs);
 		Log.i("Deleter", "Wyjebano " + deleted + " przestarzalych koncertow!");
 	}
 
 	private String[] universalGetter3000(String columnName) {
 		String[] column = { columnName };
-		Cursor c = database.query("Concerts", column, null, null, null, null, null);
+		Cursor c = database.query(CONCERTS_TABLE, column, null, null, null, null, null);
 
 		int size = c.getCount();
 		String[] array = new String[size];
@@ -228,6 +218,14 @@ public class dbManager extends SQLiteOpenHelper {
 		String[] res = new String[hashSet.size()];
 		hashSet.toArray(res);
 		return res;
+	}
+
+	public void deleteDB(Context context)
+	{
+		database.close();
+		context.deleteDatabase(DATABASE_NAME);
+		Log.i("DB", "Baza usuniêta");
+		new dbManager(context);
 	}
 
 	public String[] getArtists() {
@@ -256,7 +254,7 @@ public class dbManager extends SQLiteOpenHelper {
 
 	public String getDate(int ID) {
 		String[] columns = { "ORD", "DAY", "MONTH", "YEAR" };
-		Cursor c = database.query("Concerts", columns, "ORD = " + ID, null, null, null, null);
+		Cursor c = database.query(CONCERTS_TABLE, columns, "ORD = " + ID, null, null, null, null);
 		c.moveToFirst();
 		int day = c.getInt(1);
 		String dayS = day < 10 ? "0" + day : "" + day;
@@ -267,7 +265,7 @@ public class dbManager extends SQLiteOpenHelper {
 		return res;
 	}
 
-	/*
+	/**
 	 * metoda dodajaca id ulubionego koncertu do tabeli Favourite
 	 */
 	public void addFavouriteConcert(int id)
@@ -275,11 +273,12 @@ public class dbManager extends SQLiteOpenHelper {
 		if (!contains(id)) {
 			ContentValues cv = new ContentValues();
 			cv.put("ID", id);
-			database.insertOrThrow("Favourites", null, cv);
+			Log.i("FAV", "Wrzucomo id ulubionego: " + id);
+			database.insertOrThrow(FAVOURITES_TABLE, null, cv);
 		}
 	}
 
-	/*
+	/**
 	 * Metoda uzyskujï¿½ca ulubione koncerty z tabeli Favourite
 	 * 
 	 * @return tablica concertow awierajaca ulubione koncerty
@@ -287,19 +286,20 @@ public class dbManager extends SQLiteOpenHelper {
 	public Concert[] getAllFavouriteConcert()
 	{
 		String[] columns = { "ID" };
-		Cursor c = database.query("Favourites", columns, null, null, null, null, null);
-		c.moveToFirst();
-		Concert[] favouriteConcert = new Concert[c.getCount()];
+		Cursor c = database.query(FAVOURITES_TABLE, columns, null, null, null, null, null);
+		Concert[] concerts = new Concert[getSize(FAVOURITES_TABLE)];
+		// Concert[] concerts = new Concert[c.getCount()];
+		// Log.i("FAV", "Liczba rekordów:" + c.getCount());
 		for (int i = 0; c.moveToNext(); i++)
-			favouriteConcert[i] = getConcertsByID(c.getInt(0));
+			concerts[i] = getConcertsByID(c.getInt(0));
 		c.close();
 
-		return favouriteConcert;
+		return concerts;
 	}
 
 	private String fieldGetter(int ID, String fieldName) {
 		String[] columns = { "ORD", fieldName };
-		Cursor c = database.query("Concerts", columns, "ORD = " + ID, null, null, null, null);
+		Cursor c = database.query(CONCERTS_TABLE, columns, "ORD = " + ID, null, null, null, null);
 		String res = c.moveToFirst() ? c.getString(1) : null;
 		c.close();
 		return res;
@@ -316,12 +316,11 @@ public class dbManager extends SQLiteOpenHelper {
 
 	private Concert[] getConcertsBy(String condition) {
 		String[] columns = { "ORD", "ARTIST", "CITY", "SPOT", "DAY", "MONTH", "YEAR", "AGENCY", "URL" };
-		Cursor c = database.query("Concerts", columns, condition, null, null, null, "YEAR,MONTH,DAY");
+		Cursor c = database.query(CONCERTS_TABLE, columns, condition, null, null, null, "YEAR,MONTH,DAY");
 		Concert[] concerts = new Concert[c.getCount()];
-		for (int i = 0; c.moveToNext(); i++) {
+		for (int i = 0; c.moveToNext(); i++)
 			concerts[i] = new Concert(c.getInt(0), c.getString(1), c.getString(2), c.getString(3),
 					c.getInt(4), c.getInt(5), c.getInt(6), getAgency(c.getString(7)), c.getString(8));
-		}
 		c.close();
 		return concerts;
 	}
@@ -363,7 +362,7 @@ public class dbManager extends SQLiteOpenHelper {
 				String.valueOf(mT),
 				String.valueOf(dT)
 		};
-		Cursor c = database.query("Concerts", columns, condition, selectionArgs, null, null, null);
+		Cursor c = database.query(CONCERTS_TABLE, columns, condition, selectionArgs, null, null, null);
 		Concert[] concerts = new Concert[c.getCount()];
 		for (int i = 0; c.moveToNext(); i++) {
 			concerts[i] = new Concert(c.getInt(0), c.getString(1), c.getString(2), c.getString(3),
@@ -373,7 +372,7 @@ public class dbManager extends SQLiteOpenHelper {
 		return concerts;
 	}
 
-	public Concert getConcertsByID(int id) {
+	private Concert getConcertsByID(int id) {
 		String condition = "ORD = " + id;
 		return getConcertsBy(condition)[0]; // id jest unuikalne wiec bedzie to zawsze tablica jednoelementowa
 	}

@@ -40,8 +40,8 @@ public class RecentFragment extends Fragment {
 		context = inflater.getContext();
 		lv = (ListView) view.findViewById(R.id.recentList);
 
-		//dbm = (dbManager) getArguments().getSerializable("dbManager");
-		dbm = ((MainActivity)getActivity()).getDBManager();
+		// dbm = (dbManager) getArguments().getSerializable("dbManager");
+		dbm = ((MainActivity) getActivity()).getDBManager();
 
 		// button na koncu listy ktory rozwija liste o wincyj jesli sie da
 		nextButton = new Button(context);
@@ -93,15 +93,15 @@ public class RecentFragment extends Fragment {
 
 	private Concert[] cutArray(Concert[] array)
 	{
-		if (showedConcerts >= dbm.getSize() - 1)
+		if (showedConcerts >= dbm.getSize(dbManager.CONCERTS_TABLE) - 1)
 		{
-			showedConcerts = dbm.getSize() - 1;
+			showedConcerts = dbm.getSize(dbManager.CONCERTS_TABLE) - 1;
 			nextButton.setVisibility(View.GONE);
 			return array;
 		}
 		return Arrays.copyOfRange(array, 0, showedConcerts);
 	}
-	
+
 	public void refresh()
 	{
 		adapter = new ConcertAdapter(getActivity(), cutArray(dbm.getAllConcerts()));

@@ -9,21 +9,19 @@ import pl.javaparty.fragments.FavoriteFragment;
 import pl.javaparty.fragments.RecentFragment;
 import pl.javaparty.fragments.SearchFragment;
 import pl.javaparty.fragments.SettingsFragment;
+import pl.javaparty.items.NavDrawerItem;
 import pl.javaparty.sql.DatabaseUpdater;
 import pl.javaparty.sql.dbManager;
-import pl.javaparty.items.NavDrawerItem;
-import android.content.res.TypedArray;
 import android.content.res.Configuration;
+import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -122,7 +120,7 @@ public class MainActivity extends FragmentActivity {
 		//update();
 		
 	}
-
+ 
 	@Override
 	public boolean onKeyDown(int keycode, KeyEvent e) {
 		switch (keycode) {
@@ -135,13 +133,6 @@ public class MainActivity extends FragmentActivity {
 		}
 
 		return super.onKeyDown(keycode, e);
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.activity_main_actions, menu);
-		return super.onCreateOptionsMenu(menu);
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item)

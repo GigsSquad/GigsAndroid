@@ -2286,6 +2286,7 @@ containing a value of this type.
         public static final int end=0x7f0c002d;
         public static final int expand_activities_button=0x7f0c0033;
         public static final int expanded_menu=0x7f0c0039;
+        public static final int favorite_icon=0x7f0c0078;
         public static final int grayscale=0x7f0c001b;
         public static final int holo_dark=0x7f0c000e;
         public static final int holo_light=0x7f0c000f;

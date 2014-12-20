@@ -24,10 +24,10 @@ public class FavoriteFragment extends Fragment {
 		dbm = ((MainActivity) getActivity()).getDBManager();// przekazujemy dbm od mainActivity
 		list = (ListView) view.findViewById(R.id.FavouriteList);
 
-		//Log.i("FAV", "WIELKOSC: " + dbm.getAllFavouriteConcert().length);
+		//Log.i("FAV", "WIELKOSC: " + .length);
 		//Log.i("FAV", "Pierwszy koncert: " + dbm.getAllFavouriteConcert()[0].toString());
 
-		adapter = new ConcertAdapter(getActivity(), dbm.getConcertsByArtist("ARCHIVE"));
+		adapter = new ConcertAdapter(getActivity(), dbm.getAllFavouriteConcert());
 		list.setAdapter(adapter);
 
 		return view;
