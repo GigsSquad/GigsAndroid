@@ -61,7 +61,7 @@ public class RecentFragment extends Fragment {
 
 		lv.addFooterView(nextButton);
 
-		adapter = new ConcertAdapter(getActivity(), R.layout.card_layout, cutArray(dbm.getAllConcerts()));
+		adapter = new ConcertAdapter(getActivity(), cutArray(dbm.getAllConcerts()));
 		lv.setAdapter(adapter);
 
 		lv.setOnItemClickListener(new OnItemClickListener() {
@@ -104,7 +104,7 @@ public class RecentFragment extends Fragment {
 	
 	public void refresh()
 	{
-		adapter = new ConcertAdapter(getActivity(), R.layout.card_layout, cutArray(dbm.getAllConcerts()));
+		adapter = new ConcertAdapter(getActivity(), cutArray(dbm.getAllConcerts()));
 		lv.setAdapter(adapter);
 	}
 }

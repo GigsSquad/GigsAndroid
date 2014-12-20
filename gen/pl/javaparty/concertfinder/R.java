@@ -2249,6 +2249,9 @@ containing a value of this type.
         public static final int always=0x7f0c0025;
         public static final int artist_image=0x7f0c0069;
         public static final int artist_name=0x7f0c006a;
+        public static final int bFr=0x7f0c0076;
+        public static final int bSe=0x7f0c0074;
+        public static final int bTo=0x7f0c0075;
         public static final int beginning=0x7f0c002c;
         public static final int book_now=0x7f0c0017;
         public static final int btn_navigate=0x7f0c0070;
@@ -2263,7 +2266,8 @@ containing a value of this type.
         public static final int clearFilesButton=0x7f0c0067;
         public static final int collapseActionView=0x7f0c0026;
         public static final int con_date=0x7f0c006c;
-        public static final int concertList=0x7f0c0062;
+        public static final int concertListArtist=0x7f0c0072;
+        public static final int concertListPlace=0x7f0c0073;
         public static final int connect=0x7f0c006d;
         public static final int content_frame=0x7f0c0051;
         public static final int counter=0x7f0c005b;
@@ -2316,7 +2320,8 @@ containing a value of this type.
         public static final int sandbox=0x7f0c0011;
         public static final int satellite=0x7f0c000c;
         public static final int saveSettingsButton=0x7f0c0066;
-        public static final int searchBox=0x7f0c0061;
+        public static final int searchBoxArtist=0x7f0c0071;
+        public static final int searchBoxPlace=0x7f0c0077;
         public static final int search_badge=0x7f0c0046;
         public static final int search_bar=0x7f0c0045;
         public static final int search_button=0x7f0c0047;
@@ -2336,6 +2341,8 @@ containing a value of this type.
         public static final int strict_sandbox=0x7f0c0012;
         public static final int submit_area=0x7f0c004d;
         public static final int tabMode=0x7f0c001e;
+        public static final int tab_host=0x7f0c0061;
+        public static final int tabcontent_sb=0x7f0c0062;
         public static final int terrain=0x7f0c000d;
         public static final int title=0x7f0c0038;
         public static final int up=0x7f0c0001;
@@ -2411,6 +2418,9 @@ containing a value of this type.
         public static final int support_simple_spinner_dropdown_item=0x7f030020;
         public static final int tab_fragment_concert_info=0x7f030021;
         public static final int tab_fragment_concert_map=0x7f030022;
+        public static final int tab_search_artist=0x7f030023;
+        public static final int tab_search_date=0x7f030024;
+        public static final int tab_search_place=0x7f030025;
     }
     public static final class menu {
         public static final int activity_main_actions=0x7f0e0000;

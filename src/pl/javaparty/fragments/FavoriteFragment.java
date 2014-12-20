@@ -13,7 +13,6 @@ import android.widget.ListView;
 
 public class FavoriteFragment extends Fragment {
 	private dbManager dbm;
-
 	private ListView list;
 	private ConcertAdapter adapter;
 
@@ -22,10 +21,13 @@ public class FavoriteFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_favorite, container, false);
 
 		getActivity().getActionBar().setTitle("Twoje koncerty");
-		dbm = (dbManager) ((MainActivity)getActivity()).getDBManager();// przekazujemy dbm od mainActivity
+		dbm = ((MainActivity) getActivity()).getDBManager();// przekazujemy dbm od mainActivity
 		list = (ListView) view.findViewById(R.id.FavouriteList);
 
-		adapter = new ConcertAdapter(getActivity(), R.layout.card_layout, dbm.getAllFavouriteConcert());
+		//Log.i("FAV", "WIELKOSC: " + dbm.getAllFavouriteConcert().length);
+		//Log.i("FAV", "Pierwszy koncert: " + dbm.getAllFavouriteConcert()[0].toString());
+
+		adapter = new ConcertAdapter(getActivity(), dbm.getConcertsByArtist("ARCHIVE"));
 		list.setAdapter(adapter);
 
 		return view;

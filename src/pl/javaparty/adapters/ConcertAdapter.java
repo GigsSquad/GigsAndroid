@@ -23,8 +23,8 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 	private Typeface tf;
 	int ID; // unikalne id koncertu, nie jest wyœwietlane ale bêdzie przydatne przy
 
-	public ConcertAdapter(Context context, int resourceId, Concert[] items) {
-		super(context, resourceId, items);
+	public ConcertAdapter(Context context, Concert[] items) {
+		super(context, R.layout.card_layout, items);
 		imageLoader = new ImageLoader(context);
 		tf = Typeface.createFromAsset(getContext().getAssets(), "font/robotocondensed-light.ttf");
 	}
@@ -54,24 +54,24 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 			holder.place.setTypeface(tf);
 			holder.date.setTypeface(tf);
 
+			String titleString = rowItem.getArtist();
+
+			titleString = titleString.replace(" - ", "\n");
+			titleString = titleString.replace(": ", "\n");
+
+			int length = titleString.length();
+			holder.title.setText(titleString);
+			holder.title.setTextSize(50 - (length / 3));
+			holder.place.setText(rowItem.getPlace());
+			holder.date.setText(rowItem.dateToString());
+
+			// holder.pb.setVisibility(View.GONE); //progress bar, bo Miachu wyrazil zezaprobate 
+			imageLoader.DisplayImage(rowItem.getArtist(), holder.image);
+
 			convertView.setTag(holder);
 		} else
 			holder = (ViewHolder) convertView.getTag();
 
-		String titleString = rowItem.getArtist();
-
-		titleString = titleString.replace(" - ", "\n");
-		titleString = titleString.replace(": ", "\n");
-
-		int length = titleString.length();
-
-		holder.title.setText(titleString);
-		holder.title.setTextSize(50 - (length / 3));
-		holder.place.setText(rowItem.getPlace());
-		holder.date.setText(rowItem.dateToString());
-
-		// holder.pb.setVisibility(View.GONE);
-		imageLoader.DisplayImage(rowItem.getArtist(), holder.image);
 		Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_right);
 		holder.card.startAnimation(animation);
 		return convertView;
