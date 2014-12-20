@@ -1,0 +1,964 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="OP">
+		<item>Baborów</item>
+		<item>Biała</item>
+		<item>Brzeg</item>
+		<item>Byczyna</item>
+		<item>Dobrodzień</item>
+		<item>Głogówek</item>
+		<item>Głubczyce</item>
+		<item>Głuchołazy</item>
+		<item>Gogolin</item>
+		<item>Gorzów Śląski</item>
+		<item>Grodków</item>
+		<item>Kędzierzyn-Koźle</item>
+		<item>Kietrz</item>
+		<item>Kluczbork</item>
+		<item>Kolonowskie</item>
+		<item>Korfantów</item>
+		<item>Krapkowice</item>
+		<item>Leśnica</item>
+		<item>Lewin Brzeski</item>
+		<item>Namysłów</item>
+		<item>Niemodlin</item>
+		<item>Nysa</item>
+		<item>Olesno</item>
+		<item>Opole</item>
+		<item>Otmuchów</item>
+		<item>Ozimek</item>
+		<item>Paczków</item>
+		<item>Praszka</item>
+		<item>Prószków</item>
+		<item>Prudnik</item>
+		<item>Strzelce Opolskie</item>
+		<item>Ujazd</item>
+		<item>Wołczyn</item>
+		<item>Zawadzkie</item>
+		<item>Zdzieszowice</item>
+	</string-array>
+
+	<string-array name="LD">
+		<item>Aleksandrów Łódzki</item>
+		<item>Bełchatów</item>
+		<item>Biała Rawska</item>
+		<item>Błaszki</item>
+		<item>Brzeziny</item>
+		<item>Drzewica</item>
+		<item>Działoszyn</item>
+		<item>Głowno</item>
+		<item>Kamieńsk</item>
+		<item>Koluszki</item>
+		<item>Konstantynów Łódzki</item>
+		<item>Krośniewice</item>
+		<item>Kutno</item>
+		<item>Łask</item>
+		<item>Łęczyca</item>
+		<item>Łowicz</item>
+		<item>Łódź</item>
+		<item>Opoczno</item>
+		<item>Ozorków</item>
+		<item>Pabianice</item>
+		<item>Pajęczno</item>
+		<item>Piotrków Trybunalski</item>
+		<item>Poddębice</item>
+		<item>Przedbórz</item>
+		<item>Radomsko</item>
+		<item>Rawa Mazowiecka</item>
+		<item>Rzgów</item>
+		<item>Sieradz</item>
+		<item>Skierniewice</item>
+		<item>Stryków</item>
+		<item>Sulejów</item>
+		<item>Szadek</item>
+		<item>Tomaszów Mazowiecki</item>
+		<item>Tuszyn</item>
+		<item>Uniejów</item>
+		<item>Warta</item>
+		<item>Wieluń</item>
+		<item>Wieruszów</item>
+		<item>Wolbórz</item>
+		<item>Zduńska Wola</item>
+		<item>Zelów</item>
+		<item>Zgierz</item>
+		<item>Złoczew</item>
+		<item>Żychlin</item>
+	</string-array>
+
+	<string-array name="MP">
+		<item>Alwernia</item>
+		<item>Andrychów</item>
+		<item>Biecz</item>
+		<item>Bobowa</item>
+		<item>Bochnia</item>
+		<item>Brzesko</item>
+		<item>Brzeszcze</item>
+		<item>Bukowno</item>
+		<item>Chełmek</item>
+		<item>Chrzanów</item>
+		<item>Ciężkowice</item>
+		<item>Czchów</item>
+		<item>Dąbrowa Tarnowska</item>
+		<item>Dobczyce</item>
+		<item>Gorlice</item>
+		<item>Grybów</item>
+		<item>Jordanów</item>
+		<item>Kalwaria Zebrzydowska</item>
+		<item>Kęty</item>
+		<item>Kraków</item>
+		<item>Krynica-Zdrój</item>
+		<item>Krzeszowice</item>
+		<item>Libiąż</item>
+		<item>Limanowa</item>
+		<item>Maków Podhalański</item>
+		<item>Miechów</item>
+		<item>Mszana Dolna</item>
+		<item>Muszyna</item>
+		<item>Myślenice</item>
+		<item>Niepołomice</item>
+		<item>Nowe Brzesko</item>
+		<item>Nowy Sącz</item>
+		<item>Nowy Targ</item>
+		<item>Nowy Wiśnicz</item>
+		<item>Olkusz</item>
+		<item>Oświęcim</item>
+		<item>Piwniczna-Zdrój</item>
+		<item>Proszowice</item>
+		<item>Rabka-Zdrój</item>
+		<item>Radłów</item>
+		<item>Ryglice</item>
+		<item>Skała</item>
+		<item>Skawina</item>
+		<item>Słomniki</item>
+		<item>Stary Sącz</item>
+		<item>Sucha Beskidzka</item>
+		<item>Sułkowice</item>
+		<item>Szczawnica</item>
+		<item>Szczucin</item>
+		<item>Świątniki Górne</item>
+		<item>Tarnów</item>
+		<item>Trzebinia</item>
+		<item>Tuchów</item>
+		<item>Wadowice</item>
+		<item>Wieliczka</item>
+		<item>Wojnicz</item>
+		<item>Wolbrom</item>
+		<item>Zakliczyn</item>
+		<item>Zakopane</item>
+		<item>Zator</item>
+		<item>Żabno</item>
+	</string-array>
+
+	<string-array name="KP">
+		<item>Aleksandrów Kujawski</item>
+		<item>Barcin</item>
+		<item>Brodnica</item>
+		<item>Brześć Kujawski</item>
+		<item>Bydgoszcz</item>
+		<item>Chełmno</item>
+		<item>Chełmża</item>
+		<item>Chodecz</item>
+		<item>Ciechocinek</item>
+		<item>Dobrzyń nad Wisłą</item>
+		<item>Gniewkowo</item>
+		<item>Golub-Dobrzyń</item>
+		<item>Górzno</item>
+		<item>Grudziądz</item>
+		<item>Inowrocław</item>
+		<item>Izbica Kujawska</item>
+		<item>Jabłonowo Pomorskie</item>
+		<item>Janikowo</item>
+		<item>Janowiec Wielkopolski</item>
+		<item>Kamień Krajeński</item>
+		<item>Kcynia</item>
+		<item>Koronowo</item>
+		<item>Kowal</item>
+		<item>Kowalewo Pomorskie</item>
+		<item>Kruszwica</item>
+		<item>Lipno</item>
+		<item>Lubień Kujawski</item>
+		<item>Lubraniec</item>
+		<item>Łabiszyn</item>
+		<item>Łasin</item>
+		<item>Mogilno</item>
+		<item>Mrocza</item>
+		<item>Nakło nad Notecią</item>
+		<item>Nieszawa</item>
+		<item>Nowe</item>
+		<item>Pakość</item>
+		<item>Piotrków Kujawski</item>
+		<item>Radziejów</item>
+		<item>Radzyń Chełmiński</item>
+		<item>Rypin</item>
+		<item>Sępólno Krajeńskie</item>
+		<item>Skępe</item>
+		<item>Solec Kujawski</item>
+		<item>Strzelno</item>
+		<item>Szubin</item>
+		<item>Świecie</item>
+		<item>Toruń</item>
+		<item>Tuchola</item>
+		<item>Wąbrzeźno</item>
+		<item>Więcbork</item>
+		<item>Włocławek</item>
+		<item>Żnin</item>
+	</string-array>
+
+	<string-array name="LS">
+		<item>Babimost</item>
+		<item>Bytom Odrzański</item>
+		<item>Cybinka</item>
+		<item>Czerwieńsk</item>
+		<item>Dobiegniew</item>
+		<item>Drezdenko</item>
+		<item>Gorzów Wielkopolski</item>
+		<item>Gozdnica</item>
+		<item>Gubin</item>
+		<item>Iłowa</item>
+		<item>Jasień</item>
+		<item>Kargowa</item>
+		<item>Kostrzyn nad Odrą</item>
+		<item>Kożuchów</item>
+		<item>Krosno Odrzańskie</item>
+		<item>Lubniewice</item>
+		<item>Lubsko</item>
+		<item>Łęknica</item>
+		<item>Małomice</item>
+		<item>Międzyrzecz</item>
+		<item>Nowa Sól</item>
+		<item>Nowe Miasteczko</item>
+		<item>Nowogród Bobrzański</item>
+		<item>Ośno Lubuskie</item>
+		<item>Rzepin</item>
+		<item>Skwierzyna</item>
+		<item>Sława</item>
+		<item>Słubice</item>
+		<item>Strzelce Krajeńskie</item>
+		<item>Sulechów</item>
+		<item>Sulęcin</item>
+		<item>Szlichtyngowa</item>
+		<item>Szprotawa</item>
+		<item>Świebodzin</item>
+		<item>Torzym</item>
+		<item>Trzciel</item>
+		<item>Witnica</item>
+		<item>Wschowa</item>
+		<item>Zbąszynek</item>
+		<item>Zielona Góra</item>
+		<item>Żagań</item>
+		<item>Żary</item>
+	</string-array>
+
+	<string-array name="MZ">
+		<item>Białobrzegi</item>
+		<item>Bieżuń</item>
+		<item>Błonie</item>
+		<item>Brok</item>
+		<item>Brwinów</item>
+		<item>Chorzele</item>
+		<item>Ciechanów</item>
+		<item>Drobin</item>
+		<item>Garwolin</item>
+		<item>Gąbin</item>
+		<item>Glinojeck</item>
+		<item>Gostynin</item>
+		<item>Góra Kalwaria</item>
+		<item>Grodzisk Mazowiecki</item>
+		<item>Grójec</item>
+		<item>Halinów</item>
+		<item>Iłża</item>
+		<item>Józefów (powiat otwocki)</item>
+		<item>Kałuszyn</item>
+		<item>Karczew</item>
+		<item>Kobyłka</item>
+		<item>Konstancin-Jeziorna</item>
+		<item>Kosów Lacki</item>
+		<item>Kozienice</item>
+		<item>Legionowo</item>
+		<item>Lipsko</item>
+		<item>Łaskarzew</item>
+		<item>Łochów</item>
+		<item>Łomianki</item>
+		<item>Łosice</item>
+		<item>Maków Mazowiecki</item>
+		<item>Marki</item>
+		<item>Milanówek</item>
+		<item>Mińsk Mazowiecki</item>
+		<item>Mława</item>
+		<item>Mogielnica</item>
+		<item>Mordy</item>
+		<item>Mrozy</item>
+		<item>Mszczonów</item>
+		<item>Myszyniec</item>
+		<item>Nasielsk</item>
+		<item>Nowe Miasto nad Pilicą</item>
+		<item>Nowy Dwór Mazowiecki</item>
+		<item>Ostrołęka</item>
+		<item>Ostrów Mazowiecka</item>
+		<item>Otwock</item>
+		<item>Ożarów Mazowiecki</item>
+		<item>Piaseczno</item>
+		<item>Piastów</item>
+		<item>Pilawa</item>
+		<item>Pionki</item>
+		<item>Płock</item>
+		<item>Płońsk</item>
+		<item>Podkowa Leśna</item>
+		<item>Pruszków</item>
+		<item>Przasnysz</item>
+		<item>Przysucha</item>
+		<item>Pułtusk</item>
+		<item>Raciąż</item>
+		<item>Radom</item>
+		<item>Radzymin</item>
+		<item>Różan</item>
+		<item>Serock</item>
+		<item>Siedlce</item>
+		<item>Sierpc</item>
+		<item>Skaryszew</item>
+		<item>Sochaczew</item>
+		<item>Sokołów Podlaski</item>
+		<item>Sulejówek</item>
+		<item>Szydłowiec</item>
+		<item>Tarczyn</item>
+		<item>Tłuszcz</item>
+		<item>Warka</item>
+		<item>Warszawa</item>
+		<item>Węgrów</item>
+		<item>Wołomin</item>
+		<item>Wyszków</item>
+		<item>Wyszogród</item>
+		<item>Wyśmierzyce</item>
+		<item>Zakroczym</item>
+		<item>Ząbki</item>
+		<item>Zielonka</item>
+		<item>Zwoleń</item>
+		<item>Żelechów</item>
+		<item>Żuromin</item>
+		<item>Żyrardów</item>
+	</string-array>
+
+	<string-array name="SK">
+		<item>Bodzentyn</item>
+		<item>Busko-Zdrój</item>
+		<item>Chęciny</item>
+		<item>Chmielnik</item>
+		<item>Ćmielów</item>
+		<item>Daleszyce</item>
+		<item>Działoszyce</item>
+		<item>Jędrzejów</item>
+		<item>Kazimierza Wielka</item>
+		<item>Kielce</item>
+		<item>Końskie</item>
+		<item>Koprzywnica</item>
+		<item>Kunów</item>
+		<item>Małogoszcz</item>
+		<item>Opatów</item>
+		<item>Osiek</item>
+		<item>Ostrowiec Świętokrzyski</item>
+		<item>Ożarów</item>
+		<item>Pińczów</item>
+		<item>Połaniec</item>
+		<item>Sandomierz</item>
+		<item>Sędziszów</item>
+		<item>Skalbmierz</item>
+		<item>Skarżysko-Kamienna</item>
+		<item>Starachowice</item>
+		<item>Staszów</item>
+		<item>Stąporków</item>
+		<item>Suchedniów</item>
+		<item>Wąchock</item>
+		<item>Włoszczowa</item>
+		<item>Zawichost</item>
+	</string-array>
+
+	<string-array name="SL">
+		<item>Będzin</item>
+		<item>Bielsko-Biała</item>
+		<item>Bieruń</item>
+		<item>Blachownia</item>
+		<item>Bytom</item>
+		<item>Chorzów</item>
+		<item>Cieszyn</item>
+		<item>Czechowice-Dziedzice</item>
+		<item>Czeladź</item>
+		<item>Czerwionka-Leszczyny</item>
+		<item>Częstochowa</item>
+		<item>Dąbrowa Górnicza</item>
+		<item>Gliwice</item>
+		<item>Imielin</item>
+		<item>Jastrzębie-Zdrój</item>
+		<item>Jaworzno</item>
+		<item>Kalety</item>
+		<item>Katowice</item>
+		<item>Kłobuck</item>
+		<item>Knurów</item>
+		<item>Koniecpol</item>
+		<item>Koziegłowy</item>
+		<item>Krzanowice</item>
+		<item>Krzepice</item>
+		<item>Kuźnia Raciborska</item>
+		<item>Lędziny</item>
+		<item>Lubliniec</item>
+		<item>Łaziska Górne</item>
+		<item>Łazy</item>
+		<item>Miasteczko Śląskie</item>
+		<item>Mikołów</item>
+		<item>Mysłowice</item>
+		<item>Myszków</item>
+		<item>Ogrodzieniec</item>
+		<item>Orzesze</item>
+		<item>Piekary Śląskie</item>
+		<item>Pilica</item>
+		<item>Poręba</item>
+		<item>Pszczyna</item>
+		<item>Pszów</item>
+		<item>Pyskowice</item>
+		<item>Racibórz</item>
+		<item>Radlin</item>
+		<item>Radzionków</item>
+		<item>Ruda Śląska</item>
+		<item>Rybnik</item>
+		<item>Rydułtowy</item>
+		<item>Siemianowice Śląskie</item>
+		<item>Siewierz</item>
+		<item>Skoczów</item>
+		<item>Sławków</item>
+		<item>Sosnowiec</item>
+		<item>Sośnicowice</item>
+		<item>Strumień</item>
+		<item>Szczekociny</item>
+		<item>Szczyrk</item>
+		<item>Świętochłowice</item>
+		<item>Tarnowskie Góry</item>
+		<item>Toszek</item>
+		<item>Tychy</item>
+		<item>Ustroń</item>
+		<item>Wilamowice</item>
+		<item>Wisła</item>
+		<item>Wodzisław Śląski</item>
+		<item>Wojkowice</item>
+		<item>Woźniki</item>
+		<item>Zabrze</item>
+		<item>Zawiercie</item>
+		<item>Żarki</item>
+		<item>Żory</item>
+		<item>Żywiec</item>
+	</string-array>
+
+	<string-array name="DS">
+		<item>Bardo</item>
+		<item>Bielawa</item>
+		<item>Bierutów</item>
+		<item>Bogatynia</item>
+		<item>Boguszów-Gorce</item>
+		<item>Bolesławiec</item>
+		<item>Bolków</item>
+		<item>Brzeg Dolny</item>
+		<item>Bystrzyca Kłodzka</item>
+		<item>Chocianów</item>
+		<item>Chojnów</item>
+		<item>Duszniki-Zdrój</item>
+		<item>Dzierżoniów</item>
+		<item>Głogów</item>
+		<item>Głuszyca</item>
+		<item>Góra</item>
+		<item>Gryfów Śląski</item>
+		<item>Jawor</item>
+		<item>Jaworzyna Śląska</item>
+		<item>Jedlina-Zdrój</item>
+		<item>Jelcz-Laskowice</item>
+		<item>Jelenia Góra</item>
+		<item>Kamienna Góra</item>
+		<item>Karpacz</item>
+		<item>Kąty Wrocławskie</item>
+		<item>Kłodzko</item>
+		<item>Kowary</item>
+		<item>Kudowa-Zdrój</item>
+		<item>Lądek-Zdrój</item>
+		<item>Legnica</item>
+		<item>Leśna</item>
+		<item>Lubań</item>
+		<item>Lubawka</item>
+		<item>Lubin</item>
+		<item>Lubomierz</item>
+		<item>Lwówek Śląski</item>
+		<item>Mieroszów</item>
+		<item>Międzybórz</item>
+		<item>Międzylesie</item>
+		<item>Milicz</item>
+		<item>Mirsk</item>
+		<item>Niemcza</item>
+		<item>Nowa Ruda</item>
+		<item>Nowogrodziec</item>
+		<item>Oborniki Śląskie</item>
+		<item>Oleśnica</item>
+		<item>Olszyna</item>
+		<item>Oława</item>
+		<item>Piechowice</item>
+		<item>Pieńsk</item>
+		<item>Pieszyce</item>
+		<item>Piława Górna</item>
+		<item>Polanica-Zdrój</item>
+		<item>Polkowice</item>
+		<item>Prochowice</item>
+		<item>Prusice</item>
+		<item>Przemków</item>
+		<item>Radków</item>
+		<item>Siechnice</item>
+		<item>Sobótka</item>
+		<item>Stronie Śląskie</item>
+		<item>Strzegom</item>
+		<item>Strzelin</item>
+		<item>Syców</item>
+		<item>Szczawno-Zdrój</item>
+		<item>Szczytna</item>
+		<item>Szklarska Poręba</item>
+		<item>Ścinawa</item>
+		<item>Środa Śląska</item>
+		<item>Świdnica</item>
+		<item>Świebodzice</item>
+		<item>Świeradów-Zdrój</item>
+		<item>Świerzawa</item>
+		<item>Trzebnica</item>
+		<item>Twardogóra</item>
+		<item>Wałbrzych</item>
+		<item>Wąsosz</item>
+		<item>Węgliniec</item>
+		<item>Wiązów</item>
+		<item>Wleń</item>
+		<item>Wojcieszów</item>
+		<item>Wołów</item>
+		<item>Wrocław</item>
+		<item>Zawidów</item>
+		<item>Ząbkowice Śląskie</item>
+		<item>Zgorzelec</item>
+		<item>Ziębice</item>
+		<item>Złotoryja</item>
+		<item>Złoty Stok</item>
+		<item>Żarów</item>
+		<item>Żmigród</item>
+	</string-array>
+
+	<string-array name="LB">
+		<item>Annopol</item>
+		<item>Bełżyce</item>
+		<item>Biała Podlaska</item>
+		<item>Biłgoraj</item>
+		<item>Bychawa</item>
+		<item>Chełm</item>
+		<item>Dęblin</item>
+		<item>Frampol</item>
+		<item>Hrubieszów</item>
+		<item>Janów Lubelski</item>
+		<item>Józefów (powiat biłgorajski)</item>
+		<item>Kazimierz Dolny</item>
+		<item>Kock</item>
+		<item>Krasnobród</item>
+		<item>Krasnystaw</item>
+		<item>Kraśnik</item>
+		<item>Lubartów</item>
+		<item>Lublin</item>
+		<item>Łaszczów</item>
+		<item>Łęczna</item>
+		<item>Łuków</item>
+		<item>Międzyrzec Podlaski</item>
+		<item>Modliborzyce</item>
+		<item>Nałęczów</item>
+		<item>Opole Lubelskie</item>
+		<item>Ostrów Lubelski</item>
+		<item>Parczew</item>
+		<item>Piaski</item>
+		<item>Poniatowa</item>
+		<item>Puławy</item>
+		<item>Radzyń Podlaski</item>
+		<item>Rejowiec Fabryczny</item>
+		<item>Ryki</item>
+		<item>Stoczek Łukowski</item>
+		<item>Szczebrzeszyn</item>
+		<item>Świdnik</item>
+		<item>Tarnogród</item>
+		<item>Terespol</item>
+		<item>Tomaszów Lubelski</item>
+		<item>Tyszowce</item>
+		<item>Włodawa</item>
+		<item>Zamość</item>
+		<item>Zwierzyniec</item>
+	</string-array>
+
+	<string-array name="WM">
+		<item>Barczewo</item>
+		<item>Bartoszyce</item>
+		<item>Biała Piska</item>
+		<item>Biskupiec</item>
+		<item>Bisztynek</item>
+		<item>Braniewo</item>
+		<item>Dobre Miasto</item>
+		<item>Działdowo</item>
+		<item>Elbląg</item>
+		<item>Ełk</item>
+		<item>Frombork</item>
+		<item>Giżycko</item>
+		<item>Gołdap</item>
+		<item>Górowo Iławeckie</item>
+		<item>Iława</item>
+		<item>Jeziorany</item>
+		<item>Kętrzyn</item>
+		<item>Kisielice</item>
+		<item>Korsze</item>
+		<item>Lidzbark</item>
+		<item>Lidzbark Warmiński</item>
+		<item>Lubawa</item>
+		<item>Mikołajki</item>
+		<item>Miłakowo</item>
+		<item>Miłomłyn</item>
+		<item>Młynary</item>
+		<item>Morąg</item>
+		<item>Mrągowo</item>
+		<item>Nidzica</item>
+		<item>Nowe Miasto Lubawskie</item>
+		<item>Olecko</item>
+		<item>Olsztyn</item>
+		<item>Olsztynek</item>
+		<item>Orneta</item>
+		<item>Orzysz</item>
+		<item>Ostróda</item>
+		<item>Pasłęk</item>
+		<item>Pasym</item>
+		<item>Pieniężno</item>
+		<item>Pisz</item>
+		<item>Reszel</item>
+		<item>Ruciane-Nida</item>
+		<item>Ryn</item>
+		<item>Sępopol</item>
+		<item>Susz</item>
+		<item>Szczytno</item>
+		<item>Tolkmicko</item>
+		<item>Węgorzewo</item>
+		<item>Zalewo</item>
+	</string-array>
+
+	<string-array name="ZP">
+		<item>Barlinek</item>
+		<item>Barwice</item>
+		<item>Białogard</item>
+		<item>Biały Bór</item>
+		<item>Bobolice</item>
+		<item>Borne Sulinowo</item>
+		<item>Cedynia</item>
+		<item>Chociwel</item>
+		<item>Chojna</item>
+		<item>Choszczno</item>
+		<item>Czaplinek</item>
+		<item>Człopa</item>
+		<item>Darłowo</item>
+		<item>Dębno</item>
+		<item>Dobra (powiat łobeski)</item>
+		<item>Dobrzany</item>
+		<item>Drawno</item>
+		<item>Drawsko Pomorskie</item>
+		<item>Dziwnów</item>
+		<item>Golczewo</item>
+		<item>Goleniów</item>
+		<item>Gościno</item>
+		<item>Gryfice</item>
+		<item>Gryfino</item>
+		<item>Ińsko</item>
+		<item>Kalisz Pomorski</item>
+		<item>Kamień Pomorski</item>
+		<item>Karlino</item>
+		<item>Kołobrzeg</item>
+		<item>Koszalin</item>
+		<item>Lipiany</item>
+		<item>Łobez</item>
+		<item>Maszewo</item>
+		<item>Mieszkowice</item>
+		<item>Międzyzdroje</item>
+		<item>Mirosławiec</item>
+		<item>Moryń</item>
+		<item>Myślibórz</item>
+		<item>Nowe Warpno</item>
+		<item>Nowogard</item>
+		<item>Pełczyce</item>
+		<item>Płoty</item>
+		<item>Polanów</item>
+		<item>Police</item>
+		<item>Połczyn-Zdrój</item>
+		<item>Pyrzyce</item>
+		<item>Recz</item>
+		<item>Resko</item>
+		<item>Sianów</item>
+		<item>Sławno</item>
+		<item>Stargard Szczeciński</item>
+		<item>Stepnica</item>
+		<item>Suchań</item>
+		<item>Szczecin</item>
+		<item>Szczecinek</item>
+		<item>Świdwin</item>
+		<item>Świnoujście</item>
+		<item>Trzcińsko-Zdrój</item>
+		<item>Trzebiatów</item>
+		<item>Tuczno</item>
+		<item>Tychowo</item>
+		<item>Wałcz</item>
+		<item>Węgorzyno</item>
+		<item>Wolin</item>
+		<item>Złocieniec</item>
+	</string-array>
+
+	<string-array name="WP">
+		<item>Bojanowo</item>
+		<item>Borek Wielkopolski</item>
+		<item>Buk</item>
+		<item>Chodzież</item>
+		<item>Czarnków</item>
+		<item>Czempiń</item>
+		<item>Czerniejewo</item>
+		<item>Dąbie</item>
+		<item>Dobra (powiat turecki)</item>
+		<item>Dobrzyca</item>
+		<item>Dolsk</item>
+		<item>Gniezno</item>
+		<item>Golina</item>
+		<item>Gołańcz</item>
+		<item>Gostyń</item>
+		<item>Grabów nad Prosną</item>
+		<item>Grodzisk Wielkopolski</item>
+		<item>Jarocin</item>
+		<item>Jastrowie</item>
+		<item>Jutrosin</item>
+		<item>Kalisz</item>
+		<item>Kępno</item>
+		<item>Kleczew</item>
+		<item>Kłecko</item>
+		<item>Kłodawa</item>
+		<item>Kobylin</item>
+		<item>Koło</item>
+		<item>Konin</item>
+		<item>Kostrzyn</item>
+		<item>Kościan</item>
+		<item>Koźmin Wielkopolski</item>
+		<item>Kórnik</item>
+		<item>Krajenka</item>
+		<item>Krobia</item>
+		<item>Krotoszyn</item>
+		<item>Krzywiń</item>
+		<item>Krzyż Wielkopolski</item>
+		<item>Książ Wielkopolski</item>
+		<item>Leszno</item>
+		<item>Luboń</item>
+		<item>Lwówek</item>
+		<item>Łobżenica</item>
+		<item>Margonin</item>
+		<item>Miejska Górka</item>
+		<item>Międzychód</item>
+		<item>Mikstat</item>
+		<item>Miłosław</item>
+		<item>Mosina</item>
+		<item>Murowana Goślina</item>
+		<item>Nekla</item>
+		<item>Nowe Skalmierzyce</item>
+		<item>Nowy Tomyśl</item>
+		<item>Oborniki</item>
+		<item>Obrzycko</item>
+		<item>Odolanów</item>
+		<item>Okonek</item>
+		<item>Opalenica</item>
+		<item>Osieczna</item>
+		<item>Ostroróg</item>
+		<item>Ostrów Wielkopolski</item>
+		<item>Ostrzeszów</item>
+		<item>Piła</item>
+		<item>Pleszew</item>
+		<item>Pniewy</item>
+		<item>Pobiedziska</item>
+		<item>Pogorzela</item>
+		<item>Poniec</item>
+		<item>Poznań</item>
+		<item>Przedecz</item>
+		<item>Puszczykowo</item>
+		<item>Pyzdry</item>
+		<item>Rakoniewice</item>
+		<item>Raszków</item>
+		<item>Rawicz</item>
+		<item>Rogoźno</item>
+		<item>Rychwał</item>
+		<item>Rydzyna</item>
+		<item>Sieraków</item>
+		<item>Skoki</item>
+		<item>Słupca</item>
+		<item>Sompolno</item>
+		<item>Stawiszyn</item>
+		<item>Stęszew</item>
+		<item>Sulmierzyce</item>
+		<item>Swarzędz</item>
+		<item>Szamocin</item>
+		<item>Szamotuły</item>
+		<item>Ślesin</item>
+		<item>Śmigiel</item>
+		<item>Śrem</item>
+		<item>Środa Wielkopolska</item>
+		<item>Trzcianka</item>
+		<item>Trzemeszno</item>
+		<item>Tuliszków</item>
+		<item>Turek</item>
+		<item>Ujście</item>
+		<item>Wągrowiec</item>
+		<item>Wieleń</item>
+		<item>Wielichowo</item>
+		<item>Witkowo</item>
+		<item>Wolsztyn</item>
+		<item>Wronki</item>
+		<item>Września</item>
+		<item>Wyrzysk</item>
+		<item>Wysoka</item>
+		<item>Zagórów</item>
+		<item>Zbąszyń</item>
+		<item>Zduny</item>
+		<item>Złotów</item>
+		<item>Żerków</item>
+	</string-array>
+
+	<string-array name="PK">
+		<item>Baranów Sandomierski</item>
+		<item>Błażowa</item>
+		<item>Boguchwała</item>
+		<item>Brzostek</item>
+		<item>Brzozów</item>
+		<item>Cieszanów</item>
+		<item>Dębica</item>
+		<item>Dukla</item>
+		<item>Dynów</item>
+		<item>Głogów Małopolski</item>
+		<item>Iwonicz-Zdrój</item>
+		<item>Jarosław</item>
+		<item>Jasło</item>
+		<item>Jedlicze</item>
+		<item>Kańczuga</item>
+		<item>Kolbuszowa</item>
+		<item>Kołaczyce</item>
+		<item>Krosno</item>
+		<item>Lesko</item>
+		<item>Leżajsk</item>
+		<item>Lubaczów</item>
+		<item>Łańcut</item>
+		<item>Mielec</item>
+		<item>Narol</item>
+		<item>Nisko</item>
+		<item>Nowa Dęba</item>
+		<item>Nowa Sarzyna</item>
+		<item>Oleszyce</item>
+		<item>Pilzno</item>
+		<item>Pruchnik</item>
+		<item>Przecław</item>
+		<item>Przemyśl</item>
+		<item>Przeworsk</item>
+		<item>Radomyśl Wielki</item>
+		<item>Radymno</item>
+		<item>Ropczyce</item>
+		<item>Rudnik nad Sanem</item>
+		<item>Rymanów</item>
+		<item>Rzeszów</item>
+		<item>Sanok</item>
+		<item>Sędziszów Małopolski</item>
+		<item>Sieniawa</item>
+		<item>Sokołów Małopolski</item>
+		<item>Stalowa Wola</item>
+		<item>Strzyżów</item>
+		<item>Tarnobrzeg</item>
+		<item>Tyczyn</item>
+		<item>Ulanów</item>
+		<item>Ustrzyki Dolne</item>
+		<item>Zagórz</item>
+		<item>Zaklików</item>
+	</string-array>
+
+	<string-array name="PL">
+		<item>Augustów</item>
+		<item>Białystok</item>
+		<item>Bielsk Podlaski</item>
+		<item>Brańsk</item>
+		<item>Choroszcz</item>
+		<item>Ciechanowiec</item>
+		<item>Czarna Białostocka</item>
+		<item>Czyżew</item>
+		<item>Dąbrowa Białostocka</item>
+		<item>Drohiczyn</item>
+		<item>Goniądz</item>
+		<item>Grajewo</item>
+		<item>Hajnówka</item>
+		<item>Jedwabne</item>
+		<item>Kleszczele</item>
+		<item>Knyszyn</item>
+		<item>Kolno</item>
+		<item>Krynki</item>
+		<item>Lipsk</item>
+		<item>Łapy</item>
+		<item>Łomża</item>
+		<item>Michałowo</item>
+		<item>Mońki</item>
+		<item>Nowogród</item>
+		<item>Rajgród</item>
+		<item>Sejny</item>
+		<item>Siemiatycze</item>
+		<item>Sokółka</item>
+		<item>Stawiski</item>
+		<item>Suchowola</item>
+		<item>Supraśl</item>
+		<item>Suraż</item>
+		<item>Suwałki</item>
+		<item>Szczuczyn</item>
+		<item>Szepietowo</item>
+		<item>Tykocin</item>
+		<item>Wasilków</item>
+		<item>Wysokie Mazowieckie</item>
+		<item>Zabłudów</item>
+		<item>Zambrów</item>
+	</string-array>
+
+	<string-array name="PM">
+		<item>Brusy</item>
+		<item>Bytów</item>
+		<item>Chojnice</item>
+		<item>Czarna Woda</item>
+		<item>Czarne</item>
+		<item>Czersk</item>
+		<item>Człuchów</item>
+		<item>Debrzno</item>
+		<item>Dzierzgoń</item>
+		<item>Gdańsk</item>
+		<item>Gdynia</item>
+		<item>Gniew</item>
+		<item>Hel</item>
+		<item>Jastarnia</item>
+		<item>Kartuzy</item>
+		<item>Kępice</item>
+		<item>Kościerzyna</item>
+		<item>Krynica Morska</item>
+		<item>Kwidzyn</item>
+		<item>Lębork</item>
+		<item>Łeba</item>
+		<item>Malbork</item>
+		<item>Miastko</item>
+		<item>Nowy Dwór Gdański</item>
+		<item>Nowy Staw</item>
+		<item>Pelplin</item>
+		<item>Prabuty</item>
+		<item>Pruszcz Gdański</item>
+		<item>Puck</item>
+		<item>Reda</item>
+		<item>Rumia</item>
+		<item>Skarszewy</item>
+		<item>Skórcz</item>
+		<item>Słupsk</item>
+		<item>Sopot</item>
+		<item>Starogard Gdański</item>
+		<item>Sztum</item>
+		<item>Tczew</item>
+		<item>Ustka</item>
+		<item>Wejherowo</item>
+		<item>Władysławowo</item>
+		<item>Żukowo</item>
+	</string-array>
+
+</resources>

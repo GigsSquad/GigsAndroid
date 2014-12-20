@@ -220,12 +220,14 @@ public class MainActivity extends FragmentActivity {
 		{
 			Log.i("RF", "Olaboga, refreshyk.");
 			changeFragment(currentFragment);//odswieza dany fragment
-			Log.i("RF", "To tez wyszlo.");
+			
 			navDrawerItems.get(1).setCount("" + dbMgr.getSize());
 			navDrawerItems.get(1).setCounterVisibility(true);
 
 			navDrawerItems.get(2).setCount("0"); // TODO licznik ulubionych koncertów
 			navDrawerItems.get(2).setCounterVisibility(true);
+			
+			Log.i("RF", "To tez wyszlo.");
 		}	
 	}
 }
