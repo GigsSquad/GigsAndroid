@@ -118,6 +118,11 @@ public class MainActivity extends FragmentActivity {
 				android.R.anim.slide_out_right).replace(R.id.content_frame, fragment).addToBackStack(null).commit();
 		drawerLayout.openDrawer(drawerList);
 		
+		navDrawerItems.get(1).setCount("" + dbMgr.getSize());
+		navDrawerItems.get(1).setCounterVisibility(true);
+
+		navDrawerItems.get(2).setCount("0"); // TODO licznik ulubionych koncertów
+		navDrawerItems.get(2).setCounterVisibility(true);
 		//TODO jak bazy nie ma to update, a tak chuj, niech sami aktualizuja
 		//update();
 		
@@ -216,6 +221,11 @@ public class MainActivity extends FragmentActivity {
 			Log.i("RF", "Olaboga, refreshyk.");
 			changeFragment(currentFragment);//odswieza dany fragment
 			Log.i("RF", "To tez wyszlo.");
+			navDrawerItems.get(1).setCount("" + dbMgr.getSize());
+			navDrawerItems.get(1).setCounterVisibility(true);
+
+			navDrawerItems.get(2).setCount("0"); // TODO licznik ulubionych koncertów
+			navDrawerItems.get(2).setCounterVisibility(true);
 		}	
 	}
 }
