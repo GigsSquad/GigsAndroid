@@ -20,24 +20,9 @@ public final class R {
         public static final int slide_out_left=0x7f040008;
     }
     public static final class array {
-        public static final int DS=0x7f0d0008;
-        public static final int KP=0x7f0d0003;
-        public static final int LB=0x7f0d0009;
-        public static final int LD=0x7f0d0001;
-        public static final int LS=0x7f0d0004;
-        public static final int MP=0x7f0d0002;
-        public static final int MZ=0x7f0d0005;
-        public static final int OP=0x7f0d0000;
-        public static final int PK=0x7f0d000d;
-        public static final int PL=0x7f0d000e;
-        public static final int PM=0x7f0d000f;
-        public static final int SK=0x7f0d0006;
-        public static final int SL=0x7f0d0007;
-        public static final int WM=0x7f0d000a;
-        public static final int WP=0x7f0d000c;
-        public static final int ZP=0x7f0d000b;
-        public static final int nav_menu=0x7f0d0010;
-        public static final int nav_menu_icons=0x7f0d0011;
+        public static final int COUNTIES=0x7f0d0000;
+        public static final int nav_menu=0x7f0d0001;
+        public static final int nav_menu_icons=0x7f0d0002;
     }
     public static final class attr {
         /**  Custom divider drawable to use for elements in the action bar. 
@@ -2247,35 +2232,34 @@ containing a value of this type.
         public static final int action_mode_close_button=0x7f0c0033;
         public static final int activity_chooser_view_content=0x7f0c0034;
         public static final int always=0x7f0c0025;
-        public static final int artist_image=0x7f0c006a;
-        public static final int artist_name=0x7f0c006b;
+        public static final int artist_image=0x7f0c0069;
+        public static final int artist_name=0x7f0c006a;
         public static final int beginning=0x7f0c002c;
         public static final int book_now=0x7f0c0017;
         public static final int bottom=0x7f0c002f;
-        public static final int btn_navigate=0x7f0c0071;
+        public static final int btn_navigate=0x7f0c0070;
         public static final int buyButton=0x7f0c0013;
         public static final int buy_now=0x7f0c0018;
         public static final int buy_with_google=0x7f0c0019;
         public static final int card=0x7f0c0055;
         public static final int card_view=0x7f0c0056;
         public static final int checkbox=0x7f0c003c;
-        public static final int cityAutoComplete=0x7f0c0066;
+        public static final int cityAutoComplete=0x7f0c0065;
         public static final int classic=0x7f0c001a;
-        public static final int clearFilesButton=0x7f0c0068;
+        public static final int clearFilesButton=0x7f0c0067;
         public static final int collapseActionView=0x7f0c0026;
-        public static final int con_date=0x7f0c006d;
+        public static final int con_date=0x7f0c006c;
         public static final int concertList=0x7f0c0063;
-        public static final int connect=0x7f0c006e;
+        public static final int connect=0x7f0c006d;
         public static final int content_frame=0x7f0c0053;
         public static final int counter=0x7f0c005d;
-        public static final int countySpinner=0x7f0c0065;
         public static final int dark=0x7f0c0058;
         public static final int dateTV=0x7f0c005c;
         public static final int decor_content_parent=0x7f0c0042;
         public static final int default_activity_button=0x7f0c0037;
         public static final int dialog=0x7f0c002a;
         public static final int disableHome=0x7f0c001f;
-        public static final int distanceSeekBar=0x7f0c0069;
+        public static final int distanceSeekBar=0x7f0c0068;
         public static final int distanceTextView=0x7f0c005f;
         public static final int drawer_layout=0x7f0c0052;
         public static final int dropdown=0x7f0c002b;
@@ -2298,8 +2282,8 @@ containing a value of this type.
         public static final int listMode=0x7f0c001d;
         public static final int list_image=0x7f0c0057;
         public static final int list_item=0x7f0c0038;
-        public static final int location_map=0x7f0c0070;
-        public static final int mapLayout=0x7f0c006f;
+        public static final int location_map=0x7f0c006f;
+        public static final int mapLayout=0x7f0c006e;
         public static final int match_parent=0x7f0c0015;
         public static final int middle=0x7f0c002e;
         public static final int monochrome=0x7f0c001c;
@@ -2307,7 +2291,7 @@ containing a value of this type.
         public static final int none=0x7f0c000a;
         public static final int normal=0x7f0c000b;
         public static final int placeTV=0x7f0c005a;
-        public static final int place_name=0x7f0c006c;
+        public static final int place_name=0x7f0c006b;
         public static final int production=0x7f0c0010;
         public static final int progress_circular=0x7f0c0007;
         public static final int progress_horizontal=0x7f0c0008;
@@ -2316,7 +2300,7 @@ containing a value of this type.
         public static final int recentList=0x7f0c0061;
         public static final int sandbox=0x7f0c0011;
         public static final int satellite=0x7f0c000c;
-        public static final int saveSettingsButton=0x7f0c0067;
+        public static final int saveSettingsButton=0x7f0c0066;
         public static final int searchBox=0x7f0c0062;
         public static final int search_badge=0x7f0c0048;
         public static final int search_bar=0x7f0c0047;

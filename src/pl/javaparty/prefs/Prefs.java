@@ -23,15 +23,9 @@ public class Prefs {
 	public static String getCity(Context context) {
 		return getPrefs(context).getString("CITY", "Warszawa");
 	}
-	
-	public static String getCounty(Context context)
-	{
-		return getPrefs(context).getString("COUNTY", "mazowieckie");
-	}
 
-	public static void setCity(Context context, String value, String county) {
+	public static void setCity(Context context, String value) {
 		getPrefs(context).edit().putString("CITY", value).commit();
-		getPrefs(context).edit().putString("COUNTY", county).commit();
 	}
 
 	// Wspolrzedne

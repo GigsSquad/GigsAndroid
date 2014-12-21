@@ -61,6 +61,11 @@ public class dbManager extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// TODO Auto-generated method stub
 	}
+	
+	public void deleteBase()
+	{
+		database.delete("Concerts", "'1'='1'", null);
+	}
 
 	public void addConcert(String artistName,String city,String spot,
 			int day,int month,int year,String agency,String url){
