@@ -5,9 +5,9 @@ import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.items.Concert;
 import pl.javaparty.sql.dbManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +32,7 @@ public class ArtistSearch extends Fragment {
 		View view = inflater.inflate(R.layout.tab_search_artist, container, false);
 		getActivity().getActionBar().setTitle("Szukaj wg Artysty");
 
-		dbm = ((MainActivity) getActivity()).getDBManager();// przekazujemy dbm od mainActivity
+		dbm = MainActivity.getDBManager();// przekazujemy dbm od mainActivity
 
 		searchBox = (AutoCompleteTextView) view.findViewById(R.id.searchBoxArtist);
 		concertList = (ListView) view.findViewById(R.id.concertListArtist);
@@ -62,13 +62,13 @@ public class ArtistSearch extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
 				lastPosition = position;
-				Fragment fragment = new ConcertFragment();
-				Bundle args = new Bundle();
+				Intent concertInfo = new Intent(getActivity(), ConcertFragment.class);
+				Bundle b = new Bundle();
+
 				Concert item = (Concert) parent.getAdapter().getItem(position);
-				args.putInt("ID", item.getID()); // przesylam unikalne id koncertu
-				fragment.setArguments(args);
-				FragmentManager fragmentManager = getFragmentManager();
-				fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).addToBackStack(getTag()).commit();
+				b.putInt("ID", item.getID()); // przesylam unikalne id koncertu
+				concertInfo.putExtra("bundle", b);
+				startActivity(concertInfo);
 			}
 		});
 

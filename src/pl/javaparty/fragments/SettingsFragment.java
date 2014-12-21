@@ -40,7 +40,7 @@ public class SettingsFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_settings, container, false);
 		context = inflater.getContext();
 		getActivity().getActionBar().setTitle("Preferencje");
-		dbm = ((MainActivity) getActivity()).getDBManager();// przekazujemy dbm od mainActivity
+		dbm = MainActivity.getDBManager();// przekazujemy dbm od mainActivity
 		citySearchBox = (AutoCompleteTextView) view.findViewById(R.id.cityAutoComplete);
 		distanceSeekBar = (SeekBar) view.findViewById(R.id.distanceSeekBar);
 		distanceTextView = (TextView) view.findViewById(R.id.distanceTextView);

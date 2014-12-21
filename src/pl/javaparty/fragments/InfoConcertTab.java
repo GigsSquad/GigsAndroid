@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class InfoConcertTab extends Fragment {
 
@@ -33,9 +32,11 @@ public class InfoConcertTab extends Fragment {
 		// price = (TextView) view.findViewById(R.id.priceTV);
 		image = (ImageView) view.findViewById(R.id.artist_image);
 		connect = (Button) view.findViewById(R.id.connect);
+		
+		Log.i("KURWA", "INFO");
 
 		final int ID = (getArguments().getInt("ID", -1)); // -1 bo bazadanych numeruje od 1 a nie od 0
-		final dbManager dbm = ((MainActivity)getActivity()).getDBManager();
+		final dbManager dbm = MainActivity.getDBManager();
 		Log.i("KURWA", "Przes³ane id: " + ID);
 		String artistName = dbm.getArtist(ID);
 		getActivity().getActionBar().setTitle(artistName);
@@ -43,11 +44,11 @@ public class InfoConcertTab extends Fragment {
 		place.setText(dbm.getCity(ID) + " " + dbm.getSpot(ID));
 		Log.i("DMB", "City: " + dbm.getCity(ID));
 		Log.i("DMB", "Spot: " + dbm.getSpot(ID));
-		date.setText(dbm.getDate(ID)); 
+		date.setText(dbm.getDate(ID));
 		// price.setText(concert.get);
 		final String URL = dbm.getUrl(ID);
 		new ImageLoader(inflater.getContext()).DisplayImage(artistName, image);
-		
+
 		connect.setOnClickListener(new OnClickListener() { // otwiera przegladarkï¿½ z linkiem do koncertu
 			@Override
 			public void onClick(View arg0) {
@@ -58,15 +59,6 @@ public class InfoConcertTab extends Fragment {
 			}
 
 		});
-		
-		image.setOnClickListener(new OnClickListener() {
-		    public void onClick(View v) {
-		       dbm.addFavouriteConcert(ID);		
-		   //    Log.i("TUTAJ",Integer.toString(ID));
-		       Toast.makeText(getActivity(), "Dodano do Twoich koncertow!", Toast.LENGTH_SHORT).show();
-		    }
-		});
-		
 		return view;
 	}
 }

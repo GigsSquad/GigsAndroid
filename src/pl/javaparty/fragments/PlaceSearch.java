@@ -6,6 +6,7 @@ import pl.javaparty.concertfinder.R;
 import pl.javaparty.items.Concert;
 import pl.javaparty.sql.dbManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -34,7 +35,7 @@ public class PlaceSearch extends Fragment {
 		View view = inflater.inflate(R.layout.tab_search_place, container, false);
 		getActivity().getActionBar().setTitle("Szukaj wg miejsca");
 
-		dbm = ((MainActivity) getActivity()).getDBManager();// przekazujemy dbm od mainActivity
+		dbm = MainActivity.getDBManager();// przekazujemy dbm od mainActivity
 
 		context = inflater.getContext();
 
@@ -66,13 +67,13 @@ public class PlaceSearch extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
 				lastPosition = position;
-				Fragment fragment = new ConcertFragment();
-				Bundle args = new Bundle();
+				Intent concertInfo = new Intent(context, ConcertFragment.class);
+				Bundle b = new Bundle();
+
 				Concert item = (Concert) parent.getAdapter().getItem(position);
-				args.putInt("ID", item.getID()); // przesylam unikalne id koncertu
-				fragment.setArguments(args);
-				FragmentManager fragmentManager = getFragmentManager();
-				fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).addToBackStack(getTag()).commit();
+				b.putInt("ID", item.getID()); // przesylam unikalne id koncertu
+				concertInfo.putExtra("bundle", b);
+				startActivity(concertInfo);
 			}
 		});
 

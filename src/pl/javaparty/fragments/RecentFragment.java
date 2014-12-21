@@ -8,9 +8,9 @@ import pl.javaparty.concertfinder.R;
 import pl.javaparty.items.Concert;
 import pl.javaparty.sql.dbManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,8 +40,7 @@ public class RecentFragment extends Fragment {
 		context = inflater.getContext();
 		lv = (ListView) view.findViewById(R.id.recentList);
 
-		// dbm = (dbManager) getArguments().getSerializable("dbManager");
-		dbm = ((MainActivity) getActivity()).getDBManager();
+		dbm = MainActivity.getDBManager();
 
 		// button na koncu listy ktory rozwija liste o wincyj jesli sie da
 		nextButton = new Button(context);
@@ -69,16 +68,11 @@ public class RecentFragment extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Log.i("LV", "KLIK");
 				lastPosition = position;
-				Fragment fragment = new ConcertFragment();
-				Bundle b = new Bundle();
 
+				Intent concertInfo = new Intent(context, ConcertFragment.class);
 				Concert item = (Concert) parent.getAdapter().getItem(position);
-				b.putInt("ID", item.getID()); // przesylam unikalne id koncertu
-
-				fragment.setArguments(b);
-				FragmentManager fragmentManager = getFragmentManager();
-				fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right,
-						R.anim.slide_out_left).replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+				concertInfo.putExtra("ID", item.getID());
+				startActivity(concertInfo);
 			}
 		});
 		return view;

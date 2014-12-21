@@ -288,13 +288,24 @@ public class dbManager extends SQLiteOpenHelper {
 		String[] columns = { "ID" };
 		Cursor c = database.query(FAVOURITES_TABLE, columns, null, null, null, null, null);
 		Concert[] concerts = new Concert[getSize(FAVOURITES_TABLE)];
-		// Concert[] concerts = new Concert[c.getCount()];
-		// Log.i("FAV", "Liczba rekordów:" + c.getCount());
 		for (int i = 0; c.moveToNext(); i++)
 			concerts[i] = getConcertsByID(c.getInt(0));
 		c.close();
 
 		return concerts;
+	}
+
+	public boolean isConcertFavourite(int id)
+	{
+		String[] columns = { "ID" };
+		boolean favourite = false;
+		Cursor c = database.query(FAVOURITES_TABLE, columns, null, null, null, null, null);
+		for (int i = 0; c.moveToNext(); i++)
+			if (c.getInt(0) == id)
+				favourite = true;
+		c.close();
+
+		return favourite;
 	}
 
 	private String fieldGetter(int ID, String fieldName) {

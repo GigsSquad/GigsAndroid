@@ -36,7 +36,7 @@ public class MainActivity extends FragmentActivity {
 	ListView drawerList;
 	// Context context;
 	int currentFragment = 1;
-	dbManager dbMgr;
+	static dbManager dbMgr;
 	Bundle arguments;
 	private ActionBarDrawerToggle drawerToggle;
 	FragmentManager fragmentManager;
@@ -118,7 +118,8 @@ public class MainActivity extends FragmentActivity {
 		navDrawerItems.get(1).setCount("" + dbMgr.getSize(dbManager.CONCERTS_TABLE));
 		navDrawerItems.get(1).setCounterVisibility(true);
 
-		navDrawerItems.get(2).setCount("0"); // TODO licznik ulubionych koncertów
+		navDrawerItems.get(2).setCount("" + dbMgr.getSize(dbManager.FAVOURITES_TABLE)); // TODO licznik ulubionych
+																						// koncertów
 		navDrawerItems.get(2).setCounterVisibility(true);
 		// TODO jak bazy nie ma to update, a tak chuj, niech sami aktualizuja
 		// update();
@@ -198,7 +199,7 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	// przekazuje DBmanagera
-	public dbManager getDBManager()
+	public static dbManager getDBManager()
 	{
 		return dbMgr;
 	}
@@ -215,7 +216,7 @@ public class MainActivity extends FragmentActivity {
 			navDrawerItems.get(1).setCount("" + dbMgr.getSize(dbManager.CONCERTS_TABLE));
 			navDrawerItems.get(1).setCounterVisibility(true);
 
-			navDrawerItems.get(2).setCount("0"); // TODO licznik ulubionych koncertów
+			navDrawerItems.get(2).setCount("" + dbMgr.getSize(dbManager.FAVOURITES_TABLE));
 			navDrawerItems.get(2).setCounterVisibility(true);
 
 			Log.i("RF", "To tez wyszlo.");
