@@ -38,12 +38,12 @@ public class DatabaseUpdater
 			{
 				{
 					js.getData();
-					dbm.deleteOldConcerts();
 				}
 			} catch (IOException e)
 			{
 				e.printStackTrace();
 			}
+			dbm.deleteOldConcerts();
 			activity.runOnUiThread(r);
 		}
 		
