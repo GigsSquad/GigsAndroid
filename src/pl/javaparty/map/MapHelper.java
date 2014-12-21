@@ -42,9 +42,10 @@ public class MapHelper {
 	 * Oblicza odleglosc miedzy zadanym miastem w stringu a miastem ktore zostalo zapisane w ustawieniach.
 	 * 
 	 * @param city
-	 *            - nazwa miasta
+	 *            nazwa miasta
 	 * @return zwraca odleglosc w kilometrach
 	 * @throws IOException
+	 *             shit happens
 	 */
 
 	public int distanceTo(final String city)

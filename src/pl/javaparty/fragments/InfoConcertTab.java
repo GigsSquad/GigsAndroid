@@ -3,6 +3,7 @@ package pl.javaparty.fragments;
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.imageloader.ImageLoader;
+import pl.javaparty.prefs.Prefs;
 import pl.javaparty.sql.dbManager;
 import android.content.Intent;
 import android.net.Uri;
@@ -71,9 +72,25 @@ public class InfoConcertTab extends Fragment {
 				item.setIcon(R.drawable.ic_action_favorite_on);
 			return true;
 		case R.id.website_icon:
-			Intent intent = new Intent(Intent.ACTION_VIEW,
+			Intent websiteIntent = new Intent(Intent.ACTION_VIEW,
 					Uri.parse(dbm.getUrl(ID)));
-			startActivity(intent);
+			startActivity(websiteIntent);
+			return true;
+
+		case R.id.share:
+			Intent sendIntent = new Intent();
+			sendIntent.setAction(Intent.ACTION_SEND);
+			sendIntent.putExtra(Intent.EXTRA_TEXT, dbm.getArtist(ID) + ", " + dbm.getCity(ID) + " (" + dbm.getDate(ID) + ")");
+			sendIntent.setType("text/plain");
+			startActivity(sendIntent);
+			return true;
+
+		case R.id.naviagte_icon:
+			Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW,
+					Uri.parse("http://maps.google.com/maps?saddr=" + Prefs.getCity(getActivity()) + "&daddr=" + dbm.getCity(ID) + " " + dbm.getSpot(ID)));
+			startActivity(navIntent);
+			return true;
+
 		default:
 			return super.onOptionsItemSelected(item);
 		}

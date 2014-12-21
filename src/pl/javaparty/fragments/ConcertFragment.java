@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTabHost;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 
 public class ConcertFragment extends FragmentActivity {
 
@@ -24,14 +25,13 @@ public class ConcertFragment extends FragmentActivity {
 		mTabHost.addTab(mTabHost.newTabSpec("mapFragment").setIndicator("Mapa"), MapConcertTab.class, getIntent().getExtras());
 	}
 
-	@Override
-	public boolean onKeyDown(int keycode, KeyEvent e) {
-		switch (keycode) {
-		case KeyEvent.KEYCODE_MENU:
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		// toggle nav drawer on selecting action bar app icon/title
+		if (onOptionsItemSelected(item)) {
 			return true;
 		}
-
-		return super.onKeyDown(keycode, e);
+		return super.onOptionsItemSelected(item);
 	}
 
 }
