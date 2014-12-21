@@ -1,964 +1,920 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+
 <resources>
-	<string-array name="OP">
-		<item>Baborów</item>
-		<item>Biała</item>
-		<item>Brzeg</item>
-		<item>Byczyna</item>
-		<item>Dobrodzień</item>
-		<item>Głogówek</item>
-		<item>Głubczyce</item>
-		<item>Głuchołazy</item>
-		<item>Gogolin</item>
-		<item>Gorzów Śląski</item>
-		<item>Grodków</item>
-		<item>Kędzierzyn-Koźle</item>
-		<item>Kietrz</item>
-		<item>Kluczbork</item>
-		<item>Kolonowskie</item>
-		<item>Korfantów</item>
-		<item>Krapkowice</item>
-		<item>Leśnica</item>
-		<item>Lewin Brzeski</item>
-		<item>Namysłów</item>
-		<item>Niemodlin</item>
-		<item>Nysa</item>
-		<item>Olesno</item>
-		<item>Opole</item>
-		<item>Otmuchów</item>
-		<item>Ozimek</item>
-		<item>Paczków</item>
-		<item>Praszka</item>
-		<item>Prószków</item>
-		<item>Prudnik</item>
-		<item>Strzelce Opolskie</item>
-		<item>Ujazd</item>
-		<item>Wołczyn</item>
-		<item>Zawadzkie</item>
-		<item>Zdzieszowice</item>
-	</string-array>
-
-	<string-array name="LD">
-		<item>Aleksandrów Łódzki</item>
-		<item>Bełchatów</item>
-		<item>Biała Rawska</item>
-		<item>Błaszki</item>
-		<item>Brzeziny</item>
-		<item>Drzewica</item>
-		<item>Działoszyn</item>
-		<item>Głowno</item>
-		<item>Kamieńsk</item>
-		<item>Koluszki</item>
-		<item>Konstantynów Łódzki</item>
-		<item>Krośniewice</item>
-		<item>Kutno</item>
-		<item>Łask</item>
-		<item>Łęczyca</item>
-		<item>Łowicz</item>
-		<item>Łódź</item>
-		<item>Opoczno</item>
-		<item>Ozorków</item>
-		<item>Pabianice</item>
-		<item>Pajęczno</item>
-		<item>Piotrków Trybunalski</item>
-		<item>Poddębice</item>
-		<item>Przedbórz</item>
-		<item>Radomsko</item>
-		<item>Rawa Mazowiecka</item>
-		<item>Rzgów</item>
-		<item>Sieradz</item>
-		<item>Skierniewice</item>
-		<item>Stryków</item>
-		<item>Sulejów</item>
-		<item>Szadek</item>
-		<item>Tomaszów Mazowiecki</item>
-		<item>Tuszyn</item>
-		<item>Uniejów</item>
-		<item>Warta</item>
-		<item>Wieluń</item>
-		<item>Wieruszów</item>
-		<item>Wolbórz</item>
-		<item>Zduńska Wola</item>
-		<item>Zelów</item>
-		<item>Zgierz</item>
-		<item>Złoczew</item>
-		<item>Żychlin</item>
-	</string-array>
-
-	<string-array name="MP">
-		<item>Alwernia</item>
-		<item>Andrychów</item>
-		<item>Biecz</item>
-		<item>Bobowa</item>
-		<item>Bochnia</item>
-		<item>Brzesko</item>
-		<item>Brzeszcze</item>
-		<item>Bukowno</item>
-		<item>Chełmek</item>
-		<item>Chrzanów</item>
-		<item>Ciężkowice</item>
-		<item>Czchów</item>
-		<item>Dąbrowa Tarnowska</item>
-		<item>Dobczyce</item>
-		<item>Gorlice</item>
-		<item>Grybów</item>
-		<item>Jordanów</item>
-		<item>Kalwaria Zebrzydowska</item>
-		<item>Kęty</item>
-		<item>Kraków</item>
-		<item>Krynica-Zdrój</item>
-		<item>Krzeszowice</item>
-		<item>Libiąż</item>
-		<item>Limanowa</item>
-		<item>Maków Podhalański</item>
-		<item>Miechów</item>
-		<item>Mszana Dolna</item>
-		<item>Muszyna</item>
-		<item>Myślenice</item>
-		<item>Niepołomice</item>
-		<item>Nowe Brzesko</item>
-		<item>Nowy Sącz</item>
-		<item>Nowy Targ</item>
-		<item>Nowy Wiśnicz</item>
-		<item>Olkusz</item>
-		<item>Oświęcim</item>
-		<item>Piwniczna-Zdrój</item>
-		<item>Proszowice</item>
-		<item>Rabka-Zdrój</item>
-		<item>Radłów</item>
-		<item>Ryglice</item>
-		<item>Skała</item>
-		<item>Skawina</item>
-		<item>Słomniki</item>
-		<item>Stary Sącz</item>
-		<item>Sucha Beskidzka</item>
-		<item>Sułkowice</item>
-		<item>Szczawnica</item>
-		<item>Szczucin</item>
-		<item>Świątniki Górne</item>
-		<item>Tarnów</item>
-		<item>Trzebinia</item>
-		<item>Tuchów</item>
-		<item>Wadowice</item>
-		<item>Wieliczka</item>
-		<item>Wojnicz</item>
-		<item>Wolbrom</item>
-		<item>Zakliczyn</item>
-		<item>Zakopane</item>
-		<item>Zator</item>
-		<item>Żabno</item>
-	</string-array>
-
-	<string-array name="KP">
-		<item>Aleksandrów Kujawski</item>
-		<item>Barcin</item>
-		<item>Brodnica</item>
-		<item>Brześć Kujawski</item>
-		<item>Bydgoszcz</item>
-		<item>Chełmno</item>
-		<item>Chełmża</item>
-		<item>Chodecz</item>
-		<item>Ciechocinek</item>
-		<item>Dobrzyń nad Wisłą</item>
-		<item>Gniewkowo</item>
-		<item>Golub-Dobrzyń</item>
-		<item>Górzno</item>
-		<item>Grudziądz</item>
-		<item>Inowrocław</item>
-		<item>Izbica Kujawska</item>
-		<item>Jabłonowo Pomorskie</item>
-		<item>Janikowo</item>
-		<item>Janowiec Wielkopolski</item>
-		<item>Kamień Krajeński</item>
-		<item>Kcynia</item>
-		<item>Koronowo</item>
-		<item>Kowal</item>
-		<item>Kowalewo Pomorskie</item>
-		<item>Kruszwica</item>
-		<item>Lipno</item>
-		<item>Lubień Kujawski</item>
-		<item>Lubraniec</item>
-		<item>Łabiszyn</item>
-		<item>Łasin</item>
-		<item>Mogilno</item>
-		<item>Mrocza</item>
-		<item>Nakło nad Notecią</item>
-		<item>Nieszawa</item>
-		<item>Nowe</item>
-		<item>Pakość</item>
-		<item>Piotrków Kujawski</item>
-		<item>Radziejów</item>
-		<item>Radzyń Chełmiński</item>
-		<item>Rypin</item>
-		<item>Sępólno Krajeńskie</item>
-		<item>Skępe</item>
-		<item>Solec Kujawski</item>
-		<item>Strzelno</item>
-		<item>Szubin</item>
-		<item>Świecie</item>
-		<item>Toruń</item>
-		<item>Tuchola</item>
-		<item>Wąbrzeźno</item>
-		<item>Więcbork</item>
-		<item>Włocławek</item>
-		<item>Żnin</item>
-	</string-array>
-
-	<string-array name="LS">
-		<item>Babimost</item>
-		<item>Bytom Odrzański</item>
-		<item>Cybinka</item>
-		<item>Czerwieńsk</item>
-		<item>Dobiegniew</item>
-		<item>Drezdenko</item>
-		<item>Gorzów Wielkopolski</item>
-		<item>Gozdnica</item>
-		<item>Gubin</item>
-		<item>Iłowa</item>
-		<item>Jasień</item>
-		<item>Kargowa</item>
-		<item>Kostrzyn nad Odrą</item>
-		<item>Kożuchów</item>
-		<item>Krosno Odrzańskie</item>
-		<item>Lubniewice</item>
-		<item>Lubsko</item>
-		<item>Łęknica</item>
-		<item>Małomice</item>
-		<item>Międzyrzecz</item>
-		<item>Nowa Sól</item>
-		<item>Nowe Miasteczko</item>
-		<item>Nowogród Bobrzański</item>
-		<item>Ośno Lubuskie</item>
-		<item>Rzepin</item>
-		<item>Skwierzyna</item>
-		<item>Sława</item>
-		<item>Słubice</item>
-		<item>Strzelce Krajeńskie</item>
-		<item>Sulechów</item>
-		<item>Sulęcin</item>
-		<item>Szlichtyngowa</item>
-		<item>Szprotawa</item>
-		<item>Świebodzin</item>
-		<item>Torzym</item>
-		<item>Trzciel</item>
-		<item>Witnica</item>
-		<item>Wschowa</item>
-		<item>Zbąszynek</item>
-		<item>Zielona Góra</item>
-		<item>Żagań</item>
-		<item>Żary</item>
-	</string-array>
-
-	<string-array name="MZ">
-		<item>Białobrzegi</item>
-		<item>Bieżuń</item>
-		<item>Błonie</item>
-		<item>Brok</item>
-		<item>Brwinów</item>
-		<item>Chorzele</item>
-		<item>Ciechanów</item>
-		<item>Drobin</item>
-		<item>Garwolin</item>
-		<item>Gąbin</item>
-		<item>Glinojeck</item>
-		<item>Gostynin</item>
-		<item>Góra Kalwaria</item>
-		<item>Grodzisk Mazowiecki</item>
-		<item>Grójec</item>
-		<item>Halinów</item>
-		<item>Iłża</item>
-		<item>Józefów (powiat otwocki)</item>
-		<item>Kałuszyn</item>
-		<item>Karczew</item>
-		<item>Kobyłka</item>
-		<item>Konstancin-Jeziorna</item>
-		<item>Kosów Lacki</item>
-		<item>Kozienice</item>
-		<item>Legionowo</item>
-		<item>Lipsko</item>
-		<item>Łaskarzew</item>
-		<item>Łochów</item>
-		<item>Łomianki</item>
-		<item>Łosice</item>
-		<item>Maków Mazowiecki</item>
-		<item>Marki</item>
-		<item>Milanówek</item>
-		<item>Mińsk Mazowiecki</item>
-		<item>Mława</item>
-		<item>Mogielnica</item>
-		<item>Mordy</item>
-		<item>Mrozy</item>
-		<item>Mszczonów</item>
-		<item>Myszyniec</item>
-		<item>Nasielsk</item>
-		<item>Nowe Miasto nad Pilicą</item>
-		<item>Nowy Dwór Mazowiecki</item>
-		<item>Ostrołęka</item>
-		<item>Ostrów Mazowiecka</item>
-		<item>Otwock</item>
-		<item>Ożarów Mazowiecki</item>
-		<item>Piaseczno</item>
-		<item>Piastów</item>
-		<item>Pilawa</item>
-		<item>Pionki</item>
-		<item>Płock</item>
-		<item>Płońsk</item>
-		<item>Podkowa Leśna</item>
-		<item>Pruszków</item>
-		<item>Przasnysz</item>
-		<item>Przysucha</item>
-		<item>Pułtusk</item>
-		<item>Raciąż</item>
-		<item>Radom</item>
-		<item>Radzymin</item>
-		<item>Różan</item>
-		<item>Serock</item>
-		<item>Siedlce</item>
-		<item>Sierpc</item>
-		<item>Skaryszew</item>
-		<item>Sochaczew</item>
-		<item>Sokołów Podlaski</item>
-		<item>Sulejówek</item>
-		<item>Szydłowiec</item>
-		<item>Tarczyn</item>
-		<item>Tłuszcz</item>
-		<item>Warka</item>
-		<item>Warszawa</item>
-		<item>Węgrów</item>
-		<item>Wołomin</item>
-		<item>Wyszków</item>
-		<item>Wyszogród</item>
-		<item>Wyśmierzyce</item>
-		<item>Zakroczym</item>
-		<item>Ząbki</item>
-		<item>Zielonka</item>
-		<item>Zwoleń</item>
-		<item>Żelechów</item>
-		<item>Żuromin</item>
-		<item>Żyrardów</item>
-	</string-array>
-
-	<string-array name="SK">
-		<item>Bodzentyn</item>
-		<item>Busko-Zdrój</item>
-		<item>Chęciny</item>
-		<item>Chmielnik</item>
-		<item>Ćmielów</item>
-		<item>Daleszyce</item>
-		<item>Działoszyce</item>
-		<item>Jędrzejów</item>
-		<item>Kazimierza Wielka</item>
-		<item>Kielce</item>
-		<item>Końskie</item>
-		<item>Koprzywnica</item>
-		<item>Kunów</item>
-		<item>Małogoszcz</item>
-		<item>Opatów</item>
-		<item>Osiek</item>
-		<item>Ostrowiec Świętokrzyski</item>
-		<item>Ożarów</item>
-		<item>Pińczów</item>
-		<item>Połaniec</item>
-		<item>Sandomierz</item>
-		<item>Sędziszów</item>
-		<item>Skalbmierz</item>
-		<item>Skarżysko-Kamienna</item>
-		<item>Starachowice</item>
-		<item>Staszów</item>
-		<item>Stąporków</item>
-		<item>Suchedniów</item>
-		<item>Wąchock</item>
-		<item>Włoszczowa</item>
-		<item>Zawichost</item>
-	</string-array>
-
-	<string-array name="SL">
-		<item>Będzin</item>
-		<item>Bielsko-Biała</item>
-		<item>Bieruń</item>
-		<item>Blachownia</item>
-		<item>Bytom</item>
-		<item>Chorzów</item>
-		<item>Cieszyn</item>
-		<item>Czechowice-Dziedzice</item>
-		<item>Czeladź</item>
-		<item>Czerwionka-Leszczyny</item>
-		<item>Częstochowa</item>
-		<item>Dąbrowa Górnicza</item>
-		<item>Gliwice</item>
-		<item>Imielin</item>
-		<item>Jastrzębie-Zdrój</item>
-		<item>Jaworzno</item>
-		<item>Kalety</item>
-		<item>Katowice</item>
-		<item>Kłobuck</item>
-		<item>Knurów</item>
-		<item>Koniecpol</item>
-		<item>Koziegłowy</item>
-		<item>Krzanowice</item>
-		<item>Krzepice</item>
-		<item>Kuźnia Raciborska</item>
-		<item>Lędziny</item>
-		<item>Lubliniec</item>
-		<item>Łaziska Górne</item>
-		<item>Łazy</item>
-		<item>Miasteczko Śląskie</item>
-		<item>Mikołów</item>
-		<item>Mysłowice</item>
-		<item>Myszków</item>
-		<item>Ogrodzieniec</item>
-		<item>Orzesze</item>
-		<item>Piekary Śląskie</item>
-		<item>Pilica</item>
-		<item>Poręba</item>
-		<item>Pszczyna</item>
-		<item>Pszów</item>
-		<item>Pyskowice</item>
-		<item>Racibórz</item>
-		<item>Radlin</item>
-		<item>Radzionków</item>
-		<item>Ruda Śląska</item>
-		<item>Rybnik</item>
-		<item>Rydułtowy</item>
-		<item>Siemianowice Śląskie</item>
-		<item>Siewierz</item>
-		<item>Skoczów</item>
-		<item>Sławków</item>
-		<item>Sosnowiec</item>
-		<item>Sośnicowice</item>
-		<item>Strumień</item>
-		<item>Szczekociny</item>
-		<item>Szczyrk</item>
-		<item>Świętochłowice</item>
-		<item>Tarnowskie Góry</item>
-		<item>Toszek</item>
-		<item>Tychy</item>
-		<item>Ustroń</item>
-		<item>Wilamowice</item>
-		<item>Wisła</item>
-		<item>Wodzisław Śląski</item>
-		<item>Wojkowice</item>
-		<item>Woźniki</item>
-		<item>Zabrze</item>
-		<item>Zawiercie</item>
-		<item>Żarki</item>
-		<item>Żory</item>
-		<item>Żywiec</item>
-	</string-array>
-
-	<string-array name="DS">
-		<item>Bardo</item>
-		<item>Bielawa</item>
-		<item>Bierutów</item>
-		<item>Bogatynia</item>
-		<item>Boguszów-Gorce</item>
-		<item>Bolesławiec</item>
-		<item>Bolków</item>
-		<item>Brzeg Dolny</item>
-		<item>Bystrzyca Kłodzka</item>
-		<item>Chocianów</item>
-		<item>Chojnów</item>
-		<item>Duszniki-Zdrój</item>
-		<item>Dzierżoniów</item>
-		<item>Głogów</item>
-		<item>Głuszyca</item>
-		<item>Góra</item>
-		<item>Gryfów Śląski</item>
-		<item>Jawor</item>
-		<item>Jaworzyna Śląska</item>
-		<item>Jedlina-Zdrój</item>
-		<item>Jelcz-Laskowice</item>
-		<item>Jelenia Góra</item>
-		<item>Kamienna Góra</item>
-		<item>Karpacz</item>
-		<item>Kąty Wrocławskie</item>
-		<item>Kłodzko</item>
-		<item>Kowary</item>
-		<item>Kudowa-Zdrój</item>
-		<item>Lądek-Zdrój</item>
-		<item>Legnica</item>
-		<item>Leśna</item>
-		<item>Lubań</item>
-		<item>Lubawka</item>
-		<item>Lubin</item>
-		<item>Lubomierz</item>
-		<item>Lwówek Śląski</item>
-		<item>Mieroszów</item>
-		<item>Międzybórz</item>
-		<item>Międzylesie</item>
-		<item>Milicz</item>
-		<item>Mirsk</item>
-		<item>Niemcza</item>
-		<item>Nowa Ruda</item>
-		<item>Nowogrodziec</item>
-		<item>Oborniki Śląskie</item>
-		<item>Oleśnica</item>
-		<item>Olszyna</item>
-		<item>Oława</item>
-		<item>Piechowice</item>
-		<item>Pieńsk</item>
-		<item>Pieszyce</item>
-		<item>Piława Górna</item>
-		<item>Polanica-Zdrój</item>
-		<item>Polkowice</item>
-		<item>Prochowice</item>
-		<item>Prusice</item>
-		<item>Przemków</item>
-		<item>Radków</item>
-		<item>Siechnice</item>
-		<item>Sobótka</item>
-		<item>Stronie Śląskie</item>
-		<item>Strzegom</item>
-		<item>Strzelin</item>
-		<item>Syców</item>
-		<item>Szczawno-Zdrój</item>
-		<item>Szczytna</item>
-		<item>Szklarska Poręba</item>
-		<item>Ścinawa</item>
-		<item>Środa Śląska</item>
-		<item>Świdnica</item>
-		<item>Świebodzice</item>
-		<item>Świeradów-Zdrój</item>
-		<item>Świerzawa</item>
-		<item>Trzebnica</item>
-		<item>Twardogóra</item>
-		<item>Wałbrzych</item>
-		<item>Wąsosz</item>
-		<item>Węgliniec</item>
-		<item>Wiązów</item>
-		<item>Wleń</item>
-		<item>Wojcieszów</item>
-		<item>Wołów</item>
-		<item>Wrocław</item>
-		<item>Zawidów</item>
-		<item>Ząbkowice Śląskie</item>
-		<item>Zgorzelec</item>
-		<item>Ziębice</item>
-		<item>Złotoryja</item>
-		<item>Złoty Stok</item>
-		<item>Żarów</item>
-		<item>Żmigród</item>
-	</string-array>
-
-	<string-array name="LB">
-		<item>Annopol</item>
-		<item>Bełżyce</item>
-		<item>Biała Podlaska</item>
-		<item>Biłgoraj</item>
-		<item>Bychawa</item>
-		<item>Chełm</item>
-		<item>Dęblin</item>
-		<item>Frampol</item>
-		<item>Hrubieszów</item>
-		<item>Janów Lubelski</item>
-		<item>Józefów (powiat biłgorajski)</item>
-		<item>Kazimierz Dolny</item>
-		<item>Kock</item>
-		<item>Krasnobród</item>
-		<item>Krasnystaw</item>
-		<item>Kraśnik</item>
-		<item>Lubartów</item>
-		<item>Lublin</item>
-		<item>Łaszczów</item>
-		<item>Łęczna</item>
-		<item>Łuków</item>
-		<item>Międzyrzec Podlaski</item>
-		<item>Modliborzyce</item>
-		<item>Nałęczów</item>
-		<item>Opole Lubelskie</item>
-		<item>Ostrów Lubelski</item>
-		<item>Parczew</item>
-		<item>Piaski</item>
-		<item>Poniatowa</item>
-		<item>Puławy</item>
-		<item>Radzyń Podlaski</item>
-		<item>Rejowiec Fabryczny</item>
-		<item>Ryki</item>
-		<item>Stoczek Łukowski</item>
-		<item>Szczebrzeszyn</item>
-		<item>Świdnik</item>
-		<item>Tarnogród</item>
-		<item>Terespol</item>
-		<item>Tomaszów Lubelski</item>
-		<item>Tyszowce</item>
-		<item>Włodawa</item>
-		<item>Zamość</item>
-		<item>Zwierzyniec</item>
-	</string-array>
-
-	<string-array name="WM">
-		<item>Barczewo</item>
-		<item>Bartoszyce</item>
-		<item>Biała Piska</item>
-		<item>Biskupiec</item>
-		<item>Bisztynek</item>
-		<item>Braniewo</item>
-		<item>Dobre Miasto</item>
-		<item>Działdowo</item>
-		<item>Elbląg</item>
-		<item>Ełk</item>
-		<item>Frombork</item>
-		<item>Giżycko</item>
-		<item>Gołdap</item>
-		<item>Górowo Iławeckie</item>
-		<item>Iława</item>
-		<item>Jeziorany</item>
-		<item>Kętrzyn</item>
-		<item>Kisielice</item>
-		<item>Korsze</item>
-		<item>Lidzbark</item>
-		<item>Lidzbark Warmiński</item>
-		<item>Lubawa</item>
-		<item>Mikołajki</item>
-		<item>Miłakowo</item>
-		<item>Miłomłyn</item>
-		<item>Młynary</item>
-		<item>Morąg</item>
-		<item>Mrągowo</item>
-		<item>Nidzica</item>
-		<item>Nowe Miasto Lubawskie</item>
-		<item>Olecko</item>
-		<item>Olsztyn</item>
-		<item>Olsztynek</item>
-		<item>Orneta</item>
-		<item>Orzysz</item>
-		<item>Ostróda</item>
-		<item>Pasłęk</item>
-		<item>Pasym</item>
-		<item>Pieniężno</item>
-		<item>Pisz</item>
-		<item>Reszel</item>
-		<item>Ruciane-Nida</item>
-		<item>Ryn</item>
-		<item>Sępopol</item>
-		<item>Susz</item>
-		<item>Szczytno</item>
-		<item>Tolkmicko</item>
-		<item>Węgorzewo</item>
-		<item>Zalewo</item>
-	</string-array>
-
-	<string-array name="ZP">
-		<item>Barlinek</item>
-		<item>Barwice</item>
-		<item>Białogard</item>
-		<item>Biały Bór</item>
-		<item>Bobolice</item>
-		<item>Borne Sulinowo</item>
-		<item>Cedynia</item>
-		<item>Chociwel</item>
-		<item>Chojna</item>
-		<item>Choszczno</item>
-		<item>Czaplinek</item>
-		<item>Człopa</item>
-		<item>Darłowo</item>
-		<item>Dębno</item>
-		<item>Dobra (powiat łobeski)</item>
-		<item>Dobrzany</item>
-		<item>Drawno</item>
-		<item>Drawsko Pomorskie</item>
-		<item>Dziwnów</item>
-		<item>Golczewo</item>
-		<item>Goleniów</item>
-		<item>Gościno</item>
-		<item>Gryfice</item>
-		<item>Gryfino</item>
-		<item>Ińsko</item>
-		<item>Kalisz Pomorski</item>
-		<item>Kamień Pomorski</item>
-		<item>Karlino</item>
-		<item>Kołobrzeg</item>
-		<item>Koszalin</item>
-		<item>Lipiany</item>
-		<item>Łobez</item>
-		<item>Maszewo</item>
-		<item>Mieszkowice</item>
-		<item>Międzyzdroje</item>
-		<item>Mirosławiec</item>
-		<item>Moryń</item>
-		<item>Myślibórz</item>
-		<item>Nowe Warpno</item>
-		<item>Nowogard</item>
-		<item>Pełczyce</item>
-		<item>Płoty</item>
-		<item>Polanów</item>
-		<item>Police</item>
-		<item>Połczyn-Zdrój</item>
-		<item>Pyrzyce</item>
-		<item>Recz</item>
-		<item>Resko</item>
-		<item>Sianów</item>
-		<item>Sławno</item>
-		<item>Stargard Szczeciński</item>
-		<item>Stepnica</item>
-		<item>Suchań</item>
-		<item>Szczecin</item>
-		<item>Szczecinek</item>
-		<item>Świdwin</item>
-		<item>Świnoujście</item>
-		<item>Trzcińsko-Zdrój</item>
-		<item>Trzebiatów</item>
-		<item>Tuczno</item>
-		<item>Tychowo</item>
-		<item>Wałcz</item>
-		<item>Węgorzyno</item>
-		<item>Wolin</item>
-		<item>Złocieniec</item>
-	</string-array>
-
-	<string-array name="WP">
-		<item>Bojanowo</item>
-		<item>Borek Wielkopolski</item>
-		<item>Buk</item>
-		<item>Chodzież</item>
-		<item>Czarnków</item>
-		<item>Czempiń</item>
-		<item>Czerniejewo</item>
-		<item>Dąbie</item>
-		<item>Dobra (powiat turecki)</item>
-		<item>Dobrzyca</item>
-		<item>Dolsk</item>
-		<item>Gniezno</item>
-		<item>Golina</item>
-		<item>Gołańcz</item>
-		<item>Gostyń</item>
-		<item>Grabów nad Prosną</item>
-		<item>Grodzisk Wielkopolski</item>
-		<item>Jarocin</item>
-		<item>Jastrowie</item>
-		<item>Jutrosin</item>
-		<item>Kalisz</item>
-		<item>Kępno</item>
-		<item>Kleczew</item>
-		<item>Kłecko</item>
-		<item>Kłodawa</item>
-		<item>Kobylin</item>
-		<item>Koło</item>
-		<item>Konin</item>
-		<item>Kostrzyn</item>
-		<item>Kościan</item>
-		<item>Koźmin Wielkopolski</item>
-		<item>Kórnik</item>
-		<item>Krajenka</item>
-		<item>Krobia</item>
-		<item>Krotoszyn</item>
-		<item>Krzywiń</item>
-		<item>Krzyż Wielkopolski</item>
-		<item>Książ Wielkopolski</item>
-		<item>Leszno</item>
-		<item>Luboń</item>
-		<item>Lwówek</item>
-		<item>Łobżenica</item>
-		<item>Margonin</item>
-		<item>Miejska Górka</item>
-		<item>Międzychód</item>
-		<item>Mikstat</item>
-		<item>Miłosław</item>
-		<item>Mosina</item>
-		<item>Murowana Goślina</item>
-		<item>Nekla</item>
-		<item>Nowe Skalmierzyce</item>
-		<item>Nowy Tomyśl</item>
-		<item>Oborniki</item>
-		<item>Obrzycko</item>
-		<item>Odolanów</item>
-		<item>Okonek</item>
-		<item>Opalenica</item>
-		<item>Osieczna</item>
-		<item>Ostroróg</item>
-		<item>Ostrów Wielkopolski</item>
-		<item>Ostrzeszów</item>
-		<item>Piła</item>
-		<item>Pleszew</item>
-		<item>Pniewy</item>
-		<item>Pobiedziska</item>
-		<item>Pogorzela</item>
-		<item>Poniec</item>
-		<item>Poznań</item>
-		<item>Przedecz</item>
-		<item>Puszczykowo</item>
-		<item>Pyzdry</item>
-		<item>Rakoniewice</item>
-		<item>Raszków</item>
-		<item>Rawicz</item>
-		<item>Rogoźno</item>
-		<item>Rychwał</item>
-		<item>Rydzyna</item>
-		<item>Sieraków</item>
-		<item>Skoki</item>
-		<item>Słupca</item>
-		<item>Sompolno</item>
-		<item>Stawiszyn</item>
-		<item>Stęszew</item>
-		<item>Sulmierzyce</item>
-		<item>Swarzędz</item>
-		<item>Szamocin</item>
-		<item>Szamotuły</item>
-		<item>Ślesin</item>
-		<item>Śmigiel</item>
-		<item>Śrem</item>
-		<item>Środa Wielkopolska</item>
-		<item>Trzcianka</item>
-		<item>Trzemeszno</item>
-		<item>Tuliszków</item>
-		<item>Turek</item>
-		<item>Ujście</item>
-		<item>Wągrowiec</item>
-		<item>Wieleń</item>
-		<item>Wielichowo</item>
-		<item>Witkowo</item>
-		<item>Wolsztyn</item>
-		<item>Wronki</item>
-		<item>Września</item>
-		<item>Wyrzysk</item>
-		<item>Wysoka</item>
-		<item>Zagórów</item>
-		<item>Zbąszyń</item>
-		<item>Zduny</item>
-		<item>Złotów</item>
-		<item>Żerków</item>
-	</string-array>
-
-	<string-array name="PK">
-		<item>Baranów Sandomierski</item>
-		<item>Błażowa</item>
-		<item>Boguchwała</item>
-		<item>Brzostek</item>
-		<item>Brzozów</item>
-		<item>Cieszanów</item>
-		<item>Dębica</item>
-		<item>Dukla</item>
-		<item>Dynów</item>
-		<item>Głogów Małopolski</item>
-		<item>Iwonicz-Zdrój</item>
-		<item>Jarosław</item>
-		<item>Jasło</item>
-		<item>Jedlicze</item>
-		<item>Kańczuga</item>
-		<item>Kolbuszowa</item>
-		<item>Kołaczyce</item>
-		<item>Krosno</item>
-		<item>Lesko</item>
-		<item>Leżajsk</item>
-		<item>Lubaczów</item>
-		<item>Łańcut</item>
-		<item>Mielec</item>
-		<item>Narol</item>
-		<item>Nisko</item>
-		<item>Nowa Dęba</item>
-		<item>Nowa Sarzyna</item>
-		<item>Oleszyce</item>
-		<item>Pilzno</item>
-		<item>Pruchnik</item>
-		<item>Przecław</item>
-		<item>Przemyśl</item>
-		<item>Przeworsk</item>
-		<item>Radomyśl Wielki</item>
-		<item>Radymno</item>
-		<item>Ropczyce</item>
-		<item>Rudnik nad Sanem</item>
-		<item>Rymanów</item>
-		<item>Rzeszów</item>
-		<item>Sanok</item>
-		<item>Sędziszów Małopolski</item>
-		<item>Sieniawa</item>
-		<item>Sokołów Małopolski</item>
-		<item>Stalowa Wola</item>
-		<item>Strzyżów</item>
-		<item>Tarnobrzeg</item>
-		<item>Tyczyn</item>
-		<item>Ulanów</item>
-		<item>Ustrzyki Dolne</item>
-		<item>Zagórz</item>
-		<item>Zaklików</item>
-	</string-array>
-
-	<string-array name="PL">
-		<item>Augustów</item>
-		<item>Białystok</item>
-		<item>Bielsk Podlaski</item>
-		<item>Brańsk</item>
-		<item>Choroszcz</item>
-		<item>Ciechanowiec</item>
-		<item>Czarna Białostocka</item>
-		<item>Czyżew</item>
-		<item>Dąbrowa Białostocka</item>
-		<item>Drohiczyn</item>
-		<item>Goniądz</item>
-		<item>Grajewo</item>
-		<item>Hajnówka</item>
-		<item>Jedwabne</item>
-		<item>Kleszczele</item>
-		<item>Knyszyn</item>
-		<item>Kolno</item>
-		<item>Krynki</item>
-		<item>Lipsk</item>
-		<item>Łapy</item>
-		<item>Łomża</item>
-		<item>Michałowo</item>
-		<item>Mońki</item>
-		<item>Nowogród</item>
-		<item>Rajgród</item>
-		<item>Sejny</item>
-		<item>Siemiatycze</item>
-		<item>Sokółka</item>
-		<item>Stawiski</item>
-		<item>Suchowola</item>
-		<item>Supraśl</item>
-		<item>Suraż</item>
-		<item>Suwałki</item>
-		<item>Szczuczyn</item>
-		<item>Szepietowo</item>
-		<item>Tykocin</item>
-		<item>Wasilków</item>
-		<item>Wysokie Mazowieckie</item>
-		<item>Zabłudów</item>
-		<item>Zambrów</item>
-	</string-array>
-
-	<string-array name="PM">
-		<item>Brusy</item>
-		<item>Bytów</item>
-		<item>Chojnice</item>
-		<item>Czarna Woda</item>
-		<item>Czarne</item>
-		<item>Czersk</item>
-		<item>Człuchów</item>
-		<item>Debrzno</item>
-		<item>Dzierzgoń</item>
-		<item>Gdańsk</item>
-		<item>Gdynia</item>
-		<item>Gniew</item>
-		<item>Hel</item>
-		<item>Jastarnia</item>
-		<item>Kartuzy</item>
-		<item>Kępice</item>
-		<item>Kościerzyna</item>
-		<item>Krynica Morska</item>
-		<item>Kwidzyn</item>
-		<item>Lębork</item>
-		<item>Łeba</item>
-		<item>Malbork</item>
-		<item>Miastko</item>
-		<item>Nowy Dwór Gdański</item>
-		<item>Nowy Staw</item>
-		<item>Pelplin</item>
-		<item>Prabuty</item>
-		<item>Pruszcz Gdański</item>
-		<item>Puck</item>
-		<item>Reda</item>
-		<item>Rumia</item>
-		<item>Skarszewy</item>
-		<item>Skórcz</item>
-		<item>Słupsk</item>
-		<item>Sopot</item>
-		<item>Starogard Gdański</item>
-		<item>Sztum</item>
-		<item>Tczew</item>
-		<item>Ustka</item>
-		<item>Wejherowo</item>
-		<item>Władysławowo</item>
-		<item>Żukowo</item>
+	<string-array name="COUNTIES">
+		<item>Aleksandrów Kujawski (kujawsko-pomorskie)</item>
+		<item>Aleksandrów Łódzki (łódzkie)</item>
+		<item>Alwernia (małopolskie)</item>
+		<item>Andrychów (małopolskie)</item>
+		<item>Annopol (lubelskie)</item>
+		<item>Augustów (podlaskie)</item>
+		<item>Babimost (lubuskie)</item>
+		<item>Baborów (opolskie)</item>
+		<item>Baranów Sandomierski (podkarpackie)</item>
+		<item>Barcin (kujawsko-pomorskie)</item>
+		<item>Barczewo (warmińsko-mazurskie)</item>
+		<item>Bardo (dolnośląskie)</item>
+		<item>Barlinek (zachodniopomorskie )</item>
+		<item>Bartoszyce (warmińsko-mazurskie)</item>
+		<item>Barwice (zachodniopomorskie )</item>
+		<item>Bełchatów (łódzkie)</item>
+		<item>Bełżyce (lubelskie)</item>
+		<item>Będzin (śląskie)</item>
+		<item>Biała (opolskie)</item>
+		<item>Biała Piska (warmińsko-mazurskie)</item>
+		<item>Biała Podlaska (lubelskie)</item>
+		<item>Biała Rawska (łódzkie)</item>
+		<item>Białobrzegi (mazowieckie)</item>
+		<item>Białogard (zachodniopomorskie )</item>
+		<item>Biały Bór (zachodniopomorskie )</item>
+		<item>Białystok (podlaskie)</item>
+		<item>Biecz (małopolskie)</item>
+		<item>Bielawa (dolnośląskie)</item>
+		<item>Bielsk Podlaski (podlaskie)</item>
+		<item>Bielsko-Biała (śląskie)</item>
+		<item>Bieruń (śląskie)</item>
+		<item>Bierutów (dolnośląskie)</item>
+		<item>Bieżuń (mazowieckie)</item>
+		<item>Biłgoraj (lubelskie)</item>
+		<item>Biskupiec (warmińsko-mazurskie)</item>
+		<item>Bisztynek (warmińsko-mazurskie)</item>
+		<item>Blachownia (śląskie)</item>
+		<item>Błaszki (łódzkie)</item>
+		<item>Błażowa (podkarpackie)</item>
+		<item>Błonie (mazowieckie)</item>
+		<item>Bobolice (zachodniopomorskie )</item>
+		<item>Bobowa (małopolskie)</item>
+		<item>Bochnia (małopolskie)</item>
+		<item>Bodzentyn (świętokrzyskie)</item>
+		<item>Bogatynia (dolnośląskie)</item>
+		<item>Boguchwała (podkarpackie)</item>
+		<item>Boguszów-Gorce (dolnośląskie)</item>
+		<item>Bojanowo (wielkopolskie)</item>
+		<item>Bolesławiec (dolnośląskie)</item>
+		<item>Bolków (dolnośląskie)</item>
+		<item>Borek Wielkopolski (wielkopolskie)</item>
+		<item>Borne Sulinowo (zachodniopomorskie )</item>
+		<item>Braniewo (warmińsko-mazurskie)</item>
+		<item>Brańsk (podlaskie)</item>
+		<item>Brodnica (kujawsko-pomorskie)</item>
+		<item>Brok (mazowieckie)</item>
+		<item>Brusy (pomorskie)</item>
+		<item>Brwinów (mazowieckie)</item>
+		<item>Brzeg (opolskie)</item>
+		<item>Brzeg Dolny (dolnośląskie)</item>
+		<item>Brzesko (małopolskie)</item>
+		<item>Brzeszcze (małopolskie)</item>
+		<item>Brześć Kujawski (kujawsko-pomorskie)</item>
+		<item>Brzeziny (łódzkie)</item>
+		<item>Brzostek (podkarpackie)</item>
+		<item>Brzozów (podkarpackie)</item>
+		<item>Buk (wielkopolskie)</item>
+		<item>Bukowno (małopolskie)</item>
+		<item>Busko-Zdrój (świętokrzyskie)</item>
+		<item>Bychawa (lubelskie)</item>
+		<item>Byczyna (opolskie)</item>
+		<item>Bydgoszcz (kujawsko-pomorskie)</item>
+		<item>Bystrzyca Kłodzka (dolnośląskie)</item>
+		<item>Bytom (śląskie)</item>
+		<item>Bytom Odrzański (lubuskie)</item>
+		<item>Bytów (pomorskie)</item>
+		<item>Cedynia (zachodniopomorskie )</item>
+		<item>Chełm (lubelskie)</item>
+		<item>Chełmek (małopolskie)</item>
+		<item>Chełmno (kujawsko-pomorskie)</item>
+		<item>Chełmża (kujawsko-pomorskie)</item>
+		<item>Chęciny (świętokrzyskie)</item>
+		<item>Chmielnik (świętokrzyskie)</item>
+		<item>Chocianów (dolnośląskie)</item>
+		<item>Chociwel (zachodniopomorskie )</item>
+		<item>Chodecz (kujawsko-pomorskie)</item>
+		<item>Chodzież (wielkopolskie)</item>
+		<item>Chojna (zachodniopomorskie )</item>
+		<item>Chojnice (pomorskie)</item>
+		<item>Chojnów (dolnośląskie)</item>
+		<item>Choroszcz (podlaskie)</item>
+		<item>Chorzele (mazowieckie)</item>
+		<item>Chorzów (śląskie)</item>
+		<item>Choszczno (zachodniopomorskie )</item>
+		<item>Chrzanów (małopolskie)</item>
+		<item>Ciechanowiec (podlaskie)</item>
+		<item>Ciechanów (mazowieckie)</item>
+		<item>Ciechocinek (kujawsko-pomorskie)</item>
+		<item>Cieszanów (podkarpackie)</item>
+		<item>Cieszyn (śląskie)</item>
+		<item>Ciężkowice (małopolskie)</item>
+		<item>Cybinka (lubuskie)</item>
+		<item>Czaplinek (zachodniopomorskie )</item>
+		<item>Czarna Białostocka (podlaskie)</item>
+		<item>Czarna Woda (pomorskie)</item>
+		<item>Czarne (pomorskie)</item>
+		<item>Czarnków (wielkopolskie)</item>
+		<item>Czchów (małopolskie)</item>
+		<item>Czechowice-Dziedzice (śląskie)</item>
+		<item>Czeladź (śląskie)</item>
+		<item>Czempiń (wielkopolskie)</item>
+		<item>Czerniejewo (wielkopolskie)</item>
+		<item>Czersk (pomorskie)</item>
+		<item>Czerwieńsk (lubuskie)</item>
+		<item>Czerwionka-Leszczyny (śląskie)</item>
+		<item>Częstochowa (śląskie)</item>
+		<item>Człopa (zachodniopomorskie )</item>
+		<item>Człuchów (pomorskie)</item>
+		<item>Czyżew (podlaskie)</item>
+		<item>Ćmielów (świętokrzyskie)</item>
+		<item>Daleszyce (świętokrzyskie)</item>
+		<item>Darłowo (zachodniopomorskie )</item>
+		<item>Dąbie (wielkopolskie)</item>
+		<item>Dąbrowa Białostocka (podlaskie)</item>
+		<item>Dąbrowa Górnicza (śląskie)</item>
+		<item>Dąbrowa Tarnowska (małopolskie)</item>
+		<item>Debrzno (pomorskie)</item>
+		<item>Dębica (podkarpackie)</item>
+		<item>Dęblin (lubelskie)</item>
+		<item>Dębno (zachodniopomorskie )</item>
+		<item>Dobczyce (małopolskie)</item>
+		<item>Dobiegniew (lubuskie)</item>
+		<item>Dobra (powiat łobeski) (zachodniopomorskie )</item>
+		<item>Dobra (powiat turecki) (wielkopolskie)</item>
+		<item>Dobre Miasto (warmińsko-mazurskie)</item>
+		<item>Dobrodzień (opolskie)</item>
+		<item>Dobrzany (zachodniopomorskie )</item>
+		<item>Dobrzyca (wielkopolskie)</item>
+		<item>Dobrzyń nad Wisłą (kujawsko-pomorskie)</item>
+		<item>Dolsk (wielkopolskie)</item>
+		<item>Drawno (zachodniopomorskie )</item>
+		<item>Drawsko Pomorskie (zachodniopomorskie )</item>
+		<item>Drezdenko (lubuskie)</item>
+		<item>Drobin (mazowieckie)</item>
+		<item>Drohiczyn (podlaskie)</item>
+		<item>Drzewica (łódzkie)</item>
+		<item>Dukla (podkarpackie)</item>
+		<item>Duszniki-Zdrój (dolnośląskie)</item>
+		<item>Dynów (podkarpackie)</item>
+		<item>Działdowo (warmińsko-mazurskie)</item>
+		<item>Działoszyce (świętokrzyskie)</item>
+		<item>Działoszyn (łódzkie)</item>
+		<item>Dzierzgoń (pomorskie)</item>
+		<item>Dzierżoniów (dolnośląskie)</item>
+		<item>Dziwnów (zachodniopomorskie )</item>
+		<item>Elbląg (warmińsko-mazurskie)</item>
+		<item>Ełk (warmińsko-mazurskie)</item>
+		<item>Frampol (lubelskie)</item>
+		<item>Frombork (warmińsko-mazurskie)</item>
+		<item>Garwolin (mazowieckie)</item>
+		<item>Gąbin (mazowieckie)</item>
+		<item>Gdańsk (pomorskie)</item>
+		<item>Gdynia (pomorskie)</item>
+		<item>Giżycko (warmińsko-mazurskie)</item>
+		<item>Glinojeck (mazowieckie)</item>
+		<item>Gliwice (śląskie)</item>
+		<item>Głogów (dolnośląskie)</item>
+		<item>Głogów Małopolski (podkarpackie)</item>
+		<item>Głogówek (opolskie)</item>
+		<item>Głowno (łódzkie)</item>
+		<item>Głubczyce (opolskie)</item>
+		<item>Głuchołazy (opolskie)</item>
+		<item>Głuszyca (dolnośląskie)</item>
+		<item>Gniew (pomorskie)</item>
+		<item>Gniewkowo (kujawsko-pomorskie)</item>
+		<item>Gniezno (wielkopolskie)</item>
+		<item>Gogolin (opolskie)</item>
+		<item>Golczewo (zachodniopomorskie )</item>
+		<item>Goleniów (zachodniopomorskie )</item>
+		<item>Golina (wielkopolskie)</item>
+		<item>Golub-Dobrzyń (kujawsko-pomorskie)</item>
+		<item>Gołańcz (wielkopolskie)</item>
+		<item>Gołdap (warmińsko-mazurskie)</item>
+		<item>Goniądz (podlaskie)</item>
+		<item>Gorlice (małopolskie)</item>
+		<item>Gorzów Śląski (opolskie)</item>
+		<item>Gorzów Wielkopolski (lubuskie)</item>
+		<item>Gostynin (mazowieckie)</item>
+		<item>Gostyń (wielkopolskie)</item>
+		<item>Gościno (zachodniopomorskie )</item>
+		<item>Gozdnica (lubuskie)</item>
+		<item>Góra (dolnośląskie)</item>
+		<item>Góra Kalwaria (mazowieckie)</item>
+		<item>Górowo Iławeckie (warmińsko-mazurskie)</item>
+		<item>Górzno (kujawsko-pomorskie)</item>
+		<item>Grabów nad Prosną (wielkopolskie)</item>
+		<item>Grajewo (podlaskie)</item>
+		<item>Grodków (opolskie)</item>
+		<item>Grodzisk Mazowiecki (mazowieckie)</item>
+		<item>Grodzisk Wielkopolski (wielkopolskie)</item>
+		<item>Grójec (mazowieckie)</item>
+		<item>Grudziądz (kujawsko-pomorskie)</item>
+		<item>Grybów (małopolskie)</item>
+		<item>Gryfice (zachodniopomorskie )</item>
+		<item>Gryfino (zachodniopomorskie )</item>
+		<item>Gryfów Śląski (dolnośląskie)</item>
+		<item>Gubin (lubuskie)</item>
+		<item>Hajnówka (podlaskie)</item>
+		<item>Halinów (mazowieckie)</item>
+		<item>Hel (pomorskie)</item>
+		<item>Hrubieszów (lubelskie)</item>
+		<item>Iława (warmińsko-mazurskie)</item>
+		<item>Iłowa (lubuskie)</item>
+		<item>Iłża (mazowieckie)</item>
+		<item>Imielin (śląskie)</item>
+		<item>Inowrocław (kujawsko-pomorskie)</item>
+		<item>Ińsko (zachodniopomorskie )</item>
+		<item>Iwonicz-Zdrój (podkarpackie)</item>
+		<item>Izbica Kujawska (kujawsko-pomorskie)</item>
+		<item>Jabłonowo Pomorskie (kujawsko-pomorskie)</item>
+		<item>Janikowo (kujawsko-pomorskie)</item>
+		<item>Janowiec Wielkopolski (kujawsko-pomorskie)</item>
+		<item>Janów Lubelski (lubelskie)</item>
+		<item>Jarocin (wielkopolskie)</item>
+		<item>Jarosław (podkarpackie)</item>
+		<item>Jasień (lubuskie)</item>
+		<item>Jasło (podkarpackie)</item>
+		<item>Jastarnia (pomorskie)</item>
+		<item>Jastrowie (wielkopolskie)</item>
+		<item>Jastrzębie-Zdrój (śląskie)</item>
+		<item>Jawor (dolnośląskie)</item>
+		<item>Jaworzno (śląskie)</item>
+		<item>Jaworzyna Śląska (dolnośląskie)</item>
+		<item>Jedlicze (podkarpackie)</item>
+		<item>Jedlina-Zdrój (dolnośląskie)</item>
+		<item>Jedwabne (podlaskie)</item>
+		<item>Jelcz-Laskowice (dolnośląskie)</item>
+		<item>Jelenia Góra (dolnośląskie)</item>
+		<item>Jeziorany (warmińsko-mazurskie)</item>
+		<item>Jędrzejów (świętokrzyskie)</item>
+		<item>Jordanów (małopolskie)</item>
+		<item>Józefów (powiat biłgorajski) (lubelskie)</item>
+		<item>Józefów (powiat otwocki) (mazowieckie)</item>
+		<item>Jutrosin (wielkopolskie)</item>
+		<item>Kalety (śląskie)</item>
+		<item>Kalisz (wielkopolskie)</item>
+		<item>Kalisz Pomorski (zachodniopomorskie )</item>
+		<item>Kalwaria Zebrzydowska (małopolskie)</item>
+		<item>Kałuszyn (mazowieckie)</item>
+		<item>Kamienna Góra (dolnośląskie)</item>
+		<item>Kamień Krajeński (kujawsko-pomorskie)</item>
+		<item>Kamień Pomorski (zachodniopomorskie )</item>
+		<item>Kamieńsk (łódzkie)</item>
+		<item>Kańczuga (podkarpackie)</item>
+		<item>Karczew (mazowieckie)</item>
+		<item>Kargowa (lubuskie)</item>
+		<item>Karlino (zachodniopomorskie )</item>
+		<item>Karpacz (dolnośląskie)</item>
+		<item>Kartuzy (pomorskie)</item>
+		<item>Katowice (śląskie)</item>
+		<item>Kazimierz Dolny (lubelskie)</item>
+		<item>Kazimierza Wielka (świętokrzyskie)</item>
+		<item>Kąty Wrocławskie (dolnośląskie)</item>
+		<item>Kcynia (kujawsko-pomorskie)</item>
+		<item>Kędzierzyn-Koźle (opolskie)</item>
+		<item>Kępice (pomorskie)</item>
+		<item>Kępno (wielkopolskie)</item>
+		<item>Kętrzyn (warmińsko-mazurskie)</item>
+		<item>Kęty (małopolskie)</item>
+		<item>Kielce (świętokrzyskie)</item>
+		<item>Kietrz (opolskie)</item>
+		<item>Kisielice (warmińsko-mazurskie)</item>
+		<item>Kleczew (wielkopolskie)</item>
+		<item>Kleszczele (podlaskie)</item>
+		<item>Kluczbork (opolskie)</item>
+		<item>Kłecko (wielkopolskie)</item>
+		<item>Kłobuck (śląskie)</item>
+		<item>Kłodawa (wielkopolskie)</item>
+		<item>Kłodzko (dolnośląskie)</item>
+		<item>Knurów (śląskie)</item>
+		<item>Knyszyn (podlaskie)</item>
+		<item>Kobylin (wielkopolskie)</item>
+		<item>Kobyłka (mazowieckie)</item>
+		<item>Kock (lubelskie)</item>
+		<item>Kolbuszowa (podkarpackie)</item>
+		<item>Kolno (podlaskie)</item>
+		<item>Kolonowskie (opolskie)</item>
+		<item>Koluszki (łódzkie)</item>
+		<item>Kołaczyce (podkarpackie)</item>
+		<item>Koło (wielkopolskie)</item>
+		<item>Kołobrzeg (zachodniopomorskie )</item>
+		<item>Koniecpol (śląskie)</item>
+		<item>Konin (wielkopolskie)</item>
+		<item>Konstancin-Jeziorna (mazowieckie)</item>
+		<item>Konstantynów Łódzki (łódzkie)</item>
+		<item>Końskie (świętokrzyskie)</item>
+		<item>Koprzywnica (świętokrzyskie)</item>
+		<item>Korfantów (opolskie)</item>
+		<item>Koronowo (kujawsko-pomorskie)</item>
+		<item>Korsze (warmińsko-mazurskie)</item>
+		<item>Kosów Lacki (mazowieckie)</item>
+		<item>Kostrzyn (wielkopolskie)</item>
+		<item>Kostrzyn nad Odrą (lubuskie)</item>
+		<item>Koszalin (zachodniopomorskie )</item>
+		<item>Kościan (wielkopolskie)</item>
+		<item>Kościerzyna (pomorskie)</item>
+		<item>Kowal (kujawsko-pomorskie)</item>
+		<item>Kowalewo Pomorskie (kujawsko-pomorskie)</item>
+		<item>Kowary (dolnośląskie)</item>
+		<item>Koziegłowy (śląskie)</item>
+		<item>Kozienice (mazowieckie)</item>
+		<item>Koźmin Wielkopolski (wielkopolskie)</item>
+		<item>Kożuchów (lubuskie)</item>
+		<item>Kórnik (wielkopolskie)</item>
+		<item>Krajenka (wielkopolskie)</item>
+		<item>Kraków (małopolskie)</item>
+		<item>Krapkowice (opolskie)</item>
+		<item>Krasnobród (lubelskie)</item>
+		<item>Krasnystaw (lubelskie)</item>
+		<item>Kraśnik (lubelskie)</item>
+		<item>Krobia (wielkopolskie)</item>
+		<item>Krosno (podkarpackie)</item>
+		<item>Krosno Odrzańskie (lubuskie)</item>
+		<item>Krośniewice (łódzkie)</item>
+		<item>Krotoszyn (wielkopolskie)</item>
+		<item>Kruszwica (kujawsko-pomorskie)</item>
+		<item>Krynica Morska (pomorskie)</item>
+		<item>Krynica-Zdrój (małopolskie)</item>
+		<item>Krynki (podlaskie)</item>
+		<item>Krzanowice (śląskie)</item>
+		<item>Krzepice (śląskie)</item>
+		<item>Krzeszowice (małopolskie)</item>
+		<item>Krzywiń (wielkopolskie)</item>
+		<item>Krzyż Wielkopolski (wielkopolskie)</item>
+		<item>Książ Wielkopolski (wielkopolskie)</item>
+		<item>Kudowa-Zdrój (dolnośląskie)</item>
+		<item>Kunów (świętokrzyskie)</item>
+		<item>Kutno (łódzkie)</item>
+		<item>Kuźnia Raciborska (śląskie)</item>
+		<item>Kwidzyn (pomorskie)</item>
+		<item>Lądek-Zdrój (dolnośląskie)</item>
+		<item>Legionowo (mazowieckie)</item>
+		<item>Legnica (dolnośląskie)</item>
+		<item>Lesko (podkarpackie)</item>
+		<item>Leszno (wielkopolskie)</item>
+		<item>Leśna (dolnośląskie)</item>
+		<item>Leśnica (opolskie)</item>
+		<item>Lewin Brzeski (opolskie)</item>
+		<item>Leżajsk (podkarpackie)</item>
+		<item>Lębork (pomorskie)</item>
+		<item>Lędziny (śląskie)</item>
+		<item>Libiąż (małopolskie)</item>
+		<item>Lidzbark (warmińsko-mazurskie)</item>
+		<item>Lidzbark Warmiński (warmińsko-mazurskie)</item>
+		<item>Limanowa (małopolskie)</item>
+		<item>Lipiany (zachodniopomorskie )</item>
+		<item>Lipno (kujawsko-pomorskie)</item>
+		<item>Lipsk (podlaskie)</item>
+		<item>Lipsko (mazowieckie)</item>
+		<item>Lubaczów (podkarpackie)</item>
+		<item>Lubań (dolnośląskie)</item>
+		<item>Lubartów (lubelskie)</item>
+		<item>Lubawa (warmińsko-mazurskie)</item>
+		<item>Lubawka (dolnośląskie)</item>
+		<item>Lubień Kujawski (kujawsko-pomorskie)</item>
+		<item>Lubin (dolnośląskie)</item>
+		<item>Lublin (lubelskie)</item>
+		<item>Lubliniec (śląskie)</item>
+		<item>Lubniewice (lubuskie)</item>
+		<item>Lubomierz (dolnośląskie)</item>
+		<item>Luboń (wielkopolskie)</item>
+		<item>Lubraniec (kujawsko-pomorskie)</item>
+		<item>Lubsko (lubuskie)</item>
+		<item>Lwówek (wielkopolskie)</item>
+		<item>Lwówek Śląski (dolnośląskie)</item>
+		<item>Łabiszyn (kujawsko-pomorskie)</item>
+		<item>Łańcut (podkarpackie)</item>
+		<item>Łapy (podlaskie)</item>
+		<item>Łasin (kujawsko-pomorskie)</item>
+		<item>Łask (łódzkie)</item>
+		<item>Łaskarzew (mazowieckie)</item>
+		<item>Łaszczów (lubelskie)</item>
+		<item>Łaziska Górne (śląskie)</item>
+		<item>Łazy (śląskie)</item>
+		<item>Łeba (pomorskie)</item>
+		<item>Łęczna (lubelskie)</item>
+		<item>Łęczyca (łódzkie)</item>
+		<item>Łęknica (lubuskie)</item>
+		<item>Łobez (zachodniopomorskie )</item>
+		<item>Łobżenica (wielkopolskie)</item>
+		<item>Łochów (mazowieckie)</item>
+		<item>Łomianki (mazowieckie)</item>
+		<item>Łomża (podlaskie)</item>
+		<item>Łosice (mazowieckie)</item>
+		<item>Łowicz (łódzkie)</item>
+		<item>Łódź (łódzkie)</item>
+		<item>Łuków (lubelskie)</item>
+		<item>Maków Mazowiecki (mazowieckie)</item>
+		<item>Maków Podhalański (małopolskie)</item>
+		<item>Malbork (pomorskie)</item>
+		<item>Małogoszcz (świętokrzyskie)</item>
+		<item>Małomice (lubuskie)</item>
+		<item>Margonin (wielkopolskie)</item>
+		<item>Marki (mazowieckie)</item>
+		<item>Maszewo (zachodniopomorskie )</item>
+		<item>Miasteczko Śląskie (śląskie)</item>
+		<item>Miastko (pomorskie)</item>
+		<item>Michałowo (podlaskie)</item>
+		<item>Miechów (małopolskie)</item>
+		<item>Miejska Górka (wielkopolskie)</item>
+		<item>Mielec (podkarpackie)</item>
+		<item>Mieroszów (dolnośląskie)</item>
+		<item>Mieszkowice (zachodniopomorskie )</item>
+		<item>Międzybórz (dolnośląskie)</item>
+		<item>Międzychód (wielkopolskie)</item>
+		<item>Międzylesie (dolnośląskie)</item>
+		<item>Międzyrzec Podlaski (lubelskie)</item>
+		<item>Międzyrzecz (lubuskie)</item>
+		<item>Międzyzdroje (zachodniopomorskie )</item>
+		<item>Mikołajki (warmińsko-mazurskie)</item>
+		<item>Mikołów (śląskie)</item>
+		<item>Mikstat (wielkopolskie)</item>
+		<item>Milanówek (mazowieckie)</item>
+		<item>Milicz (dolnośląskie)</item>
+		<item>Miłakowo (warmińsko-mazurskie)</item>
+		<item>Miłomłyn (warmińsko-mazurskie)</item>
+		<item>Miłosław (wielkopolskie)</item>
+		<item>Mińsk Mazowiecki (mazowieckie)</item>
+		<item>Mirosławiec (zachodniopomorskie )</item>
+		<item>Mirsk (dolnośląskie)</item>
+		<item>Mława (mazowieckie)</item>
+		<item>Młynary (warmińsko-mazurskie)</item>
+		<item>Modliborzyce (lubelskie)</item>
+		<item>Mogielnica (mazowieckie)</item>
+		<item>Mogilno (kujawsko-pomorskie)</item>
+		<item>Mońki (podlaskie)</item>
+		<item>Morąg (warmińsko-mazurskie)</item>
+		<item>Mordy (mazowieckie)</item>
+		<item>Moryń (zachodniopomorskie )</item>
+		<item>Mosina (wielkopolskie)</item>
+		<item>Mrągowo (warmińsko-mazurskie)</item>
+		<item>Mrocza (kujawsko-pomorskie)</item>
+		<item>Mrozy (mazowieckie)</item>
+		<item>Mszana Dolna (małopolskie)</item>
+		<item>Mszczonów (mazowieckie)</item>
+		<item>Murowana Goślina (wielkopolskie)</item>
+		<item>Muszyna (małopolskie)</item>
+		<item>Mysłowice (śląskie)</item>
+		<item>Myszków (śląskie)</item>
+		<item>Myszyniec (mazowieckie)</item>
+		<item>Myślenice (małopolskie)</item>
+		<item>Myślibórz (zachodniopomorskie )</item>
+		<item>Nakło nad Notecią (kujawsko-pomorskie)</item>
+		<item>Nałęczów (lubelskie)</item>
+		<item>Namysłów (opolskie)</item>
+		<item>Narol (podkarpackie)</item>
+		<item>Nasielsk (mazowieckie)</item>
+		<item>Nekla (wielkopolskie)</item>
+		<item>Nidzica (warmińsko-mazurskie)</item>
+		<item>Niemcza (dolnośląskie)</item>
+		<item>Niemodlin (opolskie)</item>
+		<item>Niepołomice (małopolskie)</item>
+		<item>Nieszawa (kujawsko-pomorskie)</item>
+		<item>Nisko (podkarpackie)</item>
+		<item>Nowa Dęba (podkarpackie)</item>
+		<item>Nowa Ruda (dolnośląskie)</item>
+		<item>Nowa Sarzyna (podkarpackie)</item>
+		<item>Nowa Sól (lubuskie)</item>
+		<item>Nowe (kujawsko-pomorskie)</item>
+		<item>Nowe Brzesko (małopolskie)</item>
+		<item>Nowe Miasteczko (lubuskie)</item>
+		<item>Nowe Miasto Lubawskie (warmińsko-mazurskie)</item>
+		<item>Nowe Miasto nad Pilicą (mazowieckie)</item>
+		<item>Nowe Skalmierzyce (wielkopolskie)</item>
+		<item>Nowe Warpno (zachodniopomorskie )</item>
+		<item>Nowogard (zachodniopomorskie )</item>
+		<item>Nowogrodziec (dolnośląskie)</item>
+		<item>Nowogród (podlaskie)</item>
+		<item>Nowogród Bobrzański (lubuskie)</item>
+		<item>Nowy Dwór Gdański (pomorskie)</item>
+		<item>Nowy Dwór Mazowiecki (mazowieckie)</item>
+		<item>Nowy Sącz (małopolskie)</item>
+		<item>Nowy Staw (pomorskie)</item>
+		<item>Nowy Targ (małopolskie)</item>
+		<item>Nowy Tomyśl (wielkopolskie)</item>
+		<item>Nowy Wiśnicz (małopolskie)</item>
+		<item>Nysa (opolskie)</item>
+		<item>Oborniki (wielkopolskie)</item>
+		<item>Oborniki Śląskie (dolnośląskie)</item>
+		<item>Obrzycko (wielkopolskie)</item>
+		<item>Odolanów (wielkopolskie)</item>
+		<item>Ogrodzieniec (śląskie)</item>
+		<item>Okonek (wielkopolskie)</item>
+		<item>Olecko (warmińsko-mazurskie)</item>
+		<item>Olesno (opolskie)</item>
+		<item>Oleszyce (podkarpackie)</item>
+		<item>Oleśnica (dolnośląskie)</item>
+		<item>Olkusz (małopolskie)</item>
+		<item>Olsztyn (warmińsko-mazurskie)</item>
+		<item>Olsztynek (warmińsko-mazurskie)</item>
+		<item>Olszyna (dolnośląskie)</item>
+		<item>Oława (dolnośląskie)</item>
+		<item>Opalenica (wielkopolskie)</item>
+		<item>Opatów (świętokrzyskie)</item>
+		<item>Opoczno (łódzkie)</item>
+		<item>Opole (opolskie)</item>
+		<item>Opole Lubelskie (lubelskie)</item>
+		<item>Orneta (warmińsko-mazurskie)</item>
+		<item>Orzesze (śląskie)</item>
+		<item>Orzysz (warmińsko-mazurskie)</item>
+		<item>Osieczna (wielkopolskie)</item>
+		<item>Osiek (świętokrzyskie)</item>
+		<item>Ostrołęka (mazowieckie)</item>
+		<item>Ostroróg (wielkopolskie)</item>
+		<item>Ostrowiec Świętokrzyski (świętokrzyskie)</item>
+		<item>Ostróda (warmińsko-mazurskie)</item>
+		<item>Ostrów Lubelski (lubelskie)</item>
+		<item>Ostrów Mazowiecka (mazowieckie)</item>
+		<item>Ostrów Wielkopolski (wielkopolskie)</item>
+		<item>Ostrzeszów (wielkopolskie)</item>
+		<item>Ośno Lubuskie (lubuskie)</item>
+		<item>Oświęcim (małopolskie)</item>
+		<item>Otmuchów (opolskie)</item>
+		<item>Otwock (mazowieckie)</item>
+		<item>Ozimek (opolskie)</item>
+		<item>Ozorków (łódzkie)</item>
+		<item>Ożarów (świętokrzyskie)</item>
+		<item>Ożarów Mazowiecki (mazowieckie)</item>
+		<item>Pabianice (łódzkie)</item>
+		<item>Paczków (opolskie)</item>
+		<item>Pajęczno (łódzkie)</item>
+		<item>Pakość (kujawsko-pomorskie)</item>
+		<item>Parczew (lubelskie)</item>
+		<item>Pasłęk (warmińsko-mazurskie)</item>
+		<item>Pasym (warmińsko-mazurskie)</item>
+		<item>Pelplin (pomorskie)</item>
+		<item>Pełczyce (zachodniopomorskie )</item>
+		<item>Piaseczno (mazowieckie)</item>
+		<item>Piaski (lubelskie)</item>
+		<item>Piastów (mazowieckie)</item>
+		<item>Piechowice (dolnośląskie)</item>
+		<item>Piekary Śląskie (śląskie)</item>
+		<item>Pieniężno (warmińsko-mazurskie)</item>
+		<item>Pieńsk (dolnośląskie)</item>
+		<item>Pieszyce (dolnośląskie)</item>
+		<item>Pilawa (mazowieckie)</item>
+		<item>Pilica (śląskie)</item>
+		<item>Pilzno (podkarpackie)</item>
+		<item>Piła (wielkopolskie)</item>
+		<item>Piława Górna (dolnośląskie)</item>
+		<item>Pińczów (świętokrzyskie)</item>
+		<item>Pionki (mazowieckie)</item>
+		<item>Piotrków Kujawski (kujawsko-pomorskie)</item>
+		<item>Piotrków Trybunalski (łódzkie)</item>
+		<item>Pisz (warmińsko-mazurskie)</item>
+		<item>Piwniczna-Zdrój (małopolskie)</item>
+		<item>Pleszew (wielkopolskie)</item>
+		<item>Płock (mazowieckie)</item>
+		<item>Płońsk (mazowieckie)</item>
+		<item>Płoty (zachodniopomorskie )</item>
+		<item>Pniewy (wielkopolskie)</item>
+		<item>Pobiedziska (wielkopolskie)</item>
+		<item>Poddębice (łódzkie)</item>
+		<item>Podkowa Leśna (mazowieckie)</item>
+		<item>Pogorzela (wielkopolskie)</item>
+		<item>Polanica-Zdrój (dolnośląskie)</item>
+		<item>Polanów (zachodniopomorskie )</item>
+		<item>Police (zachodniopomorskie )</item>
+		<item>Polkowice (dolnośląskie)</item>
+		<item>Połaniec (świętokrzyskie)</item>
+		<item>Połczyn-Zdrój (zachodniopomorskie )</item>
+		<item>Poniatowa (lubelskie)</item>
+		<item>Poniec (wielkopolskie)</item>
+		<item>Poręba (śląskie)</item>
+		<item>Poznań (wielkopolskie)</item>
+		<item>Prabuty (pomorskie)</item>
+		<item>Praszka (opolskie)</item>
+		<item>Prochowice (dolnośląskie)</item>
+		<item>Proszowice (małopolskie)</item>
+		<item>Prószków (opolskie)</item>
+		<item>Pruchnik (podkarpackie)</item>
+		<item>Prudnik (opolskie)</item>
+		<item>Prusice (dolnośląskie)</item>
+		<item>Pruszcz Gdański (pomorskie)</item>
+		<item>Pruszków (mazowieckie)</item>
+		<item>Przasnysz (mazowieckie)</item>
+		<item>Przecław (podkarpackie)</item>
+		<item>Przedbórz (łódzkie)</item>
+		<item>Przedecz (wielkopolskie)</item>
+		<item>Przemków (dolnośląskie)</item>
+		<item>Przemyśl (podkarpackie)</item>
+		<item>Przeworsk (podkarpackie)</item>
+		<item>Przysucha (mazowieckie)</item>
+		<item>Pszczyna (śląskie)</item>
+		<item>Pszów (śląskie)</item>
+		<item>Puck (pomorskie)</item>
+		<item>Puławy (lubelskie)</item>
+		<item>Pułtusk (mazowieckie)</item>
+		<item>Puszczykowo (wielkopolskie)</item>
+		<item>Pyrzyce (zachodniopomorskie )</item>
+		<item>Pyskowice (śląskie)</item>
+		<item>Pyzdry (wielkopolskie)</item>
+		<item>Rabka-Zdrój (małopolskie)</item>
+		<item>Raciąż (mazowieckie)</item>
+		<item>Racibórz (śląskie)</item>
+		<item>Radków (dolnośląskie)</item>
+		<item>Radlin (śląskie)</item>
+		<item>Radłów (małopolskie)</item>
+		<item>Radom (mazowieckie)</item>
+		<item>Radomsko (łódzkie)</item>
+		<item>Radomyśl Wielki (podkarpackie)</item>
+		<item>Radymno (podkarpackie)</item>
+		<item>Radziejów (kujawsko-pomorskie)</item>
+		<item>Radzionków (śląskie)</item>
+		<item>Radzymin (mazowieckie)</item>
+		<item>Radzyń Chełmiński (kujawsko-pomorskie)</item>
+		<item>Radzyń Podlaski (lubelskie)</item>
+		<item>Rajgród (podlaskie)</item>
+		<item>Rakoniewice (wielkopolskie)</item>
+		<item>Raszków (wielkopolskie)</item>
+		<item>Rawa Mazowiecka (łódzkie)</item>
+		<item>Rawicz (wielkopolskie)</item>
+		<item>Recz (zachodniopomorskie )</item>
+		<item>Reda (pomorskie)</item>
+		<item>Rejowiec Fabryczny (lubelskie)</item>
+		<item>Resko (zachodniopomorskie )</item>
+		<item>Reszel (warmińsko-mazurskie)</item>
+		<item>Rogoźno (wielkopolskie)</item>
+		<item>Ropczyce (podkarpackie)</item>
+		<item>Różan (mazowieckie)</item>
+		<item>Ruciane-Nida (warmińsko-mazurskie)</item>
+		<item>Ruda Śląska (śląskie)</item>
+		<item>Rudnik nad Sanem (podkarpackie)</item>
+		<item>Rumia (pomorskie)</item>
+		<item>Rybnik (śląskie)</item>
+		<item>Rychwał (wielkopolskie)</item>
+		<item>Rydułtowy (śląskie)</item>
+		<item>Rydzyna (wielkopolskie)</item>
+		<item>Ryglice (małopolskie)</item>
+		<item>Ryki (lubelskie)</item>
+		<item>Rymanów (podkarpackie)</item>
+		<item>Ryn (warmińsko-mazurskie)</item>
+		<item>Rypin (kujawsko-pomorskie)</item>
+		<item>Rzepin (lubuskie)</item>
+		<item>Rzeszów (podkarpackie)</item>
+		<item>Rzgów (łódzkie)</item>
+		<item>Sandomierz (świętokrzyskie)</item>
+		<item>Sanok (podkarpackie)</item>
+		<item>Sejny (podlaskie)</item>
+		<item>Serock (mazowieckie)</item>
+		<item>Sędziszów (świętokrzyskie)</item>
+		<item>Sędziszów Małopolski (podkarpackie)</item>
+		<item>Sępopol (warmińsko-mazurskie)</item>
+		<item>Sępólno Krajeńskie (kujawsko-pomorskie)</item>
+		<item>Sianów (zachodniopomorskie )</item>
+		<item>Siechnice (dolnośląskie)</item>
+		<item>Siedlce (mazowieckie)</item>
+		<item>Siemianowice Śląskie (śląskie)</item>
+		<item>Siemiatycze (podlaskie)</item>
+		<item>Sieniawa (podkarpackie)</item>
+		<item>Sieradz (łódzkie)</item>
+		<item>Sieraków (wielkopolskie)</item>
+		<item>Sierpc (mazowieckie)</item>
+		<item>Siewierz (śląskie)</item>
+		<item>Skalbmierz (świętokrzyskie)</item>
+		<item>Skała (małopolskie)</item>
+		<item>Skarszewy (pomorskie)</item>
+		<item>Skaryszew (mazowieckie)</item>
+		<item>Skarżysko-Kamienna (świętokrzyskie)</item>
+		<item>Skawina (małopolskie)</item>
+		<item>Skępe (kujawsko-pomorskie)</item>
+		<item>Skierniewice (łódzkie)</item>
+		<item>Skoczów (śląskie)</item>
+		<item>Skoki (wielkopolskie)</item>
+		<item>Skórcz (pomorskie)</item>
+		<item>Skwierzyna (lubuskie)</item>
+		<item>Sława (lubuskie)</item>
+		<item>Sławków (śląskie)</item>
+		<item>Sławno (zachodniopomorskie )</item>
+		<item>Słomniki (małopolskie)</item>
+		<item>Słubice (lubuskie)</item>
+		<item>Słupca (wielkopolskie)</item>
+		<item>Słupsk (pomorskie)</item>
+		<item>Sobótka (dolnośląskie)</item>
+		<item>Sochaczew (mazowieckie)</item>
+		<item>Sokołów Małopolski (podkarpackie)</item>
+		<item>Sokołów Podlaski (mazowieckie)</item>
+		<item>Sokółka (podlaskie)</item>
+		<item>Solec Kujawski (kujawsko-pomorskie)</item>
+		<item>Sompolno (wielkopolskie)</item>
+		<item>Sopot (pomorskie)</item>
+		<item>Sosnowiec (śląskie)</item>
+		<item>Sośnicowice (śląskie)</item>
+		<item>Stalowa Wola (podkarpackie)</item>
+		<item>Starachowice (świętokrzyskie)</item>
+		<item>Stargard Szczeciński (zachodniopomorskie )</item>
+		<item>Starogard Gdański (pomorskie)</item>
+		<item>Stary Sącz (małopolskie)</item>
+		<item>Staszów (świętokrzyskie)</item>
+		<item>Stawiski (podlaskie)</item>
+		<item>Stawiszyn (wielkopolskie)</item>
+		<item>Stąporków (świętokrzyskie)</item>
+		<item>Stepnica (zachodniopomorskie )</item>
+		<item>Stęszew (wielkopolskie)</item>
+		<item>Stoczek Łukowski (lubelskie)</item>
+		<item>Stronie Śląskie (dolnośląskie)</item>
+		<item>Strumień (śląskie)</item>
+		<item>Stryków (łódzkie)</item>
+		<item>Strzegom (dolnośląskie)</item>
+		<item>Strzelce Krajeńskie (lubuskie)</item>
+		<item>Strzelce Opolskie (opolskie)</item>
+		<item>Strzelin (dolnośląskie)</item>
+		<item>Strzelno (kujawsko-pomorskie)</item>
+		<item>Strzyżów (podkarpackie)</item>
+		<item>Sucha Beskidzka (małopolskie)</item>
+		<item>Suchań (zachodniopomorskie )</item>
+		<item>Suchedniów (świętokrzyskie)</item>
+		<item>Suchowola (podlaskie)</item>
+		<item>Sulechów (lubuskie)</item>
+		<item>Sulejów (łódzkie)</item>
+		<item>Sulejówek (mazowieckie)</item>
+		<item>Sulęcin (lubuskie)</item>
+		<item>Sulmierzyce (wielkopolskie)</item>
+		<item>Sułkowice (małopolskie)</item>
+		<item>Supraśl (podlaskie)</item>
+		<item>Suraż (podlaskie)</item>
+		<item>Susz (warmińsko-mazurskie)</item>
+		<item>Suwałki (podlaskie)</item>
+		<item>Swarzędz (wielkopolskie)</item>
+		<item>Syców (dolnośląskie)</item>
+		<item>Szadek (łódzkie)</item>
+		<item>Szamocin (wielkopolskie)</item>
+		<item>Szamotuły (wielkopolskie)</item>
+		<item>Szczawnica (małopolskie)</item>
+		<item>Szczawno-Zdrój (dolnośląskie)</item>
+		<item>Szczebrzeszyn (lubelskie)</item>
+		<item>Szczecin (zachodniopomorskie )</item>
+		<item>Szczecinek (zachodniopomorskie )</item>
+		<item>Szczekociny (śląskie)</item>
+		<item>Szczucin (małopolskie)</item>
+		<item>Szczuczyn (podlaskie)</item>
+		<item>Szczyrk (śląskie)</item>
+		<item>Szczytna (dolnośląskie)</item>
+		<item>Szczytno (warmińsko-mazurskie)</item>
+		<item>Szepietowo (podlaskie)</item>
+		<item>Szklarska Poręba (dolnośląskie)</item>
+		<item>Szlichtyngowa (lubuskie)</item>
+		<item>Szprotawa (lubuskie)</item>
+		<item>Sztum (pomorskie)</item>
+		<item>Szubin (kujawsko-pomorskie)</item>
+		<item>Szydłowiec (mazowieckie)</item>
+		<item>Ścinawa (dolnośląskie)</item>
+		<item>Ślesin (wielkopolskie)</item>
+		<item>Śmigiel (wielkopolskie)</item>
+		<item>Śrem (wielkopolskie)</item>
+		<item>Środa Śląska (dolnośląskie)</item>
+		<item>Środa Wielkopolska (wielkopolskie)</item>
+		<item>Świątniki Górne (małopolskie)</item>
+		<item>Świdnica (dolnośląskie)</item>
+		<item>Świdnik (lubelskie)</item>
+		<item>Świdwin (zachodniopomorskie )</item>
+		<item>Świebodzice (dolnośląskie)</item>
+		<item>Świebodzin (lubuskie)</item>
+		<item>Świecie (kujawsko-pomorskie)</item>
+		<item>Świeradów-Zdrój (dolnośląskie)</item>
+		<item>Świerzawa (dolnośląskie)</item>
+		<item>Świętochłowice (śląskie)</item>
+		<item>Świnoujście (zachodniopomorskie )</item>
+		<item>Tarczyn (mazowieckie)</item>
+		<item>Tarnobrzeg (podkarpackie)</item>
+		<item>Tarnogród (lubelskie)</item>
+		<item>Tarnowskie Góry (śląskie)</item>
+		<item>Tarnów (małopolskie)</item>
+		<item>Tczew (pomorskie)</item>
+		<item>Terespol (lubelskie)</item>
+		<item>Tłuszcz (mazowieckie)</item>
+		<item>Tolkmicko (warmińsko-mazurskie)</item>
+		<item>Tomaszów Lubelski (lubelskie)</item>
+		<item>Tomaszów Mazowiecki (łódzkie)</item>
+		<item>Toruń (kujawsko-pomorskie)</item>
+		<item>Torzym (lubuskie)</item>
+		<item>Toszek (śląskie)</item>
+		<item>Trzcianka (wielkopolskie)</item>
+		<item>Trzciel (lubuskie)</item>
+		<item>Trzcińsko-Zdrój (zachodniopomorskie )</item>
+		<item>Trzebiatów (zachodniopomorskie )</item>
+		<item>Trzebinia (małopolskie)</item>
+		<item>Trzebnica (dolnośląskie)</item>
+		<item>Trzemeszno (wielkopolskie)</item>
+		<item>Tuchola (kujawsko-pomorskie)</item>
+		<item>Tuchów (małopolskie)</item>
+		<item>Tuczno (zachodniopomorskie )</item>
+		<item>Tuliszków (wielkopolskie)</item>
+		<item>Turek (wielkopolskie)</item>
+		<item>Tuszyn (łódzkie)</item>
+		<item>Twardogóra (dolnośląskie)</item>
+		<item>Tychowo (zachodniopomorskie )</item>
+		<item>Tychy (śląskie)</item>
+		<item>Tyczyn (podkarpackie)</item>
+		<item>Tykocin (podlaskie)</item>
+		<item>Tyszowce (lubelskie)</item>
+		<item>Ujazd (opolskie)</item>
+		<item>Ujście (wielkopolskie)</item>
+		<item>Ulanów (podkarpackie)</item>
+		<item>Uniejów (łódzkie)</item>
+		<item>Ustka (pomorskie)</item>
+		<item>Ustroń (śląskie)</item>
+		<item>Ustrzyki Dolne (podkarpackie)</item>
+		<item>Wadowice (małopolskie)</item>
+		<item>Wałbrzych (dolnośląskie)</item>
+		<item>Wałcz (zachodniopomorskie )</item>
+		<item>Warka (mazowieckie)</item>
+		<item>Warszawa (mazowieckie)</item>
+		<item>Warta (łódzkie)</item>
+		<item>Wasilków (podlaskie)</item>
+		<item>Wąbrzeźno (kujawsko-pomorskie)</item>
+		<item>Wąchock (świętokrzyskie)</item>
+		<item>Wągrowiec (wielkopolskie)</item>
+		<item>Wąsosz (dolnośląskie)</item>
+		<item>Wejherowo (pomorskie)</item>
+		<item>Węgliniec (dolnośląskie)</item>
+		<item>Węgorzewo (warmińsko-mazurskie)</item>
+		<item>Węgorzyno (zachodniopomorskie )</item>
+		<item>Węgrów (mazowieckie)</item>
+		<item>Wiązów (dolnośląskie)</item>
+		<item>Wieleń (wielkopolskie)</item>
+		<item>Wielichowo (wielkopolskie)</item>
+		<item>Wieliczka (małopolskie)</item>
+		<item>Wieluń (łódzkie)</item>
+		<item>Wieruszów (łódzkie)</item>
+		<item>Więcbork (kujawsko-pomorskie)</item>
+		<item>Wilamowice (śląskie)</item>
+		<item>Wisła (śląskie)</item>
+		<item>Witkowo (wielkopolskie)</item>
+		<item>Witnica (lubuskie)</item>
+		<item>Wleń (dolnośląskie)</item>
+		<item>Władysławowo (pomorskie)</item>
+		<item>Włocławek (kujawsko-pomorskie)</item>
+		<item>Włodawa (lubelskie)</item>
+		<item>Włoszczowa (świętokrzyskie)</item>
+		<item>Wodzisław Śląski (śląskie)</item>
+		<item>Wojcieszów (dolnośląskie)</item>
+		<item>Wojkowice (śląskie)</item>
+		<item>Wojnicz (małopolskie)</item>
+		<item>Wolbórz (łódzkie)</item>
+		<item>Wolbrom (małopolskie)</item>
+		<item>Wolin (zachodniopomorskie )</item>
+		<item>Wolsztyn (wielkopolskie)</item>
+		<item>Wołczyn (opolskie)</item>
+		<item>Wołomin (mazowieckie)</item>
+		<item>Wołów (dolnośląskie)</item>
+		<item>Woźniki (śląskie)</item>
+		<item>Wrocław (dolnośląskie)</item>
+		<item>Wronki (wielkopolskie)</item>
+		<item>Września (wielkopolskie)</item>
+		<item>Wschowa (lubuskie)</item>
+		<item>Wyrzysk (wielkopolskie)</item>
+		<item>Wysoka (wielkopolskie)</item>
+		<item>Wysokie Mazowieckie (podlaskie)</item>
+		<item>Wyszków (mazowieckie)</item>
+		<item>Wyszogród (mazowieckie)</item>
+		<item>Wyśmierzyce (mazowieckie)</item>
+		<item>Zabłudów (podlaskie)</item>
+		<item>Zabrze (śląskie)</item>
+		<item>Zagórów (wielkopolskie)</item>
+		<item>Zagórz (podkarpackie)</item>
+		<item>Zakliczyn (małopolskie)</item>
+		<item>Zaklików (podkarpackie)</item>
+		<item>Zakopane (małopolskie)</item>
+		<item>Zakroczym (mazowieckie)</item>
+		<item>Zalewo (warmińsko-mazurskie)</item>
+		<item>Zambrów (podlaskie)</item>
+		<item>Zamość (lubelskie)</item>
+		<item>Zator (małopolskie)</item>
+		<item>Zawadzkie (opolskie)</item>
+		<item>Zawichost (świętokrzyskie)</item>
+		<item>Zawidów (dolnośląskie)</item>
+		<item>Zawiercie (śląskie)</item>
+		<item>Ząbki (mazowieckie)</item>
+		<item>Ząbkowice Śląskie (dolnośląskie)</item>
+		<item>Zbąszynek (lubuskie)</item>
+		<item>Zbąszyń (wielkopolskie)</item>
+		<item>Zduny (wielkopolskie)</item>
+		<item>Zduńska Wola (łódzkie)</item>
+		<item>Zdzieszowice (opolskie)</item>
+		<item>Zelów (łódzkie)</item>
+		<item>Zgierz (łódzkie)</item>
+		<item>Zgorzelec (dolnośląskie)</item>
+		<item>Zielona Góra (lubuskie)</item>
+		<item>Zielonka (mazowieckie)</item>
+		<item>Ziębice (dolnośląskie)</item>
+		<item>Złocieniec (zachodniopomorskie )</item>
+		<item>Złoczew (łódzkie)</item>
+		<item>Złotoryja (dolnośląskie)</item>
+		<item>Złotów (wielkopolskie)</item>
+		<item>Złoty Stok (dolnośląskie)</item>
+		<item>Zwierzyniec (lubelskie)</item>
+		<item>Zwoleń (mazowieckie)</item>
+		<item>Żabno (małopolskie)</item>
+		<item>Żagań (lubuskie)</item>
+		<item>Żarki (śląskie)</item>
+		<item>Żarów (dolnośląskie)</item>
+		<item>Żary (lubuskie)</item>
+		<item>Żelechów (mazowieckie)</item>
+		<item>Żerków (wielkopolskie)</item>
+		<item>Żmigród (dolnośląskie)</item>
+		<item>Żnin (kujawsko-pomorskie)</item>
+		<item>Żory (śląskie)</item>
+		<item>Żukowo (pomorskie)</item>
+		<item>Żuromin (mazowieckie)</item>
+		<item>Żychlin (łódzkie)</item>
+		<item>Żyrardów (mazowieckie)</item>
+		<item>Żywiec (śląskie)</item>
 	</string-array>
 
 </resources>
