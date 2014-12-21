@@ -66,7 +66,7 @@ public class dbManager extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// TODO Auto-generated method stub
 	}
-	
+
 	public void deleteBase()
 	{
 		database.delete("Concerts", "'1'='1'", null);
@@ -281,6 +281,11 @@ public class dbManager extends SQLiteOpenHelper {
 			Log.i("FAV", "Wrzucomo id ulubionego: " + id);
 			database.insertOrThrow(FAVOURITES_TABLE, null, cv);
 		}
+	}
+
+	public void delFavouriteConcert(int id)
+	{
+
 	}
 
 	/**
