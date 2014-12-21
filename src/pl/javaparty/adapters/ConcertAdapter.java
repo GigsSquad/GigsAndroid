@@ -67,7 +67,7 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 		int length = titleString.length();
 		holder.title.setText(titleString);
 		holder.title.setTextSize(50 - (length / 3));
-		holder.place.setText(rowItem.getPlace());
+		holder.place.setText(getPreparedPlace(rowItem.getPlace()));
 		holder.date.setText(rowItem.dateToString());
 		
 		// holder.pb.setVisibility(View.GONE); //progress bar, bo Miachu wyrazil zezaprobate 
@@ -80,5 +80,13 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 	public int getID()
 	{
 		return ID;
+	}
+	
+	private String getPreparedPlace(String place)
+	{
+		final int MAX_LENGTH = 25;
+		if(place!=null && place.length()>MAX_LENGTH)
+			return place.substring(0, MAX_LENGTH)+"...";
+		return place;
 	}
 }
