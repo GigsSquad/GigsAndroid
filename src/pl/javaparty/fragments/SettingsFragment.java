@@ -37,7 +37,7 @@ public class SettingsFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_settings, container, false);
 		context = inflater.getContext();
 		getActivity().getActionBar().setTitle("Preferencje");
-		dbm = ((MainActivity)getActivity()).getDBManager();//przekazujemy dbm od mainActivity
+		dbm = ((MainActivity) getActivity()).getDBManager();// przekazujemy dbm od mainActivity
 		citySearchBox = (AutoCompleteTextView) view.findViewById(R.id.cityAutoComplete);
 		distanceSeekBar = (SeekBar) view.findViewById(R.id.distanceSeekBar);
 		distanceTextView = (TextView) view.findViewById(R.id.distanceTextView);
@@ -46,6 +46,7 @@ public class SettingsFragment extends Fragment {
 		
 		adapter = ArrayAdapter.createFromResource(getActivity(), R.array.COUNTIES, android.R.layout.simple_dropdown_item_1line);
 		citySearchBox.setAdapter(adapter);
+
 		citySearchBox.setThreshold(1);
 
 		if (Prefs.getCity(getActivity()) != null)
@@ -87,14 +88,15 @@ public class SettingsFragment extends Fragment {
 				Toast.makeText(getActivity(), "Zapisano!", Toast.LENGTH_SHORT).show();
 			}
 		});
-		
+
 		clearButton.setOnClickListener(new OnClickListener()
 		{
-			
+
 			@Override
 			public void onClick(View v)
 			{
-				FileExplorer f = new FileExplorer(context);	
+				dbm.deleteDB(context); 
+				FileExplorer f = new FileExplorer(context);
 				f.clear();
 				Log.i("SETTINGS", "Usunieto obrazki z dysku");
 				dbm.deleteBase();

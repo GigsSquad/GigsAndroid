@@ -8,7 +8,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import pl.javaparty.sql.dbManager;
-import android.util.Log;
 
 /*
  * Klasa do parsowania strony TicketPro 
@@ -34,6 +33,8 @@ public class JDTicketPro {
 					.timeout(1000000).get();
 			Elements concertData = doc.getElementsByClass("eventInfo");
 
+			// dbm.updateHash("TicketPro", currentHash);
+
 			for (Element el : concertData) {
 				String conName = el.getElementsByTag("a").first().text();
 
@@ -41,50 +42,45 @@ public class JDTicketPro {
 				conUrl = "http://www.ticketpro.pl" + conUrl;
 
 				String location = el.getElementsByClass("fn").text(); // City + spot
-				if (!location.equals("")) // dane sa na glownej stronie
+				if (!location.equals("")) // nie ma lokalizacji na głównej stronie->odwiedzamy szczegóły
 				{
 
-					try {
+					try { // jezeli coś jest zapisane niestandardowo to omijamy
 						conCity = location.split(",")[1];
 						conSpot = location.split(",")[0];
-						
+
 						String conDate = el.getElementsByClass("dtstart").first().text();
+
 						String[] conDateArray = conDate.split("\\.");
+
 						conDay = Integer.parseInt(conDateArray[0]);
 						conMonth = Integer.parseInt(conDateArray[1]);
 						conYear = Integer.parseInt(conDateArray[2]);
 					} catch (ArrayIndexOutOfBoundsException e) {
-						Log.i("rafal", conName);
-						Log.i("rafal", conUrl);
+						System.err.println("Błąd parsowania");
 						continue;
 					}
-					if (conCity.matches("…"))
-					{ // jeżeli są kropki to wchodzimy w szczegóły po miasto
-						conCity = getCityDetails(conUrl);
-						/*
-						 * Log.i("kropki",conCity); //Log.i("kropki",urlParse); Log.i("kropki",conName);
-						 */
-					}
+
+					// System.out.printf("%s %s %s  %d  %d  %d %s %s \n",conName, conCity, conSpot, conDay, conMonth,
+					// conYear, "TicketPro", conUrl);
 					dbm.addConcert(conName, conCity, conSpot, conDay, conMonth, conYear, "TicketPro", conUrl);
 				} else
-					// nie ma lokalizacji na głównej stronie->odwiedzamy szczegóły
-
+					// jest wiecej niz jeden koncert
+					// System.out.println(conName);
 					getOtherLocalisation(conName, conUrl);
 
 			}
 
-			urlParse = doc.getElementsByClass("normal").last().attr("href");
-			urlParse = "http://www.ticketpro.pl" + urlParse;
-			urlParseName = doc.getElementsByClass("normal").last().text();
+			try {
+				urlParse = doc.getElementsByClass("normal").last().attr("href");
+				urlParse = "http://www.ticketpro.pl" + urlParse;
+				urlParseName = doc.getElementsByClass("normal").last().text();
+			} catch (Exception e) {
+				break;
+			}
 
 		} while (urlParseName.equals("Następny"));
 
-	}
-
-	private String getCityDetails(String conUrl) throws IOException {
-		Document doc = Jsoup.connect(conUrl).timeout(1000000).get();
-		String conCity = doc.getElementsByClass("adr").first().text();
-		return conCity;
 	}
 
 	private void getOtherLocalisation(String conName, String detailInfo) throws IOException
@@ -101,9 +97,7 @@ public class JDTicketPro {
 			String conDate = el.getElementsByClass("date").first().text();
 
 			if (conDate.split(" - ").length > 1) //
-			{
-				Log.i("KURWA", conName);
-				Log.i("KURWA", conUrl);
+			{ // System.out.println("Bałwan!"); // no wlasnie co dalej?
 				continue;
 				/*
 				 * Tych przypadkow jest <0,5% kiedyś naprawie conLocationArray String conLocation = el.html();
@@ -133,7 +127,6 @@ public class JDTicketPro {
 					String[] conLocationArray = conLocation.split(",");
 					String conSpot = conLocationArray[0];
 					String conCity = conLocationArray[1];
-
 					// System.out.printf("%s %s %s  %d  %d  %d %s %s \n",conName, conCity, conSpot, conDay, conMonth,
 					// conYear, "TicketPro", conUrl);
 					dbm.addConcert(conName, conCity, conSpot, conDay, conMonth, conYear, "TicketPro", conUrl);
@@ -145,5 +138,4 @@ public class JDTicketPro {
 			}
 		}
 	}
-
 }

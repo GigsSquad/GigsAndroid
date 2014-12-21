@@ -82,6 +82,10 @@ public class Concert
 		this.ticketsPrice = "";
 	}
 
+	public Concert(int ID) {
+		this.ID = ID;
+	}
+
 	public String getArtist()
 	{
 		return artist;
