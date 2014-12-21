@@ -14,9 +14,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,7 +22,6 @@ public class InfoConcertTab extends Fragment {
 
 	TextView artist, place, date, price, url;
 	ImageView image;
-	Button connect;
 	dbManager dbm;
 	int ID;
 
@@ -36,8 +33,9 @@ public class InfoConcertTab extends Fragment {
 		date = (TextView) view.findViewById(R.id.con_date);
 		// price = (TextView) view.findViewById(R.id.priceTV);
 		image = (ImageView) view.findViewById(R.id.artist_image);
-		connect = (Button) view.findViewById(R.id.connect);
 		dbm = MainActivity.getDBManager();
+
+		setHasOptionsMenu(true);
 
 		Log.i("KURWA", "INFO");
 
@@ -52,27 +50,13 @@ public class InfoConcertTab extends Fragment {
 		Log.i("DMB", "Spot: " + dbm.getSpot(ID));
 		date.setText(dbm.getDate(ID));
 		// price.setText(concert.get);
-		final String URL = dbm.getUrl(ID);
 		new ImageLoader(inflater.getContext()).DisplayImage(artistName, image);
-
-		connect.setOnClickListener(new OnClickListener() { // otwiera przegladarkï¿½ z linkiem do koncertu
-			@Override
-			public void onClick(View arg0) {
-				Log.i("KLIK", "KLIK");
-				Intent intent = new Intent(Intent.ACTION_VIEW,
-						Uri.parse(URL));
-				startActivity(intent);
-			}
-
-		});
 		return view;
 	}
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.activity_main_actions, menu);
-
-		// zmienia ikonkê na
 		if (dbm.isConcertFavourite(ID))
 			menu.getItem(0).setIcon(R.drawable.ic_action_favorite_on);
 
@@ -83,10 +67,13 @@ public class InfoConcertTab extends Fragment {
 		switch (item.getItemId()) {
 		case R.id.favorite_icon:
 			dbm.addFavouriteConcert(ID);
-			// TODO: tutaj taki sam IF jak w onCreateOptionsMenu()
 			if (dbm.isConcertFavourite(ID))
 				item.setIcon(R.drawable.ic_action_favorite_on);
 			return true;
+		case R.id.website_icon:
+			Intent intent = new Intent(Intent.ACTION_VIEW,
+					Uri.parse(dbm.getUrl(ID)));
+			startActivity(intent);
 		default:
 			return super.onOptionsItemSelected(item);
 		}

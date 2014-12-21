@@ -1,6 +1,5 @@
 package pl.javaparty.fragments;
 
-
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.map.MapHelper;
@@ -11,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +37,7 @@ public class MapConcertTab extends Fragment {
 		ID = getArguments().getInt("ID", -1);
 
 		dbm = MainActivity.getDBManager();
+		mapHelper = new MapHelper(getActivity());
 
 		if (container == null)
 			return null;
@@ -80,6 +81,8 @@ public class MapConcertTab extends Fragment {
 
 	private static void setUpMap() {
 		mMap.setMyLocationEnabled(true); // pokazuje nasz¹ pozycje
+		Log.i("MAP", "ID koncertu: " + ID);
+		Log.i("MAP", "Miasto koncertu: " + dbm.getCity(ID));
 		mMap.addMarker(new MarkerOptions().position(mapHelper.getLatLng(dbm.getCity(ID))).title(dbm.getCity(ID) + " " + dbm.getSpot(ID))
 				.snippet(dbm.getArtist(ID) + " " + dbm.getDate(ID))); // ustawia marker
 		mMap.animateCamera(CameraUpdateFactory

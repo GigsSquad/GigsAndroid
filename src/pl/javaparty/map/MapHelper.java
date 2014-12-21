@@ -81,7 +81,8 @@ public class MapHelper {
 
 	public LatLng getLatLng(String city)
 	{
+		Log.i("MAP", "MapHelper getLatLng City: " + city);
 		Address address = getAddress(city);
-		return new LatLng(address.getLatitude(), address.getLongitude());
+		return (new LatLng(address.getLatitude(), address.getLongitude()));
 	}
 }

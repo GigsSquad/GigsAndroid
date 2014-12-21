@@ -4,6 +4,7 @@ import pl.javaparty.concertfinder.R;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTabHost;
+import android.view.KeyEvent;
 
 public class ConcertFragment extends FragmentActivity {
 
@@ -22,4 +23,15 @@ public class ConcertFragment extends FragmentActivity {
 		mTabHost.addTab(mTabHost.newTabSpec("infoFragment").setIndicator("Informacje"), InfoConcertTab.class, getIntent().getExtras());
 		mTabHost.addTab(mTabHost.newTabSpec("mapFragment").setIndicator("Mapa"), MapConcertTab.class, getIntent().getExtras());
 	}
+
+	@Override
+	public boolean onKeyDown(int keycode, KeyEvent e) {
+		switch (keycode) {
+		case KeyEvent.KEYCODE_MENU:
+			return true;
+		}
+
+		return super.onKeyDown(keycode, e);
+	}
+
 }
