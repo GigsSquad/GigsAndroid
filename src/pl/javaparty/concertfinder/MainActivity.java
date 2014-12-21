@@ -30,21 +30,22 @@ import android.widget.ListView;
 
 public class MainActivity extends FragmentActivity {
 
-	// ArrayAdapter<String> adapterDrawer;
-	// String[] menu;
-	DrawerLayout drawerLayout;
-	ListView drawerList;
-	// Context context;
-	int currentFragment = 1;
-	static dbManager dbMgr;
-	Bundle arguments;
-	private ActionBarDrawerToggle drawerToggle;
-	FragmentManager fragmentManager;
-
-	private String[] navMenuTitles;
+	/* Drawer */
 	private TypedArray navMenuIcons;
 	private ArrayList<NavDrawerItem> navDrawerItems;
 	private NavDrawerAdapter adapter;
+	private DrawerLayout drawerLayout;
+	private ListView drawerList;
+	private String[] navMenuTitles;
+	private ActionBarDrawerToggle drawerToggle;
+
+	/* Fragmenty */
+	private FragmentManager fragmentManager;
+	private int currentFragment = 1;
+	private Bundle arguments;
+
+	/* Baza */
+	static dbManager dbMgr;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,12 +60,8 @@ public class MainActivity extends FragmentActivity {
 		navMenuIcons = getResources().obtainTypedArray(R.array.nav_menu_icons);
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		drawerList = (ListView) findViewById(R.id.left_drawer);
-		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-		drawerList = (ListView) findViewById(R.id.left_drawer);
 
 		navDrawerItems = new ArrayList<NavDrawerItem>();
-
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
@@ -76,12 +73,12 @@ public class MainActivity extends FragmentActivity {
 		adapter = new NavDrawerAdapter(getApplicationContext(), navDrawerItems);
 		drawerList.setAdapter(adapter);
 
-		// ustawianie actionbara by mozna go bylo wcisnac
+		/* ustawianie actionbara by mozna go bylo wcisnac */
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 
 		drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
-				R.drawable.ic_drawer, // nav menu toggle icon
+				R.drawable.ic_drawer, // ikonka
 				R.string.app_name
 				) {
 					public void onDrawerClosed(View view) {
@@ -94,25 +91,21 @@ public class MainActivity extends FragmentActivity {
 				};
 
 		drawerLayout.setDrawerListener(drawerToggle);
-
 		drawerList.setSelector(android.R.color.holo_blue_dark);
 		drawerList.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
-
 				drawerLayout.closeDrawers();
-
 				if (position == 3)
 					update();
 				else if (currentFragment != position)
 					changeFragment(position);
-
 			}
 		});
+
 		// pierwsza inicjalizacja
-		Fragment fragment = new RecentFragment();
 		fragmentManager.beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
-				android.R.anim.slide_out_right).replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+				android.R.anim.slide_out_right).replace(R.id.content_frame, new RecentFragment()).addToBackStack(null).commit();
 		drawerLayout.openDrawer(drawerList);
 
 		navDrawerItems.get(1).setCount("" + dbMgr.getSize(dbManager.CONCERTS_TABLE));
@@ -121,7 +114,7 @@ public class MainActivity extends FragmentActivity {
 		navDrawerItems.get(2).setCount("" + dbMgr.getSize(dbManager.FAVOURITES_TABLE)); // TODO licznik ulubionych
 																						// koncertów
 		navDrawerItems.get(2).setCounterVisibility(true);
-		// TODO jak bazy nie ma to update, a tak chuj, niech sami aktualizuja
+		// TODO jak bazy nie ma to update, a tak chuj, niech sami aktualizuja < lol
 		// update();
 
 	}

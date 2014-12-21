@@ -33,7 +33,7 @@ public class DateSearch extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
 		View view = inflater.inflate(R.layout.tab_search_date, container, false);
 		getActivity().getActionBar().setTitle("Szukaj wg miejsca");
-		dbm = ((MainActivity) getActivity()).getDBManager();// przekazujemy dbm od mainActivity
+		dbm = MainActivity.getDBManager();// przekazujemy dbm od mainActivity
 		context = inflater.getContext();
 		concertList = (ListView) view.findViewById(R.id.concertListPlace);
 		bFrom = (Button) view.findViewById(R.id.bFr);

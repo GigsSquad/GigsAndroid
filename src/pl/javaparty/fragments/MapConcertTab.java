@@ -36,7 +36,7 @@ public class MapConcertTab extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
 		ID = getArguments().getInt("ID", -1);
 
-		dbm = ((MainActivity)getActivity()).getDBManager();
+		dbm = MainActivity.getDBManager();
 
 		if (container == null)
 			return null;

@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,12 +66,9 @@ public class PlaceSearch extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
 				lastPosition = position;
-				Intent concertInfo = new Intent(context, ConcertFragment.class);
-				Bundle b = new Bundle();
-
+				Intent concertInfo = new Intent(getActivity().getApplicationContext(), ConcertFragment.class);
 				Concert item = (Concert) parent.getAdapter().getItem(position);
-				b.putInt("ID", item.getID()); // przesylam unikalne id koncertu
-				concertInfo.putExtra("bundle", b);
+				concertInfo.putExtra("ID", item.getID());
 				startActivity(concertInfo);
 			}
 		});

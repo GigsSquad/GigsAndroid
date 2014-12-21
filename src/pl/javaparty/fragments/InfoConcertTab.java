@@ -10,6 +10,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -22,6 +25,8 @@ public class InfoConcertTab extends Fragment {
 	TextView artist, place, date, price, url;
 	ImageView image;
 	Button connect;
+	dbManager dbm;
+	int ID;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
@@ -32,11 +37,12 @@ public class InfoConcertTab extends Fragment {
 		// price = (TextView) view.findViewById(R.id.priceTV);
 		image = (ImageView) view.findViewById(R.id.artist_image);
 		connect = (Button) view.findViewById(R.id.connect);
-		
+		dbm = MainActivity.getDBManager();
+
 		Log.i("KURWA", "INFO");
 
-		final int ID = (getArguments().getInt("ID", -1)); // -1 bo bazadanych numeruje od 1 a nie od 0
-		final dbManager dbm = MainActivity.getDBManager();
+		ID = (getArguments().getInt("ID", -1)); // -1 bo bazadanych numeruje od 1 a nie od 0
+		dbm = MainActivity.getDBManager();
 		Log.i("KURWA", "Przes³ane id: " + ID);
 		String artistName = dbm.getArtist(ID);
 		getActivity().getActionBar().setTitle(artistName);
@@ -60,5 +66,29 @@ public class InfoConcertTab extends Fragment {
 
 		});
 		return view;
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.activity_main_actions, menu);
+
+		// zmienia ikonkê na
+		if (dbm.isConcertFavourite(ID))
+			menu.getItem(0).setIcon(R.drawable.ic_action_favorite_on);
+
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.favorite_icon:
+			dbm.addFavouriteConcert(ID);
+			// TODO: tutaj taki sam IF jak w onCreateOptionsMenu()
+			if (dbm.isConcertFavourite(ID))
+				item.setIcon(R.drawable.ic_action_favorite_on);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 }
