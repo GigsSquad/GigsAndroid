@@ -118,7 +118,6 @@ public class MainActivity extends FragmentActivity {
 	public boolean onKeyDown(int keycode, KeyEvent e) {
 		switch (keycode) {
 		case KeyEvent.KEYCODE_MENU:
-			updateCounters();
 			if (drawerLayout.isDrawerOpen(drawerList))
 				drawerLayout.closeDrawer(drawerList);
 			else
@@ -155,6 +154,11 @@ public class MainActivity extends FragmentActivity {
 	{
 		DatabaseUpdater db = new DatabaseUpdater(dbMgr, this);
 		db.update(new Refresh());
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// No call for super(). Bug on API Level > 11.
 	}
 
 	private void changeFragment(int position)

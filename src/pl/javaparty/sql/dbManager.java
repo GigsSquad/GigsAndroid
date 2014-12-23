@@ -20,7 +20,7 @@ public class dbManager extends SQLiteOpenHelper {
 	public final static String CONCERTS_TABLE = "Concerts";
 	public final static String FAVOURITES_TABLE = "Favourites";
 	public final static String HASHCODES_TABLE = "Hashcodes";
-
+	
 	private static String CreateConcertTable =
 			"CREATE TABLE " + CONCERTS_TABLE + "(" +
 					"ORD INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -180,7 +180,7 @@ public class dbManager extends SQLiteOpenHelper {
 		}
 	}
 
-	public void deleteOldConcerts() // wypierdalator starch koncert�w
+	public void deleteOldConcerts() // wypierdalator starch koncert�w //<- L
 	{
 		Log.i("Deleter", "Szukam starych koncertow");
 		Calendar calendar = Calendar.getInstance();
@@ -283,9 +283,11 @@ public class dbManager extends SQLiteOpenHelper {
 		}
 	}
 
-	public void delFavouriteConcert(int id)
+	public void removeFavouriteConcert(int id)
 	{
-
+		String selection = new String("ID = "+id);
+	//	int deleted = database.delete(CONCERTS_TABLE, selection, selectionArgs);
+		database.delete(FAVOURITES_TABLE, selection,null);
 	}
 
 	/**
@@ -299,7 +301,15 @@ public class dbManager extends SQLiteOpenHelper {
 		Cursor c = database.query(FAVOURITES_TABLE, columns, null, null, null, null, null);
 		Concert[] concerts = new Concert[getSize(FAVOURITES_TABLE)];
 		for (int i = 0; c.moveToNext(); i++)
+		{
 			concerts[i] = getFavConcertByID(c.getInt(0));
+			//c.moveToNext();
+		/*	int id = c.getInt(0);
+			String condition = "ID = " + id;
+			concerts[i] = getConcertsBy(condition)[0];
+			*/
+		}
+			
 		c.close();
 
 		return concerts;

@@ -31,7 +31,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:gravity="center"
-            android:paddingBottom="2dp"
+            android:paddingBottom="42dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="2dp"

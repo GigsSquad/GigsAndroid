@@ -114,9 +114,17 @@ public class MapConcertTab extends Fragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.favorite_icon:
-			dbm.addFavouriteConcert(ID);
-			if (dbm.isConcertFavourite(ID))
+			if (dbm.isConcertFavourite(ID))// wyjebujemy
+			{
+				dbm.removeFavouriteConcert(ID);
+				item.setIcon(R.drawable.ic_action_not_important_w);
+			}
+			else
+			{
+				dbm.addFavouriteConcert(ID);
 				item.setIcon(R.drawable.ic_action_important_w);
+			}
+
 			MainActivity.updateCounters(); // aktualizuje liczbę ulubionych koncertów w NavDrawerze
 			return true;
 		case R.id.website_icon:

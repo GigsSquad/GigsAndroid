@@ -86,7 +86,7 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 	{
 		final int MAX_LENGTH = 25;
 		if (place != null && place.length() > MAX_LENGTH)
-			return place.substring(0, MAX_LENGTH) + "...";
+			return place.substring(0, MAX_LENGTH) + "(...)";
 		return place;
 	}
 }

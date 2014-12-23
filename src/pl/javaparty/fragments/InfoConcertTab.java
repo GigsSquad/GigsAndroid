@@ -49,8 +49,12 @@ public class InfoConcertTab extends Fragment {
 
 		ID = (getArguments().getInt("ID", -1)); // -1 bo bazadanych numeruje od 1 a nie od 0
 		dbm = MainActivity.getDBManager();
+
 		String artistName = dbm.getArtist(ID);
 		getActivity().getActionBar().setTitle(artistName);
+		artistName = artistName.replace(" - ", "\n");
+		artistName = artistName.replace(": ", "\n");
+
 		artist.setText(artistName);
 		place.setText(dbm.getCity(ID) + " " + dbm.getSpot(ID));
 		date.setText(dbm.getDate(ID));
@@ -58,7 +62,11 @@ public class InfoConcertTab extends Fragment {
 		Calendar today = Calendar.getInstance();
 		long diff = dbm.getConcertByID(ID).getCalendar().getTimeInMillis() - today.getTimeInMillis();
 		int days = (int) Math.ceil((diff / (24 * 60 * 60 * 1000))) + 1;
-		howlong.setText("zostało jeszcze " + days + " dni");
+		
+		if (days <= 0)
+			howlong.setVisibility(View.GONE);
+		else
+			howlong.setText("pozostało jeszcze " + days + " dni");
 
 		new calculateDistance().execute();
 		new ImageLoader(inflater.getContext()).DisplayImage(artistName, image);
@@ -121,9 +129,17 @@ public class InfoConcertTab extends Fragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.favorite_icon:
-			dbm.addFavouriteConcert(ID);
-			if (dbm.isConcertFavourite(ID))
+			if (dbm.isConcertFavourite(ID))// wyjebujemy
+			{
+				dbm.removeFavouriteConcert(ID);
+				item.setIcon(R.drawable.ic_action_not_important_w);
+			}
+			else
+			{
+				dbm.addFavouriteConcert(ID);
 				item.setIcon(R.drawable.ic_action_important_w);
+			}
+
 			MainActivity.updateCounters(); // aktualizuje liczbę ulubionych koncertów w NavDrawerze
 			return true;
 		case R.id.website_icon:
