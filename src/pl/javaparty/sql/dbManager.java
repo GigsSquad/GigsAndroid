@@ -68,8 +68,9 @@ public class dbManager extends SQLiteOpenHelper {
 
 	public void deleteBase()
 	{
-		database.delete(CONCERTS_TABLE, "'1'='1'", null);
-		database.delete(FAVOURITES_TABLE, "'1'='1'", null);
+		database.delete(CONCERTS_TABLE, null, null);
+		database.delete(FAVOURITES_TABLE, null, null);
+		database.delete(HASHCODES_TABLE, null, null);
 	}
 
 	public void addConcert(String artistName, String city, String spot,
@@ -357,8 +358,8 @@ public class dbManager extends SQLiteOpenHelper {
 		return concerts;
 	}
 
-	public Concert[] getAllConcerts() {
-		return getConcertsBy(null);
+	public Concert[] getAllConcerts(String filter) {
+		return getConcertsBy(filter);
 	}
 
 	public Concert[] getConcertsByArtist(String artist, String filter) {

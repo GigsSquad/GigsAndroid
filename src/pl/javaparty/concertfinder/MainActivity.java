@@ -53,7 +53,8 @@ public class MainActivity extends FragmentActivity {
 		setContentView(R.layout.activity_main);
 
 		dbMgr = new dbManager(getApplicationContext());
-
+		//usuwanie starych koncertow przy starcie
+		dbMgr.deleteOldConcerts();
 		fragmentManager = getSupportFragmentManager();
 
 		navMenuTitles = getResources().getStringArray(R.array.nav_menu);
