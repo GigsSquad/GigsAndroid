@@ -8,6 +8,7 @@ import pl.javaparty.sql.dbManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,19 +37,20 @@ public class ArtistSearch extends Fragment {
 
 		searchBox = (AutoCompleteTextView) view.findViewById(R.id.searchBoxArtist);
 		concertList = (ListView) view.findViewById(R.id.concertListArtist);
-
-		adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, dbm.getArtists());
+		String filter = getArguments().getString("CONDITIONS");
+		Log.i("FILTRUJE", filter);
+		adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, dbm.getArtists(filter));
 
 		searchBox.setAdapter(adapterSearchBox);
 		searchBox.setThreshold(1);
-		// new DownloadTask().execute();
 
 		searchBox.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
 				String artist = searchBox.getText().toString();
-				adapter = new ConcertAdapter(getActivity(), dbm.getConcertsByArtist(artist));
+				String filter = getArguments().getString("CONDITIONS");
+				adapter = new ConcertAdapter(getActivity(), dbm.getConcertsByArtist(artist, filter));
 				concertList.setAdapter(adapter);
 				// zapisywanie danych, coby potem przywrocic
 				lastSearching = searchBox.getText().toString();
@@ -83,7 +85,13 @@ public class ArtistSearch extends Fragment {
 		}
 		if (lastSearching != null)
 			getActivity().getActionBar().setTitle("Szukaj: " + lastSearching);
-
 	}
+	
+	public void refresh()
+	{
+		String filter = getArguments().getString("CONDITIONS");
+		adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, dbm.getArtists(filter));
 
+		searchBox.setAdapter(adapterSearchBox);
+	}
 }

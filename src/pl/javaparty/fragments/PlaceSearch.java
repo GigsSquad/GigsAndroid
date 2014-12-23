@@ -40,8 +40,8 @@ public class PlaceSearch extends Fragment {
 
 		searchBox = (AutoCompleteTextView) view.findViewById(R.id.searchBoxPlace);
 		concertList = (ListView) view.findViewById(R.id.concertListPlace);
-
-		adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, dbm.getCities());
+		String filter = getArguments().getString("CONDITIONS");
+		adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, dbm.getCities(filter));
 
 		searchBox.setAdapter(adapterSearchBox);
 		searchBox.setThreshold(1);
@@ -52,7 +52,8 @@ public class PlaceSearch extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
 				String city = searchBox.getText().toString();
-				adapter = new ConcertAdapter(getActivity(), dbm.getConcertsByCity(city)); // concertMgr.getConcertList(searchBox.getText().toString()));
+				String filter = getArguments().getString("CONDITIONS");
+				adapter = new ConcertAdapter(getActivity(), dbm.getConcertsByCity(city, filter));
 				concertList.setAdapter(adapter);
 				// zapisywanie danych, coby potem przywrocic
 				lastSearching = searchBox.getText().toString();
@@ -90,4 +91,11 @@ public class PlaceSearch extends Fragment {
 
 	}
 
+	public void refresh()
+	{
+		String filter = getArguments().getString("CONDITIONS");
+		adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, dbm.getCities(filter));
+
+		searchBox.setAdapter(adapterSearchBox);
+	}
 }

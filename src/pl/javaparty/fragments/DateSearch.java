@@ -79,8 +79,9 @@ public class DateSearch extends Fragment {
 		bSearch.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Log.i("DATE", "Iloœæ: " + dbm.getConcertsByDateRange(dF, mF, yF, dT, mT, yT).length);
-				adapter = new ConcertAdapter(context, dbm.getConcertsByDateRange(dF, mF, yF, dT, mT, yT));
+				String filter = getArguments().getString("CONDITIONS");
+				Log.i("DATE", "Iloœæ: " + dbm.getConcertsByDateRange(dF, mF, yF, dT, mT, yT, filter).length);
+				adapter = new ConcertAdapter(context, dbm.getConcertsByDateRange(dF, mF, yF, dT, mT, yT, filter));
 				concertList.setAdapter(adapter);
 				lastSearching = dF + "." + mF + "." + yF + " - " + dT + "." + mT + "." + yT;
 				getActivity().getActionBar().setTitle("Szukaj: " + lastSearching);

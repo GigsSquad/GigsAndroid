@@ -52,7 +52,7 @@ public class Concert
 	}
 
 	public enum AgencyName {
-		GOAHEAD, ALTERART, INNE
+		GOAHEAD, ALTERART, EBILET, LIVENATION, TICKETPRO, INNE
 	}
 
 	private final int ID; // unikalne id ka¿dego koncertu

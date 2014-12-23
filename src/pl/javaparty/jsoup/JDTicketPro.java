@@ -63,7 +63,7 @@ public class JDTicketPro {
 
 					// System.out.printf("%s %s %s  %d  %d  %d %s %s \n",conName, conCity, conSpot, conDay, conMonth,
 					// conYear, "TicketPro", conUrl);
-					dbm.addConcert(conName, conCity, conSpot, conDay, conMonth, conYear, "TicketPro", conUrl);
+					dbm.addConcert(conName, conCity, conSpot, conDay, conMonth, conYear, "TICKETPRO", conUrl);
 				} else
 					// jest wiecej niz jeden koncert
 					// System.out.println(conName);
@@ -110,7 +110,7 @@ public class JDTicketPro {
 				 * 
 				 * // String conSpot = conLocationArray[0]; //String conCity = conLocationArray[1];
 				 * 
-				 * //System.out.println(conName+conCity+ conSpot+conDay+ conMonth+ conYear+ "TicketPro"+ conUrl); break;
+				 * //System.out.println(conName+conCity+ conSpot+conDay+ conMonth+ conYear+ "TICKETPRO"+ conUrl); break;
 				 * } // String conSpot = conLocationArray[0]; //String conCity = conLocationArray[1];
 				 */
 			}
@@ -129,7 +129,7 @@ public class JDTicketPro {
 					String conCity = conLocationArray[1];
 					// System.out.printf("%s %s %s  %d  %d  %d %s %s \n",conName, conCity, conSpot, conDay, conMonth,
 					// conYear, "TicketPro", conUrl);
-					dbm.addConcert(conName, conCity, conSpot, conDay, conMonth, conYear, "TicketPro", conUrl);
+					dbm.addConcert(conName, conCity, conSpot, conDay, conMonth, conYear, "TICKETPRO", conUrl);
 
 				} catch (ArrayIndexOutOfBoundsException e) {
 					System.err.println("Błąd parsowania");

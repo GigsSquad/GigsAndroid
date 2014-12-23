@@ -20,7 +20,6 @@ public class dbManager extends SQLiteOpenHelper {
 	public final static String CONCERTS_TABLE = "Concerts";
 	public final static String FAVOURITES_TABLE = "Favourites";
 	public final static String HASHCODES_TABLE = "Hashcodes";
-	public Thread download;
 
 	private static String CreateConcertTable =
 			"CREATE TABLE " + CONCERTS_TABLE + "(" +
@@ -69,7 +68,8 @@ public class dbManager extends SQLiteOpenHelper {
 
 	public void deleteBase()
 	{
-		database.delete("Concerts", "'1'='1'", null);
+		database.delete(CONCERTS_TABLE, "'1'='1'", null);
+		database.delete(FAVOURITES_TABLE, "'1'='1'", null);
 	}
 
 	public void addConcert(String artistName, String city, String spot,
@@ -206,9 +206,9 @@ public class dbManager extends SQLiteOpenHelper {
 		Log.i("Deleter", "Wyjebano " + deleted + " przestarzalych koncertow!");
 	}
 
-	private String[] universalGetter3000(String columnName) {
+	private String[] universalGetter3000(String columnName, String condition) {
 		String[] column = { columnName };
-		Cursor c = database.query(CONCERTS_TABLE, column, null, null, null, null, null);
+		Cursor c = database.query(CONCERTS_TABLE, column, condition, null, null, null, null);
 
 		int size = c.getCount();
 		String[] array = new String[size];
@@ -233,14 +233,14 @@ public class dbManager extends SQLiteOpenHelper {
 		new dbManager(context);
 	}
 
-	public String[] getArtists() {
-		return deleteDuplicates(universalGetter3000("ARTIST"));
+	public String[] getArtists(String condition) {
+		return deleteDuplicates(universalGetter3000("ARTIST", condition));// "'1'='0' OR AGENCY = 'GOAHEAD'"));
 	}
 
-	public String[] getCities() {
-		return deleteDuplicates(universalGetter3000("CITY"));
+	public String[] getCities(String condition) {
+		return deleteDuplicates(universalGetter3000("CITY", condition));
 	}
-
+	
 	public String getArtist(int ID) {
 		return fieldGetter(ID, "ARTIST");
 	}
@@ -310,7 +310,7 @@ public class dbManager extends SQLiteOpenHelper {
 		String[] columns = { "ID" };
 		boolean favourite = false;
 		Cursor c = database.query(FAVOURITES_TABLE, columns, null, null, null, null, null);
-		for (int i = 0; c.moveToNext(); i++)
+		for (int i = 0; c.moveToNext(); i++)//TODO wut? Czo to za niewykorzystane i?
 			if (c.getInt(0) == id)
 				favourite = true;
 		c.close();
@@ -326,7 +326,7 @@ public class dbManager extends SQLiteOpenHelper {
 		return res;
 	}
 
-	private AgencyName getAgency(String s) {
+	private AgencyName getAgency(String s) {//TODO zrobic bardiej uniwersalnie
 		AgencyName agency = null;
 		if (s.equals("GOAHEAD"))
 			agency = AgencyName.GOAHEAD;
@@ -350,25 +350,26 @@ public class dbManager extends SQLiteOpenHelper {
 		return getConcertsBy(null);
 	}
 
-	public Concert[] getConcertsByArtist(String artist) {
-		String condition = "ARTIST = '" + artist + "'";
+	public Concert[] getConcertsByArtist(String artist, String filter) {
+		String condition = "ARTIST = '" + artist + "' AND ( " + filter + " )";
 		return getConcertsBy(condition);
 	}
 
-	public Concert[] getConcertsByCity(String city) {
-		String condition = "CITY = '" + city + "'";
+	public Concert[] getConcertsByCity(String city, String filter) {
+		String condition = "CITY = '" + city + "' AND ( " + filter + " )";
 		return getConcertsBy(condition);
 	}
 
-	public Concert[] getConcertsByDate(int day, int month, int year) {
+	/*public Concert[] getConcertsByDate(int day, int month, int year) {
 		String condition = "DAY = " + day + " AND MONTH = " + month + " AND YEAR = " + year;
 		return getConcertsBy(condition);
-	}
+	}*/
 
-	public Concert[] getConcertsByDateRange(int dF, int mF, int yF, int dT, int mT, int yT) {
+	public Concert[] getConcertsByDateRange(int dF, int mF, int yF, int dT, int mT, int yT, String filter) {
 		String[] columns = { "ORD", "ARTIST", "CITY", "SPOT", "DAY", "MONTH", "YEAR", "AGENCY", "URL" };
 		String condition = "(YEAR > ? OR (YEAR = ? AND MONTH > ?) OR (YEAR = ? AND MONTH = ? AND DAY >= ?))"
-				+ "AND (YEAR < ? OR (YEAR = ? AND MONTH < ?) OR (YEAR = ? AND MONTH = ? AND DAY <= ?))";
+				+ "AND (YEAR < ? OR (YEAR = ? AND MONTH < ?) OR (YEAR = ? AND MONTH = ? AND DAY <= ?)) "
+				+ "AND (" + filter + ")";
 		String[] selectionArgs = {
 				String.valueOf(yF),
 				String.valueOf(yF),
