@@ -13,10 +13,11 @@ import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -38,7 +39,10 @@ public class MapConcertTab extends Fragment {
 
 		dbm = MainActivity.getDBManager();
 		mapHelper = new MapHelper(getActivity());
-
+		mapHelper.updateMyCity();
+		
+		setHasOptionsMenu(true);
+		
 		if (container == null)
 			return null;
 
@@ -53,16 +57,6 @@ public class MapConcertTab extends Fragment {
 		} catch (InflateException e) {
 			/* map is already there, just return view as it is */
 		}
-
-		((Button) view.findViewById(R.id.btn_navigate)).setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-						Uri.parse("http://maps.google.com/maps?saddr=" + Prefs.getCity(getActivity()) + "&daddr=" + dbm.getCity(ID) + " " + dbm.getSpot(ID)));
-				startActivity(intent);
-			}
-		});
 
 		fragmentManager = getChildFragmentManager();
 
@@ -80,7 +74,7 @@ public class MapConcertTab extends Fragment {
 	}
 
 	private static void setUpMap() {
-		mMap.setMyLocationEnabled(true); // pokazuje nasz� pozycje
+		mMap.setMyLocationEnabled(true); // pokazuje nasz� pozycje
 		Log.i("MAP", "ID koncertu: " + ID);
 		Log.i("MAP", "Miasto koncertu: " + dbm.getCity(ID));
 		mMap.addMarker(new MarkerOptions().position(mapHelper.getLatLng(dbm.getCity(ID))).title(dbm.getCity(ID) + " " + dbm.getSpot(ID))
@@ -107,5 +101,47 @@ public class MapConcertTab extends Fragment {
 		super.onDestroyView();
 		if (mMap != null)
 			mMap = null;
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.concert_map_menu, menu);
+		if (dbm.isConcertFavourite(ID))
+			menu.getItem(0).setIcon(R.drawable.ic_action_important);
+
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.favorite_icon:
+			dbm.addFavouriteConcert(ID);
+			if (dbm.isConcertFavourite(ID))
+				item.setIcon(R.drawable.ic_action_important);
+			MainActivity.updateCounters(); // aktualizuje liczbę ulubionych koncertów w NavDrawerze
+			return true;
+		case R.id.website_icon:
+			Intent websiteIntent = new Intent(Intent.ACTION_VIEW,
+					Uri.parse(dbm.getUrl(ID)));
+			startActivity(websiteIntent);
+			return true;
+
+		case R.id.share:
+			Intent sendIntent = new Intent();
+			sendIntent.setAction(Intent.ACTION_SEND);
+			sendIntent.putExtra(Intent.EXTRA_TEXT, dbm.getArtist(ID) + ", " + dbm.getCity(ID) + " (" + dbm.getDate(ID) + ")");
+			sendIntent.setType("text/plain");
+			startActivity(sendIntent);
+			return true;
+
+		case R.id.naviagte_icon:
+			Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW,
+					Uri.parse("http://maps.google.com/maps?saddr=" + Prefs.getCity(getActivity()) + "&daddr=" + dbm.getCity(ID) + " " + dbm.getSpot(ID)));
+			startActivity(navIntent);
+			return true;
+
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 }

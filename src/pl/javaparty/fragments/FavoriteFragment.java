@@ -22,8 +22,8 @@ public class FavoriteFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
-		View view = inflater.inflate(R.layout.fragment_favorite, container, false);
-
+		View view = inflater.inflate(R.layout.fragment_favourite, container, false);
+ 
 		getActivity().getActionBar().setTitle("Twoje koncerty");
 		dbm = MainActivity.getDBManager();// przekazujemy dbm od mainActivity
 		list = (ListView) view.findViewById(R.id.FavouriteList);
@@ -42,7 +42,7 @@ public class FavoriteFragment extends Fragment {
 				startActivity(concertInfo);
 			}
 		});
-
+ 
 		return view;
 	}
 }

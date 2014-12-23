@@ -31,8 +31,8 @@ import android.widget.ListView;
 public class MainActivity extends FragmentActivity {
 
 	/* Drawer */
+	private static ArrayList<NavDrawerItem> navDrawerItems;
 	private TypedArray navMenuIcons;
-	private ArrayList<NavDrawerItem> navDrawerItems;
 	private NavDrawerAdapter adapter;
 	private DrawerLayout drawerLayout;
 	private ListView drawerList;
@@ -107,15 +107,10 @@ public class MainActivity extends FragmentActivity {
 		fragmentManager.beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
 				android.R.anim.slide_out_right).replace(R.id.content_frame, new RecentFragment()).addToBackStack(null).commit();
 		drawerLayout.openDrawer(drawerList);
+		updateCounters(); // aktualizuje liczniki w NavDrawerze
 
-		navDrawerItems.get(1).setCount("" + dbMgr.getSize(dbManager.CONCERTS_TABLE));
-		navDrawerItems.get(1).setCounterVisibility(true);
-
-		navDrawerItems.get(2).setCount("" + dbMgr.getSize(dbManager.FAVOURITES_TABLE)); // TODO licznik ulubionych
-																						// koncertów
-		navDrawerItems.get(2).setCounterVisibility(true);
 		// TODO jak bazy nie ma to update, a tak chuj, niech sami aktualizuja < lol
-		// update();
+		update();
 
 	}
 
@@ -123,6 +118,7 @@ public class MainActivity extends FragmentActivity {
 	public boolean onKeyDown(int keycode, KeyEvent e) {
 		switch (keycode) {
 		case KeyEvent.KEYCODE_MENU:
+			updateCounters();
 			if (drawerLayout.isDrawerOpen(drawerList))
 				drawerLayout.closeDrawer(drawerList);
 			else
@@ -191,6 +187,15 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
+	public static void updateCounters()
+	{
+		navDrawerItems.get(1).setCount("" + dbMgr.getSize(dbManager.CONCERTS_TABLE));
+		navDrawerItems.get(1).setCounterVisibility(true);
+
+		navDrawerItems.get(2).setCount("" + dbMgr.getSize(dbManager.FAVOURITES_TABLE));
+		navDrawerItems.get(2).setCounterVisibility(true);
+	}
+
 	// przekazuje DBmanagera
 	public static dbManager getDBManager()
 	{
@@ -205,12 +210,6 @@ public class MainActivity extends FragmentActivity {
 		{
 			Log.i("RF", "Olaboga, refreshyk.");
 			changeFragment(currentFragment);// odswieza dany fragment
-
-			navDrawerItems.get(1).setCount("" + dbMgr.getSize(dbManager.CONCERTS_TABLE));
-			navDrawerItems.get(1).setCounterVisibility(true);
-
-			navDrawerItems.get(2).setCount("" + dbMgr.getSize(dbManager.FAVOURITES_TABLE));
-			navDrawerItems.get(2).setCounterVisibility(true);
 
 			Log.i("RF", "To tez wyszlo.");
 		}

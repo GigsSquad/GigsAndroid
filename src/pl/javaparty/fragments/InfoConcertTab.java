@@ -42,7 +42,7 @@ public class InfoConcertTab extends Fragment {
 
 		ID = (getArguments().getInt("ID", -1)); // -1 bo bazadanych numeruje od 1 a nie od 0
 		dbm = MainActivity.getDBManager();
-		Log.i("KURWA", "Przes�ane id: " + ID);
+		Log.i("KURWA", "Przes�ane id: " + ID);
 		String artistName = dbm.getArtist(ID);
 		getActivity().getActionBar().setTitle(artistName);
 		artist.setText(artistName);
@@ -57,9 +57,9 @@ public class InfoConcertTab extends Fragment {
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		inflater.inflate(R.menu.activity_main_actions, menu);
+		inflater.inflate(R.menu.concert_info_menu, menu);
 		if (dbm.isConcertFavourite(ID))
-			menu.getItem(0).setIcon(R.drawable.ic_action_favorite_on);
+			menu.getItem(0).setIcon(R.drawable.ic_action_important);
 
 	}
 
@@ -69,7 +69,8 @@ public class InfoConcertTab extends Fragment {
 		case R.id.favorite_icon:
 			dbm.addFavouriteConcert(ID);
 			if (dbm.isConcertFavourite(ID))
-				item.setIcon(R.drawable.ic_action_favorite_on);
+				item.setIcon(R.drawable.ic_action_important);
+			MainActivity.updateCounters(); // aktualizuje liczbę ulubionych koncertów w NavDrawerze
 			return true;
 		case R.id.website_icon:
 			Intent websiteIntent = new Intent(Intent.ACTION_VIEW,

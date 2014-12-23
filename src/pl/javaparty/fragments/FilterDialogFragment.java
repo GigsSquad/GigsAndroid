@@ -1,11 +1,6 @@
 package pl.javaparty.fragments;
 
-import java.util.Arrays;
-
-import com.google.android.gms.drive.internal.ac;
-
 import pl.javaparty.items.Concert.AgencyName;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -13,8 +8,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 
 public class FilterDialogFragment extends DialogFragment
 {

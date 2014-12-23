@@ -1,0 +1,28 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/favorite_icon"
+        android:icon="@drawable/ic_action_not_important"
+        android:showAsAction="always"
+        android:title="Ulubione">
+    </item>
+    <item
+        android:id="@+id/website_icon"
+        android:icon="@drawable/ic_action_web_site"
+        android:showAsAction="ifRoom|collapseActionView"
+        android:title="Wyświetl w przeglądarce">
+    </item>
+    <item
+        android:id="@+id/share"
+        android:icon="@drawable/ic_action_share"
+        android:showAsAction="ifRoom|collapseActionView"
+        android:title="Udostępnij">
+    </item>
+    <item
+        android:id="@+id/naviagte_icon"
+        android:icon="@drawable/ic_action_directions"
+        android:showAsAction="ifRoom|collapseActionView"
+        android:title="Pokaż trasę">
+    </item>
+
+</menu>

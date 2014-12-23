@@ -2,9 +2,15 @@
 
     <item
         android:id="@+id/favorite_icon"
-        android:icon="@drawable/ic_action_favorite"
+        android:icon="@drawable/ic_action_not_important"
         android:showAsAction="always"
         android:title="Ulubione">
+    </item>
+    <item
+        android:id="@+id/naviagte_icon"
+        android:icon="@drawable/ic_action_directions"
+        android:showAsAction="always"
+        android:title="Pokaż trasę">
     </item>
     <item
         android:id="@+id/website_icon"
@@ -14,22 +20,9 @@
     </item>
     <item
         android:id="@+id/share"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/ic_action_share"
         android:showAsAction="ifRoom|collapseActionView"
         android:title="Udostępnij">
     </item>
-    <item
-        android:id="@+id/share_fb"
-        android:icon="@drawable/ic_launcher"
-        android:showAsAction="ifRoom|collapseActionView"
-        android:title="Udostępnij na FB">
-    </item>
 
-     <item
-        android:id="@+id/naviagte_icon"
-        android:icon="@drawable/ic_launcher"
-        android:showAsAction="ifRoom|collapseActionView"
-        android:title="Pokaż trasę">
-    </item>
-    
 </menu>

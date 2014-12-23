@@ -55,11 +55,11 @@ public class Concert
 		GOAHEAD, ALTERART, EBILET, LIVENATION, TICKETPRO, INNE
 	}
 
-	private final int ID; // unikalne id ka¿dego koncertu
+	private final int ID; // unikalne id kaï¿½dego koncertu
 	private String artist;
 	private String city; // to leci potem do google maps api
-	private String spot; // lokalizacja w mieœcie, jakiœ klub czy coœ (ulica?)
-	private Calendar date; // sam wyliczy dzieñ tygodnia, mo¿na mu dodaæ godzinê etc.
+	private String spot; // lokalizacja w mieï¿½cie, jakiï¿½ klub czy coï¿½ (ulica?)
+	private Calendar date; // sam wyliczy dzieï¿½ tygodnia, moï¿½na mu dodaï¿½ godzinï¿½ etc.
 	private String url; // url do strony ze szczegolowymi informacjami o danym koncercie
 	private AgencyName agency;
 	// additional info
@@ -70,7 +70,6 @@ public class Concert
 
 	public Concert(int ID, String artist, String city, String spot, int day, int month, int year, AgencyName agency, String url)
 	{
-		Log.i("ID", "ID: " + ID);
 		this.ID = ID;
 		this.agency = agency;
 		this.artist = artist.trim();
@@ -127,19 +126,19 @@ public class Concert
 			day = "niedziela";
 			break;
 		case 2:
-			day = "poniedzia³ek";
+			day = "poniedziaÅ‚ek";
 			break;
 		case 3:
 			day = "wtorek";
 			break;
 		case 4:
-			day = "œroda";
+			day = "Å›roda";
 			break;
 		case 5:
 			day = "czwartek";
 			break;
 		case 6:
-			day = "pi¹tek";
+			day = "piÄ…tek";
 			break;
 		case 7:
 			day = "sobota";

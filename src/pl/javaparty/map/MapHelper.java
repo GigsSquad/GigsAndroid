@@ -19,13 +19,14 @@ public class MapHelper {
 	private Geocoder geoCoder;
 	private List<Address> addressList;
 	private Address cityAddress; // to zadane
-	private Address myCityAddress; // to z ustawieñ
+	private Address myCityAddress; // to z ustawieï¿½
 	private String myCity;
 
 	public MapHelper(Context context) {
 		this.context = context;
 		geoCoder = new Geocoder(context);
 		myCity = Prefs.getCity(context);
+		Log.i("MAP", "Prefs.getCity: " + myCity);
 		myCityAddress = getAddress(myCity);
 	}
 
@@ -66,7 +67,7 @@ public class MapHelper {
 		try {
 			addressList = geoCoder.getFromLocationName(city, 1);
 		} catch (IOException e) {
-			Toast.makeText(context, "Nie mo¿na za³adowaæ, brak internetu", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "Nie moÅ¼na zaÅ‚adowaÄ‡, brak internetu", Toast.LENGTH_SHORT).show();
 			e.printStackTrace();
 		}
 
@@ -75,7 +76,7 @@ public class MapHelper {
 		} catch (IndexOutOfBoundsException e)
 		{
 			getAddress("Warszawa"); // TODO: tymczasowo
-			Log.e("MAP", "Nie znaleziono ¿adneog miasta dla stringa: " + city);
+			Log.e("MAP", "Nie znaleziono Å¼adneog miasta dla stringa: " + city);
 		}
 		return address;
 	}

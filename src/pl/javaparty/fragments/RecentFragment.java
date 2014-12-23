@@ -36,7 +36,7 @@ public class RecentFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
 		View view = inflater.inflate(R.layout.fragment_recent, container, false);
-		getActivity().getActionBar().setTitle("Najbli¿sze koncerty");
+		getActivity().getActionBar().setTitle("NajbliÅ¼sze koncerty");
 		context = inflater.getContext();
 		lv = (ListView) view.findViewById(R.id.recentList);
 
@@ -44,7 +44,7 @@ public class RecentFragment extends Fragment {
 
 		// button na koncu listy ktory rozwija liste o wincyj jesli sie da
 		nextButton = new Button(context);
-		nextButton.setText("Poka¿ wiêcej");
+		nextButton.setText("PokaÅ¼ wiÄ™cej");
 		nextButton.setOnClickListener(new OnClickListener()
 		{
 

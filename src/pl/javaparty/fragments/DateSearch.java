@@ -5,10 +5,12 @@ import java.util.Calendar;
 import pl.javaparty.adapters.ConcertAdapter;
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
+import pl.javaparty.items.Concert;
 import pl.javaparty.sql.dbManager;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -16,9 +18,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class DateSearch extends Fragment {
 
@@ -55,7 +59,7 @@ public class DateSearch extends Fragment {
 						bFrom.setText(dF + "." + mF + "." + yF);
 					}
 				}, mYear, mMonth, mDay);
-				mDatePicker.setTitle("Wybierz datê");
+				mDatePicker.setTitle("Wybierz datÄ™");
 				mDatePicker.show();
 			}
 		});
@@ -71,7 +75,7 @@ public class DateSearch extends Fragment {
 						bTo.setText(dT + "." + mT + "." + yT);
 					}
 				}, yF, mF, dF);
-				mDatePicker.setTitle("Wybierz datê");
+				mDatePicker.setTitle("Wybierz datÄ™");
 				mDatePicker.show();
 			}
 		});
@@ -80,13 +84,24 @@ public class DateSearch extends Fragment {
 			@Override
 			public void onClick(View v) {
 				String filter = getArguments().getString("CONDITIONS");
-				Log.i("DATE", "Iloœæ: " + dbm.getConcertsByDateRange(dF, mF, yF, dT, mT, yT, filter).length);
+				Log.i("DATE", "IloÅ›Ä‡: " + dbm.getConcertsByDateRange(dF, mF, yF, dT, mT, yT, filter).length);
 				adapter = new ConcertAdapter(context, dbm.getConcertsByDateRange(dF, mF, yF, dT, mT, yT, filter));
 				concertList.setAdapter(adapter);
 				lastSearching = dF + "." + mF + "." + yF + " - " + dT + "." + mT + "." + yT;
 				getActivity().getActionBar().setTitle("Szukaj: " + lastSearching);
-				bFrom.setText("Wybierz datê od");
-				bTo.setText("Wybierz datê do");
+				bFrom.setText("Wybierz datÄ™ od");
+				bTo.setText("Wybierz datÄ™ do");
+			}
+		});
+
+		concertList.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position,
+					long id) {
+				Intent concertInfo = new Intent(getActivity().getApplicationContext(), ConcertFragment.class);
+				Concert item = (Concert) parent.getAdapter().getItem(position);
+				concertInfo.putExtra("ID", item.getID());
+				startActivity(concertInfo);
 			}
 		});
 
