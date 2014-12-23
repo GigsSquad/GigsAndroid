@@ -21,7 +21,7 @@ public class Prefs {
 
 	// Miasto
 	public static String getCity(Context context) {
-		return getPrefs(context).getString("CITY", "Warszawa");
+		return getPrefs(context).getString("CITY", "");
 	}
 
 	public static void setCity(Context context, String value) {

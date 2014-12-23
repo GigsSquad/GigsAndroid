@@ -39,10 +39,9 @@ public class MapConcertTab extends Fragment {
 
 		dbm = MainActivity.getDBManager();
 		mapHelper = new MapHelper(getActivity());
-		mapHelper.updateMyCity();
-		
+
 		setHasOptionsMenu(true);
-		
+
 		if (container == null)
 			return null;
 
@@ -107,7 +106,7 @@ public class MapConcertTab extends Fragment {
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.concert_map_menu, menu);
 		if (dbm.isConcertFavourite(ID))
-			menu.getItem(0).setIcon(R.drawable.ic_action_important);
+			menu.getItem(0).setIcon(R.drawable.ic_action_important_w);
 
 	}
 
@@ -117,7 +116,7 @@ public class MapConcertTab extends Fragment {
 		case R.id.favorite_icon:
 			dbm.addFavouriteConcert(ID);
 			if (dbm.isConcertFavourite(ID))
-				item.setIcon(R.drawable.ic_action_important);
+				item.setIcon(R.drawable.ic_action_important_w);
 			MainActivity.updateCounters(); // aktualizuje liczbę ulubionych koncertów w NavDrawerze
 			return true;
 		case R.id.website_icon:

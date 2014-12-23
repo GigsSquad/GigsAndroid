@@ -9,34 +9,20 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
 public class MapHelper {
 
-	private Context context;
 	private Geocoder geoCoder;
 	private List<Address> addressList;
-	private Address cityAddress; // to zadane
-	private Address myCityAddress; // to z ustawie�
-	private String myCity;
+	private Address destinationAddress; // to zadane
+	private Address hometownAddress; // to z ustawie�
+	private String hometownString;
 
 	public MapHelper(Context context) {
-		this.context = context;
 		geoCoder = new Geocoder(context);
-		myCity = Prefs.getCity(context);
-		Log.i("MAP", "Prefs.getCity: " + myCity);
-		myCityAddress = getAddress(myCity);
-	}
-
-	/**
-	 * Powinno byc wywolywane po zmianie miasta w ustawieniach
-	 */
-	public void updateMyCity()
-	{
-		myCityAddress = getAddress(Prefs.getCity(context));
-		Prefs.setLatLng(context, myCityAddress.getLatitude(), myCityAddress.getLongitude());
+		hometownString = Prefs.getCity(context);
 	}
 
 	/**
@@ -51,12 +37,21 @@ public class MapHelper {
 
 	public int distanceTo(final String city)
 	{
-		cityAddress = getAddress(city);
+		destinationAddress = getAddress(city.trim());
+		hometownAddress = getAddress(hometownString);
 
+		Log.i("MAP", "Miasto:" + city);
 		float[] distanceFloat = new float[3];
-		Location.distanceBetween(myCityAddress.getLatitude(), myCityAddress.getLongitude(), cityAddress.getLatitude(), cityAddress.getLongitude(),
-				distanceFloat);
 
+		try {
+			Location.distanceBetween(
+					hometownAddress.getLatitude(), hometownAddress.getLongitude(),
+					destinationAddress.getLatitude(), destinationAddress.getLongitude(),
+					distanceFloat);
+		} catch (NullPointerException ne)
+		{
+			return 0;
+		}
 		Log.i("MAP", "Dystans w km: " + (int) (distanceFloat[0] / 1000));
 		return (int) (distanceFloat[0] / 1000);
 	}
@@ -66,17 +61,13 @@ public class MapHelper {
 		Address address = null;
 		try {
 			addressList = geoCoder.getFromLocationName(city, 1);
+			while (addressList.size() == 0)
+				addressList = geoCoder.getFromLocationName(city, 1);
+			if (addressList.size() > 0)
+				address = addressList.get(0);
 		} catch (IOException e) {
-			Toast.makeText(context, "Nie można załadować, brak internetu", Toast.LENGTH_SHORT).show();
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-
-		try {
-			address = addressList.get(0);
-		} catch (IndexOutOfBoundsException e)
-		{
-			getAddress("Warszawa"); // TODO: tymczasowo
-			Log.e("MAP", "Nie znaleziono żadneog miasta dla stringa: " + city);
 		}
 		return address;
 	}

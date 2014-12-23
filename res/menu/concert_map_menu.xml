@@ -2,7 +2,7 @@
 
     <item
         android:id="@+id/favorite_icon"
-        android:icon="@drawable/ic_action_not_important"
+        android:icon="@drawable/ic_action_not_important_w"
         android:showAsAction="always"
         android:title="Ulubione">
     </item>

@@ -4,8 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import android.util.Log;
-
 public class Concert
 {
 	@Override
@@ -115,6 +113,11 @@ public class Concert
 	public int getID()
 	{
 		return ID;
+	}
+
+	public Calendar getCalendar()
+	{
+		return date;
 	}
 
 	public String dateToString()

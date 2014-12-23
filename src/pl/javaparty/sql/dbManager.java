@@ -86,8 +86,8 @@ public class dbManager extends SQLiteOpenHelper {
 			cv.put("URL", url);
 			database.insertOrThrow("Concerts", null, cv);
 		}
-		else
-			System.out.println("Nie dodano " + artistName + city);
+		//else
+			//System.out.println("Nie dodano " + artistName + city);
 	}
 
 	public boolean contains(String artistName, String city, String spot, int day, int month, int year) {
@@ -180,7 +180,7 @@ public class dbManager extends SQLiteOpenHelper {
 		}
 	}
 
-	public void deleteOldConcerts() // wypierdalator starch koncertów
+	public void deleteOldConcerts() // wypierdalator starch koncertï¿½w
 	{
 		Log.i("Deleter", "Szukam starych koncertow");
 		Calendar calendar = Calendar.getInstance();
@@ -229,7 +229,7 @@ public class dbManager extends SQLiteOpenHelper {
 	{
 		database.close();
 		context.deleteDatabase(DATABASE_NAME);
-		Log.i("DB", "Baza usuniêta");
+		Log.i("DB", "Baza usuniï¿½ta");
 		new dbManager(context);
 	}
 
@@ -240,7 +240,7 @@ public class dbManager extends SQLiteOpenHelper {
 	public String[] getCities(String condition) {
 		return deleteDuplicates(universalGetter3000("CITY", condition));
 	}
-	
+
 	public String getArtist(int ID) {
 		return fieldGetter(ID, "ARTIST");
 	}
@@ -299,7 +299,7 @@ public class dbManager extends SQLiteOpenHelper {
 		Cursor c = database.query(FAVOURITES_TABLE, columns, null, null, null, null, null);
 		Concert[] concerts = new Concert[getSize(FAVOURITES_TABLE)];
 		for (int i = 0; c.moveToNext(); i++)
-			concerts[i] = getConcertsByID(c.getInt(0));
+			concerts[i] = getFavConcertByID(c.getInt(0));
 		c.close();
 
 		return concerts;
@@ -310,7 +310,8 @@ public class dbManager extends SQLiteOpenHelper {
 		String[] columns = { "ID" };
 		boolean favourite = false;
 		Cursor c = database.query(FAVOURITES_TABLE, columns, null, null, null, null, null);
-		for (int i = 0; c.moveToNext(); i++)//TODO wut? Czo to za niewykorzystane i?
+		for (int i = 0; c.moveToNext(); i++)
+			// TODO wut? Czo to za niewykorzystane i?
 			if (c.getInt(0) == id)
 				favourite = true;
 		c.close();
@@ -326,7 +327,7 @@ public class dbManager extends SQLiteOpenHelper {
 		return res;
 	}
 
-	private AgencyName getAgency(String s) {//TODO zrobic bardiej uniwersalnie
+	private AgencyName getAgency(String s) {// TODO zrobic bardiej uniwersalnie
 		AgencyName agency = null;
 		if (s.equals("GOAHEAD"))
 			agency = AgencyName.GOAHEAD;
@@ -360,10 +361,15 @@ public class dbManager extends SQLiteOpenHelper {
 		return getConcertsBy(condition);
 	}
 
-	/*public Concert[] getConcertsByDate(int day, int month, int year) {
-		String condition = "DAY = " + day + " AND MONTH = " + month + " AND YEAR = " + year;
-		return getConcertsBy(condition);
-	}*/
+	public Concert getConcertByID(int ID) {
+		String condition = "ORD = " + ID;
+		return getConcertsBy(condition)[0];
+	}
+
+	/*
+	 * public Concert[] getConcertsByDate(int day, int month, int year) { String condition = "DAY = " + day +
+	 * " AND MONTH = " + month + " AND YEAR = " + year; return getConcertsBy(condition); }
+	 */
 
 	public Concert[] getConcertsByDateRange(int dF, int mF, int yF, int dT, int mT, int yT, String filter) {
 		String[] columns = { "ORD", "ARTIST", "CITY", "SPOT", "DAY", "MONTH", "YEAR", "AGENCY", "URL" };
@@ -394,7 +400,7 @@ public class dbManager extends SQLiteOpenHelper {
 		return concerts;
 	}
 
-	private Concert getConcertsByID(int id) {
+	private Concert getFavConcertByID(int id) {
 		String condition = "ORD = " + id;
 		return getConcertsBy(condition)[0]; // id jest unuikalne wiec bedzie to zawsze tablica jednoelementowa
 	}
