@@ -42,7 +42,7 @@ public class InfoConcertTab extends Fragment {
 
 		ID = (getArguments().getInt("ID", -1)); // -1 bo bazadanych numeruje od 1 a nie od 0
 		dbm = MainActivity.getDBManager();
-		Log.i("KURWA", "Przes³ane id: " + ID);
+		Log.i("KURWA", "Przesï¿½ane id: " + ID);
 		String artistName = dbm.getArtist(ID);
 		getActivity().getActionBar().setTitle(artistName);
 		artist.setText(artistName);
@@ -67,9 +67,18 @@ public class InfoConcertTab extends Fragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.favorite_icon:
-			dbm.addFavouriteConcert(ID);
-			if (dbm.isConcertFavourite(ID))
+			if(dbm.isConcertFavourite(ID))//wyjebujemy
+			{
+				dbm.removeFavouriteConcert(ID);
+				item.setIcon(R.drawable.ic_action_favorite);
+			}
+			else
+			{
+				dbm.addFavouriteConcert(ID);
 				item.setIcon(R.drawable.ic_action_favorite_on);
+			}
+			
+				
 			return true;
 		case R.id.website_icon:
 			Intent websiteIntent = new Intent(Intent.ACTION_VIEW,
