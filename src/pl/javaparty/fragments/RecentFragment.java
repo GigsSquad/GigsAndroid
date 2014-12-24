@@ -97,6 +97,8 @@ public class RecentFragment extends Fragment {
 		refresh();
 		lv.setSelection(lastPosition);
 	}
+	
+	
 
 	private Concert[] cutArray(Concert[] array)
 	{

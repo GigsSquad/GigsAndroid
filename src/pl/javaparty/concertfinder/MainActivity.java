@@ -204,7 +204,7 @@ public class MainActivity extends FragmentActivity {
 					.beginTransaction()
 					.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
 					.replace(R.id.content_frame, fragment)
-					.addToBackStack(null).commit();
+					.addToBackStack(null).commitAllowingStateLoss();
 		}
 	}
 

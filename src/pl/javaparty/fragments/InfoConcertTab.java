@@ -52,6 +52,7 @@ public class InfoConcertTab extends Fragment {
 
 		String artistName = dbm.getArtist(ID);
 		getActivity().getActionBar().setTitle(artistName);
+		new ImageLoader(inflater.getContext()).DisplayImage(artistName, image);
 		artistName = artistName.replace(" - ", "\n");
 		artistName = artistName.replace(": ", "\n");
 
@@ -69,7 +70,6 @@ public class InfoConcertTab extends Fragment {
 			howlong.setText("pozostało jeszcze " + days + " dni");
 
 		new calculateDistance().execute();
-		new ImageLoader(inflater.getContext()).DisplayImage(artistName, image);
 
 		addCalendar.setOnClickListener(new OnClickListener() {
 
@@ -122,7 +122,6 @@ public class InfoConcertTab extends Fragment {
 		inflater.inflate(R.menu.concert_info_menu, menu);
 		if (dbm.isConcertFavourite(ID))
 			menu.getItem(0).setIcon(R.drawable.ic_action_important_w);
-
 	}
 
 	@Override
