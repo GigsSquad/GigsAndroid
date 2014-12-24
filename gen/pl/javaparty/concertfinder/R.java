@@ -324,17 +324,6 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
         public static final int buttonBarStyle=0x7f010059;
-        /** <p>Must be one or more (separated by '|') of the following constant values.</p>
-<table>
-<colgroup align="left" />
-<colgroup align="left" />
-<colgroup align="left" />
-<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
-<tr><td><code>top</code></td><td>0x30</td><td> Push object to the top of its container, not changing its size. </td></tr>
-<tr><td><code>bottom</code></td><td>0x50</td><td> Push object to the bottom of its container, not changing its size. </td></tr>
-</table>
-         */
-        public static final int buttonGravity=0x7f0100be;
         /**  Appearance of the buy button. Must be one of "classic", "grayscale" and "monochrome" 
          <p>Must be one of the following constant values.</p>
 <table>
@@ -516,10 +505,20 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
         public static final int closeItemLayout=0x7f010098;
-        /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+        /**  Text to set as the content description for the collapse button. 
+         <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int collapseContentDescription=0x7f0100bf;
+        /**  Icon drawable to use for the collapse button. 
+         <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int collapseIcon=0x7f0100bf;
+        public static final int collapseIcon=0x7f0100be;
         /**  The drawing color for the bars 
          <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
 "<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
@@ -2225,64 +2224,63 @@ containing a value of this type.
         public static final int tab_unselected_pressed_bluetheme=0x7f02008e;
     }
     public static final class id {
-        public static final int FavouriteList=0x7f0c0062;
-        public static final int LinearLayout1=0x7f0c0066;
-        public static final int RelativeLayout1=0x7f0c005f;
-        public static final int action_bar=0x7f0c0044;
+        public static final int FavouriteList=0x7f0c0061;
+        public static final int LinearLayout1=0x7f0c0065;
+        public static final int RelativeLayout1=0x7f0c005e;
+        public static final int action_bar=0x7f0c0043;
         public static final int action_bar_activity_content=0x7f0c0003;
-        public static final int action_bar_container=0x7f0c0043;
-        public static final int action_bar_root=0x7f0c003f;
+        public static final int action_bar_container=0x7f0c0042;
+        public static final int action_bar_root=0x7f0c003e;
         public static final int action_bar_spinner=0x7f0c0002;
-        public static final int action_bar_subtitle=0x7f0c0032;
-        public static final int action_bar_title=0x7f0c0031;
-        public static final int action_context_bar=0x7f0c0045;
+        public static final int action_bar_subtitle=0x7f0c0030;
+        public static final int action_bar_title=0x7f0c002f;
+        public static final int action_context_bar=0x7f0c0044;
         public static final int action_menu_divider=0x7f0c0005;
         public static final int action_menu_presenter=0x7f0c0006;
-        public static final int action_mode_bar=0x7f0c0041;
-        public static final int action_mode_bar_stub=0x7f0c0040;
-        public static final int action_mode_close_button=0x7f0c0033;
-        public static final int activity_chooser_view_content=0x7f0c0034;
-        public static final int add_to_calendar_btn=0x7f0c0071;
+        public static final int action_mode_bar=0x7f0c0040;
+        public static final int action_mode_bar_stub=0x7f0c003f;
+        public static final int action_mode_close_button=0x7f0c0031;
+        public static final int activity_chooser_view_content=0x7f0c0032;
+        public static final int add_to_calendar_btn=0x7f0c0070;
         public static final int always=0x7f0c0025;
-        public static final int artist_image=0x7f0c006b;
-        public static final int artist_name=0x7f0c006c;
+        public static final int artist_image=0x7f0c006a;
+        public static final int artist_name=0x7f0c0071;
         public static final int bFr=0x7f0c0079;
         public static final int bSe=0x7f0c0077;
         public static final int bTo=0x7f0c0078;
         public static final int beginning=0x7f0c002c;
         public static final int book_now=0x7f0c0017;
-        public static final int bottom=0x7f0c002f;
         public static final int buyButton=0x7f0c0013;
         public static final int buy_now=0x7f0c0018;
         public static final int buy_with_google=0x7f0c0019;
-        public static final int card=0x7f0c0055;
-        public static final int card_view=0x7f0c0056;
-        public static final int checkbox=0x7f0c003c;
-        public static final int cityAutoComplete=0x7f0c0067;
+        public static final int card=0x7f0c0054;
+        public static final int card_view=0x7f0c0055;
+        public static final int checkbox=0x7f0c003b;
+        public static final int cityAutoComplete=0x7f0c0066;
         public static final int classic=0x7f0c001a;
-        public static final int clearFilesButton=0x7f0c0069;
+        public static final int clearFilesButton=0x7f0c0068;
         public static final int collapseActionView=0x7f0c0026;
-        public static final int con_date=0x7f0c006f;
+        public static final int con_date=0x7f0c006e;
         public static final int concertListArtist=0x7f0c0075;
         public static final int concertListPlace=0x7f0c0076;
-        public static final int content_frame=0x7f0c0053;
-        public static final int counter=0x7f0c005e;
-        public static final int dark=0x7f0c0058;
-        public static final int dateTV=0x7f0c005c;
-        public static final int decor_content_parent=0x7f0c0042;
-        public static final int default_activity_button=0x7f0c0037;
+        public static final int content_frame=0x7f0c0052;
+        public static final int counter=0x7f0c005d;
+        public static final int dark=0x7f0c0057;
+        public static final int dateTV=0x7f0c005b;
+        public static final int decor_content_parent=0x7f0c0041;
+        public static final int default_activity_button=0x7f0c0035;
         public static final int dialog=0x7f0c002a;
         public static final int disableHome=0x7f0c001f;
-        public static final int distanceSeekBar=0x7f0c006a;
-        public static final int distanceTV=0x7f0c006e;
-        public static final int distanceTextView=0x7f0c0060;
-        public static final int drawer_layout=0x7f0c0052;
+        public static final int distanceSeekBar=0x7f0c0069;
+        public static final int distanceTV=0x7f0c006d;
+        public static final int distanceTextView=0x7f0c005f;
+        public static final int drawer_layout=0x7f0c0051;
         public static final int dropdown=0x7f0c002b;
-        public static final int edit_query=0x7f0c0046;
+        public static final int edit_query=0x7f0c0045;
         public static final int end=0x7f0c002d;
-        public static final int expand_activities_button=0x7f0c0035;
-        public static final int expanded_menu=0x7f0c003b;
-        public static final int fav_image=0x7f0c005d;
+        public static final int expand_activities_button=0x7f0c0033;
+        public static final int expanded_menu=0x7f0c003a;
+        public static final int fav_image=0x7f0c005c;
         public static final int favorite_icon=0x7f0c007b;
         public static final int filter_icon=0x7f0c007f;
         public static final int grayscale=0x7f0c001b;
@@ -2290,17 +2288,18 @@ containing a value of this type.
         public static final int holo_light=0x7f0c000f;
         public static final int home=0x7f0c0000;
         public static final int homeAsUp=0x7f0c0020;
-        public static final int howlongTV=0x7f0c0070;
+        public static final int howlongTV=0x7f0c006f;
         public static final int hybrid=0x7f0c0009;
-        public static final int icon=0x7f0c0039;
+        public static final int icon=0x7f0c0038;
         public static final int ifRoom=0x7f0c0027;
-        public static final int image=0x7f0c0036;
-        public static final int imageView1=0x7f0c0059;
-        public static final int imageView2=0x7f0c005b;
-        public static final int left_drawer=0x7f0c0054;
+        public static final int image1=0x7f0c0034;
+        public static final int image2=0x7f0c0036;
+        public static final int imageView1=0x7f0c0058;
+        public static final int imageView2=0x7f0c005a;
+        public static final int left_drawer=0x7f0c0053;
         public static final int listMode=0x7f0c001d;
-        public static final int list_image=0x7f0c0057;
-        public static final int list_item=0x7f0c0038;
+        public static final int list_image=0x7f0c0056;
+        public static final int list_item=0x7f0c0037;
         public static final int location_map=0x7f0c0073;
         public static final int mapLayout=0x7f0c0072;
         public static final int match_parent=0x7f0c0015;
@@ -2310,44 +2309,44 @@ containing a value of this type.
         public static final int never=0x7f0c0028;
         public static final int none=0x7f0c000a;
         public static final int normal=0x7f0c000b;
-        public static final int placeTV=0x7f0c005a;
-        public static final int place_name=0x7f0c006d;
+        public static final int placeTV=0x7f0c0059;
+        public static final int place_name=0x7f0c006c;
         public static final int production=0x7f0c0010;
         public static final int progress_circular=0x7f0c0007;
         public static final int progress_horizontal=0x7f0c0008;
-        public static final int radio=0x7f0c003e;
-        public static final int realtabcontent=0x7f0c0061;
-        public static final int recentList=0x7f0c0063;
+        public static final int radio=0x7f0c003d;
+        public static final int realtabcontent=0x7f0c0060;
+        public static final int recentList=0x7f0c0062;
+        public static final int relativeLayout1=0x7f0c006b;
         public static final int sandbox=0x7f0c0011;
         public static final int satellite=0x7f0c000c;
-        public static final int saveSettingsButton=0x7f0c0068;
+        public static final int saveSettingsButton=0x7f0c0067;
         public static final int searchBoxArtist=0x7f0c0074;
         public static final int searchBoxPlace=0x7f0c007a;
-        public static final int search_badge=0x7f0c0048;
-        public static final int search_bar=0x7f0c0047;
-        public static final int search_button=0x7f0c0049;
-        public static final int search_close_btn=0x7f0c004e;
-        public static final int search_edit_frame=0x7f0c004a;
-        public static final int search_go_btn=0x7f0c0050;
-        public static final int search_mag_icon=0x7f0c004b;
-        public static final int search_plate=0x7f0c004c;
-        public static final int search_src_text=0x7f0c004d;
-        public static final int search_voice_btn=0x7f0c0051;
+        public static final int search_badge=0x7f0c0047;
+        public static final int search_bar=0x7f0c0046;
+        public static final int search_button=0x7f0c0048;
+        public static final int search_close_btn=0x7f0c004d;
+        public static final int search_edit_frame=0x7f0c0049;
+        public static final int search_go_btn=0x7f0c004f;
+        public static final int search_mag_icon=0x7f0c004a;
+        public static final int search_plate=0x7f0c004b;
+        public static final int search_src_text=0x7f0c004c;
+        public static final int search_voice_btn=0x7f0c0050;
         public static final int selectionDetails=0x7f0c0014;
         public static final int share=0x7f0c007d;
-        public static final int shortcut=0x7f0c003d;
+        public static final int shortcut=0x7f0c003c;
         public static final int showCustom=0x7f0c0021;
         public static final int showHome=0x7f0c0022;
         public static final int showTitle=0x7f0c0023;
         public static final int split_action_bar=0x7f0c0004;
         public static final int strict_sandbox=0x7f0c0012;
-        public static final int submit_area=0x7f0c004f;
+        public static final int submit_area=0x7f0c004e;
         public static final int tabMode=0x7f0c001e;
-        public static final int tab_host=0x7f0c0064;
-        public static final int tabcontent_sb=0x7f0c0065;
+        public static final int tab_host=0x7f0c0063;
+        public static final int tabcontent_sb=0x7f0c0064;
         public static final int terrain=0x7f0c000d;
-        public static final int title=0x7f0c003a;
-        public static final int top=0x7f0c0030;
+        public static final int title=0x7f0c0039;
         public static final int up=0x7f0c0001;
         public static final int useLogo=0x7f0c0024;
         public static final int website_icon=0x7f0c007c;
@@ -2441,13 +2440,13 @@ containing a value of this type.
          %1$s is the title. %2$s is the description of what tapping/clicking the whole
          thing is going to do. 
          */
-        public static final int abc_action_bar_home_description_format=0x7f070027;
+        public static final int abc_action_bar_home_description_format=0x7f070028;
         /**  Just like action_bar_home_description_format, but this one will be used
          if the window is also providing subtitle text.
          %1$s is the title. %2$s is the subtitle. %3$s is the description of what
          tapping/clicking the whole thing is going to do. 
          */
-        public static final int abc_action_bar_home_subtitle_description_format=0x7f070028;
+        public static final int abc_action_bar_home_subtitle_description_format=0x7f070029;
         /**  Content description for the action bar "up" affordance. [CHAR LIMIT=NONE] 
          */
         public static final int abc_action_bar_up_description=0x7f070025;
@@ -2459,37 +2458,40 @@ containing a value of this type.
         public static final int abc_action_mode_done=0x7f070023;
         /**  Title for a button to expand the list of activities in ActivityChooserView [CHAR LIMIT=25] 
          */
-        public static final int abc_activity_chooser_view_see_all=0x7f07002f;
+        public static final int abc_activity_chooser_view_see_all=0x7f070030;
         /**  ActivityChooserView - accessibility support 
  Description of the shwoing of a popup window with activities to choose from. [CHAR LIMIT=NONE] 
          */
-        public static final int abc_activitychooserview_choose_application=0x7f07002e;
+        public static final int abc_activitychooserview_choose_application=0x7f07002f;
         /**  SearchView accessibility description for clear button [CHAR LIMIT=NONE] 
          */
-        public static final int abc_searchview_description_clear=0x7f07002b;
+        public static final int abc_searchview_description_clear=0x7f07002c;
         /**  SearchView accessibility description for search text field [CHAR LIMIT=NONE] 
          */
-        public static final int abc_searchview_description_query=0x7f07002a;
+        public static final int abc_searchview_description_query=0x7f07002b;
         /**  SearchView accessibility description for search button [CHAR LIMIT=NONE] 
          */
-        public static final int abc_searchview_description_search=0x7f070029;
+        public static final int abc_searchview_description_search=0x7f07002a;
         /**  SearchView accessibility description for submit button [CHAR LIMIT=NONE] 
          */
-        public static final int abc_searchview_description_submit=0x7f07002c;
+        public static final int abc_searchview_description_submit=0x7f07002d;
         /**  SearchView accessibility description for voice button [CHAR LIMIT=NONE] 
          */
-        public static final int abc_searchview_description_voice=0x7f07002d;
+        public static final int abc_searchview_description_voice=0x7f07002e;
         /**  Description of the choose target button in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
          */
-        public static final int abc_shareactionprovider_share_with=0x7f070031;
+        public static final int abc_shareactionprovider_share_with=0x7f070032;
         /**  Description of a share target (both in the list of such or the default share button) in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
          */
-        public static final int abc_shareactionprovider_share_with_application=0x7f070030;
+        public static final int abc_shareactionprovider_share_with_application=0x7f070031;
+        /**  Content description for the Toolbar icon used to collapse an expanded action mode. [CHAR LIMIT=NONE] 
+         */
+        public static final int abc_toolbar_collapse_description=0x7f070027;
         public static final int accept=0x7f070002;
-        public static final int action_search=0x7f070037;
-        public static final int action_settings=0x7f070038;
-        public static final int app_name=0x7f070032;
-        public static final int checkBoxGoAhead=0x7f070036;
+        public static final int action_search=0x7f070038;
+        public static final int action_settings=0x7f070039;
+        public static final int app_name=0x7f070033;
+        public static final int checkBoxGoAhead=0x7f070037;
         /**   Text for notification shown when the Android Wear apps needs to be updated. Only shown on the wearable. [CHAR LIMIT=NONE] 
          */
         public static final int common_android_wear_notification_needs_update_text=0x7f070009;
@@ -2592,13 +2594,13 @@ containing a value of this type.
         public static final int create_calendar_message=0x7f070005;
         public static final int create_calendar_title=0x7f070004;
         public static final int decline=0x7f070003;
-        public static final int downloadButton=0x7f070034;
-        public static final int drawer_close=0x7f07003a;
-        public static final int drawer_open=0x7f070039;
-        public static final int searchBox=0x7f070035;
+        public static final int downloadButton=0x7f070035;
+        public static final int drawer_close=0x7f07003b;
+        public static final int drawer_open=0x7f07003a;
+        public static final int searchBox=0x7f070036;
         public static final int store_picture_message=0x7f070001;
         public static final int store_picture_title=0x7f070000;
-        public static final int title_activity_info_page=0x7f070033;
+        public static final int title_activity_info_page=0x7f070034;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 
          */
@@ -7079,8 +7081,8 @@ containing a value of this type.
            <tr><th>Attribute</th><th>Description</th></tr>
            <tr><td><code>{@link #Toolbar_android_gravity android:gravity}</code></td><td></td></tr>
            <tr><td><code>{@link #Toolbar_android_minHeight android:minHeight}</code></td><td> Allows us to read in the minHeight attr pre-v16 </td></tr>
-           <tr><td><code>{@link #Toolbar_buttonGravity pl.javaparty.concertfinder:buttonGravity}</code></td><td></td></tr>
-           <tr><td><code>{@link #Toolbar_collapseIcon pl.javaparty.concertfinder:collapseIcon}</code></td><td></td></tr>
+           <tr><td><code>{@link #Toolbar_collapseContentDescription pl.javaparty.concertfinder:collapseContentDescription}</code></td><td> Text to set as the content description for the collapse button.</td></tr>
+           <tr><td><code>{@link #Toolbar_collapseIcon pl.javaparty.concertfinder:collapseIcon}</code></td><td> Icon drawable to use for the collapse button.</td></tr>
            <tr><td><code>{@link #Toolbar_contentInsetEnd pl.javaparty.concertfinder:contentInsetEnd}</code></td><td> Minimum inset for content views within a bar.</td></tr>
            <tr><td><code>{@link #Toolbar_contentInsetLeft pl.javaparty.concertfinder:contentInsetLeft}</code></td><td> Minimum inset for content views within a bar.</td></tr>
            <tr><td><code>{@link #Toolbar_contentInsetRight pl.javaparty.concertfinder:contentInsetRight}</code></td><td> Minimum inset for content views within a bar.</td></tr>
@@ -7105,7 +7107,7 @@ containing a value of this type.
            </table>
            @see #Toolbar_android_gravity
            @see #Toolbar_android_minHeight
-           @see #Toolbar_buttonGravity
+           @see #Toolbar_collapseContentDescription
            @see #Toolbar_collapseIcon
            @see #Toolbar_contentInsetEnd
            @see #Toolbar_contentInsetLeft
@@ -7150,32 +7152,33 @@ containing a value of this type.
         */
         public static final int Toolbar_android_minHeight = 1;
         /**
-          <p>This symbol is the offset where the {@link pl.javaparty.concertfinder.R.attr#buttonGravity}
-          attribute's value can be found in the {@link #Toolbar} array.
+          <p>
+          @attr description
+           Text to set as the content description for the collapse button. 
 
 
-          <p>Must be one or more (separated by '|') of the following constant values.</p>
-<table>
-<colgroup align="left" />
-<colgroup align="left" />
-<colgroup align="left" />
-<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
-<tr><td><code>top</code></td><td>0x30</td><td> Push object to the top of its container, not changing its size. </td></tr>
-<tr><td><code>bottom</code></td><td>0x50</td><td> Push object to the bottom of its container, not changing its size. </td></tr>
-</table>
-          @attr name pl.javaparty.concertfinder:buttonGravity
+          <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          <p>This is a private symbol.
+          @attr name pl.javaparty.concertfinder:collapseContentDescription
         */
-        public static final int Toolbar_buttonGravity = 18;
+        public static final int Toolbar_collapseContentDescription = 19;
         /**
-          <p>This symbol is the offset where the {@link pl.javaparty.concertfinder.R.attr#collapseIcon}
-          attribute's value can be found in the {@link #Toolbar} array.
+          <p>
+          @attr description
+           Icon drawable to use for the collapse button. 
 
 
           <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+          <p>This is a private symbol.
           @attr name pl.javaparty.concertfinder:collapseIcon
         */
-        public static final int Toolbar_collapseIcon = 19;
+        public static final int Toolbar_collapseIcon = 18;
         /**
           <p>
           @attr description

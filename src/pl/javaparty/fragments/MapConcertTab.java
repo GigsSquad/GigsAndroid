@@ -3,7 +3,6 @@ package pl.javaparty.fragments;
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.map.MapHelper;
-import pl.javaparty.prefs.Prefs;
 import pl.javaparty.sql.dbManager;
 import android.content.Intent;
 import android.net.Uri;
@@ -124,8 +123,7 @@ public class MapConcertTab extends Fragment {
 				dbm.addFavouriteConcert(ID);
 				item.setIcon(R.drawable.ic_action_important_w);
 			}
-
-			MainActivity.updateCounters(); // aktualizuje liczbę ulubionych koncertów w NavDrawerze
+			MainActivity.updateCounters();
 			return true;
 		case R.id.website_icon:
 			Intent websiteIntent = new Intent(Intent.ACTION_VIEW,
@@ -143,7 +141,7 @@ public class MapConcertTab extends Fragment {
 
 		case R.id.naviagte_icon:
 			Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW,
-					Uri.parse("http://maps.google.com/maps?saddr=" + Prefs.getCity(getActivity()) + "&daddr=" + dbm.getCity(ID) + " " + dbm.getSpot(ID)));
+					Uri.parse("http://maps.google.com/maps?saddr=&daddr=" + dbm.getCity(ID) + " " + dbm.getSpot(ID)));
 			startActivity(navIntent);
 			return true;
 

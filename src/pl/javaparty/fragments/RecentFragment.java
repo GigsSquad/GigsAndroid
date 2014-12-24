@@ -15,7 +15,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,24 +43,21 @@ public class RecentFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
 		View view = inflater.inflate(R.layout.fragment_recent, container, false);
-		getActivity().getActionBar().setTitle("Najbliøsze koncerty");
+		getActivity().getActionBar().setTitle("Najbli≈ºsze koncerty");
 		context = inflater.getContext();
 		lv = (ListView) view.findViewById(R.id.recentList);
-		
+		dbm = MainActivity.getDBManager();
+
 		checkedAgencies = new HashMap<>();
 		AgencyName[] vals = AgencyName.values();
-		for(int i = 0; i< vals.length; i++)
-		{
+		for (int i = 0; i < vals.length; i++)
 			checkedAgencies.put(vals[i].name(), true);
-		}
-		
+
 		setHasOptionsMenu(true);
-		
-		dbm = MainActivity.getDBManager();
 
 		// button na koncu listy ktory rozwija liste o wincyj jesli sie da
 		nextButton = new Button(context);
-		nextButton.setText("Pokaø wiÍcej");
+		nextButton.setText("Poka≈º wiƒôcej");
 		nextButton.setOnClickListener(new OnClickListener()
 		{
 
@@ -83,7 +79,6 @@ public class RecentFragment extends Fragment {
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Log.i("LV", "KLIK");
 				lastPosition = position;
 
 				Intent concertInfo = new Intent(context, ConcertFragment.class);
@@ -99,6 +94,7 @@ public class RecentFragment extends Fragment {
 	public void onResume()
 	{
 		super.onResume();
+		refresh();
 		lv.setSelection(lastPosition);
 	}
 
@@ -118,7 +114,7 @@ public class RecentFragment extends Fragment {
 		adapter = new ConcertAdapter(getActivity(), cutArray(dbm.getAllConcerts(filterAgencies())));
 		lv.setAdapter(adapter);
 	}
-	
+
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
@@ -133,59 +129,59 @@ public class RecentFragment extends Fragment {
 			FilterDialogFragment dialog = new FilterDialogFragment();
 			dialog.setFilterDialogListener(new FilterDialogListener()
 			{
-					@Override
-					public void onDialogPositiveClick(boolean[] checked)
+				@Override
+				public void onDialogPositiveClick(boolean[] checked)
+				{
+					// this.checked = checked;
+					int i = 0;
+					for (CharSequence c : checkedAgencies.keySet())
 					{
-						//this.checked = checked;
-						int i = 0;
-						for(CharSequence c: checkedAgencies.keySet())
-						{
-							checkedAgencies.put(c, checked[i++]);
-						}
-
-						refresh();
-
+						checkedAgencies.put(c, checked[i++]);
 					}
 
-					@Override
-					public void onDialogNegativeClick(boolean[] checked)
-					{
-						//nevermind
-					}
+					refresh();
+
+				}
+
+				@Override
+				public void onDialogNegativeClick(boolean[] checked)
+				{
+					// nevermind
+				}
 			});
 			Bundle args = new Bundle();
-			
+
 			boolean[] checked = new boolean[checkedAgencies.size()];
 			int i = 0;
-			for(Boolean b: checkedAgencies.values())
+			for (Boolean b : checkedAgencies.values())
 			{
-				checked[i++]=b;
+				checked[i++] = b;
 			}
 			args.putBooleanArray("CHECKED", checked);
-			
+
 			CharSequence[] agencies = new CharSequence[checkedAgencies.size()];
 			checkedAgencies.keySet().toArray(agencies);
 			args.putCharSequenceArray("AGENCIES", agencies);
 			dialog.setArguments(args);
-			
+
 			dialog.show(getActivity().getFragmentManager(), "FILTER");
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
+
 	private String filterAgencies()
 	{
 		String returned = "'1'='0'";
-		for(CharSequence c: checkedAgencies.keySet())
+		for (CharSequence c : checkedAgencies.keySet())
 		{
-			if(checkedAgencies.get(c))
+			if (checkedAgencies.get(c))
 			{
-				returned+=" OR AGENCY = '" + c + "'";
+				returned += " OR AGENCY = '" + c + "'";
 			}
 		}
 		return returned;
-		
+
 	}
 }

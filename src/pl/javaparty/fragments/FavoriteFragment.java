@@ -23,7 +23,7 @@ public class FavoriteFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
 		View view = inflater.inflate(R.layout.fragment_favourite, container, false);
- 
+
 		getActivity().getActionBar().setTitle("Twoje koncerty");
 		dbm = MainActivity.getDBManager();// przekazujemy dbm od mainActivity
 		list = (ListView) view.findViewById(R.id.FavouriteList);
@@ -35,14 +35,28 @@ public class FavoriteFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
-				
+
 				Intent concertInfo = new Intent(getActivity().getApplicationContext(), ConcertFragment.class);
 				Concert item = (Concert) parent.getAdapter().getItem(position);
 				concertInfo.putExtra("ID", item.getID());
 				startActivity(concertInfo);
 			}
 		});
- 
+
 		return view;
 	}
+
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		refresh();
+	}
+
+	public void refresh()
+	{
+		adapter = new ConcertAdapter(getActivity(), dbm.getAllFavouriteConcert());
+		list.setAdapter(adapter);
+	}
+
 }

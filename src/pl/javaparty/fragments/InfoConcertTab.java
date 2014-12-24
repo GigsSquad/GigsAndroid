@@ -62,7 +62,7 @@ public class InfoConcertTab extends Fragment {
 		Calendar today = Calendar.getInstance();
 		long diff = dbm.getConcertByID(ID).getCalendar().getTimeInMillis() - today.getTimeInMillis();
 		int days = (int) Math.ceil((diff / (24 * 60 * 60 * 1000))) + 1;
-		
+
 		if (days <= 0)
 			howlong.setVisibility(View.GONE);
 		else
@@ -140,7 +140,7 @@ public class InfoConcertTab extends Fragment {
 				item.setIcon(R.drawable.ic_action_important_w);
 			}
 
-			MainActivity.updateCounters(); // aktualizuje liczbę ulubionych koncertów w NavDrawerze
+			MainActivity.updateCounters();
 			return true;
 		case R.id.website_icon:
 			Intent websiteIntent = new Intent(Intent.ACTION_VIEW,
@@ -158,7 +158,7 @@ public class InfoConcertTab extends Fragment {
 
 		case R.id.naviagte_icon:
 			Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW,
-					Uri.parse("http://maps.google.com/maps?saddr=" + Prefs.getCity(getActivity()) + "&daddr=" + dbm.getCity(ID) + " " + dbm.getSpot(ID)));
+					Uri.parse("http://maps.google.com/maps?saddr=&daddr=" + dbm.getCity(ID) + " " + dbm.getSpot(ID)));
 			startActivity(navIntent);
 			return true;
 

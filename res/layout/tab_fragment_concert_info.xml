@@ -24,29 +24,8 @@
             android:scaleType="fitXY"
             android:src="@drawable/bg" />
 
-        <TextView
-            android:id="@+id/artist_name"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:paddingBottom="42dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="2dp"
-            android:shadowColor="#212121"
-            android:shadowDx="1"
-            android:shadowDy="1"
-            android:shadowRadius="2"
-            android:text="title"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#ffffff"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:typeface="sans" />
-
         <RelativeLayout
+            android:id="@+id/relativeLayout1"
             android:layout_width="fill_parent"
             android:layout_height="200dp"
             android:layout_alignParentBottom="true"
@@ -129,7 +108,6 @@
                     android:paddingLeft="40dp"
                     android:text="zostało 56 dni"
                     android:textColor="#757575" />
-
             </LinearLayout>
 
             <TextView
@@ -147,6 +125,30 @@
                 android:textColor="#2196F3"
                 android:textSize="14sp" />
         </RelativeLayout>
+
+        <TextView
+            android:id="@+id/artist_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/relativeLayout1"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="75dp"
+            android:gravity="center"
+            android:paddingBottom="2dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="2dp"
+            android:shadowColor="#212121"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="2"
+            android:text="title"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#ffffff"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:typeface="sans" />
+
     </RelativeLayout>
 
 </LinearLayout>

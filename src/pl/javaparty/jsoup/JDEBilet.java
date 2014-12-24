@@ -20,7 +20,7 @@ import pl.javaparty.sql.dbManager;
 public class JDEBilet {
 	private dbManager dbm;
 	
-	JDEBilet(dbManager dbm){
+	public JDEBilet(dbManager dbm){
 		this.dbm= dbm;
 	}
 	

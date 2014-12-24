@@ -11,6 +11,7 @@ import pl.javaparty.fragments.SettingsFragment;
 import pl.javaparty.items.NavDrawerItem;
 import pl.javaparty.sql.DatabaseUpdater;
 import pl.javaparty.sql.dbManager;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -25,19 +26,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-//import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 public class MainActivity extends FragmentActivity {
 
 	/* Drawer */
 	private static ArrayList<NavDrawerItem> navDrawerItems;
-	private TypedArray navMenuIcons;
-	private NavDrawerAdapter adapter;
-	private DrawerLayout drawerLayout;
-	private ListView drawerList;
-	private String[] navMenuTitles;
+	private static NavDrawerAdapter adapter;
+	private static ListView drawerList;
+	private static Context context;
 	private ActionBarDrawerToggle drawerToggle;
+	private DrawerLayout drawerLayout;
+	private TypedArray navMenuIcons;
+	private String[] navMenuTitles;
 
 	/* Fragmenty */
 	private FragmentManager fragmentManager;
@@ -46,6 +47,7 @@ public class MainActivity extends FragmentActivity {
 
 	/* Baza */
 	static dbManager dbMgr;
+	DatabaseUpdater dbu;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +55,8 @@ public class MainActivity extends FragmentActivity {
 		setContentView(R.layout.activity_main);
 
 		dbMgr = new dbManager(getApplicationContext());
-		//usuwanie starych koncertow przy starcie
-		dbMgr.deleteOldConcerts();
+		context = getApplicationContext();
+		dbu = new DatabaseUpdater(dbMgr, this);
 		fragmentManager = getSupportFragmentManager();
 
 		navMenuTitles = getResources().getStringArray(R.array.nav_menu);
@@ -98,37 +100,43 @@ public class MainActivity extends FragmentActivity {
 			public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
 				drawerLayout.closeDrawers();
 				if (position == 3)
-					update();
+					dbu.update(new Refresh());
 				else if (currentFragment != position)
 					changeFragment(position);
 			}
 		});
 
+		if (dbMgr.getSize(dbManager.CONCERTS_TABLE) < 10) // czemu akurat 10? a czemu nie?
+			dbu.update(new Refresh());
+
+		updateCounters();
 		// pierwsza inicjalizacja
 		fragmentManager.beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
 				android.R.anim.slide_out_right).replace(R.id.content_frame, new RecentFragment()).addToBackStack(null).commit();
 		drawerLayout.openDrawer(drawerList);
-		updateCounters(); // aktualizuje liczniki w NavDrawerze
+	}
 
-		// TODO jak bazy nie ma to update, a tak chuj, niech sami aktualizuja < lol
-		update();
-
+	@Override
+	public void onBackPressed() {
+		drawerLayout.closeDrawer(drawerList);
+		super.onBackPressed();
 	}
 
 	@Override
 	public boolean onKeyDown(int keycode, KeyEvent e) {
 		switch (keycode) {
 		case KeyEvent.KEYCODE_MENU:
+
 			if (drawerLayout.isDrawerOpen(drawerList))
 				drawerLayout.closeDrawer(drawerList);
 			else
 				drawerLayout.openDrawer(drawerList);
 			return true;
 		}
-
 		return super.onKeyDown(keycode, e);
 	}
 
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
 		// toggle nav drawer on selecting action bar app icon/title
@@ -151,15 +159,22 @@ public class MainActivity extends FragmentActivity {
 		drawerToggle.onConfigurationChanged(newConfig);
 	}
 
-	public void update()
-	{
-		DatabaseUpdater db = new DatabaseUpdater(dbMgr, this);
-		db.update(new Refresh());
-	}
-
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		// No call for super(). Bug on API Level > 11.
+		// No call for super(). Bug on API Level > 11. lol
+	}
+
+	// odswieza aktualny fragment (laduje go od nowa)
+	private class Refresh implements Runnable
+	{
+		@Override
+		public void run()
+		{
+			Log.i("RF", "Olaboga, refreshyk.");
+			changeFragment(currentFragment);// odswieza dany fragment
+			updateCounters();
+			Log.i("RF", "To tez wyszlo.");
+		}
 	}
 
 	private void changeFragment(int position)
@@ -183,6 +198,7 @@ public class MainActivity extends FragmentActivity {
 
 		if (fragment != null)
 		{
+			updateCounters();
 			fragment.setArguments(arguments);
 			fragmentManager
 					.beginTransaction()
@@ -199,6 +215,9 @@ public class MainActivity extends FragmentActivity {
 
 		navDrawerItems.get(2).setCount("" + dbMgr.getSize(dbManager.FAVOURITES_TABLE));
 		navDrawerItems.get(2).setCounterVisibility(true);
+
+		adapter = new NavDrawerAdapter(context, navDrawerItems);
+		drawerList.setAdapter(adapter);
 	}
 
 	// przekazuje DBmanagera
@@ -207,16 +226,4 @@ public class MainActivity extends FragmentActivity {
 		return dbMgr;
 	}
 
-	// odswieza aktualny fragment (laduje go od nowa)
-	private class Refresh implements Runnable
-	{
-		@Override
-		public void run()
-		{
-			Log.i("RF", "Olaboga, refreshyk.");
-			changeFragment(currentFragment);// odswieza dany fragment
-
-			Log.i("RF", "To tez wyszlo.");
-		}
-	}
 }
