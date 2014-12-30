@@ -5,7 +5,11 @@ import pl.javaparty.concertfinder.R;
 import pl.javaparty.imageloader.FileExplorer;
 import pl.javaparty.prefs.Prefs;
 import pl.javaparty.sql.dbManager;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -18,7 +22,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
-
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -95,16 +98,58 @@ public class SettingsFragment extends Fragment {
 			@Override
 			public void onClick(View v)
 			{
-				dbm.deleteDB(context); 
+				DialogFragment dialog = new ClearDialog();
+				dialog.show(getActivity().getFragmentManager(), "CLEAR");
+				/*
+				//dbm.deleteDB(context); Czemu tak? :O
 				FileExplorer f = new FileExplorer(context);
 				f.clear();
 				Log.i("SETTINGS", "Usunieto obrazki z dysku");
 				dbm.deleteBase();
 				Log.i("SETTINGS", "Wyczyszczono baze");
 				Toast.makeText(getActivity(), "Wyczyszczono pamiec!", Toast.LENGTH_SHORT).show();
+				*/
 			}
 		});
 
 		return view;
+	}
+	
+	private class ClearDialog extends DialogFragment
+	{
+
+		@Override
+		public Dialog onCreateDialog(Bundle savedInstanceState)
+		{
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+			builder.setTitle("Czy na pewno chcesz wyczyœciæ pamiêæ?")
+			.setMessage("Wszystkie obrazki zespo³ów, oraz ca³a baza danych zostanie usuniêta!")
+					.setPositiveButton("OK", new DialogInterface.OnClickListener()
+					{
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which)
+						{
+							//dbm.deleteDB(context); Czemu tak? :O
+							FileExplorer f = new FileExplorer(context);
+							f.clear();
+							Log.i("SETTINGS", "Usunieto obrazki z dysku");
+							dbm.deleteBase();
+							Log.i("SETTINGS", "Wyczyszczono baze");
+							MainActivity.updateCounters();
+							Toast.makeText(getActivity(), "Wyczyszczono pamiec!", Toast.LENGTH_SHORT).show();
+						}
+					})
+					.setNegativeButton("Anuluj", new DialogInterface.OnClickListener()
+					{
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which)
+						{
+							//puste :(
+						}
+					});
+			return builder.create();
+		}	
 	}
 }

@@ -195,15 +195,15 @@ public class ImageLoader
 		edited = edited.replace(' ', '+');// w last fm spacja zastepowana plusem
 		//zmiana polskich znakow
 		edited = edited.toUpperCase(Locale.ENGLISH);
-		edited = edited.replace('Ä„', 'A');
-		edited = edited.replace('Ä†', 'C');
-		edited = edited.replace('Ä˜', 'E');
-		edited = edited.replace('Å', 'L');
-		edited = edited.replace('Åƒ', 'N');
-		edited = edited.replace('Ã“', 'O');
-		edited = edited.replace('Åš', 'S');
-		edited = edited.replace('Å»', 'Z');
-		edited = edited.replace('Å¹', 'Z');
+		edited = edited.replace('¥', 'A');
+		edited = edited.replace('Æ', 'C');
+		edited = edited.replace('Ê', 'E');
+		edited = edited.replace('£', 'L');
+		edited = edited.replace('Ñ', 'N');
+		edited = edited.replace('Ó', 'O');
+		edited = edited.replace('Œ', 'S');
+		edited = edited.replace('¯', 'Z');
+		edited = edited.replace('', 'Z');
 		Log.i(TAG, "po parsie: " + edited);
 		return edited;
 	}

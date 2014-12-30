@@ -102,13 +102,18 @@ public class RecentFragment extends Fragment {
 
 	private Concert[] cutArray(Concert[] array)
 	{
-		if (showedConcerts >= dbm.getSize(dbManager.CONCERTS_TABLE) - 1)
+		if (array != null)
 		{
-			showedConcerts = dbm.getSize(dbManager.CONCERTS_TABLE) - 1;
-			nextButton.setVisibility(View.GONE);
-			return array;
+			if (showedConcerts >= dbm.getSize(dbManager.CONCERTS_TABLE) - 1)
+			{
+				showedConcerts = dbm.getSize(dbManager.CONCERTS_TABLE) - 1;
+				nextButton.setVisibility(View.GONE);
+				return array;
+			}
+			else
+				return Arrays.copyOfRange(array, 0, showedConcerts);
 		}
-		return Arrays.copyOfRange(array, 0, showedConcerts);
+		return new Concert[0];//piêkna ³ata
 	}
 
 	public void refresh()
