@@ -1,6 +1,8 @@
 ConcertFinder
 =============
 
+Link do pobrania aplikacji http://goo.gl/KsiIK9
+
 ### O co chodzi
 To co wiem na pewno to to że będziemy parsować stronę, [Przykład](http://www.go-ahead.pl/pl/koncerty.html), przez JSOUP i wyciągamy z niej na początek daty, nazwy i miejsca, wyświetlamy to na ekranie. Do tego wyszukiwarka z 3 opcjami: 
 * po wykonawcy i dacie 
