@@ -15,7 +15,7 @@ import pl.javaparty.sql.dbManager;
  */
 public class JDTicketPro {
 
-	private dbManager dbm;
+	private dbManager dbm; 
 
 	public JDTicketPro(dbManager dbm) {
 		this.dbm = dbm;
@@ -96,25 +96,8 @@ public class JDTicketPro {
 
 			String conDate = el.getElementsByClass("date").first().text();
 
-			if (conDate.split(" - ").length > 1) //
-			{ // System.out.println("Bałwan!"); // no wlasnie co dalej?
-				continue;
-				/*
-				 * Tych przypadkow jest <0,5% kiedyś naprawie conLocationArray String conLocation = el.html();
-				 * conLocation = conLocation.replace("<br>", " NEWLINE");
-				 * 
-				 * for(String s : conDate.split(" - ") ) { String[] conDateArray = s.split("\\."); //
-				 * System.out.println(conLocation); int conDay = Integer.parseInt(conDateArray[0]); int conMonth =
-				 * Integer.parseInt(conDateArray[1]); int conYear = Integer.parseInt(conDateArray[2]);
-				 * 
-				 * 
-				 * // String conSpot = conLocationArray[0]; //String conCity = conLocationArray[1];
-				 * 
-				 * //System.out.println(conName+conCity+ conSpot+conDay+ conMonth+ conYear+ "TICKETPRO"+ conUrl); break;
-				 * } // String conSpot = conLocationArray[0]; //String conCity = conLocationArray[1];
-				 */
-			}
-			else { // obsluga normalnie
+			if (conDate.split(" - ").length <= 1) //
+			{
 
 				try {
 					String[] conDateArray = conDate.split("\\.");
@@ -138,4 +121,5 @@ public class JDTicketPro {
 			}
 		}
 	}
+
 }
