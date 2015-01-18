@@ -1,6 +1,12 @@
 package pl.javaparty.fragments;
 
+import java.io.IOException;
 import java.util.Calendar;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+import org.jsoup.nodes.Element;
 
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
@@ -8,13 +14,19 @@ import pl.javaparty.imageloader.ImageLoader;
 import pl.javaparty.map.MapHelper;
 import pl.javaparty.prefs.Prefs;
 import pl.javaparty.sql.dbManager;
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Events;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,10 +39,11 @@ import android.widget.TextView;
 
 public class InfoConcertTab extends Fragment {
 
-	TextView artist, place, date, addCalendar, howlong, distance;
+	TextView artist, place, date, addCalendar, howlong, distance,ticketsDetails1, ticketsDetails2,ticketsDetails3 ;
 	ImageView image;
 	dbManager dbm;
 	MapHelper mapHelper;
+	String[] prices;
 	int ID;
 
 	@Override
@@ -44,7 +57,12 @@ public class InfoConcertTab extends Fragment {
 		addCalendar = (TextView) view.findViewById(R.id.add_to_calendar_btn);
 		image = (ImageView) view.findViewById(R.id.artist_image);
 		dbm = MainActivity.getDBManager();
-
+		ticketsDetails1 = (TextView) view.findViewById(R.id.ticketsDetails1);
+		ticketsDetails2 = (TextView) view.findViewById(R.id.ticketsDetails2);
+		ticketsDetails3 = (TextView) view.findViewById(R.id.ticketsDetails3);
+		prices = new String[2]; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		prices[0] = "LEFT";
+		prices[1] = "CENTER";
 		setHasOptionsMenu(true);
 
 		ID = (getArguments().getInt("ID", -1)); // -1 bo bazadanych numeruje od 1 a nie od 0
@@ -70,7 +88,7 @@ public class InfoConcertTab extends Fragment {
 			howlong.setText("pozostało jeszcze " + days + " dni");
 
 		new calculateDistance().execute();
-
+		
 		addCalendar.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -87,10 +105,130 @@ public class InfoConcertTab extends Fragment {
 				startActivity(intent);
 			}
 		});
+		
+	/*	mHandler = new Handler(Looper.getMainLooper())
+		{
+			  
+	          handleMessage() defines the operations to perform when
+	          the Handler receives a new Message to process.
+			   
+			 @Override
+	        public void handleMessage(Message inputMessage) {
+	            ticketsDetails1.setVisibility(View.VISIBLE);
+				ticketsDetails1.setText("DUPA");// to zmienie zaraz
+	        }*/
+		//}; 
+	       
 
+			
+		new Thread( new Runnable() {
+			
+			@Override
+			public void run()  {
+				
+				String agencyName = dbm.getAgency(ID);
+			//	Handler mHandler = new Handler();
+				
+				if(agencyName.equals("TICKETPRO"))
+				{	
+					
+					try{
+						Document doc = Jsoup.connect(dbm.getUrl(ID)).timeout(1000000).get();
+						Element el = doc.select("div[id=poleCena]").first();
+						String rawString = el.text();
+						
+						rawString = rawString.replaceAll("[^0-9]+", " ");
+						rawString = rawString.trim();
+						prices = rawString.split(" ");
+						
+						Log.i("CENYPrzed", rawString);
+					}catch(IOException e)
+					{
+						Log.i("PobieranieCenyKoncertu", "Blad podczas pobierania cennika");
+					}
+						//zmiana gui
+						getActivity().runOnUiThread(new Runnable(){
+							
+							public void run(){
+								Log.i("PrzedUIUPdate", "TUTAJ");
+								try {
+									Thread.sleep(3000);
+								} catch (InterruptedException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								updatePricesUI();
+								Log.i("PoUIUPdate", "TUTAJ");
+							}			
+						});
+				}	
+			}
+		}).start();
+		
+	
+		
+		ticketsDetails1.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+			
+				Intent browserIntent = 
+                        new Intent(Intent.ACTION_VIEW, Uri.parse(dbm.getUrl(ID)));
+		    startActivity(browserIntent);
+				
+			}
+		});
+			
+	ticketsDetails2.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					Intent browserIntent = 
+                        new Intent(Intent.ACTION_VIEW, Uri.parse(dbm.getUrl(ID)));
+		    startActivity(browserIntent);
+					
+				}
+		});
+	
+	ticketsDetails3.setOnClickListener(new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			
+			Intent browserIntent = 
+                        new Intent(Intent.ACTION_VIEW, Uri.parse(dbm.getUrl(ID)));
+		    startActivity(browserIntent);
+		}
+	});
+		
 		return view;
 	}
-
+	
+private void updatePricesUI()
+	{	
+		if(prices!=null){
+			
+		
+			if(prices.length>=1) 
+			{	
+				ticketsDetails1.setVisibility(View.VISIBLE);
+				ticketsDetails1.setText(prices[0]);
+				Log.i("RAz", "LEWO");
+			}		
+				
+			if(prices.length>=2) 
+			{	ticketsDetails2.setVisibility(View.VISIBLE);
+				ticketsDetails2.setText(prices[1]);
+				Log.i("RAz", "Center");
+			}
+			if(prices.length>=3) 
+			{
+				ticketsDetails3.setVisibility(View.VISIBLE);
+				ticketsDetails3.setText(prices[2]);
+			}	
+		}
+	}
+	
 	private class calculateDistance extends AsyncTask<Void, Void, Void> {
 		int distanceInt;
 
@@ -166,3 +304,5 @@ public class InfoConcertTab extends Fragment {
 		}
 	}
 }
+
+

@@ -246,6 +246,10 @@ public class dbManager extends SQLiteOpenHelper {
 		return fieldGetter(ID, "ARTIST");
 	}
 
+	public String getAgency(int ID) {
+		return fieldGetter(ID, "AGENCY");
+	}
+	
 	public String getCity(int ID) {
 		return fieldGetter(ID, "CITY");
 	}
