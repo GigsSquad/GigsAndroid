@@ -122,12 +122,13 @@ public class InfoConcertTab extends Fragment {
 
 			
 		new Thread( new Runnable() {
+			boolean pricesDownloaded = false;
 			
 			@Override
 			public void run()  {
 				
 				String agencyName = dbm.getAgency(ID);
-			//	Handler mHandler = new Handler();
+			
 				
 				if(agencyName.equals("TICKETPRO"))
 				{	
@@ -140,23 +141,27 @@ public class InfoConcertTab extends Fragment {
 						rawString = rawString.replaceAll("[^0-9]+", " ");
 						rawString = rawString.trim();
 						prices = rawString.split(" ");
-						
+						pricesDownloaded = true;
 						Log.i("CENYPrzed", rawString);
 					}catch(IOException e)
 					{
 						Log.i("PobieranieCenyKoncertu", "Blad podczas pobierania cennika");
 					}
 						//zmiana gui
-						getActivity().runOnUiThread(new Runnable(){
+					getActivity().runOnUiThread(new Runnable(){
 							
 							public void run(){
 								Log.i("PrzedUIUPdate", "TUTAJ");
-								try {
-									Thread.sleep(3000);
-								} catch (InterruptedException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
+								while(pricesDownloaded==false){
+										
+									try {
+										synchronized(this){
+											wait();
+										}
+									} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
+								}	
 								updatePricesUI();
 								Log.i("PoUIUPdate", "TUTAJ");
 							}			
