@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center|left|right"
+    android:orientation="vertical" >
+
+    <ListView
+        android:id="@+id/concertListPlace"
+        android:layout_width="wrap_content"
+        android:layout_height="318dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/bSe"
+        android:layout_weight="1"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10dp"
+        android:fastScrollEnabled="true"
+        android:footerDividersEnabled="true"
+        android:listSelector="@android:color/transparent"
+        android:paddingLeft="10dip"
+        android:paddingRight="10dip"
+        android:paddingTop="1dip"
+        android:smoothScrollbar="true" >
+    </ListView>
+
+    <Button
+        android:id="@+id/bSe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/bTo"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/bFr"
+        android:text="Szukaj" />
+
+    <Button
+        android:id="@+id/bFr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/bSe"
+        android:text="Ustaw datę od" />
+
+    <Button
+        android:id="@+id/bTo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/bFr"
+        android:layout_below="@+id/bFr"
+        android:text="Ustaw datę do" />
+
+</RelativeLayout>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Wyszukiwarka koncertów</string>
+    <string name="title_activity_info_page">InfoPage</string>
+    <string name="downloadButton">OK</string>
+    <string name="searchBox">Wykonawca</string>
+    <string name="checkBoxGoAhead">Tylko z Go Ahead</string>
+    <string name="action_search">Szukaj</string>
+    <string name="action_settings">Ustawienia</string>
+    <string name="drawer_open">open drawer</string>
+    <string name="drawer_close">close drawer</string>
+    <string name="title_activity_splash_screen">SplashScreen</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="app_id">519087094900041</string>
+    <string name="title_activity_facebook_activity">facebook_activity</string>
+
+</resources>
