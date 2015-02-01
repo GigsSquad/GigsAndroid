@@ -26,6 +26,13 @@
             android:layout_above="@+id/skipBtn" android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
             android:layout_alignParentRight="true" android:layout_alignParentEnd="true"/>
 
+    <com.google.android.gms.common.SignInButton
+            android:id="@+id/sign_in_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/authButton" android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true" android:layout_alignParentEnd="true"/>
+
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -33,4 +40,10 @@
             android:id="@+id/skipBtn"
             android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
             android:layout_alignRight="@+id/textView" android:layout_alignEnd="@+id/textView" android:layout_centerVertical="true"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Dirty Eclipse peasants "
+            android:id="@+id/textView2" android:layout_alignParentBottom="true" android:layout_centerHorizontal="true"/>
 </RelativeLayout>
