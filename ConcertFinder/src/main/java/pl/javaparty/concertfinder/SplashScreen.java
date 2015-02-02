@@ -5,14 +5,11 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
-import com.google.android.gms.common.ConnectionResult;
 
 public class SplashScreen extends FragmentActivity {
 
 	Button skipBtn;
 	private FacebookFragment facebookFragment;
-	private boolean mSignInClicked;
-	private ConnectionResult mConnectionResult;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

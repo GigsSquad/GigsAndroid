@@ -1,5 +1,9 @@
 package pl.javaparty.fragments;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.widget.Toast;
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.map.MapHelper;
@@ -37,6 +41,10 @@ public class MapConcertTab extends Fragment {
 		ID = getArguments().getInt("ID", -1);
 
 		dbm = MainActivity.getDBManager();
+
+		if(isOnline())
+			Toast.makeText(getActivity(), "Brak połączenia", Toast.LENGTH_LONG).show();
+
 		mapHelper = new MapHelper(getActivity());
 
 		setHasOptionsMenu(true);
@@ -63,7 +71,13 @@ public class MapConcertTab extends Fragment {
 		return view;
 	}
 
-	public static void setUpMapIfNeeded() {
+	private boolean isOnline() {
+		ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo netInfo = cm.getActiveNetworkInfo();
+		return netInfo != null && netInfo.isConnectedOrConnecting();
+	}
+
+	private static void setUpMapIfNeeded() {
 		if (mMap == null) {
 			mMap = ((SupportMapFragment) fragmentManager.findFragmentById(R.id.location_map)).getMap();
 			if (mMap != null)
@@ -72,7 +86,7 @@ public class MapConcertTab extends Fragment {
 	}
 
 	private static void setUpMap() {
-		mMap.setMyLocationEnabled(true); // pokazuje nasz� pozycje
+		mMap.setMyLocationEnabled(true); // pokazuje naszą pozycje
 		Log.i("MAP", "ID koncertu: " + ID);
 		Log.i("MAP", "Miasto koncertu: " + dbm.getCity(ID));
 		mMap.addMarker(new MarkerOptions().position(mapHelper.getLatLng(dbm.getCity(ID))).title(dbm.getCity(ID) + " " + dbm.getSpot(ID))
