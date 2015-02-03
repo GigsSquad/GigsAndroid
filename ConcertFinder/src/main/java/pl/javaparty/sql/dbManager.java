@@ -258,6 +258,10 @@ public class dbManager extends SQLiteOpenHelper {
 		return fieldGetter(ID, "URL");
 	}
 
+    public String getAgency(int ID) {
+        return fieldGetter(ID, "AGENCY");
+    }
+
 	public String getDate(int ID) {
 		String[] columns = { "ORD", "DAY", "MONTH", "YEAR" };
 		Cursor c = database.query(CONCERTS_TABLE, columns, "ORD = " + ID, null, null, null, null);

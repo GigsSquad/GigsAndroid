@@ -2,9 +2,12 @@ package pl.javaparty.fragments;
 
 import java.util.Calendar;
 
+import android.os.Build;
+import android.util.Log;
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.imageloader.ImageLoader;
+import pl.javaparty.jsoup.TicketPrices;
 import pl.javaparty.map.MapHelper;
 import pl.javaparty.prefs.Prefs;
 import pl.javaparty.sql.dbManager;
@@ -27,11 +30,13 @@ import android.widget.TextView;
 
 public class InfoConcertTab extends Fragment {
 
-	TextView artist, place, date, addCalendar, howlong, distance;
+	TextView artist, place, date, addCalendar, howlong, distance,
+            ticketsDetails1,ticketsDetails2,ticketsDetails3;
 	ImageView image;
 	dbManager dbm;
 	MapHelper mapHelper;
 	int ID;
+    String[] prices;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
@@ -44,6 +49,10 @@ public class InfoConcertTab extends Fragment {
 		addCalendar = (TextView) view.findViewById(R.id.add_to_calendar_btn);
 		image = (ImageView) view.findViewById(R.id.artist_image);
 		dbm = MainActivity.getDBManager();
+        ticketsDetails1 = (TextView) view.findViewById(R.id.ticketsDetails1);
+        ticketsDetails2 = (TextView) view.findViewById(R.id.ticketsDetails2);
+        ticketsDetails3 = (TextView) view.findViewById(R.id.ticketsDetails3);
+
 
 		setHasOptionsMenu(true);
 
@@ -88,6 +97,49 @@ public class InfoConcertTab extends Fragment {
 			}
 		});
 
+       // TicketPrices pricesGetter =  Log.i("rafal",dbm.getAgency(ID));
+       // pricesGetter.execute(" ");
+        //Pobieranie cen biletów
+        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ) {
+            new TicketPrices(dbm.getUrl(ID),  dbm.getAgency(ID),ticketsDetails1,ticketsDetails2,ticketsDetails3).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }else{
+            new TicketPrices(dbm.getUrl(ID),  dbm.getAgency(ID),ticketsDetails1,ticketsDetails2,ticketsDetails3).execute();
+
+        }
+        Log.i("rafal", "po execute");
+        ticketsDetails1.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                Intent browserIntent =
+                        new Intent(Intent.ACTION_VIEW, Uri.parse(dbm.getUrl(ID)));
+                startActivity(browserIntent);
+
+            }
+        });
+
+        ticketsDetails2.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent =
+                        new Intent(Intent.ACTION_VIEW, Uri.parse(dbm.getUrl(ID)));
+                startActivity(browserIntent);
+
+            }
+        });
+
+        ticketsDetails3.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                Intent browserIntent =
+                        new Intent(Intent.ACTION_VIEW, Uri.parse(dbm.getUrl(ID)));
+                startActivity(browserIntent);
+            }
+        });
 		return view;
 	}
 
@@ -165,4 +217,28 @@ public class InfoConcertTab extends Fragment {
 			return super.onOptionsItemSelected(item);
 		}
 	}
+    private void updatePricesUI()
+    {
+        if(prices!=null){
+
+
+            if(prices.length>=1)
+            {
+                ticketsDetails1.setVisibility(View.VISIBLE);
+                ticketsDetails1.setText(prices[0]);
+
+            }
+
+            if(prices.length>=2)
+            {	ticketsDetails2.setVisibility(View.VISIBLE);
+                ticketsDetails2.setText(prices[1]);
+
+            }
+            if(prices.length>=3)
+            {
+                ticketsDetails3.setVisibility(View.VISIBLE);
+                ticketsDetails3.setText(prices[2]);
+            }
+        }
+    }
 }

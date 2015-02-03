@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 import com.facebook.*;
 import com.facebook.model.GraphUser;
@@ -40,7 +41,16 @@ public class FacebookFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.activity_splash_screen, container, false);
 
-		LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
+        Button skip = (Button) view.findViewById(R.id.skipBtn);
+        skip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
 		authButton.setFragment(this);
 
 		return view;

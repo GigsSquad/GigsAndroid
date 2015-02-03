@@ -1,153 +1,209 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="50dp"
-    android:orientation="vertical" >
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="50dp"
+              android:orientation="vertical" >
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
 
         <ImageView
-            android:id="@+id/artist_image"
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/stock_pic" />
+                android:id="@+id/artist_image"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/stock_pic" />
 
         <ImageView
-            android:id="@+id/dark"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:alpha="0.7"
-            android:scaleType="fitXY"
-            android:src="@drawable/bg" />
+                android:id="@+id/dark"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:alpha="0.7"
+                android:scaleType="fitXY"
+                android:src="@drawable/bg" />
 
         <RelativeLayout
-            android:id="@+id/relativeLayout1"
-            android:layout_width="fill_parent"
-            android:layout_height="200dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentTop="false"
-            android:layout_centerHorizontal="true" >
+                android:id="@+id/relativeLayout1"
+                android:layout_width="fill_parent"
+                android:layout_height="200dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentTop="false"
+                android:layout_centerHorizontal="true" >
 
             <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp"
-                android:background="#ffffff"
-                android:orientation="vertical" >
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:background="#ffffff"
+                    android:orientation="vertical" >
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="10dp" >
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="10dp" >
 
                     <ImageView
-                        android:id="@+id/imageView1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_action_place" />
+                            android:id="@+id/imageView1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_action_place" />
 
                     <TextView
-                        android:id="@+id/place_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="4dp"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
-                        android:paddingTop="4dp"
-                        android:text="miejsce"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="#616161"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                            android:id="@+id/place_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="4dp"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingTop="4dp"
+                            android:text="miejsce"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="#616161"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/distanceTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="40dp"
-                    android:text="200km od miejsca zamieszkania"
-                    android:textColor="#757575" />
+                        android:id="@+id/distanceTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="40dp"
+                        android:text="200km od miejsca zamieszkania"
+                        android:textColor="#757575" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp" >
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp" >
 
                     <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_action_event" />
+                            android:id="@+id/imageView2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_action_event" />
 
                     <TextView
-                        android:id="@+id/con_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="4dp"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
-                        android:paddingTop="4dp"
-                        android:text="data"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="#616161"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                            android:id="@+id/con_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="4dp"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingTop="4dp"
+                            android:text="data"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="#616161"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/howlongTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="40dp"
-                    android:text="zostało 56 dni"
-                    android:textColor="#757575" />
+                        android:id="@+id/howlongTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="40dp"
+                        android:text="zostało 56 dni"
+                        android:textColor="#757575" />
+
+                <LinearLayout
+                        android:id="@+id/ticketPrices"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center" >
+
+                    <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="fill_parent"
+                            android:layout_gravity="center"
+                            android:orientation="horizontal" >
+
+                        <TextView
+                                android:id="@+id/ticketsDetails1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left"
+                                android:padding="20dp"
+                                android:paddingRight="30dp"
+                                android:text="30zl"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:textColor="#2196F3"
+                                android:textSize="14sp"
+                                android:visibility="gone"
+                                />
+
+                        <TextView
+                                android:id="@+id/ticketsDetails2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:paddingBottom="20dp"
+                                android:paddingTop="20dp"
+                                android:paddingLeft="30dp"
+                                android:paddingRight="30dp"
+                                android:text="40zł"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:textColor="#2196F3"
+                                android:textSize="14sp"
+                                android:visibility="gone" />
+
+                        <TextView
+                                android:id="@+id/ticketsDetails3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right"
+                                android:padding="20dp"
+                                android:text="50zł"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:textColor="#2196F3"
+                                android:textSize="14sp"
+                                android:visibility="gone"  />
+
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
 
             <TextView
-                android:id="@+id/add_to_calendar_btn"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="false"
-                android:layout_centerInParent="true"
-                android:layout_centerVertical="false"
-                android:layout_marginBottom="12dp"
-                android:gravity="center"
-                android:padding="12dp"
-                android:text="DODAJ DO KALENDARZA"
-                android:textColor="#2196F3"
-                android:textSize="14sp" />
+                    android:id="@+id/add_to_calendar_btn"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="false"
+                    android:layout_centerInParent="true"
+                    android:layout_centerVertical="false"
+                    android:layout_marginBottom="12dp"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:text="DODAJ DO KALENDARZA"
+                    android:textColor="#2196F3"
+                    android:textSize="14sp" />
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/artist_name"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/relativeLayout1"
-            android:layout_alignParentLeft="true"
-            android:layout_marginBottom="75dp"
-            android:gravity="center"
-            android:paddingBottom="2dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="2dp"
-            android:shadowColor="#212121"
-            android:shadowDx="1"
-            android:shadowDy="1"
-            android:shadowRadius="2"
-            android:text="title"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#ffffff"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:typeface="sans" />
+                android:id="@+id/artist_name"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/relativeLayout1"
+                android:layout_alignParentLeft="true"
+                android:layout_marginBottom="75dp"
+                android:gravity="center"
+                android:paddingBottom="2dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="2dp"
+                android:shadowColor="#212121"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="2"
+                android:text="title"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#ffffff"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:typeface="sans" />
 
     </RelativeLayout>
 
