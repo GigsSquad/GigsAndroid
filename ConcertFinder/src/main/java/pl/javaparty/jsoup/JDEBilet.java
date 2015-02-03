@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 
+import android.util.Log;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -74,6 +75,7 @@ public class JDEBilet {
 					String [] ci = kod.split(" ");
 					club = cl[0];
 					city = ci[ci.length-1];
+                    Log.i("rafalEbilet", conUrl);
 					dbm.addConcert(conArtist, city, club, day, month, year, "EBILET", conUrl);
 					
 				}

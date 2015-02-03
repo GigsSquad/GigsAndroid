@@ -3,8 +3,7 @@ package pl.javaparty.jsoup;
 import java.io.IOException;
 
 
-
-
+import android.util.Log;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -73,7 +72,7 @@ public class JDLiveNation {
 			int year = Integer.parseInt(date[2]);
 			String place = concert.getElementsByClass("venueName").text();
 			String city= concert.getElementsByClass("venueCity").text();
-			
+            Log.i("rafalLiveNation", url);
 			dbm.addConcert(artist,city,place, day,month,year,"LIVENATION", url);
 		}
 		Elements next = doc.getElementsByClass("next");

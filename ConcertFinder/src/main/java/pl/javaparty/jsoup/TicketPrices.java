@@ -37,11 +37,19 @@ public class TicketPrices extends AsyncTask<String, Void,String>
 
     protected void onPostExecute(String result) {
 
-        prices = result.split(" ");
+        try {
+            prices = result.split(" ");
+        }catch( Exception exc)
+        {
+            td2.setVisibility(View.VISIBLE);
+            td2.setText("Brak informacji o cenach biletów");
+        }
 
         if(prices!=null){
 
-            Log.i("rafal", "w post execute");
+            if(prices.length<1)
+                td2.setText("Brak informacji o cenach biletów");
+
             if(prices.length>=1)
             {
                 td1.setVisibility(View.VISIBLE);
