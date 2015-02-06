@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -109,8 +110,9 @@ public class RecentFragment extends Fragment {
 
 	private Concert[] cutArray(Concert[] array)
 	{
-		if (array != null)
+		if (array != null &&  array.length != 0)
 		{
+			Log.i("EMPTYLIST", String.valueOf(array.length));
 			if (showedConcerts >= dbm.getSize(dbManager.CONCERTS_TABLE) - 1)
 			{
 				showedConcerts = dbm.getSize(dbManager.CONCERTS_TABLE) - 1;
@@ -120,14 +122,15 @@ public class RecentFragment extends Fragment {
 			else
 				return Arrays.copyOfRange(array, 0, showedConcerts);
 		}
-		return null;//pi�kna �ata
+		Log.i("EMPTYLIST", "Sending null");
+		return array;
 	}
 
 	public void refresh()
 	{
-		adapter = new ConcertAdapter(getActivity(), cutArray(dbm.getAllConcerts(filterAgencies())));
-		//adapter.changeData(cutArray(dbm.getAllConcerts(filterAgencies())));
-		lv.setAdapter(adapter);
+		//adapter = new ConcertAdapter(getActivity(), cutArray(dbm.getAllConcerts(filterAgencies())));
+		adapter.changeData(cutArray(dbm.getAllConcerts(filterAgencies())));
+		//lv.setAdapter(adapter);
 	}
 
 	@Override

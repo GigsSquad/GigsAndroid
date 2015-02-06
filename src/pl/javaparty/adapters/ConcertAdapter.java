@@ -1,5 +1,8 @@
 package pl.javaparty.adapters;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.imageloader.ImageLoader;
@@ -25,10 +28,18 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 	private Concert[] items;
 
 	public ConcertAdapter(Context context, Concert[] items) {
-		super(context, R.layout.card_layout, items);
+		super(context, R.layout.card_layout, toArrL(items));
 		this.items = items;
 		imageLoader = new ImageLoader(context);
 		tf = Typeface.createFromAsset(getContext().getAssets(), "font/robotocondensed-light.ttf");
+	}
+
+	private static ArrayList<Concert> toArrL(Concert[] items)
+	{
+		ArrayList<Concert> ar = new ArrayList<Concert>();
+		for(Concert c: items)
+			ar.add(c);
+		return ar;
 	}
 
 	public class ViewHolder {
@@ -95,7 +106,14 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 	public void changeData(Concert[] newData)
 	{
 		items = newData;
-		notifyDataSetChanged();
+		clear();
+		if(items!=null)
+		{
+			addAll(items);
+			notifyDataSetChanged();
+		}
+		else
+			notifyDataSetInvalidated();
 	}
 
 	private String getPreparedPlace(String place)
