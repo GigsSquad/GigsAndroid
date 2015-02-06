@@ -90,6 +90,7 @@ public class SettingsFragment extends Fragment {
 				Log.i("SETTINGS", "Dystans: " + distanceSeekBar.getProgress());
 				Toast.makeText(getActivity(), "Zapisano!", Toast.LENGTH_SHORT).show();
 			}
+			
 		});
 
 		clearButton.setOnClickListener(new OnClickListener()

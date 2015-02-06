@@ -22,9 +22,11 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 	ViewHolder holder;
 	ImageLoader imageLoader;
 	private Typeface tf;
+	private Concert[] items;
 
 	public ConcertAdapter(Context context, Concert[] items) {
 		super(context, R.layout.card_layout, items);
+		this.items = items;
 		imageLoader = new ImageLoader(context);
 		tf = Typeface.createFromAsset(getContext().getAssets(), "font/robotocondensed-light.ttf");
 	}
@@ -40,9 +42,10 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		rowItem = getItem(position);
-
+		
 		LayoutInflater mInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		if (convertView == null) {
+			
 			convertView = mInflater.inflate(R.layout.card_layout, null);
 			holder = new ViewHolder();
 			holder.card = (RelativeLayout) convertView.findViewById(R.id.card);
@@ -79,7 +82,20 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 		imageLoader.DisplayImage(rowItem.getArtist(), holder.image);
 		Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_right);
 		holder.card.startAnimation(animation);
+		
 		return convertView;
+	}
+	
+	@Override
+	public int getCount()
+	{
+		return items==null ? 0 : items.length;
+	}
+	
+	public void changeData(Concert[] newData)
+	{
+		items = newData;
+		notifyDataSetChanged();
 	}
 
 	private String getPreparedPlace(String place)

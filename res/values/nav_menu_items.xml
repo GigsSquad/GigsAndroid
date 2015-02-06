@@ -8,6 +8,7 @@
         <item>Aktualizuj</item>
         <item>Preferencje</item>
         <item>Informacje</item>
+        <item>Agencje</item>
         <item>Koncerty w </item>
     </string-array>
 
@@ -19,5 +20,9 @@
         <item>@drawable/ic_action_settings</item>
         <item>@drawable/ic_action_about</item>
     </array>
+    
+    <string-array name="agencje_submenu">
+        <item>GoAhead</item>
+    </string-array>
 
 </resources>
