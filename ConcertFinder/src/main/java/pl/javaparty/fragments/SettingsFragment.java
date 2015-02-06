@@ -115,4 +115,41 @@ public class SettingsFragment extends Fragment {
 		return view;
 	}
 	
+	private class ClearDialog extends DialogFragment
+	{
+
+		@Override
+		public Dialog onCreateDialog(Bundle savedInstanceState)
+		{
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+			builder.setTitle("Czy na pewno chcesz wyczy�ci� pami��?")
+			.setMessage("Wszystkie obrazki zespo��w, oraz ca�a baza danych zostanie usuni�ta!")
+					.setPositiveButton("OK", new DialogInterface.OnClickListener()
+					{
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which)
+						{
+							//dbm.deleteDB(context); Czemu tak? :O
+							FileExplorer f = new FileExplorer(context);
+							f.clear();
+							Log.i("SETTINGS", "Usunieto obrazki z dysku");
+							dbm.deleteBase();
+							Log.i("SETTINGS", "Wyczyszczono baze");
+							MainActivity.updateCounters();
+							Toast.makeText(getActivity(), "Wyczyszczono pamiec!", Toast.LENGTH_SHORT).show();
+						}
+					})
+					.setNegativeButton("Anuluj", new DialogInterface.OnClickListener()
+					{
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which)
+						{
+							//puste :(
+						}
+					});
+			return builder.create();
+		}	
+	}
 }
