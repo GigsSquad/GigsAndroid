@@ -1,10 +1,5 @@
 package pl.javaparty.fragments;
 
-import pl.javaparty.concertfinder.MainActivity;
-import pl.javaparty.concertfinder.R;
-import pl.javaparty.imageloader.FileExplorer;
-import pl.javaparty.prefs.Prefs;
-import pl.javaparty.sql.dbManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -17,13 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.SeekBar;
+import android.widget.*;
 import android.widget.SeekBar.OnSeekBarChangeListener;
-import android.widget.TextView;
-import android.widget.Toast;
+import pl.javaparty.concertfinder.MainActivity;
+import pl.javaparty.concertfinder.R;
+import pl.javaparty.imageloader.FileExplorer;
+import pl.javaparty.prefs.Prefs;
+import pl.javaparty.sql.dbManager;
 
 public class SettingsFragment extends Fragment {
 
@@ -115,16 +110,16 @@ public class SettingsFragment extends Fragment {
 
 		return view;
 	}
-	
-	private class ClearDialog extends DialogFragment
+
+	public class ClearDialog extends DialogFragment
 	{
 
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState)
 		{
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-			builder.setTitle("Czy na pewno chcesz wyczyœciæ pamiêæ?")
-			.setMessage("Wszystkie obrazki zespo³ów, oraz ca³a baza danych zostanie usuniêta!")
+			builder.setTitle("Czy na pewno chcesz wyczyÅ›ciÄ‡ pamiÄ™Ä‡?")
+					.setMessage("Wszystkie obrazki zespoÅ‚Ã³w, oraz caÅ‚a baza danych zostanie usuniÄ™ta!")
 					.setPositiveButton("OK", new DialogInterface.OnClickListener()
 					{
 						
