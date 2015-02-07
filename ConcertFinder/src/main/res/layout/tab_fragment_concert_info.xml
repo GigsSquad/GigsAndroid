@@ -27,7 +27,7 @@
         <RelativeLayout
                 android:id="@+id/relativeLayout1"
                 android:layout_width="fill_parent"
-                android:layout_height="230dp"
+                android:layout_height="250dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentTop="false"
                 android:layout_centerHorizontal="true" >
@@ -120,7 +120,7 @@
                             android:id="@+id/imageView3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_action_event" />
+                            android:src="@drawable/money"/>
                     <TextView
                             android:id="@+id/ticketPricesInfo"
                             android:layout_width="wrap_content"
@@ -129,7 +129,7 @@
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp"
                             android:paddingTop="4dp"
-                            android:text="ceny biletów"
+                            android:text="Kup bilet"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="#616161"
                             android:textSize="18sp"
@@ -151,7 +151,7 @@
                                 android:paddingRight="50dp"
                                 android:text="30zl"
                                 android:textAppearance="?android:attr/textAppearanceLarge"
-                                android:textColor="#757575"
+                                android:textColor="#2196F3"
                                 android:textSize="14sp"
                                 android:visibility="gone"
 
@@ -168,7 +168,7 @@
                                 android:paddingRight="30dp"
                                 android:text="40zł"
                                 android:textAppearance="?android:attr/textAppearanceLarge"
-                                android:textColor="#757575"
+                                android:textColor="#2196F3"
                                 android:textSize="14sp"
                                 android:visibility="gone" />
 
@@ -180,7 +180,7 @@
                                 android:padding="20dp"
                                 android:text="50zł"
                                 android:textAppearance="?android:attr/textAppearanceLarge"
-                                android:textColor="#757575"
+                                android:textColor="#2196F3"
                                 android:textSize="14sp"
                                 android:visibility="gone"  />
 

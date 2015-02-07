@@ -1,9 +1,18 @@
 package pl.javaparty.fragments;
 
-import java.util.Calendar;
-
+import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
+import android.provider.CalendarContract;
+import android.provider.CalendarContract.Events;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.*;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.widget.TextView;
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.imageloader.ImageLoader;
@@ -11,32 +20,18 @@ import pl.javaparty.jsoup.TicketPrices;
 import pl.javaparty.map.MapHelper;
 import pl.javaparty.prefs.Prefs;
 import pl.javaparty.sql.dbManager;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.provider.CalendarContract;
-import android.provider.CalendarContract.Events;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-public class InfoConcertTab extends Fragment {
+import java.util.Calendar;
+
+public class TabConcertInfo extends Fragment {
 
 	TextView artist, place, date, addCalendar, howlong, distance,
-            ticketsDetails1,ticketsDetails2,ticketsDetails3;
+			ticketsDetails1, ticketsDetails2, ticketsDetails3;
 	ImageView image;
 	dbManager dbm;
 	MapHelper mapHelper;
 	int ID;
-    String[] prices;
+	String[] prices;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
@@ -49,10 +44,9 @@ public class InfoConcertTab extends Fragment {
 		addCalendar = (TextView) view.findViewById(R.id.add_to_calendar_btn);
 		image = (ImageView) view.findViewById(R.id.artist_image);
 		dbm = MainActivity.getDBManager();
-        ticketsDetails1 = (TextView) view.findViewById(R.id.ticketsDetails1);
-        ticketsDetails2 = (TextView) view.findViewById(R.id.ticketsDetails2);
-        ticketsDetails3 = (TextView) view.findViewById(R.id.ticketsDetails3);
-
+		ticketsDetails1 = (TextView) view.findViewById(R.id.ticketsDetails1);
+		ticketsDetails2 = (TextView) view.findViewById(R.id.ticketsDetails2);
+		ticketsDetails3 = (TextView) view.findViewById(R.id.ticketsDetails3);
 
 		setHasOptionsMenu(true);
 
@@ -73,8 +67,12 @@ public class InfoConcertTab extends Fragment {
 		long diff = dbm.getConcertByID(ID).getCalendar().getTimeInMillis() - today.getTimeInMillis();
 		int days = (int) Math.ceil((diff / (24 * 60 * 60 * 1000))) + 1;
 
-		if (days <= 0)
+		if (days < 0)
 			howlong.setVisibility(View.GONE);
+		else if (days == 1)
+			howlong.setText("To już dziś!");
+		else if (days == 2)
+			howlong.setText("To już jutro!");
 		else
 			howlong.setText("pozostało jeszcze " + days + " dni");
 
@@ -97,76 +95,49 @@ public class InfoConcertTab extends Fragment {
 			}
 		});
 
-       // TicketPrices pricesGetter =  Log.i("rafal",dbm.getAgency(ID));
-       // pricesGetter.execute(" ");
-        //Pobieranie cen biletów
-        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ) {
-            new TicketPrices(dbm.getUrl(ID),  dbm.getAgency(ID),ticketsDetails1,ticketsDetails2,ticketsDetails3).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        }else{
-            new TicketPrices(dbm.getUrl(ID),  dbm.getAgency(ID),ticketsDetails1,ticketsDetails2,ticketsDetails3).execute();
+		// TicketPrices pricesGetter =  Log.i("rafal",dbm.getAgency(ID));
+		// pricesGetter.execute(" ");
+		//Pobieranie cen biletów
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			new TicketPrices(dbm.getUrl(ID), dbm.getAgency(ID), ticketsDetails1, ticketsDetails2, ticketsDetails3)
+					.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+		} else {
+			new TicketPrices(dbm.getUrl(ID), dbm.getAgency(ID), ticketsDetails1, ticketsDetails2, ticketsDetails3).execute();
 
-        }
-        Log.i("rafal", "po execute");
-        ticketsDetails1.setOnClickListener(new OnClickListener() {
+		}
+		Log.i("rafal", "po execute");
+		ticketsDetails1.setOnClickListener(new OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
+			@Override
+			public void onClick(View v) {
 
-                Intent browserIntent =
-                        new Intent(Intent.ACTION_VIEW, Uri.parse(dbm.getUrl(ID)));
-                startActivity(browserIntent);
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(dbm.getUrl(ID)));
+				startActivity(browserIntent);
 
-            }
-        });
+			}
+		});
 
-        ticketsDetails2.setOnClickListener(new OnClickListener() {
+		ticketsDetails2.setOnClickListener(new OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                Intent browserIntent =
-                        new Intent(Intent.ACTION_VIEW, Uri.parse(dbm.getUrl(ID)));
-                startActivity(browserIntent);
+			@Override
+			public void onClick(View v) {
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(dbm.getUrl(ID)));
+				startActivity(browserIntent);
 
-            }
-        });
+			}
+		});
 
-        ticketsDetails3.setOnClickListener(new OnClickListener() {
+		ticketsDetails3.setOnClickListener(new OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
+			@Override
+			public void onClick(View v) {
 
-                Intent browserIntent =
-                        new Intent(Intent.ACTION_VIEW, Uri.parse(dbm.getUrl(ID)));
-                startActivity(browserIntent);
-            }
-        });
+				Intent browserIntent =
+						new Intent(Intent.ACTION_VIEW, Uri.parse(dbm.getUrl(ID)));
+				startActivity(browserIntent);
+			}
+		});
 		return view;
-	}
-
-	private class calculateDistance extends AsyncTask<Void, Void, Void> {
-		int distanceInt;
-
-		@Override
-		protected void onPreExecute() {
-			distance.setVisibility(View.GONE);
-			super.onPreExecute();
-		}
-
-		@Override
-		protected Void doInBackground(Void... params) {
-			mapHelper = new MapHelper(getActivity());
-			distanceInt = mapHelper.distanceTo(dbm.getCity(ID));
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Void result) {
-			distance.setText(distanceInt + "km od " + Prefs.getCity(getActivity()));
-			if (distanceInt != 0)
-				distance.setVisibility(View.VISIBLE);
-			super.onPostExecute(result);
-		}
-
 	}
 
 	@Override
@@ -184,9 +155,7 @@ public class InfoConcertTab extends Fragment {
 			{
 				dbm.removeFavouriteConcert(ID);
 				item.setIcon(R.drawable.ic_action_not_important_w);
-			}
-			else
-			{
+			} else {
 				dbm.addFavouriteConcert(ID);
 				item.setIcon(R.drawable.ic_action_important_w);
 			}
@@ -217,28 +186,50 @@ public class InfoConcertTab extends Fragment {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-    private void updatePricesUI()
-    {
-        if(prices!=null){
 
+	private void updatePricesUI() {
+		if (prices != null) {
 
-            if(prices.length>=1)
-            {
-                ticketsDetails1.setVisibility(View.VISIBLE);
-                ticketsDetails1.setText(prices[0]);
+			if (prices.length >= 1) {
+				ticketsDetails1.setVisibility(View.VISIBLE);
+				ticketsDetails1.setText(prices[0] + "zł");
 
-            }
+			}
 
-            if(prices.length>=2)
-            {	ticketsDetails2.setVisibility(View.VISIBLE);
-                ticketsDetails2.setText(prices[1]);
+			if (prices.length >= 2) {
+				ticketsDetails2.setVisibility(View.VISIBLE);
+				ticketsDetails2.setText(prices[1] + "zł");
 
-            }
-            if(prices.length>=3)
-            {
-                ticketsDetails3.setVisibility(View.VISIBLE);
-                ticketsDetails3.setText(prices[2]);
-            }
-        }
-    }
+			}
+			if (prices.length >= 3) {
+				ticketsDetails3.setVisibility(View.VISIBLE);
+				ticketsDetails3.setText(prices[2] + "zł");
+			}
+		}
+	}
+
+	private class calculateDistance extends AsyncTask<Void, Void, Void> {
+		int distanceInt;
+
+		@Override
+		protected void onPreExecute() {
+			distance.setVisibility(View.GONE);
+			super.onPreExecute();
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			mapHelper = new MapHelper(getActivity());
+			distanceInt = mapHelper.distanceTo(dbm.getCity(ID));
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			distance.setText(distanceInt + "km od " + Prefs.getCity(getActivity()));
+			if (distanceInt != 0)
+				distance.setVisibility(View.VISIBLE);
+			super.onPostExecute(result);
+		}
+	}
 }

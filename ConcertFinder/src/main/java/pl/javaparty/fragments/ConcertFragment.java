@@ -1,10 +1,10 @@
 package pl.javaparty.fragments;
 
-import pl.javaparty.concertfinder.R;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTabHost;
 import android.view.MenuItem;
+import pl.javaparty.concertfinder.R;
 
 public class ConcertFragment extends FragmentActivity {
 
@@ -19,8 +19,9 @@ public class ConcertFragment extends FragmentActivity {
 		mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
 		mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
 
-		mTabHost.addTab(mTabHost.newTabSpec("infoFragment").setIndicator("Informacje"), InfoConcertTab.class, getIntent().getExtras());
-		mTabHost.addTab(mTabHost.newTabSpec("mapFragment").setIndicator("Mapa"), MapConcertTab.class, getIntent().getExtras());
+		mTabHost.addTab(mTabHost.newTabSpec("infoFragment").setIndicator("Informacje"), TabConcertInfo.class, getIntent().getExtras());
+		mTabHost.addTab(mTabHost.newTabSpec("mapFragment").setIndicator("Mapa koncertu"), TabConcertMap.class, getIntent().getExtras());
+		mTabHost.addTab(mTabHost.newTabSpec("googleMapFragment").setIndicator("Dojazd"), TabConcertGoogleMap.class, getIntent().getExtras());
 	}
 
 	@Override

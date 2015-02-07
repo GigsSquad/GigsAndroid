@@ -1,81 +1,33 @@
 package pl.javaparty.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.widget.Toast;
-import pl.javaparty.concertfinder.MainActivity;
-import pl.javaparty.concertfinder.R;
-import pl.javaparty.map.MapHelper;
-import pl.javaparty.sql.dbManager;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
-import android.view.InflateException;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-
+import android.view.*;
+import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MarkerOptions;
+import pl.javaparty.concertfinder.MainActivity;
+import pl.javaparty.concertfinder.R;
+import pl.javaparty.map.MapHelper;
+import pl.javaparty.sql.dbManager;
 
-public class MapConcertTab extends Fragment {
+public class TabConcertGoogleMap extends Fragment {
 
+	static int ID;
+	static dbManager dbm;
 	private static View view;
 	private static GoogleMap mMap;
 	private static FragmentManager fragmentManager;
-	static int ID;
-	static dbManager dbm;
 	private static MapHelper mapHelper;
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
-		ID = getArguments().getInt("ID", -1);
-
-		dbm = MainActivity.getDBManager();
-
-		if(isOnline())
-			Toast.makeText(getActivity(), "Brak połączenia", Toast.LENGTH_LONG).show();
-
-		mapHelper = new MapHelper(getActivity());
-
-		setHasOptionsMenu(true);
-
-		if (container == null)
-			return null;
-
-		if (view != null) {
-			ViewGroup parent = (ViewGroup) view.getParent();
-			if (parent != null)
-				parent.removeView(view);
-		}
-
-		try {
-			view = inflater.inflate(R.layout.tab_fragment_concert_map, container, false);
-		} catch (InflateException e) {
-			/* map is already there, just return view as it is */
-		}
-
-		fragmentManager = getChildFragmentManager();
-
-		setUpMapIfNeeded();
-
-		return view;
-	}
-
-	private boolean isOnline() {
-		ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo netInfo = cm.getActiveNetworkInfo();
-		return netInfo != null && netInfo.isConnectedOrConnecting();
-	}
 
 	private static void setUpMapIfNeeded() {
 		if (mMap == null) {
@@ -95,15 +47,57 @@ public class MapConcertTab extends Fragment {
 				.newLatLngZoom(mapHelper.getLatLng(dbm.getCity(ID)), 17.0f)); // przybliza do markera
 	}
 
+	private boolean isOnline() {
+		ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo netInfo = cm.getActiveNetworkInfo();
+		return netInfo != null && netInfo.isConnectedOrConnecting();
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
+		ID = getArguments().getInt("ID", -1);
+
+		dbm = MainActivity.getDBManager();
+
+		mapHelper = new MapHelper(getActivity());
+
+		setHasOptionsMenu(true);
+
+		if (container == null)
+			return null;
+
+		if (view != null) {
+			ViewGroup parent = (ViewGroup) view.getParent();
+			if (parent != null)
+				parent.removeView(view);
+		}
+
+		try {
+			view = inflater.inflate(R.layout.tab_fragment_concert_google_map, container, false);
+		} catch (InflateException e) {
+			/* map is already there, just return view as it is */
+		}
+
+		fragmentManager = getChildFragmentManager();
+
+		if (isOnline()) {
+			setUpMapIfNeeded();
+		} else {
+			Toast.makeText(getActivity(), "Brak połączenia", Toast.LENGTH_LONG).show();
+		}
+
+		return view;
+	}
+
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		if (mMap != null)
+		if (mMap != null && isOnline())
 			setUpMap();
 
 		if (mMap == null) {
 			mMap = ((SupportMapFragment) fragmentManager.findFragmentById(R.id.location_map)).getMap();
-			if (mMap != null)
+			if (mMap != null && isOnline())
 				setUpMap();
 		}
 	}
@@ -131,9 +125,7 @@ public class MapConcertTab extends Fragment {
 			{
 				dbm.removeFavouriteConcert(ID);
 				item.setIcon(R.drawable.ic_action_not_important_w);
-			}
-			else
-			{
+			} else {
 				dbm.addFavouriteConcert(ID);
 				item.setIcon(R.drawable.ic_action_important_w);
 			}
