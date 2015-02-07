@@ -1,19 +1,16 @@
 package pl.javaparty.adapters;
 
-import java.util.ArrayList;
-
-import pl.javaparty.concertfinder.R;
-import pl.javaparty.items.NavDrawerItem;
-import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import pl.javaparty.concertfinder.R;
+import pl.javaparty.items.NavDrawerItem;
+
+import java.util.ArrayList;
 
 public class NavDrawerAdapter extends BaseExpandableListAdapter
 {
@@ -122,7 +119,7 @@ public class NavDrawerAdapter extends BaseExpandableListAdapter
 			
 			imgIcon.setImageResource(items.get(groupPosition).getIcon());
 			text.setText(group.getTitle());
-			
+
 			if(isExpanded)
 				indicator.getDrawable().setState(new int[] {android.R.attr.state_expanded});
 			else
