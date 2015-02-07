@@ -28,7 +28,7 @@ public class SettingsFragment extends Fragment {
 	Button saveButton, clearButton;
 	Context context;
 	ArrayAdapter<CharSequence> adapter;
-	dbManager dbm;
+	static dbManager dbm;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
@@ -41,7 +41,7 @@ public class SettingsFragment extends Fragment {
 		distanceTextView = (TextView) view.findViewById(R.id.distanceTextView);
 		saveButton = (Button) view.findViewById(R.id.saveSettingsButton);
 		clearButton = (Button) view.findViewById(R.id.clearFilesButton);
-		
+
 		adapter = ArrayAdapter.createFromResource(getActivity(), R.array.COUNTIES, android.R.layout.simple_dropdown_item_1line);
 		citySearchBox.setAdapter(adapter);
 
@@ -85,67 +85,50 @@ public class SettingsFragment extends Fragment {
 				Log.i("SETTINGS", "Dystans: " + distanceSeekBar.getProgress());
 				Toast.makeText(getActivity(), "Zapisano!", Toast.LENGTH_SHORT).show();
 			}
-			
+
 		});
 
-		clearButton.setOnClickListener(new OnClickListener()
-		{
+		clearButton.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				DialogFragment dialog = new ClearDialog();
 				dialog.show(getActivity().getFragmentManager(), "CLEAR");
-				/*
-				//dbm.deleteDB(context); Czemu tak? :O
-				FileExplorer f = new FileExplorer(context);
-				f.clear();
-				Log.i("SETTINGS", "Usunieto obrazki z dysku");
-				dbm.deleteBase();
-				Log.i("SETTINGS", "Wyczyszczono baze");
-				Toast.makeText(getActivity(), "Wyczyszczono pamiec!", Toast.LENGTH_SHORT).show();
-				*/
 			}
 		});
 
 		return view;
 	}
 
-	public class ClearDialog extends DialogFragment
-	{
+	public static class ClearDialog extends DialogFragment {
 
 		@Override
-		public Dialog onCreateDialog(Bundle savedInstanceState)
-		{
+		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 			builder.setTitle("Czy na pewno chcesz wyczyścić pamięć?")
 					.setMessage("Wszystkie obrazki zespołów, oraz cała baza danych zostanie usunięta!")
-					.setPositiveButton("OK", new DialogInterface.OnClickListener()
-					{
-						
+					.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
 						@Override
-						public void onClick(DialogInterface dialog, int which)
-						{
+						public void onClick(DialogInterface dialog, int which) {
 							//dbm.deleteDB(context); Czemu tak? :O
-							FileExplorer f = new FileExplorer(context);
+							FileExplorer f = new FileExplorer(getActivity());
 							f.clear();
-							Log.i("SETTINGS", "Usunieto obrazki z dysku");
+							Log.i("SETTINGS", "Usunięto obrazki z dysku");
 							dbm.deleteBase();
-							Log.i("SETTINGS", "Wyczyszczono baze");
+							Log.i("SETTINGS", "Wyczyszczono bazę");
 							MainActivity.updateCounters();
-							Toast.makeText(getActivity(), "Wyczyszczono pamiec!", Toast.LENGTH_SHORT).show();
+							Toast.makeText(getActivity(), "Wyczyszczono pamięć!", Toast.LENGTH_SHORT).show();
 						}
 					})
-					.setNegativeButton("Anuluj", new DialogInterface.OnClickListener()
-					{
-						
+					.setNegativeButton("Anuluj", new DialogInterface.OnClickListener() {
+
 						@Override
-						public void onClick(DialogInterface dialog, int which)
-						{
+						public void onClick(DialogInterface dialog, int which) {
 							//puste :(
 						}
 					});
 			return builder.create();
-		}	
+		}
 	}
 }

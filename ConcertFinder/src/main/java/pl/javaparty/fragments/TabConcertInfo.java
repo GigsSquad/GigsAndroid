@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Events;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -31,7 +30,6 @@ public class TabConcertInfo extends Fragment {
 	dbManager dbm;
 	MapHelper mapHelper;
 	int ID;
-	String[] prices;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
@@ -55,28 +53,31 @@ public class TabConcertInfo extends Fragment {
 
 		String artistName = dbm.getArtist(ID);
 		getActivity().getActionBar().setTitle(artistName);
+
 		new ImageLoader(inflater.getContext()).DisplayImage(artistName, image);
+		new calculateDistance().execute();
+
 		artistName = artistName.replace(" - ", "\n");
-		artistName = artistName.replace(": ", "\n");
+		artistName = artistName.replace(": ", ":\n");
 
 		artist.setText(artistName);
-		place.setText(dbm.getCity(ID) + " " + dbm.getSpot(ID));
+		place.setText((dbm.getCity(ID) + " " + dbm.getSpot(ID)).trim());
 		date.setText(dbm.getDate(ID));
 
 		Calendar today = Calendar.getInstance();
 		long diff = dbm.getConcertByID(ID).getCalendar().getTimeInMillis() - today.getTimeInMillis();
 		int days = (int) Math.ceil((diff / (24 * 60 * 60 * 1000))) + 1;
 
-		if (days < 0)
+		if (days < 0) {
 			howlong.setVisibility(View.GONE);
-		else if (days == 1)
+		} else if (days == 1) {
 			howlong.setText("To już dziś!");
-		else if (days == 2)
+		} else if (days == 2) {
 			howlong.setText("To już jutro!");
-		else
+		} else {
 			howlong.setText("pozostało jeszcze " + days + " dni");
+		}
 
-		new calculateDistance().execute();
 
 		addCalendar.setOnClickListener(new OnClickListener() {
 
@@ -95,8 +96,6 @@ public class TabConcertInfo extends Fragment {
 			}
 		});
 
-		// TicketPrices pricesGetter =  Log.i("rafal",dbm.getAgency(ID));
-		// pricesGetter.execute(" ");
 		//Pobieranie cen biletów
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			new TicketPrices(dbm.getUrl(ID), dbm.getAgency(ID), ticketsDetails1, ticketsDetails2, ticketsDetails3)
@@ -105,7 +104,6 @@ public class TabConcertInfo extends Fragment {
 			new TicketPrices(dbm.getUrl(ID), dbm.getAgency(ID), ticketsDetails1, ticketsDetails2, ticketsDetails3).execute();
 
 		}
-		Log.i("rafal", "po execute");
 		ticketsDetails1.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -132,8 +130,7 @@ public class TabConcertInfo extends Fragment {
 			@Override
 			public void onClick(View v) {
 
-				Intent browserIntent =
-						new Intent(Intent.ACTION_VIEW, Uri.parse(dbm.getUrl(ID)));
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(dbm.getUrl(ID)));
 				startActivity(browserIntent);
 			}
 		});
@@ -187,40 +184,19 @@ public class TabConcertInfo extends Fragment {
 		}
 	}
 
-	private void updatePricesUI() {
-		if (prices != null) {
-
-			if (prices.length >= 1) {
-				ticketsDetails1.setVisibility(View.VISIBLE);
-				ticketsDetails1.setText(prices[0] + "zł");
-
-			}
-
-			if (prices.length >= 2) {
-				ticketsDetails2.setVisibility(View.VISIBLE);
-				ticketsDetails2.setText(prices[1] + "zł");
-
-			}
-			if (prices.length >= 3) {
-				ticketsDetails3.setVisibility(View.VISIBLE);
-				ticketsDetails3.setText(prices[2] + "zł");
-			}
-		}
-	}
-
 	private class calculateDistance extends AsyncTask<Void, Void, Void> {
-		int distanceInt;
+		int distanceInt = 0;
 
 		@Override
 		protected void onPreExecute() {
 			distance.setVisibility(View.GONE);
+			mapHelper = new MapHelper(getActivity());
 			super.onPreExecute();
 		}
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			mapHelper = new MapHelper(getActivity());
-			distanceInt = mapHelper.distanceTo(dbm.getCity(ID));
+			distanceInt = mapHelper.distanceTo(dbm.getCity(ID).trim());
 			return null;
 		}
 

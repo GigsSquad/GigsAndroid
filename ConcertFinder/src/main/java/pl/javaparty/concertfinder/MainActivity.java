@@ -1,18 +1,5 @@
 package pl.javaparty.concertfinder;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import pl.javaparty.adapters.NavDrawerAdapter;
-import pl.javaparty.fragments.AboutFragment;
-import pl.javaparty.fragments.FavoriteFragment;
-import pl.javaparty.fragments.RecentFragment;
-import pl.javaparty.fragments.SearchFragment;
-import pl.javaparty.fragments.SettingsFragment;
-import pl.javaparty.items.Concert.AgencyName;
-import pl.javaparty.items.NavDrawerItem;
-import pl.javaparty.sql.DatabaseUpdater;
-import pl.javaparty.sql.dbManager;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
@@ -26,9 +13,17 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
-import android.widget.ExpandableListView;
+import pl.javaparty.adapters.NavDrawerAdapter;
+import pl.javaparty.fragments.*;
+import pl.javaparty.items.NavDrawerItem;
+import pl.javaparty.sql.DatabaseUpdater;
+import pl.javaparty.sql.dbManager;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends FragmentActivity {
 
@@ -73,9 +68,9 @@ public class MainActivity extends FragmentActivity {
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
-		navDrawerItems.add(new NavDrawerItem(navMenuTitles[6], navMenuIcons.getResourceId(3, -1), agencies));//TODO icona
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1)));
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[6], navMenuIcons.getResourceId(3, -1), agencies));//TODO icona
 		navMenuIcons.recycle();
 		
 		adapter = new NavDrawerAdapter(context, navDrawerItems);

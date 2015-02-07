@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="48dp">
+
+    <ImageView
+            android:id="@+id/iconEx"
+            android:layout_width="25dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:src="@drawable/ic_launcher"/>
+
+    <TextView
+            android:id="@+id/expTextView"
+            android:layout_toRightOf="@id/iconEx"
+            android:paddingTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:minHeight="?android:attr/listPreferredItemHeightSmall"
+            android:paddingRight="40dp"
+            android:textAppearance="?android:attr/textAppearanceListItemSmall"
+            android:textColor="#000000"/>
+
+    <TextView
+            android:id="@+id/counterEx"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/iconEx"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="8dp"
+            android:textColor="#000000"/>
+
+    <ImageView android:src="@drawable/expander_group"
+               android:id="@+id/explist_indicator"
+               android:layout_width="40dp"
+               android:layout_marginTop="10dp"
+               android:layout_height="match_parent"
+               android:layout_alignParentRight="true"/>
+
+
+</RelativeLayout>

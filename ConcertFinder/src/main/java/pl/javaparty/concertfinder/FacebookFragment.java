@@ -15,6 +15,9 @@ import android.widget.Toast;
 import com.facebook.*;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
+import pl.javaparty.prefs.Prefs;
+
+import java.util.Arrays;
 
 public class FacebookFragment extends Fragment {
 
@@ -41,17 +44,18 @@ public class FacebookFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.activity_splash_screen, container, false);
 
-        Button skip = (Button) view.findViewById(R.id.skipBtn);
-        skip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                startActivity(intent);
-            }
-        });
+		Button skip = (Button) view.findViewById(R.id.skipBtn);
+		skip.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(getActivity(), MainActivity.class);
+				startActivity(intent);
+			}
+		});
 
-        LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
+		LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
 		authButton.setFragment(this);
+		authButton.setReadPermissions(Arrays.asList("user_location", "user_birthday", "user_likes"));
 
 		return view;
 	}
@@ -67,14 +71,20 @@ public class FacebookFragment extends Fragment {
 			Log.i(TAG, "Logged in...");
 			fbAccessToken = session.getAccessToken();
 
+			// Request user data and show the results
 			Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
+
 				@Override
 				public void onCompleted(GraphUser user, Response response) {
-					if (isOnline())
-						Toast.makeText(getActivity(), "Uszanowanko, " + user.getName() + "!", Toast.LENGTH_LONG).show();
+					if (user != null && isOnline()) {
+						Toast.makeText(getActivity(), "Uszanowanko, " + user.getFirstName(), Toast.LENGTH_LONG).show();
+						Prefs.setCity(getActivity(), "" + user.getLocation().getProperty("name"));
 
-					Intent intent = new Intent(getActivity(), MainActivity.class);
-					startActivity(intent);
+						//TODO tutaj jakieś rejestracje się porobi i dałnlołder który bedzie pobierać nagie foteczki if(sex() == woman && scale() >= 8)
+
+						Intent intent = new Intent(getActivity(), MainActivity.class);
+						startActivity(intent);
+					}
 				}
 			});
 		} else if (state.isClosed()) {

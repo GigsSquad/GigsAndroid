@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
@@ -39,18 +40,11 @@ public class TabConcertGoogleMap extends Fragment {
 
 	private static void setUpMap() {
 		mMap.setMyLocationEnabled(true); // pokazuje naszą pozycje
-		Log.i("MAP", "ID koncertu: " + ID);
-		Log.i("MAP", "Miasto koncertu: " + dbm.getCity(ID));
-		mMap.addMarker(new MarkerOptions().position(mapHelper.getLatLng(dbm.getCity(ID))).title(dbm.getCity(ID) + " " + dbm.getSpot(ID))
-				.snippet(dbm.getArtist(ID) + " " + dbm.getDate(ID))); // ustawia marker
-		mMap.animateCamera(CameraUpdateFactory
-				.newLatLngZoom(mapHelper.getLatLng(dbm.getCity(ID)), 17.0f)); // przybliza do markera
-	}
-
-	private boolean isOnline() {
-		ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo netInfo = cm.getActiveNetworkInfo();
-		return netInfo != null && netInfo.isConnectedOrConnecting();
+		String spot = dbm.getCity(ID);
+		LatLng latLng = mapHelper.getLatLng(spot);
+		mMap.addMarker(new MarkerOptions().position(latLng).title(dbm.getCity(ID) + " " + dbm.getSpot(ID)).snippet(
+				dbm.getArtist(ID) + " " + dbm.getDate(ID))); // ustawia marker
+		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17.0f)); // przybliza do markera
 	}
 
 	@Override
@@ -84,6 +78,7 @@ public class TabConcertGoogleMap extends Fragment {
 			setUpMapIfNeeded();
 		} else {
 			Toast.makeText(getActivity(), "Brak połączenia", Toast.LENGTH_LONG).show();
+			Log.w("MAP", "Urządzenie nie ma dostępu do internetu");
 		}
 
 		return view;
@@ -100,6 +95,12 @@ public class TabConcertGoogleMap extends Fragment {
 			if (mMap != null && isOnline())
 				setUpMap();
 		}
+	}
+
+	private boolean isOnline() {
+		ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo netInfo = cm.getActiveNetworkInfo();
+		return netInfo != null && netInfo.isConnectedOrConnecting();
 	}
 
 	@Override
