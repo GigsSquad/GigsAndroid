@@ -1,6 +1,7 @@
 package pl.javaparty.concertfinder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import pl.javaparty.adapters.NavDrawerAdapter;
 import pl.javaparty.fragments.AboutFragment;
@@ -8,6 +9,7 @@ import pl.javaparty.fragments.FavoriteFragment;
 import pl.javaparty.fragments.RecentFragment;
 import pl.javaparty.fragments.SearchFragment;
 import pl.javaparty.fragments.SettingsFragment;
+import pl.javaparty.items.Concert.AgencyName;
 import pl.javaparty.items.NavDrawerItem;
 import pl.javaparty.sql.DatabaseUpdater;
 import pl.javaparty.sql.dbManager;
@@ -24,16 +26,16 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
+import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ExpandableListView.OnGroupClickListener;
+import android.widget.ExpandableListView;
 
 public class MainActivity extends FragmentActivity {
 
 	/* Drawer */
 	private static ArrayList<NavDrawerItem> navDrawerItems;
 	private static NavDrawerAdapter adapter;
-	private static ListView drawerList;
+	private static ExpandableListView drawerList;
 	private static Context context;
 	private ActionBarDrawerToggle drawerToggle;
 	private DrawerLayout drawerLayout;
@@ -62,18 +64,21 @@ public class MainActivity extends FragmentActivity {
 		navMenuTitles = getResources().getStringArray(R.array.nav_menu);
 		navMenuIcons = getResources().obtainTypedArray(R.array.nav_menu_icons);
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		drawerList = (ListView) findViewById(R.id.left_drawer);
-
+		drawerList = (ExpandableListView) findViewById(R.id.left_drawer);
+		drawerList.setGroupIndicator(null);
+		ArrayList<String> agencies = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.agencje_submenu)));
+		
 		navDrawerItems = new ArrayList<NavDrawerItem>();
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[6], navMenuIcons.getResourceId(3, -1), agencies));//TODO icona
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1)));
 		navMenuIcons.recycle();
-
-		adapter = new NavDrawerAdapter(getApplicationContext(), navDrawerItems);
+		
+		adapter = new NavDrawerAdapter(context, navDrawerItems);
 		drawerList.setAdapter(adapter);
 
 		/* ustawianie actionbara by mozna go bylo wcisnac */
@@ -95,15 +100,42 @@ public class MainActivity extends FragmentActivity {
 
 		drawerLayout.setDrawerListener(drawerToggle);
 		drawerList.setSelector(android.R.color.holo_blue_dark);
-		drawerList.setOnItemClickListener(new OnItemClickListener() {
+		drawerList.setOnGroupClickListener(new OnGroupClickListener()
+		{
+
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
-				drawerLayout.closeDrawers();
-				if (position == 3)
-					dbu.update(new Refresh());
-				else if (currentFragment != position)
-					changeFragment(position);
+			public boolean onGroupClick(ExpandableListView parent, View v,
+					int groupPosition, long id)
+			{
+				Log.i("DRAWER", "Group: " + groupPosition);
+				if (navDrawerItems.get(groupPosition).getSubmenu() == null)
+				{
+					drawerLayout.closeDrawers();
+					if (groupPosition == 3)
+						dbu.update(new Refresh());
+					else if (currentFragment != groupPosition)
+						changeFragment(groupPosition);
+					return true;
+				}
+				return false;
 			}
+			
+		});
+		drawerList.setOnChildClickListener(new OnChildClickListener(){
+
+			@Override
+			public boolean onChildClick(ExpandableListView parent, View v,
+					int groupPosition, int childPosition, long id)
+			{
+				Log.i("DRAWER", "Child: " + childPosition);
+				drawerLayout.closeDrawers();
+				if(currentFragment != groupPosition || currentFragment !=30+childPosition)
+				{
+					changeFragment(30+childPosition);
+				}
+				return false;
+			}
+			
 		});
 
 		if (dbMgr.getSize(dbManager.CONCERTS_TABLE) < 10) // czemu akurat 10? a czemu nie?
@@ -192,6 +224,16 @@ public class MainActivity extends FragmentActivity {
 			fragment = new SettingsFragment();
 		else if (position == 5)
 			fragment = new AboutFragment();
+		else if (position >=30)
+		{
+			int pos = position-30;
+			RecentFragment rfragment = new RecentFragment();
+			for(CharSequence ch: rfragment.checkedAgencies.keySet())
+				if(ch!=rfragment.checkedAgencies.keySet().toArray()[pos])
+					rfragment.checkedAgencies.put(ch, false);
+
+			fragment = rfragment;
+		}
 
 		if (position != 3)// takie zabezpieczenie choc to sie nie powinno wydarzyc
 			currentFragment = position;
@@ -225,5 +267,22 @@ public class MainActivity extends FragmentActivity {
 	{
 		return dbMgr;
 	}
-
+	
+	enum AgencyFragments
+	{
+		//zakladka 3 (bo RecentFragment) a druga liczba to wybrana zakladka podmenu
+		GOAHEAD(30);
+		
+		private int fragmentNumber;
+		
+		AgencyFragments(int fragment)
+		{
+			fragmentNumber = fragment;
+		}
+		
+		public int nr()
+		{
+			return fragmentNumber;
+		}
+	}
 }

@@ -11,10 +11,12 @@ import pl.javaparty.fragments.FilterDialogFragment.FilterDialogListener;
 import pl.javaparty.items.Concert;
 import pl.javaparty.items.Concert.AgencyName;
 import pl.javaparty.sql.dbManager;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,7 +40,17 @@ public class RecentFragment extends Fragment {
 	Button nextButton;
 	private int lastPosition = 0;
 	private int showedConcerts = 20;
-	private Map<CharSequence, Boolean> checkedAgencies;
+	public Map<CharSequence, Boolean> checkedAgencies;
+
+	public RecentFragment()
+	{
+		super();
+		
+		checkedAgencies = new HashMap<>();
+		AgencyName[] vals = AgencyName.values();
+		for (int i = 0; i < vals.length; i++)
+			checkedAgencies.put(vals[i].name(), true);
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
@@ -48,7 +60,7 @@ public class RecentFragment extends Fragment {
 		lv = (ListView) view.findViewById(R.id.recentList);
 		dbm = MainActivity.getDBManager();
 
-		checkedAgencies = new HashMap();
+		checkedAgencies = new HashMap<>();
 		AgencyName[] vals = AgencyName.values();
 		for (int i = 0; i < vals.length; i++)
 			checkedAgencies.put(vals[i].name(), true);
@@ -74,7 +86,8 @@ public class RecentFragment extends Fragment {
 		lv.addFooterView(nextButton);
 
 		adapter = new ConcertAdapter(getActivity(), cutArray(dbm.getAllConcerts(filterAgencies())));
-		lv.setAdapter(adapter);
+		lv.setAdapter(adapter);//TODO setEmptyView
+		lv.setEmptyView(view.findViewById(R.id.emptyList));
 
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -100,10 +113,11 @@ public class RecentFragment extends Fragment {
 	
 	
 
-	public Concert[] cutArray(Concert[] array)
+	private Concert[] cutArray(Concert[] array)
 	{
-		if (array != null)
+		if (array != null &&  array.length != 0)
 		{
+			Log.i("EMPTYLIST", String.valueOf(array.length));
 			if (showedConcerts >= dbm.getSize(dbManager.CONCERTS_TABLE) - 1)
 			{
 				showedConcerts = dbm.getSize(dbManager.CONCERTS_TABLE) - 1;
@@ -113,13 +127,14 @@ public class RecentFragment extends Fragment {
 			else
 				return Arrays.copyOfRange(array, 0, showedConcerts);
 		}
-		return new Concert[0];
+		return new Concert[0];//pi�kna �ata
 	}
 
 	public void refresh()
 	{
-		adapter = new ConcertAdapter(getActivity(), cutArray(dbm.getAllConcerts(filterAgencies())));
-		lv.setAdapter(adapter);
+		//adapter = new ConcertAdapter(getActivity(), cutArray(dbm.getAllConcerts(filterAgencies())));
+		adapter.changeData(cutArray(dbm.getAllConcerts(filterAgencies())));
+		//lv.setAdapter(adapter);
 	}
 
 	@Override

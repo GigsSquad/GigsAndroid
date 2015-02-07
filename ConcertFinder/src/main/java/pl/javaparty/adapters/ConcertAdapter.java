@@ -1,5 +1,8 @@
 package pl.javaparty.adapters;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.imageloader.ImageLoader;
@@ -22,11 +25,21 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 	ViewHolder holder;
 	ImageLoader imageLoader;
 	private Typeface tf;
+	private Concert[] items;
 
 	public ConcertAdapter(Context context, Concert[] items) {
-		super(context, R.layout.card_layout, items);
+		super(context, R.layout.card_layout, toArrL(items));
+		this.items = items;
 		imageLoader = new ImageLoader(context);
 		tf = Typeface.createFromAsset(getContext().getAssets(), "font/robotocondensed-light.ttf");
+	}
+
+	private static ArrayList<Concert> toArrL(Concert[] items)
+	{
+		ArrayList<Concert> ar = new ArrayList<Concert>();
+		for(Concert c: items)
+			ar.add(c);
+		return ar;
 	}
 
 	public class ViewHolder {
@@ -40,9 +53,10 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		rowItem = getItem(position);
-
+		
 		LayoutInflater mInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		if (convertView == null) {
+			
 			convertView = mInflater.inflate(R.layout.card_layout, null);
 			holder = new ViewHolder();
 			holder.card = (RelativeLayout) convertView.findViewById(R.id.card);
@@ -79,7 +93,27 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 		imageLoader.DisplayImage(rowItem.getArtist(), holder.image);
 		Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_right);
 		holder.card.startAnimation(animation);
+		
 		return convertView;
+	}
+	
+	@Override
+	public int getCount()
+	{
+		return items==null ? 0 : items.length;
+	}
+	
+	public void changeData(Concert[] newData)
+	{
+		items = newData;
+		clear();
+		if(items!=null)
+		{
+			addAll(items);
+			notifyDataSetChanged();
+		}
+		else
+			notifyDataSetInvalidated();
 	}
 
 	private String getPreparedPlace(String place)

@@ -90,6 +90,7 @@ public class SettingsFragment extends Fragment {
 				Log.i("SETTINGS", "Dystans: " + distanceSeekBar.getProgress());
 				Toast.makeText(getActivity(), "Zapisano!", Toast.LENGTH_SHORT).show();
 			}
+			
 		});
 
 		clearButton.setOnClickListener(new OnClickListener()
@@ -98,8 +99,8 @@ public class SettingsFragment extends Fragment {
 			@Override
 			public void onClick(View v)
 			{
-				//DialogFragment dialog = new ClearDialog();
-				//dialog.show(getActivity().getFragmentManager(), "CLEAR");
+				DialogFragment dialog = new ClearDialog();
+				dialog.show(getActivity().getFragmentManager(), "CLEAR");
 				/*
 				//dbm.deleteDB(context); Czemu tak? :O
 				FileExplorer f = new FileExplorer(context);
@@ -115,4 +116,41 @@ public class SettingsFragment extends Fragment {
 		return view;
 	}
 	
+	private class ClearDialog extends DialogFragment
+	{
+
+		@Override
+		public Dialog onCreateDialog(Bundle savedInstanceState)
+		{
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+			builder.setTitle("Czy na pewno chcesz wyczyœciæ pamiêæ?")
+			.setMessage("Wszystkie obrazki zespo³ów, oraz ca³a baza danych zostanie usuniêta!")
+					.setPositiveButton("OK", new DialogInterface.OnClickListener()
+					{
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which)
+						{
+							//dbm.deleteDB(context); Czemu tak? :O
+							FileExplorer f = new FileExplorer(context);
+							f.clear();
+							Log.i("SETTINGS", "Usunieto obrazki z dysku");
+							dbm.deleteBase();
+							Log.i("SETTINGS", "Wyczyszczono baze");
+							MainActivity.updateCounters();
+							Toast.makeText(getActivity(), "Wyczyszczono pamiec!", Toast.LENGTH_SHORT).show();
+						}
+					})
+					.setNegativeButton("Anuluj", new DialogInterface.OnClickListener()
+					{
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which)
+						{
+							//puste :(
+						}
+					});
+			return builder.create();
+		}	
+	}
 }
