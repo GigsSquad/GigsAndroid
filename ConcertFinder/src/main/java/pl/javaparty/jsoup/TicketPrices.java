@@ -106,7 +106,8 @@ public class TicketPrices extends AsyncTask<String, Void,String>
 
             rawString = rawString.replaceAll("[^0-9]+", " ");
             rawString = rawString.trim();
-
+            if(rawString.equals(" "))
+                return null;
 
         } catch (IOException e) {
             //  Log.i("PobieranieCenyKoncertu", "Blad podczas pobierania cennika");
