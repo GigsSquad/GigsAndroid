@@ -38,14 +38,13 @@ public class TicketPrices extends AsyncTask<String, Void, String> {
 
 		try {
 			prices = result.split(" ");
+
 		} catch (Exception exc) {
 			td2.setVisibility(View.VISIBLE);
 			td2.setText("Brak informacji o cenach biletów");
 		}
 
-		if (prices != null) {
-
-			if (prices.length < 1)
+			if ((prices.length < 1)||prices==null )
 				td2.setText("Brak informacji o cenach biletów");
 
 			if (prices.length >= 1) {
@@ -63,7 +62,9 @@ public class TicketPrices extends AsyncTask<String, Void, String> {
 				td3.setVisibility(View.VISIBLE);
 				td3.setText(prices[2] + "zł");
 			}
-		}
+
+            if(result.equals(""))
+                td1.setText("Bilety wyprzedane");
 	}
 
 	private String getPrices() {
@@ -86,7 +87,7 @@ public class TicketPrices extends AsyncTask<String, Void, String> {
 			rawString = rawString.replaceAll("[^0-9]+", " ");
 			rawString = rawString.trim();
 
-			// Log.i("rafal", rawString);
+
 
 		} catch (IOException e) {
 			Log.i("PobieranieCenyKoncertu", "Blad podczas pobierania cennika");
@@ -101,12 +102,14 @@ public class TicketPrices extends AsyncTask<String, Void, String> {
 			Document doc = Jsoup.connect(url).timeout(1000000).get();
 			Element el = doc.getElementsByClass("kk2").get(6);
 			rawString = el.text();
-
+            Log.i("rafalPrzeRegexem",rawString);
 			rawString = rawString.replaceAll("[^0-9]+", " ");
 			rawString = rawString.trim();
+            Log.i("rafalPoRegexem","PRZED"+rawString+"BALWAN");
+
 
 		} catch (IOException e) {
-			//  Log.i("PobieranieCenyKoncertu", "Blad podczas pobierania cennika");
+			// Log.i("PobieranieCenyKoncertu", "Blad podczas pobierania cennika");
 		}
 		return rawString;
 	}
