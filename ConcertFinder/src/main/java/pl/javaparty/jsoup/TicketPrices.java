@@ -9,6 +9,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Created by Rafal on 2015-02-02.
@@ -35,30 +36,52 @@ public class TicketPrices extends AsyncTask<String, Void, String> {
 	}
 
 	protected void onPostExecute(String result) {
-
+        String rawString;
+        String[] potentialPrices;
 		try {
-			prices = result.split(" ");
+            rawString = result.replaceAll("[^0-9]+", " ");
+            result = result.trim(); // gdyby komus sie 2 spacyjki nacislo
+            rawString = rawString.trim();
+			potentialPrices = rawString.split(" "); //wszystkie liczby jakie sa w danym stringu
 
+            prices = new String[3];
+            int j=0;
+            for(int i=0;i<potentialPrices.length;i++)
+            {
+               int postion =  result.indexOf(potentialPrices[i]);  //obliczamy pozycje
+               int resolution = potentialPrices[i].length();
+               if((result.charAt(postion+resolution)=='z')||(result.charAt(postion+resolution+1)=='z'))
+               {
+                   prices[j] = potentialPrices[i];
+                   j++;
+                   if(j==3)
+                       break;
+               }
+
+
+            }
 		} catch (Exception exc) {
 			td2.setVisibility(View.VISIBLE);
 			td2.setText("Brak informacji o cenach biletów");
 		}
 
-			if ((prices.length < 1)||prices==null )
+
+
+			if ((prices.length < 1))
 				td2.setText("Brak informacji o cenach biletów");
 
-			if (prices.length >= 1) {
+			if ((prices.length >= 1)&&(prices[0]!=null)) {
 				td1.setVisibility(View.VISIBLE);
 				td1.setText(prices[0] + "zł");
 
 			}
 
-			if (prices.length >= 2) {
+			if ((prices.length >= 2)&&(prices[1]!=null)) {
 				td2.setVisibility(View.VISIBLE);
 				td2.setText(prices[1] + "zł");
 
 			}
-			if (prices.length >= 3) {
+			if ((prices.length >= 3)&&(prices[2]!=null)) {
 				td3.setVisibility(View.VISIBLE);
 				td3.setText(prices[2] + "zł");
 			}
@@ -72,46 +95,35 @@ public class TicketPrices extends AsyncTask<String, Void, String> {
 			return getPricesFromTicketPro();
 		} else if ("GOAHEAD".equals(agencyName)) {
 			return getPricesFromGoAhead();
-		}
+		}else if("ALTERART".equals(agencyName)||"EBILET".equals(agencyName)||"LIVENATION".equals(agencyName))
+            return " "; // magic
 		return null;
 	}
 
 	private String getPricesFromTicketPro() {
-		String rawString = null;
-		Log.i("rafal", "w do in background przed ifem");
+        Element el = null;
 		try {
 			Document doc = Jsoup.connect(url).timeout(1000000).get();
-			Element el = doc.select("div[id=poleCena]").first();
-			rawString = el.text();
-
-			rawString = rawString.replaceAll("[^0-9]+", " ");
-			rawString = rawString.trim();
-
+			el = doc.select("div[id=poleCena]").first();
 
 
 		} catch (IOException e) {
 			Log.i("PobieranieCenyKoncertu", "Blad podczas pobierania cennika");
 		}
 
-		return rawString;
+		return el.text();
 	}
 
 	private String getPricesFromGoAhead() {
-		String rawString = null;
+		Element el=null;
 		try {
 			Document doc = Jsoup.connect(url).timeout(1000000).get();
-			Element el = doc.getElementsByClass("kk2").get(6);
-			rawString = el.text();
-            Log.i("rafalPrzeRegexem",rawString);
-			rawString = rawString.replaceAll("[^0-9]+", " ");
-			rawString = rawString.trim();
-            Log.i("rafalPoRegexem","PRZED"+rawString+"BALWAN");
+			el = doc.getElementsByClass("kk2").get(6);
 
-
-		} catch (IOException e) {
+           	} catch (IOException e) {
 			// Log.i("PobieranieCenyKoncertu", "Blad podczas pobierania cennika");
 		}
-		return rawString;
+		return el.text();
 	}
 }
 
