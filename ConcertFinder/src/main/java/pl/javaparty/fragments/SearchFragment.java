@@ -56,7 +56,7 @@ public class SearchFragment extends Fragment{
 		for (int i = 0; i < 3; i++)
 			mTabHost.getTabWidget().getChildAt(i).setFocusable(false);
 		
-		return (View) mTabHost;
+		return mTabHost;
 	}
 		
 	@Override

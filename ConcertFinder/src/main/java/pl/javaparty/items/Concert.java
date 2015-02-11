@@ -115,10 +115,11 @@ public class Concert
 		return ID;
 	}
 
-	public Calendar getCalendar()
-	{
-		return date;
-	}
+	public Calendar getCalendar() { return date; }
+
+    public int[] getDayMonthYear(){
+      return new int[]{Calendar.DAY_OF_MONTH, Calendar.MONTH +1, Calendar.YEAR};
+    }
 
 	public String dateToString()
 	{
