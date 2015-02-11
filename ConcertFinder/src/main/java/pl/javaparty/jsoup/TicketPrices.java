@@ -9,6 +9,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Created by Rafal on 2015-02-02.
@@ -17,7 +18,7 @@ public class TicketPrices extends AsyncTask<String, Void, String> {
 	String url, agencyName;
 	TextView td1, td2, td3;
 
-	String[] prices;
+	String[] prices ;
 
 	public TicketPrices(String url, String agencyName, TextView td1, TextView td2, TextView td3) {
 		super();
@@ -36,80 +37,120 @@ public class TicketPrices extends AsyncTask<String, Void, String> {
 
 	protected void onPostExecute(String result) {
 
-		try {
-			prices = result.split(" ");
-		} catch (Exception exc) {
-			td2.setVisibility(View.VISIBLE);
-			td2.setText("Brak informacji o cenach biletów");
-		}
+        if((result==null)||(result.equals(" "))){
+            td1.setVisibility(View.VISIBLE);
+            td1.setText("Brak informacji o cenach biletów");
+           // return;
+            }
+        if(result.equals("")){
+            td1.setVisibility(View.VISIBLE);
+            td1.setText("Bilety wyprzedane");
+        }
 
-		if (prices != null) {
+       try{
+           prices = result.split(" ");
+           }catch(NullPointerException exc)
+            {
+           td2.setVisibility(View.VISIBLE);
+           td2.setText("Brak informacji o cenach biletów");
+            }
 
-			if (prices.length < 1)
+        	if ((prices.length < 1))
 				td2.setText("Brak informacji o cenach biletów");
 
-			if (prices.length >= 1) {
+			if ((prices.length >= 1)&&(prices[0]!=null&&!prices[0].equals(""))) {
 				td1.setVisibility(View.VISIBLE);
 				td1.setText(prices[0] + "zł");
+            }
 
-			}
-
-			if (prices.length >= 2) {
+			if ((prices.length >= 2)&&(prices[1]!=null)) {
 				td2.setVisibility(View.VISIBLE);
 				td2.setText(prices[1] + "zł");
-
-			}
-			if (prices.length >= 3) {
+            }
+			if ((prices.length >= 3)&&(prices[2]!=null)) {
 				td3.setVisibility(View.VISIBLE);
 				td3.setText(prices[2] + "zł");
 			}
-		}
-	}
+      	}
 
 	private String getPrices() {
 		if ("TICKETPRO".equals(agencyName)) {
 			return getPricesFromTicketPro();
 		} else if ("GOAHEAD".equals(agencyName)) {
 			return getPricesFromGoAhead();
-		}
+		}else if("ALTERART".equals(agencyName)||"EBILET".equals(agencyName)||"LIVENATION".equals(agencyName))
+            return " "; // magic
 		return null;
 	}
 
 	private String getPricesFromTicketPro() {
-		String rawString = null;
-		Log.i("rafal", "w do in background przed ifem");
+        Element el = null;
 		try {
 			Document doc = Jsoup.connect(url).timeout(1000000).get();
-			Element el = doc.select("div[id=poleCena]").first();
-			rawString = el.text();
+			el = doc.select("div[id=poleCena]").first();
 
-			rawString = rawString.replaceAll("[^0-9]+", " ");
-			rawString = rawString.trim();
-
-			// Log.i("rafal", rawString);
 
 		} catch (IOException e) {
 			Log.i("PobieranieCenyKoncertu", "Blad podczas pobierania cennika");
 		}
 
-		return rawString;
+		return getRealPrices(el.text());
 	}
 
 	private String getPricesFromGoAhead() {
-		String rawString = null;
+
 		try {
 			Document doc = Jsoup.connect(url).timeout(1000000).get();
-			Element el = doc.getElementsByClass("kk2").get(6);
-			rawString = el.text();
-
-			rawString = rawString.replaceAll("[^0-9]+", " ");
-			rawString = rawString.trim();
-
-		} catch (IOException e) {
-			//  Log.i("PobieranieCenyKoncertu", "Blad podczas pobierania cennika");
+            Element el = doc.getElementsByClass("kk2").get(6);
+            return getRealPrices(el.text());
+           	} catch (IOException e) {
+			// Log.i("PobieranieCenyKoncertu", "Blad podczas pobierania cennika");
+            return null;
 		}
-		return rawString;
-	}
+    }
+
+    private String getRealPrices(String rawString){
+        String[] potentialPrices;
+        String[] realPrices = new String[3];
+        try {
+            String onlyNumbers  = rawString.replaceAll("[^0-9]+", " ");
+            rawString = rawString.trim();// gdyby komus sie 2 spacyjki nacislo
+            onlyNumbers = onlyNumbers.trim();
+            Log.i("rafal1", onlyNumbers);
+            potentialPrices = onlyNumbers.split(" "); //wszystkie liczby jakie sa w danym stringu
+            Log.i("rafal2", potentialPrices[0]);
+            Log.i("rafal3", "jeden");
+            int j=0;
+            for(int i=0;i<potentialPrices.length;i++)
+            {
+                int postion =  rawString.indexOf(potentialPrices[i]);  //obliczamy pozycje
+                int resolution = potentialPrices[i].length();  // jak dluga jest liczba
+                Log.i("rafal3", "dwa");
+
+                if((rawString.charAt(postion+resolution)=='z')||(rawString.charAt(postion+resolution+1)=='z'))
+                {
+                    realPrices[j] = potentialPrices[i];
+                    j++;
+                    if(j==3)
+                        break;
+                }
+                Log.i("rafal3", "trzy");
+
+            }
+        } catch (Exception exc) {
+            return null;
+        }
+
+        String tmp ="";
+        for(String st:realPrices)
+        {
+           if(st!=null)
+               tmp = tmp + (st + " ");
+        }
+        Log.i("rafal", realPrices.toString());
+        Log.i("rafal", tmp);
+        return tmp;
+    }
 }
 
 
