@@ -126,6 +126,7 @@ public class TicketPrices extends AsyncTask<String, Void, String> {
                 int postion =  rawString.indexOf(potentialPrices[i]);  //obliczamy pozycje
                 int resolution = potentialPrices[i].length();  // jak dluga jest liczba
                 Log.i("rafal3", "dwa");
+
                 if((rawString.charAt(postion+resolution)=='z')||(rawString.charAt(postion+resolution+1)=='z'))
                 {
                     realPrices[j] = potentialPrices[i];
