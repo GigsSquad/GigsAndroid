@@ -48,7 +48,7 @@ public class JDAlterArt {
 				int year = Integer.valueOf(dateStrArr[2]);
                 Log.i("rafalAlterArt",urls.get(i));
 				dbm.addConcert(names.get(i).text(), cities.get(i).text(), spots.get(i).text(),
-						day, month, year, "ALTERART", urls.get(i));
+                        day, month, year, "ALTERART", urls.get(i));
 			}
 		}
 	}

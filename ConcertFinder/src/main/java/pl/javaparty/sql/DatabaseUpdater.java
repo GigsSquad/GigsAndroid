@@ -1,6 +1,7 @@
 package pl.javaparty.sql;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import pl.javaparty.jsoup.JDAlterArt;
 import pl.javaparty.jsoup.JDGoAhead;
@@ -8,6 +9,7 @@ import pl.javaparty.jsoup.JDLiveNation;
 import pl.javaparty.jsoup.JDTicketPro;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import pl.javaparty.prefs.Prefs;
 
 public class DatabaseUpdater
 {
@@ -37,8 +39,10 @@ public class DatabaseUpdater
 		@Override
 		public void run()
 		{
-			try
+			//try
 			{
+
+                /*
 				Log.i("JSD", "Pobieram GoAhead 1/5");
 				long startTime = System.currentTimeMillis();
 				new JDGoAhead(dbm).getData();
@@ -72,14 +76,25 @@ public class DatabaseUpdater
 				// new JDEBilet(dbm).getData();
 				time = (int) ((System.currentTimeMillis() - startTime) / 1000);
 				Log.i("JSD", "Pobrano Ebilet w " + time + "sekund");
+*/
+                long startTime = System.currentTimeMillis();
+                PhpParser parser = new PhpParser(activity, dbm);
 
-				Log.i("JSD", "Skończyłem pobieranie");
+                //parametry
+                String lastID = String.valueOf(Prefs.getLastID(activity));
+                String device = android.os.Build.MODEL.replaceAll(" ", "+");
 
-			} catch (IOException e)
-			{
-				e.printStackTrace();
+                InputStream input = WebConnector.post(new String[]{"get="+lastID, "device="+device});
+                parser.parse(input);
+                int time = (int) ((System.currentTimeMillis() - startTime) / 1000);
+                Log.i("JSD", "Uzupelniono baze w " + time + "sekund");
+
 			}
-			dbm.deleteOldConcerts();
+            //catch (IOException e)
+			//{
+			//	e.printStackTrace();
+			//}
+			//dbm.deleteOldConcerts();
 			activity.runOnUiThread(r);
 		}
 

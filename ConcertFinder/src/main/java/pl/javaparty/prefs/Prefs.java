@@ -42,4 +42,9 @@ public class Prefs {
 		getPrefs(context).edit().putFloat("LNG", (float) lng).commit();
 	}
 
+    //zewnetrzna baza
+    public static int getLastID(Context context) { return getPrefs(context).getInt("LASTID", -1); }
+
+    public static void setLastID(Context context, int value) { getPrefs(context).edit().putInt("LASTID", value).commit(); }
+
 }
