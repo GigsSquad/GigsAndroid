@@ -1,16 +1,11 @@
 package pl.javaparty.sql;
 
 
-import android.content.Context;
-import android.util.Log;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.URLEncoder;
 
 public class WebConnector
 {
@@ -27,23 +22,13 @@ public class WebConnector
     {
         InputStream is = null;
         String query = "";
-       // try
+
+        for (int i = 0; i < params.length; i++)
         {
-            for(int i = 0; i < params.length; i++)
-            {
-                query += String.format("%s", params[i]);
-                if(i+1 < params.length)
-                    query += "&";
-            }
-            Log.i("UPDATER", "QUERY: " + query);
+            query += String.format("%s", params[i]);
+            if (i + 1 < params.length)
+                query += "&";
         }
-        /*
-        catch (UnsupportedEncodingException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return is;
-        }*/
 
         try
         {
@@ -52,24 +37,14 @@ public class WebConnector
             connection.setRequestProperty("Accept-Charset", CHARSET);
             connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + CHARSET);
 
-            try
-            {
-                OutputStream output = connection.getOutputStream();
-                output.write(query.getBytes(CHARSET));
-                output.close();
-            }
-            catch (IOException e)
-            {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-                return is;
-            }
+            OutputStream output = connection.getOutputStream();
+            output.write(query.getBytes(CHARSET));
+            output.close();
 
             is = connection.getInputStream();
         }
         catch (IOException e)
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
