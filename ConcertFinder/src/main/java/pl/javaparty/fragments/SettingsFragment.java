@@ -119,6 +119,7 @@ public class SettingsFragment extends Fragment {
 							Log.i("SETTINGS", "Wyczyszczono bazę");
 							MainActivity.updateCounters();
 							Toast.makeText(getActivity(), "Wyczyszczono pamięć!", Toast.LENGTH_SHORT).show();
+                            Prefs.setLastID(getActivity(), -1);
 						}
 					})
 					.setNegativeButton("Anuluj", new DialogInterface.OnClickListener() {

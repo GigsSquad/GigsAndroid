@@ -3,8 +3,9 @@ package pl.javaparty.sql;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 import pl.javaparty.prefs.Prefs;
-
+import android.os.Handler;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,37 +27,41 @@ public class PhpParser
 
     public void parse(InputStream is)
     {
-        BufferedReader br = null;
-
-        String line;
-        try
+        if(is!=null)
         {
+            BufferedReader br = null;
 
-            br = new BufferedReader(new InputStreamReader(is));
-            int lastID = -1;
-            while ((line = br.readLine()) != null)
+            String line;
+            try
             {
-                lastID = addToDatabase(line);
-            }
 
-            Prefs.setLastID(context, lastID);
+                br = new BufferedReader(new InputStreamReader(is));
+                int lastID = -1;
+                while ((line = br.readLine()) != null)
+                {
+                    lastID = addToDatabase(line);
+                }
 
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        } finally
-        {
-            if (br != null)
+                Prefs.setLastID(context, lastID);
+
+            } catch (IOException e)
             {
-                try
+                e.printStackTrace();
+            } finally
+            {
+                if (br != null)
                 {
-                    br.close();
-                } catch (IOException e)
-                {
-                    e.printStackTrace();
+                    try
+                    {
+                        br.close();
+                    } catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
+
     }
 
     /**
