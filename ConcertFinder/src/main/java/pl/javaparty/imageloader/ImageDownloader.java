@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -35,7 +36,7 @@ public class ImageDownloader
 	
 	private static String getBandPictureAdress(String bandName) throws IOException
 	{
-		Document doc = Jsoup.connect(LASTFM_URL + bandName).timeout(10000).get();
+		Document doc = Jsoup.connect(LASTFM_URL + URLEncoder.encode(bandName, "UTF-8")).timeout(10000).get();
 		Element imgClass = doc.getElementsByClass("resource-images").first();
 		Element imgTag = imgClass.select("img").first();
 		return imgTag.attr("src");
