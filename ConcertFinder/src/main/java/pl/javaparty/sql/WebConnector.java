@@ -1,7 +1,7 @@
 package pl.javaparty.sql;
 
-import android.util.Log;
 
+import android.util.Log;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -46,7 +46,6 @@ public class WebConnector
             is = connection.getInputStream();
         } catch (IOException e)
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             return is;
         }

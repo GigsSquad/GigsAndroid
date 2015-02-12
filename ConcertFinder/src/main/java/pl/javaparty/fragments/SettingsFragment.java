@@ -118,6 +118,7 @@ public class SettingsFragment extends Fragment {
 							dbm.deleteBase();
 							Log.i("SETTINGS", "Wyczyszczono bazę");
 							MainActivity.updateCounters();
+                            Prefs.setLastID(getActivity(), -1);
 							Toast.makeText(getActivity(), "Wyczyszczono pamięć!", Toast.LENGTH_SHORT).show();
                             Prefs.setLastID(getActivity(), -1);
 						}

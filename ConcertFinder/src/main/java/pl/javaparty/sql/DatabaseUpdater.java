@@ -1,15 +1,15 @@
 package pl.javaparty.sql;
 
-import java.io.InputStream;
 
-import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.Toast;
 import pl.javaparty.prefs.Prefs;
+import java.io.InputStream;
 
 public class DatabaseUpdater
 {
+
     dbManager dbm;
     FragmentActivity activity;
 
@@ -42,6 +42,7 @@ public class DatabaseUpdater
 
             //parametry
             String lastID = String.valueOf(Prefs.getLastID(activity));
+
             String device = android.os.Build.MODEL.replaceAll(" ", "+");
 
             InputStream input = WebConnector.post(new String[]{"get=" + lastID, "device=" + device});
