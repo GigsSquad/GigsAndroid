@@ -1,13 +1,15 @@
 package pl.javaparty.sql;
 
-import android.os.Build;
+
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.widget.Toast;
 import pl.javaparty.prefs.Prefs;
 
 import java.io.InputStream;
 
 public class DatabaseUpdater {
+
 	dbManager dbm;
 	FragmentActivity activity;
 
@@ -35,16 +37,26 @@ public class DatabaseUpdater {
 
 			//parametry
 			String lastID = String.valueOf(Prefs.getLastID(activity));
-			String device = Build.MODEL.replaceAll(" ", "+");
+
+			String device = android.os.Build.MODEL.replaceAll(" ", "+");
 
 			InputStream input = WebConnector.post(new String[] { "get=" + lastID, "device=" + device });
-			parser.parse(input);
+			if (input != null) {
+				parser.parse(input);
+				int time = (int) ((System.currentTimeMillis() - startTime) / 1000);
+				Log.i("JSD", "Uzupelniono baze w " + time + "sekund");
+				activity.runOnUiThread(r);
+			} else {
+				activity.runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						Toast.makeText(activity, "Brak nowych koncertów.", Toast.LENGTH_LONG).show();
+					}
+				});
+			}
 
-			int time = (int) ((System.currentTimeMillis() - startTime) / 1000);
-			Log.i("JSD", "Uzupelniono baze w " + time + "sekund");
+			//dbm.deleteOldConcerts();
 
-			//dbm.deleteOldConcerts(); TODO to ma chyba zostac ale troche byc zmienione
-			activity.runOnUiThread(r);
 		}
 
 	}

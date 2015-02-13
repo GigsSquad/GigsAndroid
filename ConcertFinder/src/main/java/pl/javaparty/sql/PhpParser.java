@@ -1,5 +1,6 @@
 package pl.javaparty.sql;
 
+
 import android.content.Context;
 import android.util.Log;
 import pl.javaparty.prefs.Prefs;
@@ -27,7 +28,6 @@ public class PhpParser {
 
 			String line;
 			try {
-
 				br = new BufferedReader(new InputStreamReader(is));
 				int lastID = -1;
 				while ((line = br.readLine()) != null) {
