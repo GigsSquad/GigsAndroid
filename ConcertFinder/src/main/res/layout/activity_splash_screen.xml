@@ -26,13 +26,6 @@
             android:layout_above="@+id/skipBtn" android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
             android:layout_alignParentRight="true" android:layout_alignParentEnd="true"/>
 
-    <com.google.android.gms.common.SignInButton
-            android:id="@+id/sign_in_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/authButton" android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
-            android:layout_alignParentRight="true" android:layout_alignParentEnd="true"/>
-
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

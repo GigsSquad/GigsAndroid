@@ -28,23 +28,11 @@ public class Prefs {
 		getPrefs(context).edit().putString("CITY", value).commit();
 	}
 
-	// Wspolrzedne
-	public static double getLat(Context context) {
-		return getPrefs(context).getFloat("LAT", -1);
-	}
-
-	public static double getLng(Context context) {
-		return getPrefs(context).getFloat("LNG", -1);
-	}
-
-	public static void setLatLng(Context context, double lat, double lng) {
-		getPrefs(context).edit().putFloat("LAT", (float) lat).commit();
-		getPrefs(context).edit().putFloat("LNG", (float) lng).commit();
-	}
-
     //zewnetrzna baza
     public static int getLastID(Context context) { return getPrefs(context).getInt("LASTID", -1); }
 
-    public static void setLastID(Context context, int value) { getPrefs(context).edit().putInt("LASTID", value).commit(); }
+	public static void setLastID(Context context, int value) {
+		getPrefs(context).edit().putInt("LASTID", value).commit();
+	}
 
 }

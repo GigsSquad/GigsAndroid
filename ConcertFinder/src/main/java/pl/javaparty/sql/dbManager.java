@@ -1,17 +1,17 @@
 package pl.javaparty.sql;
 
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.HashSet;
-
-import pl.javaparty.items.Concert;
-import pl.javaparty.items.Concert.AgencyName;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import pl.javaparty.items.Concert;
+import pl.javaparty.items.Concert.AgencyName;
+
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.HashSet;
 
 public class dbManager extends SQLiteOpenHelper {
 
@@ -55,7 +55,6 @@ public class dbManager extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		Log.i("Rafal", "W EXECSQL");
 		db.execSQL(CreateConcertTable);
 		db.execSQL(CreateHashcodeTable);
 		db.execSQL(CreateFavouriteTable);
@@ -87,8 +86,6 @@ public class dbManager extends SQLiteOpenHelper {
 			cv.put("URL", url);
 			database.insertOrThrow("Concerts", null, cv);
 		}
-		//else
-			//System.out.println("Nie dodano " + artistName + city);
 	}
 
 	public boolean contains(String artistName, String city, String spot, int day, int month, int year) {

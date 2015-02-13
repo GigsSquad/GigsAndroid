@@ -1,10 +1,5 @@
 package pl.javaparty.fragments;
 
-import pl.javaparty.adapters.ConcertAdapter;
-import pl.javaparty.concertfinder.MainActivity;
-import pl.javaparty.concertfinder.R;
-import pl.javaparty.items.Concert;
-import pl.javaparty.sql.dbManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,12 +12,17 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
+import pl.javaparty.adapters.ConcertAdapter;
+import pl.javaparty.concertfinder.MainActivity;
+import pl.javaparty.concertfinder.R;
+import pl.javaparty.items.Concert;
+import pl.javaparty.sql.dbManager;
 
 public class PlaceSearch extends Fragment {
 
 	AutoCompleteTextView searchBox;
 	ListView concertList;
-	ArrayAdapter<String> adapterSearchBox, adapterList;
+	ArrayAdapter<String> adapterSearchBox;
 	ConcertAdapter adapter;
 	Context context;
 	dbManager dbm;

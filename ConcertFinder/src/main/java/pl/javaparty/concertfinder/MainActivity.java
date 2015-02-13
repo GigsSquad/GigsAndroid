@@ -34,11 +34,11 @@ public class MainActivity extends FragmentActivity {
 	private static Context context;
 	private ActionBarDrawerToggle drawerToggle;
 	private DrawerLayout drawerLayout;
-	private TypedArray navMenuIcons;
-	private String[] navMenuTitles;
+	TypedArray navMenuIcons;
+	String[] navMenuTitles;
 
 	/* Fragmenty */
-	private FragmentManager fragmentManager;
+	FragmentManager fragmentManager;
 	private int currentFragment = 1;
 	private Bundle arguments;
 
@@ -62,8 +62,8 @@ public class MainActivity extends FragmentActivity {
 		drawerList = (ExpandableListView) findViewById(R.id.left_drawer);
 		drawerList.setGroupIndicator(null);
 		ArrayList<String> agencies = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.agencje_submenu)));
-		
-		navDrawerItems = new ArrayList<NavDrawerItem>();
+
+		navDrawerItems = new ArrayList<>();
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));

@@ -1,9 +1,16 @@
 package pl.javaparty.fragments;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.*;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
+import android.widget.ListView;
 import pl.javaparty.adapters.ConcertAdapter;
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
@@ -11,28 +18,13 @@ import pl.javaparty.fragments.FilterDialogFragment.FilterDialogListener;
 import pl.javaparty.items.Concert;
 import pl.javaparty.items.Concert.AgencyName;
 import pl.javaparty.sql.dbManager;
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RecentFragment extends Fragment {
 
-	ArrayAdapter<String> adapterSearchBox, adapterList, adapterDrawer;
 	ConcertAdapter adapter;
 	ListView lv;
 	Context context;

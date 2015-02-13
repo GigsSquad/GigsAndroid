@@ -1,6 +1,9 @@
 package pl.javaparty.fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -12,6 +15,7 @@ import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.imageloader.ImageLoader;
@@ -19,8 +23,6 @@ import pl.javaparty.jsoup.TicketPrices;
 import pl.javaparty.map.MapHelper;
 import pl.javaparty.prefs.Prefs;
 import pl.javaparty.sql.dbManager;
-
-import java.util.Calendar;
 
 public class TabConcertInfo extends Fragment {
 
@@ -48,7 +50,7 @@ public class TabConcertInfo extends Fragment {
 
 		setHasOptionsMenu(true);
 
-		ID = (getArguments().getInt("ID", -1)); // -1 bo bazadanych numeruje od 1 a nie od 0
+		ID = (getArguments().getInt("ID", -1));
 		dbm = MainActivity.getDBManager();
 
 		String artistName = dbm.getArtist(ID);
@@ -61,23 +63,19 @@ public class TabConcertInfo extends Fragment {
 		artistName = artistName.replace(": ", ":\n");
 
 		artist.setText(artistName);
-		place.setText((dbm.getCity(ID) + " " + dbm.getSpot(ID)).trim());
-		date.setText(dbm.getDate(ID));
+		place.setText(dbm.getCity(ID) + " " + dbm.getSpot(ID));
+		date.setText(dbm.getConcertByID(ID).dateToString());
 
-		Calendar today = Calendar.getInstance();
-		long diff = dbm.getConcertByID(ID).getCalendar().getTimeInMillis() - today.getTimeInMillis();
-		int days = (int) Math.ceil((diff / (24 * 60 * 60 * 1000))) + 1;
-
+		int days = dbm.getConcertByID(ID).daysTo();
 		if (days < 0) {
 			howlong.setVisibility(View.GONE);
-		} else if (days == 1) {
+		} else if (days == 0) {
 			howlong.setText("To już dziś!");
-		} else if (days == 2) {
+		} else if (days == 1) {
 			howlong.setText("To już jutro!");
 		} else {
 			howlong.setText("pozostało jeszcze " + days + " dni");
 		}
-
 
 		addCalendar.setOnClickListener(new OnClickListener() {
 
@@ -97,12 +95,16 @@ public class TabConcertInfo extends Fragment {
 		});
 
 		//Pobieranie cen biletów
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			new TicketPrices(dbm.getUrl(ID), dbm.getAgency(ID), ticketsDetails1, ticketsDetails2, ticketsDetails3)
-					.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-		} else {
-			new TicketPrices(dbm.getUrl(ID), dbm.getAgency(ID), ticketsDetails1, ticketsDetails2, ticketsDetails3).execute();
+		if (isOnline()) {
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+				new TicketPrices(dbm.getUrl(ID), dbm.getAgency(ID), ticketsDetails1, ticketsDetails2, ticketsDetails3)
+						.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			} else {
+				new TicketPrices(dbm.getUrl(ID), dbm.getAgency(ID), ticketsDetails1, ticketsDetails2, ticketsDetails3).execute();
 
+			}
+		} else {
+			Toast.makeText(getActivity(), "Nie można pobrać cen biletów, brak połączenia", Toast.LENGTH_LONG).show();
 		}
 		ticketsDetails1.setOnClickListener(new OnClickListener() {
 
@@ -135,6 +137,12 @@ public class TabConcertInfo extends Fragment {
 			}
 		});
 		return view;
+	}
+
+	private boolean isOnline() {
+		ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo netInfo = cm.getActiveNetworkInfo();
+		return netInfo != null && netInfo.isConnectedOrConnecting();
 	}
 
 	@Override

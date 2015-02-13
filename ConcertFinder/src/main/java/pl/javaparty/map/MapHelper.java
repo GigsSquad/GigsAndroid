@@ -18,6 +18,7 @@ public class MapHelper {
 	private Address destinationAddress; // to zadane
 	private Address hometownAddress; // to z ustawie�
 	private String hometownString;
+
 	public MapHelper(Context context) {
 		geoCoder = new Geocoder(context);
 		hometownString = Prefs.getCity(context);
@@ -32,7 +33,7 @@ public class MapHelper {
 	 */
 
 	public int distanceTo(final String city) {
-		destinationAddress = getAddress(city.trim());
+		destinationAddress = getAddress(city);
 		hometownAddress = getAddress(hometownString);
 
 		Log.i("MAP", "Miasto:" + city);
@@ -65,10 +66,7 @@ public class MapHelper {
 	}
 
 	public LatLng getLatLng(String place) {
-		try {
-			return (new LatLng(getAddress(place).getLatitude(), getAddress(place).getLongitude()));
-		} catch (NullPointerException e) {
-			return (new LatLng(getAddress(place).getLatitude(), getAddress(place).getLongitude()));
-		}
+		return (new LatLng(getAddress(place).getLatitude(), getAddress(place).getLongitude()));
+
 	}
 }

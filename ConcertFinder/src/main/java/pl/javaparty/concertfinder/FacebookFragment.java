@@ -23,7 +23,6 @@ public class FacebookFragment extends Fragment {
 
 	private static final String TAG = "MainFragment";
 	private UiLifecycleHelper uiHelper;
-	private String fbAccessToken;
 	private Session.StatusCallback callback = new Session.StatusCallback() {
 		@Override
 		public void call(Session session, SessionState state, Exception exception) {
@@ -69,7 +68,6 @@ public class FacebookFragment extends Fragment {
 	private void onSessionStateChange(Session session, SessionState state, Exception exception) {
 		if (state.isOpened()) {
 			Log.i(TAG, "Logged in...");
-			fbAccessToken = session.getAccessToken();
 
 			// Request user data and show the results
 			Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
@@ -77,16 +75,16 @@ public class FacebookFragment extends Fragment {
 				@Override
 				public void onCompleted(GraphUser user, Response response) {
 					if (user != null && isOnline()) {
-						Toast.makeText(getActivity(), "Uszanowanko, " + user.getFirstName(), Toast.LENGTH_LONG).show();
-						Prefs.setCity(getActivity(), "" + user.getLocation().getProperty("name"));
+						Toast.makeText(getActivity(), "Uszanowanko, " + user.getFirstName(), Toast.LENGTH_SHORT).show();
+						Prefs.setCity(getActivity(), "" + user.getLocation().getProperty("name").toString().trim());
 
+						//TODO jak chcesz zrobić rejstrację to jestes w dobrym miejscu
 						//TODO tutaj jakieś rejestracje się porobi i dałnlołder który bedzie pobierać nagie foteczki if(sex() == woman && scale() >= 8)
-
-						Intent intent = new Intent(getActivity(), MainActivity.class);
-						startActivity(intent);
 					}
 				}
 			});
+			Intent intent = new Intent(getActivity(), MainActivity.class);
+			startActivity(intent);
 		} else if (state.isClosed()) {
 			Log.i(TAG, "Logged out...");
 		}

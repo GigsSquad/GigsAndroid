@@ -1,56 +1,44 @@
 package pl.javaparty.imageloader;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import android.util.Log;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-
-import android.util.Log;
-
-public class ImageDownloader
-{
+public class ImageDownloader {
 	private final static String LASTFM_URL = new String("http://www.lastfm.pl/music/"/* i tu nazwa zespolu */);
 	private final static int BUFFER_SIZE = 4096;
 	private final static String TAG = "ImageDownloader";
-	
-	public static void bandImage(File fileDir, String bandName)
-	{
-		try
-		{
+
+	public static void bandImage(File fileDir, String bandName) {
+		try {
 			String bandImgUrl = getBandPictureAdress(bandName);
 			saveImage(fileDir, bandImgUrl);
-		} catch (IOException e)
-		{
-			Log.e(TAG, "Przekroczono czas polaczenia. Nic nie pobrano.");
+		} catch (IOException e) {
+			//Log.e(TAG, "Przekroczono czas polaczenia. Nic nie pobrano.");
 		}
 	}
-	
-	private static String getBandPictureAdress(String bandName) throws IOException
-	{
-		Document doc = Jsoup.connect(LASTFM_URL + URLEncoder.encode(bandName, "UTF-8")).timeout(10000).get();
+
+	private static String getBandPictureAdress(String bandName) throws IOException {
+		Document doc = Jsoup.connect(LASTFM_URL + URLEncoder.encode(bandName, "UTF-8")).timeout(30000).get();
 		Element imgClass = doc.getElementsByClass("resource-images").first();
 		Element imgTag = imgClass.select("img").first();
 		return imgTag.attr("src");
 	}
-	
-	private static void saveImage(File fileDir, String url) throws IOException
-	{
+
+	private static void saveImage(File fileDir, String url) throws IOException {
 		//synchronized (url)
 		{
 			//if (!fileDir.exists())
 			{
-				Log.i(TAG, "Pobieranie obrazka z: " + url);
-				try
-				{
+				//Log.i(TAG, "Pobieranie obrazka z: " + url);
+				try {
 					URL link = new URL(url);
 					HttpURLConnection connection = (HttpURLConnection) link
 							.openConnection();
@@ -70,9 +58,8 @@ public class ImageDownloader
 
 					is.close();
 					os.close();
-				} catch (MalformedURLException e)
-				{
-					Log.e(TAG, "Bledny adres obrazka do pobrania.");
+				} catch (MalformedURLException e) {
+					Log.e(TAG, "Bledny adres obrazka do pobrania");
 				}
 			}
 		}

@@ -4,8 +4,29 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-public class Concert
-{
+public class Concert {
+	private final int ID; // unikalne id ka�dego koncertu
+	private String artist;
+	private String city; // to leci potem do google maps api
+	private String spot; // lokalizacja w mie�cie, jaki� klub czy co� (ulica?)
+	private Calendar date; // sam wyliczy dzie� tygodnia, mo�na mu doda� godzin� etc.
+	private String url; // url do strony ze szczegolowymi informacjami o danym koncercie
+	private AgencyName agency;
+
+	public Concert(int ID, String artist, String city, String spot, int day, int month, int year, AgencyName agency, String url) {
+		this.ID = ID;
+		this.agency = agency;
+		this.artist = artist.trim();
+		this.city = city.trim();
+		this.spot = spot.trim();
+		date = new GregorianCalendar(year, month - 1, day);
+		this.url = url.trim();
+	}
+
+	public Concert(int ID) {
+		this.ID = ID;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -17,6 +38,7 @@ public class Concert
 		return result;
 	}
 
+	// jeszcze sa adresy do stron gdzie mozna kupic bilet, ale na razie tego nie dodaje
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -49,80 +71,37 @@ public class Concert
 		return true;
 	}
 
-	public enum AgencyName {
-		GOAHEAD, ALTERART, EBILET, LIVENATION, TICKETPRO, INNE
-	}
-
-	private final int ID; // unikalne id ka�dego koncertu
-	private String artist;
-	private String city; // to leci potem do google maps api
-	private String spot; // lokalizacja w mie�cie, jaki� klub czy co� (ulica?)
-	private Calendar date; // sam wyliczy dzie� tygodnia, mo�na mu doda� godzin� etc.
-	private String url; // url do strony ze szczegolowymi informacjami o danym koncercie
-	private AgencyName agency;
-	// additional info
-	private String entryHours;
-	private String ticketsPrice;
-
-	// jeszcze sa adresy do stron gdzie mozna kupic bilet, ale na razie tego nie dodaje
-
-	public Concert(int ID, String artist, String city, String spot, int day, int month, int year, AgencyName agency, String url)
-	{
-		this.ID = ID;
-		this.agency = agency;
-		this.artist = artist.trim();
-		this.city = city.trim();
-		this.spot = spot.trim();
-		date = new GregorianCalendar(year, month - 1, day);
-		this.url = url.trim();
-		this.entryHours = "";
-		this.ticketsPrice = "";
-	}
-
-	public Concert(int ID) {
-		this.ID = ID;
-	}
-
-	public String getArtist()
-	{
+	public String getArtist() {
 		return artist;
 	}
 
-	public String getCity()
-	{
+	public String getCity() {
 		return city;
-	}
-
-	public String getSpot() {
-		return spot;
 	}
 
 	public String getPlace() {
 		return city + " " + spot;
 	}
 
-	public AgencyName getAgency()
-	{
-		return agency;
-	}
-
-	public Calendar getDate() {
-		return date;
-	}
-
-	public int getID()
-	{
+	public int getID() {
 		return ID;
 	}
 
-	public Calendar getCalendar() { return date; }
+	public int daysTo() {
+		Calendar today = Calendar.getInstance();
+		return (date.get(Calendar.DAY_OF_MONTH) - (today.get(Calendar.DAY_OF_MONTH)));
 
-    public int[] getDayMonthYear(){
-      return new int[]{Calendar.DAY_OF_MONTH, Calendar.MONTH +1, Calendar.YEAR};
-    }
+	}
 
-	public String dateToString()
-	{
+	public int[] getDayMonthYear() {
+		return new int[] { Calendar.DAY_OF_MONTH, Calendar.MONTH + 1, Calendar.YEAR };
+	}
+
+	public Calendar getCalendar() {
+		return date;
+	}
+
+	public String dateToString() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 		String day = "";
 		switch (date.get(Calendar.DAY_OF_WEEK)) {
@@ -153,26 +132,12 @@ public class Concert
 		return dateFormat.format(date.getTime()) + " (" + day + ")";
 	}
 
-	public String getURL()
-	{
-		return url;
-	}
-
-	public void setMoreData(String adress, String entryHours, String ticketsPrice)
-	{
-		this.entryHours = entryHours;
-		this.ticketsPrice = ticketsPrice;
-	}
-
-	public String getMoreData()// tymczasowe raczej, bo po co to komu? :D
-	{
-		return entryHours + " " + ticketsPrice;
-	}
-
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return artist + " " + getPlace() + " " + dateToString() + "\n";
 	}
 
+	public enum AgencyName {
+		GOAHEAD, ALTERART, EBILET, LIVENATION, TICKETPRO, INNE
+	}
 }
