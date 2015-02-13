@@ -187,7 +187,8 @@ public class dbManager extends SQLiteOpenHelper {
 		Calendar calendar = Calendar.getInstance();
 		int day = calendar.get(Calendar.DAY_OF_MONTH);
 		int month = calendar.get(Calendar.MONTH) + 1;
-		int year = calendar.get(Calendar.YEAR);
+        month = month == 1? 12 : month-1; // przepuszczamy miesięczne
+        int year = calendar.get(Calendar.YEAR);
 		String selection = new String("YEAR < ? OR (YEAR = ? AND MONTH < ?) OR (YEAR = ? AND MONTH = ? AND DAY < ?)");
 		String selectionArgs[] = new String[]
 		{

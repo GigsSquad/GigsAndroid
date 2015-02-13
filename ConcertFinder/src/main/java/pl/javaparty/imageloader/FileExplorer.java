@@ -7,18 +7,20 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
 
 import android.content.Context;
+import android.util.Log;
 
 public class FileExplorer
 {
 	private File fileDir;
-	private final String IMAGES_DIR = new String("/pl.javaparty.concertfinder/bandImages");
+	private final String IMAGES_DIR = new String("/bandImages");
 	
 	public FileExplorer(Context context)
 	{
-		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))//jesli jest karta SD
-            fileDir=new File(android.os.Environment.getExternalStorageDirectory(),IMAGES_DIR);
-		else
-			fileDir= new File(context.getCacheDir(), IMAGES_DIR);
+//		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))//jesli jest karta SD
+//            fileDir=new File(android.os.Environment.getExternalStorageDirectory(),IMAGES_DIR);
+//		else
+			fileDir= new File(context.getFilesDir(), IMAGES_DIR);
+        Log.i("DIR", fileDir.getPath());
 		if(!fileDir.exists())
 			fileDir.mkdirs();
 	}
