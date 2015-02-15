@@ -18,7 +18,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
-import pl.javaparty.map.MapHelper;
 import pl.javaparty.sql.dbManager;
 
 public class TabConcertGoogleMap extends Fragment {
@@ -28,7 +27,7 @@ public class TabConcertGoogleMap extends Fragment {
 	private static View view;
 	private static GoogleMap mMap;
 	private static FragmentManager fragmentManager;
-	private static MapHelper mapHelper;
+	static Context context;
 
 	private static void setUpMapIfNeeded() {
 		if (mMap == null) {
@@ -40,20 +39,24 @@ public class TabConcertGoogleMap extends Fragment {
 
 	private static void setUpMap() {
 		mMap.setMyLocationEnabled(true); // pokazuje naszą pozycje
-		String spot = dbm.getCity(ID);
-		LatLng latLng = mapHelper.getLatLng(spot);
-		mMap.addMarker(new MarkerOptions().position(latLng).title(dbm.getCity(ID) + " " + dbm.getSpot(ID)).snippet(
-				dbm.getArtist(ID) + " " + dbm.getDate(ID))); // ustawia marker
-		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17.0f)); // przybliza do markera
+
+		//Log.i("MAP", "RAW: " + Double.parseDouble(dbm.getLat(ID) + " " + Double.parseDouble(dbm.getLon(ID))));
+		try {
+			LatLng latLng = new LatLng(Double.parseDouble(dbm.getLon(ID)), Double.parseDouble(dbm.getLat(ID)));
+			mMap.addMarker(new MarkerOptions().position(latLng).title(dbm.getCity(ID) + " " + dbm.getSpot(ID)).snippet(
+					dbm.getArtist(ID) + " " + dbm.getDate(ID))); // ustawia marker
+			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f)); // przybliza do markera
+		} catch (NumberFormatException nfe) {
+			Toast.makeText(context, "Brak poprawnego adresu", Toast.LENGTH_SHORT).show();
+			Log.w("MAP", "Brak adresu");
+		}
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
 		ID = getArguments().getInt("ID", -1);
-
+		context = getActivity();
 		dbm = MainActivity.getDBManager();
-
-		mapHelper = new MapHelper(getActivity());
 
 		setHasOptionsMenu(true);
 

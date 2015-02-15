@@ -15,12 +15,11 @@ import java.util.HashSet;
 
 public class dbManager extends SQLiteOpenHelper {
 
-	private final static String DATABASE_NAME = "baza.db";
-	private static SQLiteDatabase database;
 	public final static String CONCERTS_TABLE = "Concerts";
 	public final static String FAVOURITES_TABLE = "Favourites";
 	public final static String HASHCODES_TABLE = "Hashcodes";
-	
+	private final static String DATABASE_NAME = "baza.db";
+	private static SQLiteDatabase database;
 	private static String CreateConcertTable =
 			"CREATE TABLE " + CONCERTS_TABLE + "(" +
 					"ORD INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -31,8 +30,9 @@ public class dbManager extends SQLiteOpenHelper {
 					"MONTH INTEGER," +
 					"YEAR INTEGER," +
 					"AGENCY TEXT," +
-					"URL TEXT)";
-
+					"URL TEXT," +
+					"LAT TEXT," +
+					"LON TEXT)";
 	// tablica hash odpowiada za hashcode najnowszego eventu danej agencji
 	private static String CreateHashcodeTable =
 			"CREATE TABLE " + HASHCODES_TABLE + "(" +
@@ -65,15 +65,14 @@ public class dbManager extends SQLiteOpenHelper {
 		// TODO Auto-generated method stub
 	}
 
-	public void deleteBase()
-	{
+	public void deleteBase() {
 		database.delete(CONCERTS_TABLE, null, null);
 		database.delete(FAVOURITES_TABLE, null, null);
 		database.delete(HASHCODES_TABLE, null, null);
 	}
 
 	public void addConcert(String artistName, String city, String spot,
-			int day, int month, int year, String agency, String url) {
+			int day, int month, int year, String agency, String url, String lat, String lon) {
 		if (!contains(artistName, city, spot, day, month, year)) {
 			ContentValues cv = new ContentValues();
 			cv.put("ARTIST", artistName);
@@ -84,6 +83,8 @@ public class dbManager extends SQLiteOpenHelper {
 			cv.put("YEAR", year);
 			cv.put("AGENCY", agency);
 			cv.put("URL", url);
+			cv.put("LAT", lat);
+			cv.put("LON", lon);
 			database.insertOrThrow("Concerts", null, cv);
 		}
 	}
@@ -117,7 +118,7 @@ public class dbManager extends SQLiteOpenHelper {
 	}
 
 	public Cursor getData() {
-		String[] columns = { "ORD", "ARTIST", "CITY", "SPOT", "DAY", "MONTH", "YEAR", "AGENCY", "URL" };
+		String[] columns = { "ORD", "ARTIST", "CITY", "SPOT", "DAY", "MONTH", "YEAR", "AGENCY", "URL", "LAT", "LON" };
 		// dodane pobieranie ID na pocz�tku
 		Cursor c = database.query(CONCERTS_TABLE, columns, null, null, null, null, null);
 		return c;
@@ -171,8 +172,7 @@ public class dbManager extends SQLiteOpenHelper {
 			cv.put("AGENCY", agencyName);
 			cv.put("HASH", hash);
 			db.insertOrThrow(HASHCODES_TABLE, null, cv);
-		}
-		else {
+		} else {
 			String update = "UPDATE " + HASHCODES_TABLE + " SET HASH = '" + hash + "' WHERE AGENCY = '" + agencyName + "'";
 			db.execSQL(update);
 		}
@@ -184,21 +184,20 @@ public class dbManager extends SQLiteOpenHelper {
 		Calendar calendar = Calendar.getInstance();
 		int day = calendar.get(Calendar.DAY_OF_MONTH);
 		int month = calendar.get(Calendar.MONTH) + 1;
-        month = month == 1? 12 : month-1; // przepuszczamy miesięczne
-        int year = calendar.get(Calendar.YEAR);
+		month = month == 1 ? 12 : month - 1; // przepuszczamy miesięczne
+		int year = calendar.get(Calendar.YEAR);
 		String selection = new String("YEAR < ? OR (YEAR = ? AND MONTH < ?) OR (YEAR = ? AND MONTH = ? AND DAY < ?)");
 		String selectionArgs[] = new String[]
-		{
-				String.valueOf(year),
-				String.valueOf(year),
-				String.valueOf(month),
-				String.valueOf(year),
-				String.valueOf(month),
-				String.valueOf(day),
-		};
+				{
+						String.valueOf(year),
+						String.valueOf(year),
+						String.valueOf(month),
+						String.valueOf(year),
+						String.valueOf(month),
+						String.valueOf(day),
+				};
 		Cursor c = database.query(CONCERTS_TABLE, new String[] { "ORD" }, selection, selectionArgs, null, null, null);
-		while (c.moveToNext())
-		{
+		while (c.moveToNext()) {
 			Log.i("Deleter", c.getString(0));
 		}
 		int deleted = database.delete(CONCERTS_TABLE, selection, selectionArgs);
@@ -224,8 +223,7 @@ public class dbManager extends SQLiteOpenHelper {
 		return res;
 	}
 
-	public void deleteDB(Context context)
-	{
+	public void deleteDB(Context context) {
 		database.close();
 		context.deleteDatabase(DATABASE_NAME);
 		Log.i("DB", "Baza usuni�ta");
@@ -256,9 +254,17 @@ public class dbManager extends SQLiteOpenHelper {
 		return fieldGetter(ID, "URL");
 	}
 
-    public String getAgency(int ID) {
-        return fieldGetter(ID, "AGENCY");
-    }
+	public String getAgency(int ID) {
+		return fieldGetter(ID, "AGENCY");
+	}
+
+	public String getLat(int ID) {
+		return fieldGetter(ID, "LAT");
+	}
+
+	public String getLon(int ID) {
+		return fieldGetter(ID, "LON");
+	}
 
 	public String getDate(int ID) {
 		String[] columns = { "ORD", "DAY", "MONTH", "YEAR" };
@@ -276,8 +282,7 @@ public class dbManager extends SQLiteOpenHelper {
 	/**
 	 * metoda dodajaca id ulubionego koncertu do tabeli Favourite
 	 */
-	public void addFavouriteConcert(int id)
-	{
+	public void addFavouriteConcert(int id) {
 		if (!contains(id)) {
 			ContentValues cv = new ContentValues();
 			cv.put("ID", id);
@@ -286,40 +291,31 @@ public class dbManager extends SQLiteOpenHelper {
 		}
 	}
 
-	public void removeFavouriteConcert(int id)
-	{
-		String selection = new String("ID = "+id);
-	//	int deleted = database.delete(CONCERTS_TABLE, selection, selectionArgs);
-		database.delete(FAVOURITES_TABLE, selection,null);
+	public void removeFavouriteConcert(int id) {
+		String selection = new String("ID = " + id);
+		//	int deleted = database.delete(CONCERTS_TABLE, selection, selectionArgs);
+		database.delete(FAVOURITES_TABLE, selection, null);
 	}
 
 	/**
 	 * Metoda uzyskuj�ca ulubione koncerty z tabeli Favourite
-	 * 
+	 *
 	 * @return tablica concertow awierajaca ulubione koncerty
 	 */
-	public Concert[] getAllFavouriteConcert()
-	{
+	public Concert[] getAllFavouriteConcert() {
 		String[] columns = { "ID" };
 		Cursor c = database.query(FAVOURITES_TABLE, columns, null, null, null, null, null);
 		Concert[] concerts = new Concert[getSize(FAVOURITES_TABLE)];
-		for (int i = 0; c.moveToNext(); i++)
-		{
+		for (int i = 0; c.moveToNext(); i++) {
 			concerts[i] = getFavConcertByID(c.getInt(0));
-			//c.moveToNext();
-		/*	int id = c.getInt(0);
-			String condition = "ID = " + id;
-			concerts[i] = getConcertsBy(condition)[0];
-			*/
 		}
-			
+
 		c.close();
 
 		return concerts;
 	}
 
-	public boolean isConcertFavourite(int id)
-	{
+	public boolean isConcertFavourite(int id) {
 		String[] columns = { "ID" };
 		boolean favourite = false;
 		Cursor c = database.query(FAVOURITES_TABLE, columns, null, null, null, null, null);
@@ -346,16 +342,24 @@ public class dbManager extends SQLiteOpenHelper {
 			agency = AgencyName.GOAHEAD;
 		else if (s.equals("ALTERART"))
 			agency = AgencyName.ALTERART;
+		else if (s.equals("EBILET"))
+			agency = AgencyName.EBILET;
+		else if (s.equals("LIVENATION"))
+			agency = AgencyName.LIVENATION;
+		else if (s.equals("TICKETPRO"))
+			agency = AgencyName.LIVENATION;
+		else if (s.equals("SONGKICK"))
+			agency = AgencyName.SONGKICK;
 		return agency;
 	}
 
 	private Concert[] getConcertsBy(String condition) {
-		String[] columns = { "ORD", "ARTIST", "CITY", "SPOT", "DAY", "MONTH", "YEAR", "AGENCY", "URL" };
+		String[] columns = { "ORD", "ARTIST", "CITY", "SPOT", "DAY", "MONTH", "YEAR", "AGENCY", "URL", "LAT", "LON" };
 		Cursor c = database.query(CONCERTS_TABLE, columns, condition, null, null, null, "YEAR,MONTH,DAY");
 		Concert[] concerts = new Concert[c.getCount()];
 		for (int i = 0; c.moveToNext(); i++)
 			concerts[i] = new Concert(c.getInt(0), c.getString(1), c.getString(2), c.getString(3),
-					c.getInt(4), c.getInt(5), c.getInt(6), getAgency(c.getString(7)), c.getString(8));
+					c.getInt(4), c.getInt(5), c.getInt(6), getAgency(c.getString(7)), c.getString(8), c.getString(9), c.getString(10));
 		c.close();
 		return concerts;
 	}
@@ -378,11 +382,6 @@ public class dbManager extends SQLiteOpenHelper {
 		String condition = "ORD = " + ID;
 		return getConcertsBy(condition)[0];
 	}
-
-	/*
-	 * public Concert[] getConcertsByDate(int day, int month, int year) { String condition = "DAY = " + day +
-	 * " AND MONTH = " + month + " AND YEAR = " + year; return getConcertsBy(condition); }
-	 */
 
 	public Concert[] getConcertsByDateRange(int dF, int mF, int yF, int dT, int mT, int yT, String filter) {
 		String[] columns = { "ORD", "ARTIST", "CITY", "SPOT", "DAY", "MONTH", "YEAR", "AGENCY", "URL" };
@@ -407,7 +406,7 @@ public class dbManager extends SQLiteOpenHelper {
 		Concert[] concerts = new Concert[c.getCount()];
 		for (int i = 0; c.moveToNext(); i++) {
 			concerts[i] = new Concert(c.getInt(0), c.getString(1), c.getString(2), c.getString(3),
-					c.getInt(4), c.getInt(5), c.getInt(6), getAgency(c.getString(7)), c.getString(8));
+					c.getInt(4), c.getInt(5), c.getInt(6), getAgency(c.getString(7)), c.getString(8), c.getString(9), c.getString(10));
 		}
 		c.close();
 		return concerts;

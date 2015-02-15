@@ -40,37 +40,39 @@ public class TicketPrices extends AsyncTask<String, Void, String> {
 	protected void onPostExecute(String result) {
 
 		if ((result == null) || (result.equals(" "))) {
-			td1.setVisibility(View.VISIBLE);
-			td1.setText("Brak informacji o cenach biletów");
-		}
-		if (result.equals("")) {
-			td1.setVisibility(View.VISIBLE);
-			td1.setText("Bilety wyprzedane");
+			td2.setVisibility(View.VISIBLE);
+			td2.setText("Brak informacji o cenach biletów");
 		}
 
 		try {
+
+			if (result.equals("")) {
+				td1.setVisibility(View.VISIBLE);
+				td1.setText("Bilety wyprzedane");
+			}
+
 			prices = result.split(" ");
+			if ((prices.length < 1))
+				td2.setText("Brak informacji o cenach biletów");
+
+			if ((prices.length >= 1) && (prices[0] != null && !prices[0].equals(""))) {
+				td1.setVisibility(View.VISIBLE);
+				td1.setText(prices[0] + "zł");
+			}
+
+			if ((prices.length >= 2) && (prices[1] != null)) {
+				td2.setVisibility(View.VISIBLE);
+				td2.setText(prices[1] + "zł");
+			}
+			if ((prices.length >= 3) && (prices[2] != null)) {
+				td3.setVisibility(View.VISIBLE);
+				td3.setText(prices[2] + "zł");
+			}
 		} catch (NullPointerException exc) {
 			td2.setVisibility(View.VISIBLE);
 			td2.setText("Brak informacji o cenach biletów");
 		}
 
-		if ((prices.length < 1))
-			td2.setText("Brak informacji o cenach biletów");
-
-		if ((prices.length >= 1) && (prices[0] != null && !prices[0].equals(""))) {
-			td1.setVisibility(View.VISIBLE);
-			td1.setText(prices[0] + "zł");
-		}
-
-		if ((prices.length >= 2) && (prices[1] != null)) {
-			td2.setVisibility(View.VISIBLE);
-			td2.setText(prices[1] + "zł");
-		}
-		if ((prices.length >= 3) && (prices[2] != null)) {
-			td3.setVisibility(View.VISIBLE);
-			td3.setText(prices[2] + "zł");
-		}
 	}
 
 	private String getPrices() {

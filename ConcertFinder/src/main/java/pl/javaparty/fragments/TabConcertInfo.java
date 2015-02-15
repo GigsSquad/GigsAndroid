@@ -16,6 +16,7 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.android.gms.maps.model.LatLng;
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.imageloader.ImageLoader;
@@ -204,13 +205,17 @@ public class TabConcertInfo extends Fragment {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			distanceInt = mapHelper.distanceTo(dbm.getCity(ID).trim());
+			distanceInt = mapHelper.distanceTo(new LatLng(Double.parseDouble(dbm.getLon(ID)), Double.parseDouble(dbm.getLat(ID))));
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
-			distance.setText(distanceInt + "km od " + Prefs.getCity(getActivity()));
+			try {
+				distance.setText(distanceInt + "km od " + Prefs.getCity(getActivity()));
+			} catch (NullPointerException npe) {
+				distance.setText(distanceInt + "km od " + "miejsca zamieszkania");
+			}
 			if (distanceInt != 0)
 				distance.setVisibility(View.VISIBLE);
 			super.onPostExecute(result);

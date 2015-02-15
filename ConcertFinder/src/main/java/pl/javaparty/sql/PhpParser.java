@@ -1,6 +1,5 @@
 package pl.javaparty.sql;
 
-
 import android.content.Context;
 import android.util.Log;
 import pl.javaparty.prefs.Prefs;
@@ -60,7 +59,7 @@ public class PhpParser {
 		int id = -1;
 		try {
 			id = sc.nextInt();
-			dbm.addConcert(sc.next(), sc.next(), sc.next(), sc.nextInt(), sc.nextInt(), sc.nextInt(), sc.next(), sc.next());
+			dbm.addConcert(sc.next(), sc.next(), sc.next(), sc.nextInt(), sc.nextInt(), sc.nextInt(), sc.next(), sc.next(), sc.next(), sc.next());
 		} catch (InputMismatchException e) {
 			Log.i("UPDATER", "Wrong input: " + concert);
 		}

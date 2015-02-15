@@ -51,6 +51,24 @@ public class MapHelper {
 		return (int) (distanceFloat[0] / 1000);
 	}
 
+	public int distanceTo(final LatLng city) {
+		hometownAddress = getAddress(hometownString);
+
+		Log.i("MAP", "Miasto:" + city);
+		float[] distanceFloat = new float[3];
+
+		try {
+			Location.distanceBetween(
+					hometownAddress.getLatitude(), hometownAddress.getLongitude(),
+					city.latitude, city.longitude,
+					distanceFloat);
+		} catch (NullPointerException ne) {
+			return 0;
+		}
+		Log.i("MAP", "Dystans w km: " + (int) (distanceFloat[0] / 1000));
+		return (int) (distanceFloat[0] / 1000);
+	}
+
 	public Address getAddress(String place) {
 		Address address = null;
 		try {

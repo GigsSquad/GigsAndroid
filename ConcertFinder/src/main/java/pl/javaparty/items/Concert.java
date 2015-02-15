@@ -10,10 +10,12 @@ public class Concert {
 	private String city; // to leci potem do google maps api
 	private String spot; // lokalizacja w mie�cie, jaki� klub czy co� (ulica?)
 	private Calendar date; // sam wyliczy dzie� tygodnia, mo�na mu doda� godzin� etc.
-	private String url; // url do strony ze szczegolowymi informacjami o danym koncercie
-	private AgencyName agency;
+	String url; // url do strony ze szczegolowymi informacjami o danym koncercie
+	String lat;
+	String lon;
+	AgencyName agency;
 
-	public Concert(int ID, String artist, String city, String spot, int day, int month, int year, AgencyName agency, String url) {
+	public Concert(int ID, String artist, String city, String spot, int day, int month, int year, AgencyName agency, String url, String lat, String lon) {
 		this.ID = ID;
 		this.agency = agency;
 		this.artist = artist.trim();
@@ -21,6 +23,8 @@ public class Concert {
 		this.spot = spot.trim();
 		date = new GregorianCalendar(year, month - 1, day);
 		this.url = url.trim();
+		this.lat = lat.trim();
+		this.lon = lon.trim();
 	}
 
 	public Concert(int ID) {
@@ -138,6 +142,6 @@ public class Concert {
 	}
 
 	public enum AgencyName {
-		GOAHEAD, ALTERART, EBILET, LIVENATION, TICKETPRO, INNE
+		GOAHEAD, ALTERART, EBILET, LIVENATION, TICKETPRO, SONGKICK
 	}
 }

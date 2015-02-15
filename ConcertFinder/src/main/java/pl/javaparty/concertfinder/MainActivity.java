@@ -266,8 +266,7 @@ public class MainActivity extends FragmentActivity {
 	enum AgencyFragments
 	{
 		//zakladka 3 (bo RecentFragment) a druga liczba to wybrana zakladka podmenu
-		GOAHEAD(30);
-		
+		GOAHEAD(30), SONGKICK(40), LIVENATION(50), TICKETPRO(60);
 		private int fragmentNumber;
 		
 		AgencyFragments(int fragment)
