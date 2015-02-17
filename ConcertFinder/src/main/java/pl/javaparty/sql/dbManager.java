@@ -18,6 +18,7 @@ public class dbManager extends SQLiteOpenHelper {
 	public final static String CONCERTS_TABLE = "Concerts";
 	public final static String FAVOURITES_TABLE = "Favourites";
 	public final static String HASHCODES_TABLE = "Hashcodes";
+	public final static String DISTANCE_TABLE = "Distance";
 	private final static String DATABASE_NAME = "baza.db";
 	private static SQLiteDatabase database;
 	private static String CreateConcertTable =
@@ -33,6 +34,7 @@ public class dbManager extends SQLiteOpenHelper {
 					"URL TEXT," +
 					"LAT TEXT," +
 					"LON TEXT)";
+
 	// tablica hash odpowiada za hashcode najnowszego eventu danej agencji
 	private static String CreateHashcodeTable =
 			"CREATE TABLE " + HASHCODES_TABLE + "(" +
@@ -43,6 +45,8 @@ public class dbManager extends SQLiteOpenHelper {
 	private static String CreateFavouriteTable =
 			"CREATE TABLE " + FAVOURITES_TABLE + "(" +
 					"ID INTEGER)";
+
+	private static String CreateDistanceTable = "CREATE TABLE " + DISTANCE_TABLE + "(" + "ID INTEGER DISTANCE REAL";
 
 	public dbManager(Context context) {
 		super(context, DATABASE_NAME, null, 1);
@@ -58,6 +62,7 @@ public class dbManager extends SQLiteOpenHelper {
 		db.execSQL(CreateConcertTable);
 		db.execSQL(CreateHashcodeTable);
 		db.execSQL(CreateFavouriteTable);
+		db.execSQL(CreateDistanceTable);
 	}
 
 	@Override
@@ -69,6 +74,7 @@ public class dbManager extends SQLiteOpenHelper {
 		database.delete(CONCERTS_TABLE, null, null);
 		database.delete(FAVOURITES_TABLE, null, null);
 		database.delete(HASHCODES_TABLE, null, null);
+		database.delete(DISTANCE_TABLE, null, null);
 	}
 
 	public void addConcert(String artistName, String city, String spot,
@@ -87,6 +93,13 @@ public class dbManager extends SQLiteOpenHelper {
 			cv.put("LON", lon);
 			database.insertOrThrow("Concerts", null, cv);
 		}
+	}
+
+	public void addDistance(int ID, double distance) {
+		ContentValues cv = new ContentValues();
+		cv.put("ID", ID);
+		cv.put("DISTANCE", distance);
+		database.insertOrThrow("Distance", null, cv);
 	}
 
 	public boolean contains(String artistName, String city, String spot, int day, int month, int year) {
@@ -135,49 +148,6 @@ public class dbManager extends SQLiteOpenHelper {
 		return count;
 	}
 
-	public boolean agencyHashCodeExists(String agencyName) {
-		String column[] = { "AGENCY" };
-		SQLiteDatabase db = getReadableDatabase();
-		Cursor c = db.query(HASHCODES_TABLE, column, null, null, null, null, null);
-		boolean check = false;
-		while (c.moveToNext() && !check) {
-			if (c.getString(0).equals(agencyName))
-				check = true;
-		}
-		c.close();
-		return check;
-	}
-
-	public int getHash(String agencyName) {
-		int res = 0;
-		if (agencyHashCodeExists(agencyName)) {
-			SQLiteDatabase db = getReadableDatabase();
-			String[] column = { "AGENCY", "HASH" };
-			Cursor c = db.query(HASHCODES_TABLE, column, null, null, null, null, null);
-			while (c.moveToNext()) {
-				if (c.getString(0).equals(agencyName)) {
-					res = c.getInt(1);
-					break;
-				}
-			}
-			c.close();
-		}
-		return res;
-	}
-
-	public void updateHash(String agencyName, int hash) {
-		SQLiteDatabase db = getWritableDatabase();
-		ContentValues cv = new ContentValues();
-		if (!agencyHashCodeExists(agencyName)) {
-			cv.put("AGENCY", agencyName);
-			cv.put("HASH", hash);
-			db.insertOrThrow(HASHCODES_TABLE, null, cv);
-		} else {
-			String update = "UPDATE " + HASHCODES_TABLE + " SET HASH = '" + hash + "' WHERE AGENCY = '" + agencyName + "'";
-			db.execSQL(update);
-		}
-	}
-
 	public void deleteOldConcerts() // wypierdalator starch koncert�w //<- L
 	{
 		Log.i("Deleter", "Szukam starych koncertow");
@@ -221,13 +191,6 @@ public class dbManager extends SQLiteOpenHelper {
 		String[] res = new String[hashSet.size()];
 		hashSet.toArray(res);
 		return res;
-	}
-
-	public void deleteDB(Context context) {
-		database.close();
-		context.deleteDatabase(DATABASE_NAME);
-		Log.i("DB", "Baza usuni�ta");
-		new dbManager(context);
 	}
 
 	public String[] getArtists(String condition) {

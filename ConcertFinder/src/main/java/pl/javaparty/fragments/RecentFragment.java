@@ -40,8 +40,8 @@ public class RecentFragment extends Fragment {
 		
 		checkedAgencies = new HashMap<>();
 		AgencyName[] vals = AgencyName.values();
-		for (int i = 0; i < vals.length; i++)
-			checkedAgencies.put(vals[i].name(), true);
+		for (AgencyName val : vals)
+			checkedAgencies.put(val.name(), true);
 	}
 
 	@Override
@@ -54,8 +54,8 @@ public class RecentFragment extends Fragment {
 
 		checkedAgencies = new HashMap<>();
 		AgencyName[] vals = AgencyName.values();
-		for (int i = 0; i < vals.length; i++)
-			checkedAgencies.put(vals[i].name(), true);
+		for (AgencyName val : vals)
+			checkedAgencies.put(val.name(), true);
 
 		setHasOptionsMenu(true);
 
@@ -78,7 +78,7 @@ public class RecentFragment extends Fragment {
 		lv.addFooterView(nextButton);
 
 		adapter = new ConcertAdapter(getActivity(), cutArray(dbm.getAllConcerts(filterAgencies())));
-		lv.setAdapter(adapter);//TODO setEmptyView
+		lv.setAdapter(adapter);
 		lv.setEmptyView(view.findViewById(R.id.emptyList));
 
 		lv.setOnItemClickListener(new OnItemClickListener() {
@@ -119,7 +119,7 @@ public class RecentFragment extends Fragment {
 			else
 				return Arrays.copyOfRange(array, 0, showedConcerts);
 		}
-		return new Concert[0];//pi�kna �ata
+		return new Concert[0];
 	}
 
 	public void refresh()

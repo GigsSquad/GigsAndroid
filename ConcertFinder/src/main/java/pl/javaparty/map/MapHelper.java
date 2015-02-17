@@ -29,7 +29,6 @@ public class MapHelper {
 	 *
 	 * @param city nazwa miasta
 	 * @return zwraca odleglosc w kilometrach
-	 * @throws java.io.IOException shit happens
 	 */
 
 	public int distanceTo(final String city) {
@@ -51,16 +50,27 @@ public class MapHelper {
 		return (int) (distanceFloat[0] / 1000);
 	}
 
-	public int distanceTo(final LatLng city) {
+	//wynik zwracany w jakimś gównie a nie w kilometrach
+	//obliczam odległość między dwoma punktami z pitagorasa
+	public double inaccurateDistanceTo(LatLng spot) {
+		LatLng hometown = getLatLng(hometownString);
+
+		double a = Math.abs(spot.latitude - hometown.latitude);
+		double b = Math.abs(spot.longitude - hometown.longitude);
+
+		return (Math.sqrt((a * a) + (b * b)));
+	}
+
+	public int distanceTo(final LatLng spot) {
 		hometownAddress = getAddress(hometownString);
 
-		Log.i("MAP", "Miasto:" + city);
+		Log.i("MAP", "Miasto:" + spot);
 		float[] distanceFloat = new float[3];
 
 		try {
 			Location.distanceBetween(
 					hometownAddress.getLatitude(), hometownAddress.getLongitude(),
-					city.latitude, city.longitude,
+					spot.latitude, spot.longitude,
 					distanceFloat);
 		} catch (NullPointerException ne) {
 			return 0;
