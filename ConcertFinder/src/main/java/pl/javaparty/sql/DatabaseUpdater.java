@@ -4,6 +4,7 @@ package pl.javaparty.sql;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.Toast;
+import pl.javaparty.jsoup.PhpParser;
 import pl.javaparty.prefs.Prefs;
 import java.io.InputStream;
 

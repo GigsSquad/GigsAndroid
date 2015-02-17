@@ -1,11 +1,16 @@
-package pl.javaparty.sql;
+package pl.javaparty.jsoup;
 
 
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import pl.javaparty.prefs.Prefs;
 import android.os.Handler;
+import pl.javaparty.sql.WebConnector;
+import pl.javaparty.sql.dbManager;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,6 +21,7 @@ import java.util.Scanner;
 public class PhpParser
 {
     private final static String SEPARATOR = ";";
+    private final static String END_SEPARATOR = ";;";
     private final Context context;
     private final dbManager dbm;
 
@@ -29,37 +35,46 @@ public class PhpParser
     {
         if(is!=null)
         {
-            BufferedReader br = null;
-
-            String line;
+//            BufferedReader br = null;
+//
+//
+//            String line;
             try
             {
-
-                br = new BufferedReader(new InputStreamReader(is));
+                Document doc = Jsoup.parse(is, WebConnector.CHARSET, WebConnector.URL);
+//                br = new BufferedReader(new InputStreamReader(is));
                 int lastID = -1;
-                while ((line = br.readLine()) != null)
+//                while ((line = br.readLine()) != null)
+//                {
+//                    lastID = addToDatabase(line);
+//                }
+                String line = doc.text();
+                Scanner sc = new Scanner(line).useDelimiter(END_SEPARATOR);
+                while(sc.hasNext())
                 {
-                    lastID = addToDatabase(line);
+                    String next = sc.next();
+                    Log.i("UPDATER", "Parsing: " + next);
+                    lastID = addToDatabase(next);
                 }
-
                 Prefs.setLastID(context, lastID);
 
             } catch (IOException e)
             {
                 e.printStackTrace();
-            } finally
-            {
-                if (br != null)
-                {
-                    try
-                    {
-                        br.close();
-                    } catch (IOException e)
-                    {
-                        e.printStackTrace();
-                    }
-                }
             }
+//            finally
+//            {
+//                if (br != null)
+//                {
+//                    try
+//                    {
+//                        br.close();
+//                    } catch (IOException e)
+//                    {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
         }
 
     }
@@ -76,7 +91,7 @@ public class PhpParser
         try
         {
             id = sc.nextInt();
-            dbm.addConcert(sc.next(), sc.next(), sc.next(), sc.nextInt(), sc.nextInt(), sc.nextInt(), sc.next(), sc.next());
+            dbm.addConcert(id, sc.next(), sc.next(), sc.next(), sc.nextInt(), sc.nextInt(), sc.nextInt(), sc.next(), sc.next());
         }
         catch (InputMismatchException e)
         {

@@ -10,8 +10,8 @@ import java.net.URLConnection;
 
 public class WebConnector
 {
-    private final static String URL = "http://javaparty.com.pl/concertfinder.php";
-    private final static String CHARSET = "UTF-8";
+    public final static String URL = "http://javaparty.com.pl/concertfinder.php";
+    public final static String CHARSET = "UTF-8";
 
     /**
      *   Use html POST method with specified {@code params}.

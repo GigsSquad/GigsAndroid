@@ -23,7 +23,7 @@ public class dbManager extends SQLiteOpenHelper {
 	
 	private static String CreateConcertTable =
 			"CREATE TABLE " + CONCERTS_TABLE + "(" +
-					"ORD INTEGER PRIMARY KEY AUTOINCREMENT," +
+					"ORD INTEGER PRIMARY KEY," +
 					"ARTIST TEXT," +
 					"CITY TEXT," +
 					"SPOT TEXT," +
@@ -73,10 +73,11 @@ public class dbManager extends SQLiteOpenHelper {
 		database.delete(HASHCODES_TABLE, null, null);
 	}
 
-	public void addConcert(String artistName, String city, String spot,
+	public void addConcert(long id, String artistName, String city, String spot,
 			int day, int month, int year, String agency, String url) {
 		if (!contains(artistName, city, spot, day, month, year)) {
 			ContentValues cv = new ContentValues();
+            cv.put("ORD", id);
 			cv.put("ARTIST", artistName);
 			cv.put("CITY", city);
 			cv.put("SPOT", spot);
@@ -356,8 +357,11 @@ public class dbManager extends SQLiteOpenHelper {
 		Cursor c = database.query(CONCERTS_TABLE, columns, condition, null, null, null, "YEAR,MONTH,DAY");
 		Concert[] concerts = new Concert[c.getCount()];
 		for (int i = 0; c.moveToNext(); i++)
-			concerts[i] = new Concert(c.getInt(0), c.getString(1), c.getString(2), c.getString(3),
-					c.getInt(4), c.getInt(5), c.getInt(6), getAgency(c.getString(7)), c.getString(8));
+        {
+            concerts[i] = new Concert(c.getInt(0), c.getString(1), c.getString(2), c.getString(3),
+                    c.getInt(4), c.getInt(5), c.getInt(6), getAgency(c.getString(7)), c.getString(8));
+            Log.i("DB_ID", "id: " + concerts[i].getID());
+        }
 		c.close();
 		return concerts;
 	}
