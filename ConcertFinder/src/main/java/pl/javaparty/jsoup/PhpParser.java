@@ -46,6 +46,8 @@ public class PhpParser
 //                }
                 String line = doc.text();
                 Scanner sc = new Scanner(line).useDelimiter(END_SEPARATOR);
+                int thelastID = sc.nextInt(); //TODO <--------- RAFAŁKU TUTAJ!
+                Log.i("int", "int: " + thelastID);
                 while(sc.hasNext())
                 {
                     String next = sc.next();
