@@ -52,11 +52,6 @@ public class RecentFragment extends Fragment {
 		lv = (ListView) view.findViewById(R.id.recentList);
 		dbm = MainActivity.getDBManager();
 
-		checkedAgencies = new HashMap<>();
-		AgencyName[] vals = AgencyName.values();
-		for (AgencyName val : vals)
-			checkedAgencies.put(val.name(), true);
-
 		setHasOptionsMenu(true);
 
 		// button na koncu listy ktory rozwija liste o wincyj jesli sie da
