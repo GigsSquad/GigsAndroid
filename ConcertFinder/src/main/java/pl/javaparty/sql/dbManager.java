@@ -324,12 +324,14 @@ public class dbManager extends SQLiteOpenHelper {
 		return res;
 	}
 
-	private AgencyName getAgency(String s) {// TODO zrobic bardiej uniwersalnie
+	private AgencyName getAgency(String s) {
 		AgencyName agency = null;
-		if (s.equals("GOAHEAD"))
-			agency = AgencyName.GOAHEAD;
-		else if (s.equals("ALTERART"))
-			agency = AgencyName.ALTERART;
+        AgencyName[] agencyNames = AgencyName.values();
+        for(int i = 0; i < agencyNames.length && agency==null ; i++)
+        {
+            if(agencyNames[i].name().equals(s))
+                agency = agencyNames[i];
+        }
 		return agency;
 	}
 
