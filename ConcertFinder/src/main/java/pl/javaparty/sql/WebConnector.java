@@ -1,6 +1,7 @@
 package pl.javaparty.sql;
 
 
+import android.util.Log;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -9,8 +10,8 @@ import java.net.URLConnection;
 
 public class WebConnector
 {
-    private final static String URL = "http://javaparty.com.pl/concertfinder.php";
-    private final static String CHARSET = "UTF-8";
+    public final static String URL = "http://javaparty.com.pl/concertfinder.php";
+    public final static String CHARSET = "UTF-8";
 
     /**
      *   Use html POST method with specified {@code params}.
@@ -43,10 +44,11 @@ public class WebConnector
             output.close();
 
             is = connection.getInputStream();
-		} catch (IOException e) {
+        } catch (IOException e)
+        {
             e.printStackTrace();
-			return is;
-		}
+            return is;
+        }
 
         return is;
     }
