@@ -49,7 +49,6 @@ public class PhpParser
                 while(sc.hasNext())
                 {
                     String next = sc.next();
-                    Log.i("UPDATER", "Parsing: " + next);
                     lastID = addToDatabase(next);
                 }
                 Prefs.setLastID(context, lastID);

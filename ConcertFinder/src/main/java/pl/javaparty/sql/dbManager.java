@@ -341,7 +341,6 @@ public class dbManager extends SQLiteOpenHelper {
         {
             concerts[i] = new Concert(c.getInt(0), c.getString(1), c.getString(2), c.getString(3),
 					c.getInt(4), c.getInt(5), c.getInt(6), getAgency(c.getString(7)), c.getString(8), c.getString(9), c.getString(10));
-			Log.i("DB_ID", "id: " + concerts[i].getID());
         }
 		c.close();
 		return concerts;
