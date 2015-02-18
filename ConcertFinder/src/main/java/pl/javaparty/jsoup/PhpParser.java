@@ -3,18 +3,14 @@ package pl.javaparty.jsoup;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import pl.javaparty.prefs.Prefs;
-import android.os.Handler;
 import pl.javaparty.sql.WebConnector;
 import pl.javaparty.sql.dbManager;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -91,8 +87,8 @@ public class PhpParser
         try
         {
             id = sc.nextInt();
-            dbm.addConcert(id, sc.next(), sc.next(), sc.next(), sc.nextInt(), sc.nextInt(), sc.nextInt(), sc.next(), sc.next());
-        }
+			dbm.addConcert(id, sc.next(), sc.next(), sc.next(), sc.nextInt(), sc.nextInt(), sc.nextInt(), sc.next(), sc.next(), sc.next(), sc.next());
+		}
         catch (InputMismatchException e)
         {
             Log.i("UPDATER", "Wrong input: "+concert);

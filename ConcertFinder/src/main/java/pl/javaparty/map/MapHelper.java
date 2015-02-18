@@ -69,7 +69,7 @@ public class MapHelper {
 
 		try {
 			Location.distanceBetween(
-					hometownAddress.getLatitude(), hometownAddress.getLongitude(),
+					hometownAddress.getLongitude(), hometownAddress.getLatitude(),
 					spot.latitude, spot.longitude,
 					distanceFloat);
 		} catch (NullPointerException ne) {
