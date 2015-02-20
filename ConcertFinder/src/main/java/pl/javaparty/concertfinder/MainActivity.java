@@ -139,7 +139,7 @@ public class MainActivity extends FragmentActivity {
 		updateCounters();
 		// pierwsza inicjalizacja
 		fragmentManager.beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
-				android.R.anim.slide_out_right).replace(R.id.content_frame, new RecentFragment()).addToBackStack(null).commit();
+				android.R.anim.slide_out_right).replace(R.id.content_frame, new RecentFragment()).commit();
 		drawerLayout.openDrawer(drawerList);
 	}
 
