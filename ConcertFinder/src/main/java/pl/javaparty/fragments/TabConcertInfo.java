@@ -140,6 +140,7 @@ public class TabConcertInfo extends Fragment {
 		return view;
 	}
 
+
 	private boolean isOnline() {
 		ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo netInfo = cm.getActiveNetworkInfo();

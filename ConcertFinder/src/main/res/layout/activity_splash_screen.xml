@@ -39,4 +39,10 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Dirty Eclipse peasants "
             android:id="@+id/textView2" android:layout_alignParentBottom="true" android:layout_centerHorizontal="true"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Zaloguj sie do Spotify"
+            android:id="@+id/spotifyBtn" android:layout_above="@+id/authButton" android:layout_alignRight="@+id/authButton"
+            android:layout_alignEnd="@+id/authButton" android:layout_alignParentLeft="true" android:layout_alignParentStart="true"/>
 </RelativeLayout>
