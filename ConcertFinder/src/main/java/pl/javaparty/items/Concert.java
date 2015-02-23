@@ -136,6 +136,10 @@ public class Concert {
 		return dateFormat.format(date.getTime()) + " (" + day + ")";
 	}
 
+    public boolean happened(){
+        return date.before(Calendar.getInstance());
+    }
+
 	@Override
 	public String toString() {
 		return artist + " " + getPlace() + " " + dateToString() + "\n";
