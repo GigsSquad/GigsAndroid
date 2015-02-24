@@ -1,6 +1,7 @@
 package pl.javaparty.sql;
 
 
+import android.app.ProgressDialog;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.Toast;
@@ -13,6 +14,7 @@ public class DatabaseUpdater
 
     dbManager dbm;
     FragmentActivity activity;
+	public static ProgressDialog progressDialog;
 
     public DatabaseUpdater(dbManager dbm, FragmentActivity activity)
     {
@@ -22,7 +24,17 @@ public class DatabaseUpdater
 
     public void update(Runnable r)
     {
+
+		progressDialog = new ProgressDialog(activity);
+		progressDialog.setMessage("Synchronizacja kurwa bazy");
+		progressDialog.setCancelable(false);
+		progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		progressDialog.setIndeterminate(true);
+		progressDialog.show();
+
         new Thread(new Download(r)).start();
+
+
     }
 
     private class Download implements Runnable
@@ -65,7 +77,7 @@ public class DatabaseUpdater
                     }
                 });
             }
-
+			progressDialog.dismiss();
             //dbm.deleteOldConcerts();
 
         }

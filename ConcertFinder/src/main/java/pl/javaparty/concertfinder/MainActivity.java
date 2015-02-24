@@ -72,7 +72,7 @@ public class MainActivity extends FragmentActivity {
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1)));
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[6], navMenuIcons.getResourceId(3, -1), agencies));//TODO icona
 		navMenuIcons.recycle();
-		
+
 		adapter = new NavDrawerAdapter(context, navDrawerItems);
 		drawerList.setAdapter(adapter);
 
@@ -83,28 +83,25 @@ public class MainActivity extends FragmentActivity {
 		drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
 				R.drawable.ic_drawer, // ikonka
 				R.string.app_name
-				) {
-					public void onDrawerClosed(View view) {
-						invalidateOptionsMenu();
-					}
+		) {
+			public void onDrawerClosed(View view) {
+				invalidateOptionsMenu();
+			}
 
-					public void onDrawerOpened(View drawerView) {
-						invalidateOptionsMenu();
-					}
-				};
+			public void onDrawerOpened(View drawerView) {
+				invalidateOptionsMenu();
+			}
+		};
 
 		drawerLayout.setDrawerListener(drawerToggle);
 		drawerList.setSelector(android.R.color.holo_blue_dark);
-		drawerList.setOnGroupClickListener(new OnGroupClickListener()
-		{
+		drawerList.setOnGroupClickListener(new OnGroupClickListener() {
 
 			@Override
 			public boolean onGroupClick(ExpandableListView parent, View v,
-					int groupPosition, long id)
-			{
+					int groupPosition, long id) {
 				Log.i("DRAWER", "Group: " + groupPosition);
-				if (navDrawerItems.get(groupPosition).getSubmenu() == null)
-				{
+				if (navDrawerItems.get(groupPosition).getSubmenu() == null) {
 					drawerLayout.closeDrawers();
 					if (groupPosition == 3)
 						dbu.update(new Refresh());
@@ -114,27 +111,24 @@ public class MainActivity extends FragmentActivity {
 				}
 				return false;
 			}
-			
+
 		});
-		drawerList.setOnChildClickListener(new OnChildClickListener(){
+		drawerList.setOnChildClickListener(new OnChildClickListener() {
 
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v,
-					int groupPosition, int childPosition, long id)
-			{
+					int groupPosition, int childPosition, long id) {
 				Log.i("DRAWER", "Child: " + childPosition);
 				drawerLayout.closeDrawers();
-				if(currentFragment != groupPosition || currentFragment !=30+childPosition)
-				{
-					changeFragment(30+childPosition);
+				if (currentFragment != groupPosition || currentFragment != 30 + childPosition) {
+					changeFragment(30 + childPosition);
 				}
 				return false;
 			}
-			
+
 		});
 
-		if (dbMgr.getSize(dbManager.CONCERTS_TABLE) < 10) // czemu akurat 10? a czemu nie?
-			dbu.update(new Refresh());
+		dbu.update(new Refresh());
 
 		updateCounters();
 		// pierwsza inicjalizacja
@@ -164,8 +158,7 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item)
-	{
+	public boolean onOptionsItemSelected(MenuItem item) {
 		// toggle nav drawer on selecting action bar app icon/title
 		if (drawerToggle.onOptionsItemSelected(item)) {
 			return true;
@@ -192,11 +185,9 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	// odswieza aktualny fragment (laduje go od nowa)
-	private class Refresh implements Runnable
-	{
+	private class Refresh implements Runnable {
 		@Override
-		public void run()
-		{
+		public void run() {
 			Log.i("RF", "Olaboga, refreshyk.");
 			changeFragment(currentFragment);// odswieza dany fragment
 			updateCounters();
@@ -204,8 +195,7 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
-	private void changeFragment(int position)
-	{
+	private void changeFragment(int position) {
 		Fragment fragment = null;
 		if (position == 0)
 			fragment = new SearchFragment();
@@ -219,12 +209,11 @@ public class MainActivity extends FragmentActivity {
 			fragment = new SettingsFragment();
 		else if (position == 5)
 			fragment = new AboutFragment();
-		else if (position >=30)
-		{
-			int pos = position-30;
+		else if (position >= 30) {
+			int pos = position - 30;
 			RecentFragment rfragment = new RecentFragment();
-			for(CharSequence ch: rfragment.checkedAgencies.keySet())
-				if(ch!=rfragment.checkedAgencies.keySet().toArray()[pos])
+			for (CharSequence ch : rfragment.checkedAgencies.keySet())
+				if (ch != rfragment.checkedAgencies.keySet().toArray()[pos])
 					rfragment.checkedAgencies.put(ch, false);
 
 			fragment = rfragment;
@@ -233,8 +222,7 @@ public class MainActivity extends FragmentActivity {
 		if (position != 3)// takie zabezpieczenie choc to sie nie powinno wydarzyc
 			currentFragment = position;
 
-		if (fragment != null)
-		{
+		if (fragment != null) {
 			updateCounters();
 			fragment.setArguments(arguments);
 			fragmentManager
@@ -245,8 +233,7 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
-	public static void updateCounters()
-	{
+	public static void updateCounters() {
 		navDrawerItems.get(1).setCount("" + dbMgr.getSize(dbManager.CONCERTS_TABLE));
 		navDrawerItems.get(1).setCounterVisibility(true);
 
@@ -258,24 +245,20 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	// przekazuje DBmanagera
-	public static dbManager getDBManager()
-	{
+	public static dbManager getDBManager() {
 		return dbMgr;
 	}
-	
-	enum AgencyFragments
-	{
+
+	enum AgencyFragments {
 		//zakladka 3 (bo RecentFragment) a druga liczba to wybrana zakladka podmenu
 		GOAHEAD(30), SONGKICK(40), LIVENATION(50), TICKETPRO(60);
 		private int fragmentNumber;
-		
-		AgencyFragments(int fragment)
-		{
+
+		AgencyFragments(int fragment) {
 			fragmentNumber = fragment;
 		}
-		
-		public int nr()
-		{
+
+		public int nr() {
 			return fragmentNumber;
 		}
 	}
