@@ -84,6 +84,7 @@ public class DateSearch extends Fragment {
 			@Override
 			public void onClick(View v) {
 				String filter = getArguments().getString("CONDITIONS");
+               // Log.i("DATE",filter);
 				Log.i("DATE", "Ilość: " + dbm.getConcertsByDateRange(dF, mF, yF, dT, mT, yT, filter).length);
 				adapter = new ConcertAdapter(context, dbm.getConcertsByDateRange(dF, mF, yF, dT, mT, yT, filter));
 				concertList.setAdapter(adapter);

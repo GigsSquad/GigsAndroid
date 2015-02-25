@@ -1,12 +1,15 @@
 package pl.javaparty.sql;
 
 
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.Toast;
+
+import java.io.InputStream;
+
 import pl.javaparty.jsoup.PhpParser;
 import pl.javaparty.prefs.Prefs;
-import java.io.InputStream;
 
 public class DatabaseUpdater
 {
@@ -18,12 +21,15 @@ public class DatabaseUpdater
     {
         this.dbm = dbm;
         this.activity = activity;
+
     }
+
 
     public void update(Runnable r)
     {
         new Thread(new Download(r)).start();
     }
+
 
     private class Download implements Runnable
     {
@@ -37,8 +43,6 @@ public class DatabaseUpdater
         @Override
         public void run()
         {
-
-            long startTime = System.currentTimeMillis();
             PhpParser parser = new PhpParser(activity, dbm);
 
             //parametry
@@ -50,8 +54,7 @@ public class DatabaseUpdater
             if(input!=null)
             {
                 parser.parse(input);
-                int time = (int) ((System.currentTimeMillis() - startTime) / 1000);
-                Log.i("JSD", "Uzupelniono baze w " + time + "sekund");
+                Log.i("BAZA", "Baza uzupełniona");
                 activity.runOnUiThread(r);
             }
             else
