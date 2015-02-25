@@ -39,12 +39,18 @@ public class TabConcertGoogleMap extends Fragment {
 
 	private static void setUpMap() {
 		mMap.setMyLocationEnabled(true); // pokazuje naszą pozycje
+		LatLng latLng;
 
 		//Log.i("MAP", "RAW: " + Double.parseDouble(dbm.getLat(ID) + " " + Double.parseDouble(dbm.getLon(ID))));
 		try {
-			LatLng latLng = new LatLng(Double.parseDouble(dbm.getLat(ID)), Double.parseDouble(dbm.getLon(ID)));
-			mMap.addMarker(new MarkerOptions().position(latLng).title(dbm.getCity(ID) + " " + dbm.getSpot(ID)).snippet(
-					dbm.getArtist(ID) + " " + dbm.getDate(ID))); // ustawia marker
+
+			latLng = new LatLng(Double.parseDouble(dbm.getLat(ID)), Double.parseDouble(dbm.getLon(ID)));
+
+			if (latLng.latitude == 0 || latLng.longitude == 0)
+				throw new NumberFormatException();
+
+			mMap.addMarker(new MarkerOptions().position(latLng).title(dbm.getCity(ID) + " " + dbm.getSpot(ID))
+					.snippet(dbm.getArtist(ID) + " " + dbm.getDate(ID))); // ustawia marker
 			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f)); // przybliza do markera
 		} catch (NumberFormatException nfe) {
 			Toast.makeText(context, "Brak poprawnego adresu", Toast.LENGTH_SHORT).show();

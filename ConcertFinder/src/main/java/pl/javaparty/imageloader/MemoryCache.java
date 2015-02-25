@@ -16,8 +16,8 @@ public class MemoryCache {
 
 	public MemoryCache() {
 		cache = Collections.synchronizedMap(new LinkedHashMap<String, Bitmap>(10, 1.5f, true));
-		//uzywa 25% ramu
-		setLimit(Runtime.getRuntime().maxMemory() / 4);
+		//uzywa 50% ramu
+		setLimit(Runtime.getRuntime().maxMemory() / 2);
 	}
 
 	public void setLimit(long new_limit) {
