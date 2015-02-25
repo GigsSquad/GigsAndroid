@@ -1,6 +1,7 @@
 package pl.javaparty.sql;
 
 
+import android.app.ProgressDialog;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -10,26 +11,33 @@ import java.io.InputStream;
 
 import pl.javaparty.jsoup.PhpParser;
 import pl.javaparty.prefs.Prefs;
+import java.io.InputStream;
 
 public class DatabaseUpdater
 {
 
     dbManager dbm;
     FragmentActivity activity;
+	public static ProgressDialog progressDialog;
 
     public DatabaseUpdater(dbManager dbm, FragmentActivity activity)
     {
         this.dbm = dbm;
         this.activity = activity;
-
     }
-
 
     public void update(Runnable r)
     {
+
+		progressDialog = new ProgressDialog(activity);
+		progressDialog.setMessage("Synchronizacja kurwa bazy");
+		progressDialog.setCancelable(false);
+		progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		progressDialog.setIndeterminate(true);
+		progressDialog.show();
+
         new Thread(new Download(r)).start();
     }
-
 
     private class Download implements Runnable
     {
@@ -43,6 +51,8 @@ public class DatabaseUpdater
         @Override
         public void run()
         {
+
+            long startTime = System.currentTimeMillis();
             PhpParser parser = new PhpParser(activity, dbm);
 
             //parametry
@@ -54,7 +64,8 @@ public class DatabaseUpdater
             if(input!=null)
             {
                 parser.parse(input);
-                Log.i("BAZA", "Baza uzupełniona");
+                int time = (int) ((System.currentTimeMillis() - startTime) / 1000);
+                Log.i("JSD", "Uzupelniono baze w " + time + "sekund");
                 activity.runOnUiThread(r);
             }
             else
@@ -68,7 +79,7 @@ public class DatabaseUpdater
                     }
                 });
             }
-
+			progressDialog.dismiss();
             //dbm.deleteOldConcerts();
 
         }

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Events;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -194,30 +195,46 @@ public class TabConcertInfo extends Fragment {
 	}
 
 	private class calculateDistance extends AsyncTask<Void, Void, Void> {
-		int distanceInt = 0;
+		int distanceInt;
+		String hometown;
+		LatLng latlng;
 
 		@Override
 		protected void onPreExecute() {
+			distanceInt = 0;
 			distance.setVisibility(View.GONE);
 			mapHelper = new MapHelper(getActivity());
+			hometown = Prefs.getCity(getActivity());
 			super.onPreExecute();
 		}
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			distanceInt = mapHelper.distanceTo(new LatLng(Double.parseDouble(dbm.getLon(ID)), Double.parseDouble(dbm.getLat(ID))));
+
+			try {
+				latlng = new LatLng(Double.parseDouble(dbm.getLon(ID)), Double.parseDouble(dbm.getLat(ID)));
+			} catch (NumberFormatException nfe) {
+				Toast.makeText(getActivity(), "Brak poprawnego adresu do obliczanie odległości", Toast.LENGTH_SHORT).show();
+				Log.w("MAP", "Brak adresu");
+			} finally {
+				if (latlng.latitude != 0 || latlng.longitude != 0)
+					distanceInt = mapHelper.distanceTo(latlng);
+				else
+					distanceInt = 0;
+			}
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
 			try {
-				distance.setText(distanceInt + "km od " + Prefs.getCity(getActivity()));
+				distance.setText(distanceInt + "km od " + hometown);
 			} catch (NullPointerException npe) {
 				distance.setText(distanceInt + "km od " + "miejsca zamieszkania");
+			} finally {
+				if (distanceInt != 0)
+					distance.setVisibility(View.VISIBLE);
 			}
-			if (distanceInt != 0)
-				distance.setVisibility(View.VISIBLE);
 			super.onPostExecute(result);
 		}
 	}

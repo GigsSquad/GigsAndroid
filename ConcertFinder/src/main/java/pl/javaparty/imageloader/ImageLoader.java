@@ -139,6 +139,8 @@ public class ImageLoader {
 			Bitmap bitmap = BitmapFactory.decodeStream(stream);
 			stream.close();
 			return bitmap;
+		} catch (OutOfMemoryError ome) {
+			clearCache();
 		} catch (FileNotFoundException e) {
 			//Log.e(TAG, "Nie znaleziono pliku!");
 		} catch (IOException e) {

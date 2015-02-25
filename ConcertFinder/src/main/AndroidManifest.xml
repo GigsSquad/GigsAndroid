@@ -37,6 +37,7 @@
             android:name=".SplashScreen"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
+            android:launchMode="singleInstance"
             android:theme="@style/Theme.Bluetheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -47,14 +48,14 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTop"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Bluetheme" >
         </activity>
         <activity
             android:name="pl.javaparty.fragments.ConcertFragment"
             android:label="@string/app_name"
-            android:launchMode="singleTask"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Bluetheme" >
     </activity>
