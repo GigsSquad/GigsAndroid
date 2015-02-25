@@ -2,9 +2,13 @@ package pl.javaparty.sql;
 
 
 import android.app.ProgressDialog;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.Toast;
+
+import java.io.InputStream;
+
 import pl.javaparty.jsoup.PhpParser;
 import pl.javaparty.prefs.Prefs;
 
@@ -34,8 +38,6 @@ public class DatabaseUpdater
 		progressDialog.show();
 
         new Thread(new Download(r)).start();
-
-
     }
 
     private class Download implements Runnable
