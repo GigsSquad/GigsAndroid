@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.Toast;
 import pl.javaparty.jsoup.PhpParser;
 import pl.javaparty.prefs.Prefs;
+
 import java.io.InputStream;
 
 public class DatabaseUpdater

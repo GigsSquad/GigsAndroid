@@ -52,6 +52,14 @@ public class FacebookFragment extends Fragment {
 			}
 		});
 
+		Button spotifyBtn = (Button) view.findViewById(R.id.spotifyBtn);
+		spotifyBtn.setOnClickListener(new View.OnClickListener() {
+			@Override public void onClick(View v) {
+				Intent intent = new Intent(getActivity(), SpotifyActivity.class);
+				startActivity(intent);
+			}
+		});
+
 		LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
 		authButton.setFragment(this);
 		authButton.setReadPermissions(Arrays.asList("user_location", "user_birthday", "user_likes"));

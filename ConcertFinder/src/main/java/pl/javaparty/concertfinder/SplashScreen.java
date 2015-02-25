@@ -27,5 +27,4 @@ public class SplashScreen extends FragmentActivity {
 					.findFragmentById(android.R.id.content);
 		}
 	}
-
 }
