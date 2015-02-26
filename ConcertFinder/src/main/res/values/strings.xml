@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Wyszukiwarka koncertów</string>
+    <string name="app_name">_Wyszukiwarka koncertów</string>
     <string name="title_activity_info_page">InfoPage</string>
     <string name="downloadButton">OK</string>
     <string name="searchBox">Wykonawca</string>
