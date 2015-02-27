@@ -85,7 +85,7 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 		holder.place.setText(getPreparedPlace(rowItem.getPlace()));
 		holder.date.setText(rowItem.dateToString());
 
-		if (MainActivity.getDBManager().isConcertFavourite(rowItem.getID()))
+		if (MainActivity.getDBManager(). isConcertFavourite(rowItem.getID()))
 			holder.fav.setImageResource(R.drawable.ic_action_important);
 		else
 			holder.fav.setImageResource(R.drawable.ic_action_not_important);

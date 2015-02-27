@@ -13,8 +13,8 @@ import java.util.List;
 
 public class MapHelper {
 	private Geocoder geoCoder;
+    private List<Address> addressList;
 
-	private List<Address> addressList;
 	private Address destinationAddress; // to zadane
 	private Address hometownAddress; // to z ustawie�
 	private String hometownString;
@@ -97,4 +97,11 @@ public class MapHelper {
 		return (new LatLng(getAddress(place).getLatitude(), getAddress(place).getLongitude()));
 
 	}
+    public double getLat(String place){
+        Log.i("HomeTownPlace",place);
+        return getAddress(place).getLatitude();
+    }
+    public double getLon(String place){
+        return getAddress(place).getLongitude();
+    }
 }
