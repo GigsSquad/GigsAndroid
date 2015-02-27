@@ -1,0 +1,37 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                tools:context="pl.javaparty.concertfinder.SplashScreen" android:id="@+id/ut">
+
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Utwór"
+            android:id="@+id/track" android:layout_alignParentTop="true" android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true" android:layout_alignParentEnd="true"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Wróć"
+            android:id="@+id/backBtn" android:layout_alignParentBottom="true" android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
+            android:layout_alignRight="@+id/track" android:layout_alignEnd="@+id/track"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Do things"
+            android:id="@+id/thingBtn" android:layout_above="@+id/backBtn" android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
+            android:layout_alignRight="@+id/backBtn" android:layout_alignEnd="@+id/backBtn"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Do things and shit "
+            android:id="@+id/shitBtn" android:layout_above="@+id/thingBtn" android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
+            android:layout_alignRight="@+id/thingBtn" android:layout_alignEnd="@+id/thingBtn"/>
+</RelativeLayout>

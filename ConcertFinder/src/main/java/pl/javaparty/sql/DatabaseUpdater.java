@@ -11,6 +11,7 @@ import java.io.InputStream;
 
 import pl.javaparty.jsoup.PhpParser;
 import pl.javaparty.prefs.Prefs;
+
 import java.io.InputStream;
 
 public class DatabaseUpdater

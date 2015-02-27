@@ -51,6 +51,7 @@ public class MainActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+
 		dbMgr = new dbManager(getApplicationContext());
 		context = getApplicationContext();
 		dbu = new DatabaseUpdater(dbMgr, this);
