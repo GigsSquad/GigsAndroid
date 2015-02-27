@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="50dp"
+              android:orientation="vertical" >
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+        <ImageView
+                android:id="@+id/artist_image"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/stock_pic" />
+
+        <ImageView
+                android:id="@+id/dark_past"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:alpha="0.7"
+                android:scaleType="fitXY"
+                android:src="@drawable/bg" />
+
+        <RelativeLayout
+                android:id="@+id/relativeLayout1"
+                android:layout_width="fill_parent"
+                android:layout_height="250dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentTop="false"
+                android:layout_centerHorizontal="true" >
+
+            <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:background="#ffffff"
+                    android:orientation="vertical" android:layout_alignParentBottom="true">
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="10dp" >
+
+                    <ImageView
+                            android:id="@+id/imageView1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_action_place" />
+
+                    <TextView
+                            android:id="@+id/place_past"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="4dp"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingTop="4dp"
+                            android:text="miejsce"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="#616161"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+                </LinearLayout>
+
+                <TextView
+                        android:id="@+id/distance_past"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="40dp"
+                        android:text="200km od miejsca zamieszkania"
+                        android:textColor="#757575" />
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp" >
+
+                    <ImageView
+                            android:id="@+id/imageView2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_action_event" />
+
+                    <TextView
+                            android:id="@+id/date_past"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="4dp"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingTop="4dp"
+                            android:text="data"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="#616161"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+                </LinearLayout>
+
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:text="Setlist not available :(" android:id="@+id/textView3"
+                          android:layout_below="@+id/concert_map"/>
+                <ListView android:layout_width="match_parent" android:layout_height="wrap_content"
+                          android:id="@+id/songs"
+                          android:layout_below="@+id/concert_map"
+                          android:layout_gravity="center_horizontal"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <TextView
+                android:id="@+id/artist_past"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/relativeLayout1"
+                android:layout_alignParentLeft="true"
+                android:layout_marginBottom="75dp"
+                android:gravity="center"
+                android:paddingBottom="2dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="2dp"
+                android:shadowColor="#212121"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="2"
+                android:text="title"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#ffffff"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:typeface="sans" />
+
+    </RelativeLayout>
+
+</LinearLayout>

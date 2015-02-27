@@ -24,8 +24,11 @@ public class ConcertFragment extends FragmentActivity {
 
 		mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
 		mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
-        if(happened){
 
+
+        if(happened){
+            mTabHost.addTab(mTabHost.newTabSpec("infoFragment").setIndicator("Informacje"), TabPastConcertInfo.class, getIntent().getExtras());
+            mTabHost.addTab(mTabHost.newTabSpec("mapFragment").setIndicator("Komentarze"), TabComment.class, getIntent().getExtras());
         }
         else {
             mTabHost.addTab(mTabHost.newTabSpec("infoFragment").setIndicator("Informacje"), TabConcertInfo.class, getIntent().getExtras());
