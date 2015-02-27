@@ -26,6 +26,7 @@ public class SetList {
         try {
             doc = Jsoup.connect(url).get();
         }catch(Exception e){
+            e.printStackTrace();
             Log.i("SET","zły url, może nie ma na setlist");
             return null;
         }
@@ -45,23 +46,31 @@ public class SetList {
         if (doc == null || doc.getElementsByClass("noSongs").size()!=0)
             return null;
         ArrayList<String> res= new ArrayList<String>();
-        int i = 1;
-        for (Element el : doc.getElementsByClass("songLabel")) {
-            res.add(i++ + ". " + el.text());
-        }
+        for (Element el : doc.getElementsByClass("songLabel"))
+            res.add(el.text());
+
         Log.i("SET","znalazłem "+res.size()+" koncertów");
         return res;
     }
 
-    public static String getYT(String artist, String song) throws IOException {
-        Log.i("SET","YT start dla "+artist+song);
-        Document doc = Jsoup
-                .connect(
-                        "https://www.youtube.com/results?search_query="
-                                + artist + song).get();
-        return "https://www.youtube.com"
-                + doc.getElementsByClass("yt-lockup-title").first().select("a")
-                .attr("href");
+    public static String getYT(String artist, String song){
+       Log.i("SET","YT start dla "+artist+" "+song);
+        try {
+            Document doc = Jsoup
+                    .connect(
+                            "https://www.youtube.com/results?search_query="
+                                    + artist + song).
+                            userAgent("Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36").get();
+           // Log.i("SET","doc: "+doc);
+            String res =  "https://www.youtube.com"
+                    + doc.getElementsByClass("yt-lockup-title").first().select("a")
+                    .attr("href");
+            Log.i("SET","res: "+res);
+            return res;
+        }catch (IOException e){
+            Log.i("SET","Nie ma YT sry");
+            return null;
+        }
     }
 
     private static String normalize(String text) {
@@ -121,6 +130,10 @@ public class SetList {
             }
         }
         return new String(letters);
+    }
+
+    public static void main(String[] args){
+        System.out.println(getYT("The Foals","Hammer"));
     }
 
 }
