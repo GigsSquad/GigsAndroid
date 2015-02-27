@@ -47,7 +47,7 @@ public class TabPastConcertInfo extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = inflater.inflate(R.layout.tab_fragment_past_concert_info, container, false);
-        image = (ImageView) view.findViewById(R.id.dark_past);
+        image = (ImageView) view.findViewById(R.id.artist_image_past);
         artist = (TextView) view.findViewById(R.id.artist_past);
         placeTV = (TextView) view.findViewById(R.id.place_past);
         distance = (TextView) view.findViewById(R.id.distance_past);

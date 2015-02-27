@@ -10,7 +10,7 @@
             android:layout_height="wrap_content" >
 
         <ImageView
-                android:id="@+id/artist_image"
+                android:id="@+id/artist_image_past"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:scaleType="centerCrop"
