@@ -38,7 +38,8 @@ public class TabPastConcertInfo extends Fragment {
     private static dbManager dbm;
     private int ID;
     private ListView lv;
-    private TextView tv,artist,placeTV,distance,dateTV;
+    private TextView tv,artist,placeTV,distance,dateTV,loadTV;
+    private ProgressBar pbar;
     MapHelper mapHelper;
     private String artistName,city,place;
     int d,m,y;
@@ -54,7 +55,10 @@ public class TabPastConcertInfo extends Fragment {
         dateTV = (TextView) view.findViewById(R.id.date_past);
         tv = (TextView) view.findViewById(R.id.textView3);
         lv = (ListView) view.findViewById(R.id.songs);
+        pbar = (ProgressBar) view.findViewById(R.id.setlist_progress);
+        loadTV = (TextView) view.findViewById(R.id.loading_text);
         dbm = MainActivity.getDBManager();
+
 
         setHasOptionsMenu(true);
 
@@ -68,7 +72,8 @@ public class TabPastConcertInfo extends Fragment {
         d = date[0]; m = date[1]; y = date[2];
 
         getActivity().getActionBar().setTitle(artistName);
-
+        lv.setVisibility(View.INVISIBLE);
+        tv.setVisibility(View.INVISIBLE);
 
         new ImageLoader(inflater.getContext()).DisplayImage(artistName, image);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -127,29 +132,25 @@ public class TabPastConcertInfo extends Fragment {
 
     public void onViewCreated(View view, Bundle savedInstanceState)
     {
-        int SDK_INT = android.os.Build.VERSION.SDK_INT;
-        if (SDK_INT > 8)
-        {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-                    .permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            int SDK_INT = android.os.Build.VERSION.SDK_INT;
+            if (SDK_INT > 8) {
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                        .permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    String url = SetList.getYT(artistName,(String)lv.getAdapter().getItem(position));
-                    Log.i("ONVIEW","Przeszło");
-                    if(url!=null) {
+                        String url = SetList.getYT(artistName, (String) lv.getAdapter().getItem(position));
+                        Log.i("ONVIEW", "Przeszło");
+                    if (url != null) {
                         Intent i = new Intent(Intent.ACTION_VIEW);
                         i.setData(Uri.parse(url));
                         startActivity(i);
-                    }
-                    else
-                        Toast.makeText(getActivity(),"Nie znaleziono", Toast.LENGTH_LONG).show();
+                    } else
+                        Toast.makeText(getActivity(), "Nie znaleziono", Toast.LENGTH_LONG).show();
                 }
             });
-
-
-        }
+    }
     }
 
     private class calculateDistance extends AsyncTask<Void, Void, Void> {
@@ -202,9 +203,14 @@ public class TabPastConcertInfo extends Fragment {
         @Override
         protected void onPostExecute(Void result) {
             if(adapter!=null){
-            lv.setAdapter(adapter);
-            tv.setText("Setlista (kliknij aby przejść na YT)");
+                lv.setAdapter(adapter);
+                lv.setVisibility(View.VISIBLE);
+                Toast.makeText(getActivity(),"Kliknij na utwór, aby przejść do YT",Toast.LENGTH_LONG);
             }
+            else
+                tv.setVisibility(View.VISIBLE);
+            pbar.setVisibility(View.INVISIBLE);
+            loadTV.setVisibility(View.INVISIBLE);
         }
     }
 
