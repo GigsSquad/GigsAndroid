@@ -28,8 +28,18 @@ public class Prefs {
 		getPrefs(context).edit().putString("CITY", value).commit();
 	}
 
-    //zewnetrzna baza
-    public static int getLastID(Context context) { return getPrefs(context).getInt("LASTID", -1); }
+	public static int getUserID(Context context) {
+		return getPrefs(context).getInt("USERID", -1);
+	}
+
+	public static void setUserID(Context context, int value) {
+		getPrefs(context).edit().putInt("USERID", value).commit();
+	}
+
+	//zewnetrzna baza
+	public static int getLastID(Context context) {
+		return getPrefs(context).getInt("LASTID", -1);
+	}
 
 	public static void setLastID(Context context, int value) {
 		getPrefs(context).edit().putInt("LASTID", value).commit();

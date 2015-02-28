@@ -17,7 +17,6 @@ import com.facebook.*;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
@@ -32,7 +31,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.Random;
 
 public class FacebookFragment extends Fragment {
 
@@ -84,7 +82,7 @@ public class FacebookFragment extends Fragment {
 
 		LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
 		authButton.setFragment(this);
-		authButton.setReadPermissions(Arrays.asList("user_location", "user_birthday", "user_likes"));
+		authButton.setReadPermissions(Arrays.asList("user_location", "user_birthday", "user_likes", "email"));
 
 		return view;
 	}
@@ -109,19 +107,13 @@ public class FacebookFragment extends Fragment {
 						Prefs.setCity(getActivity(), "" + user.getLocation().getProperty("name").toString().trim());
 						//TODO jak chcesz zrobić rejstrację to jestes w dobrym miejscu
 						//TODO tutaj jakieś rejestracje się porobi i dałnlołder który bedzie pobierać nagie foteczki if(sex() == woman && scale() >= 8)
-						// insertUserToDB(user.getFirstName(), user.getLastName(),user.asMap().get("email").toString(), user.getBirthday(), user.getLocation().getProperty("name").toString());
 						try {
-							Random r = new Random();
-							insertUserToDB(user.getFirstName(), user.getLastName(), "mail",
-									user.getBirthday(), user.getLocation().getProperty("name").toString(), user.getId().toString());
+							insertUser(user.getFirstName(), user.getLastName(), user.getProperty("email").toString(),
+									user.getBirthday(), user.getLocation().getProperty("name").toString(), user.getId());
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-
-						//user.getId();
-						//user.asMap()final.get()
-
 					}
 				}
 			});
@@ -171,7 +163,7 @@ public class FacebookFragment extends Fragment {
 	}
 
 	//dodaje użytkownika do bazy
-	private void insertUserToDB(String firstName, String lastName, String email, String birthday, String location, String fbId) throws JSONException {
+	private void insertUser(String firstName, String lastName, String email, String birthday, String location, String fbId) throws JSONException {
 
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpPost httppost = new HttpPost("http://www.javaparty.com.pl/register.php");
@@ -207,7 +199,7 @@ public class FacebookFragment extends Fragment {
 				String line = null;
 				try {
 					while ((line = reader.readLine()) != null) {
-						sb.append(line + "\n");
+						sb.append(line);
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -218,14 +210,14 @@ public class FacebookFragment extends Fragment {
 						e.printStackTrace();
 					}
 				}
-				Log.i("JSON", "REJESTRACJA POSZŁA");
+
 				Log.i("JSON", "Co wypluł serwer: " + sb.toString());
+				Prefs.setUserID(getActivity(), Integer.parseInt(sb.toString()));
 			}
 
-		} catch (ClientProtocolException cpe) {
-			cpe.printStackTrace();
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
+		Log.i("JSON", "REJESTRACJA POSZŁA");
 	}
 }
