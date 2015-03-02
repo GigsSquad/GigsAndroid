@@ -1,8 +1,12 @@
 package pl.javaparty.items;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+
 
 public class Concert {
     private final int ID; // unikalne id ka�dego koncertu
@@ -124,7 +128,9 @@ public class Concert {
 
     public int daysTo() {
         Calendar today = Calendar.getInstance();
-        return (date.get(Calendar.DAY_OF_MONTH) - (today.get(Calendar.DAY_OF_MONTH)));
+        if(date.get(Calendar.DAY_OF_MONTH) - (today.get(Calendar.DAY_OF_MONTH))==0)
+            return 0;
+       return Days.daysBetween(new DateTime(today),new DateTime(date)).getDays()+1;
 
     }
 

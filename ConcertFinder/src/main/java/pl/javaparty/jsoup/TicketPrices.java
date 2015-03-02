@@ -119,7 +119,7 @@ public class TicketPrices extends AsyncTask<String, Void, String> {
 			onlyNumbers = onlyNumbers.trim();
 			//Log.i("TicketPrices", "Same numery:" + onlyNumbers);
 			potentialPrices = onlyNumbers.split(" "); //wszystkie liczby jakie sa w danym stringu
-			Log.i("TicketPrices", "Potencjalna cena: " + potentialPrices[0]);
+			//Log.i("TicketPrices", "Potencjalna cena: " + potentialPrices[0]);
 			int j = 0;
 			for (int i = 0; i < potentialPrices.length; i++) {
 				int postion = rawString.indexOf(potentialPrices[i]);  //obliczamy pozycje
@@ -144,8 +144,7 @@ public class TicketPrices extends AsyncTask<String, Void, String> {
 			if (st != null)
 				tmp = tmp + (st + " ");
 		}
-		Log.i("TicketPrices", "Ceny: " + realPrices.toString());
-		//Log.i("rafal", tmp);
+
 		return tmp;
 	}
 }

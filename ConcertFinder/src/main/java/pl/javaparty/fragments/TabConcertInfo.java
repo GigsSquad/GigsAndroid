@@ -69,9 +69,10 @@ public class TabConcertInfo extends Fragment {
 		date.setText(dbm.getConcertByID(ID).dateToString());
 
 		int days = dbm.getConcertByID(ID).daysTo();
+        //Log.i("daysLeftToBegining",Integer.toString(days));
 		if (days < 0) {
 			howlong.setVisibility(View.GONE);
-		} else if (days == 0) {
+		} else if (days == 0 ) {
 			howlong.setText("To już dziś!");
 		} else if (days == 1) {
 			howlong.setText("To już jutro!");
