@@ -107,7 +107,6 @@ public class FacebookFragment extends Fragment {
 						Prefs.setCity(getActivity(), "" + user.getLocation().getProperty("name").toString().trim());
 						//TODO jak chcesz zrobić rejstrację to jestes w dobrym miejscu
 						//TODO tutaj jakieś rejestracje się porobi i dałnlołder który bedzie pobierać nagie foteczki if(sex() == woman && scale() >= 8)
-						// insertUserToDB(user.getFirstName(), user.getLastName(),user.asMap().get("email").toString(), user.getBirthday(), user.getLocation().getProperty("name").toString());
 						try {
 							insertUser(user.getFirstName(), user.getLastName(), user.getProperty("email").toString(),
 									user.getBirthday(), user.getLocation().getProperty("name").toString(), user.getId());

@@ -19,85 +19,96 @@ import pl.javaparty.items.Concert;
 import pl.javaparty.items.Concert.AgencyName;
 import pl.javaparty.sql.dbManager;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TimeZone;
 
 public class RecentFragment extends Fragment {
 
-    ConcertAdapter adapter;
-    ListView lv;
-    Context context;
-    dbManager dbm;
-    Button nextButton;
-    private int lastPosition = 0;
-    private int showedConcerts = 20;
-    public Map<CharSequence, Boolean> checkedAgencies;
+	ConcertAdapter adapter;
+	ListView lv;
+	Context context;
+	dbManager dbm;
+	Button nextButton;
+	private int lastPosition = 0;
+	private int showedConcerts = 20;
+	public Map<CharSequence, Boolean> checkedAgencies;
 
-    public RecentFragment() {
-        super();
+	public RecentFragment()
+	{
+		super();
+		
+		checkedAgencies = new HashMap<>();
+		AgencyName[] vals = AgencyName.values();
+		for (AgencyName val : vals)
+			checkedAgencies.put(val.name(), true);
+	}
 
-        checkedAgencies = new HashMap<>();
-        AgencyName[] vals = AgencyName.values();
-        for (AgencyName val : vals)
-            checkedAgencies.put(val.name(), true);
-    }
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
+		View view = inflater.inflate(R.layout.fragment_recent, container, false);
+		getActivity().getActionBar().setTitle("Najbliższe koncerty");
+		context = inflater.getContext();
+		lv = (ListView) view.findViewById(R.id.recentList);
+		dbm = MainActivity.getDBManager();
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
-        View view = inflater.inflate(R.layout.fragment_recent, container, false);
-        getActivity().getActionBar().setTitle("Najbliższe koncerty");
-        context = inflater.getContext();
-        lv = (ListView) view.findViewById(R.id.recentList);
-        dbm = MainActivity.getDBManager();
+		setHasOptionsMenu(true);
 
-        setHasOptionsMenu(true);
+		// button na koncu listy ktory rozwija liste o wincyj jesli sie da
+		nextButton = new Button(context);
+		nextButton.setText("Pokaż więcej");
+		nextButton.setOnClickListener(new OnClickListener()
+		{
 
-        // button na koncu listy ktory rozwija liste o wincyj jesli sie da
-        nextButton = new Button(context);
-        nextButton.setText("Pokaż więcej");
-        nextButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v)
+			{
+				lastPosition = showedConcerts;
+				showedConcerts += 20;
+				refresh();
+				lv.setSelection(lastPosition - 1);
+			}
+		});
 
-            @Override
-            public void onClick(View v) {
-                lastPosition = showedConcerts;
-                showedConcerts += 20;
-                refresh();
-                lv.setSelection(lastPosition - 1);
-            }
-        });
-
-        lv.addFooterView(nextButton);
+		lv.addFooterView(nextButton);
         Calendar localCalendar = Calendar.getInstance(TimeZone.getDefault());
         int currentDay = localCalendar.get(Calendar.DATE);
         int currentMonth = localCalendar.get(Calendar.MONTH) + 1;
         int currentYear = localCalendar.get(Calendar.YEAR);
         Log.i("DATE", String.valueOf(currentDay));
-        Log.i("DATE", String.valueOf(currentMonth));
-        Log.i("DATE", String.valueOf(currentYear));
+        Log.i("DATE",String.valueOf(currentMonth));
+        Log.i("DATE",String.valueOf(currentYear));
 
-        adapter = new ConcertAdapter(getActivity(), cutArray(dbm.getConcertsByDateRange(currentDay, currentMonth, currentYear, 33, 13, 2050, filterAgencies())));
-        lv.setAdapter(adapter);
-        lv.setEmptyView(view.findViewById(R.id.emptyList));
+		// cutArray(dbm.getConcertsByDateRange(currentDay,currentMonth,currentYear,33,13,2050, filterAgencies())));
+		adapter = new ConcertAdapter(getActivity(), dbm.getAllConcerts(filterAgencies()));
+		lv.setAdapter(adapter);
+		lv.setEmptyView(view.findViewById(R.id.emptyList));
 
-        lv.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                lastPosition = position;
+		lv.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				lastPosition = position;
 
-                Intent concertInfo = new Intent(context, ConcertFragment.class);
-                Concert item = (Concert) parent.getAdapter().getItem(position);
-                concertInfo.putExtra("ID", item.getID());
-                startActivity(concertInfo);
-            }
-        });
-        return view;
-    }
+				Intent concertInfo = new Intent(context, ConcertFragment.class);
+				Concert item = (Concert) parent.getAdapter().getItem(position);
+				concertInfo.putExtra("ID", item.getID());
+				startActivity(concertInfo);
+			}
+		});
+		return view;
+	}
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        refresh();
-        lv.setSelection(lastPosition);
-    }
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		refresh();
+		lv.setSelection(lastPosition);
+	}
+	
+	
 
 
     private Concert[] cutArray(Concert[] array) {

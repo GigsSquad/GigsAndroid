@@ -91,7 +91,6 @@ public class dbManager extends SQLiteOpenHelper {
 			cv.put("LAT", lat);
 			cv.put("LON", lon);
 			database.insertOrThrow("Concerts", null, cv);
-
 		}
 		//else
 			//System.out.println("Nie dodano " + artistName + city);
@@ -379,6 +378,10 @@ public class dbManager extends SQLiteOpenHelper {
 		return getConcertsBy(condition)[0];
 	}
 
+	/*
+	 * public Concert[] getConcertsByDate(int day, int month, int year) { String condition = "DAY = " + day +
+	 * " AND MONTH = " + month + " AND YEAR = " + year; return getConcertsBy(condition); }
+	 */
 
 	public Concert[] getConcertsByDateRange(int dF, int mF, int yF, int dT, int mT, int yT, String filter) {
 		String[] columns = { "ORD", "ARTIST", "CITY", "SPOT", "DAY", "MONTH", "YEAR", "AGENCY", "URL","LAT","LON" };

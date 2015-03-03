@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentTabHost;
 import android.view.MenuItem;
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
-import android.app.Fragment;
 
 public class ConcertFragment extends FragmentActivity {
 
@@ -28,8 +27,8 @@ public class ConcertFragment extends FragmentActivity {
 
         if(happened){
             mTabHost.addTab(mTabHost.newTabSpec("infoFragment").setIndicator("Informacje"), TabPastConcertInfo.class, getIntent().getExtras());
-            mTabHost.addTab(mTabHost.newTabSpec("mapFragment").setIndicator("Komentarze"), TabComment.class, getIntent().getExtras());
-        }
+			mTabHost.addTab(mTabHost.newTabSpec("commentsFragment").setIndicator("Komentarze"), TabComment.class, getIntent().getExtras());
+		}
         else {
             mTabHost.addTab(mTabHost.newTabSpec("infoFragment").setIndicator("Informacje"), TabConcertInfo.class, getIntent().getExtras());
             mTabHost.addTab(mTabHost.newTabSpec("mapFragment").setIndicator("Mapa koncertu"), TabConcertMap.class, getIntent().getExtras());

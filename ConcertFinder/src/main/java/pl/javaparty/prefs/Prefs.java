@@ -26,16 +26,10 @@ public class Prefs {
 
 	public static void setCity(Context context, String value) {
 		getPrefs(context).edit().putString("CITY", value).commit();
-		/*MapHelper mapHelper = new MapHelper(context);
-        //Log.i("SortDouble", mapHelper.getLat(value);
-        value = value.substring(0,value.indexOf("(")).trim();
-        Log.i("HomeTownPlaceAfter",value);
-        setLat(context, Double.doubleToLongBits(mapHelper.getLat(value)));
-        setLon(context, Double.doubleToLongBits(mapHelper.getLon(value)));*/
 	}
 
-	public static void setLat(Context context, long lat) {
-		getPrefs(context).edit().putLong("LAT", lat);
+    //zewnetrzna baza
+    public static int getLastID(Context context) { return getPrefs(context).getInt("LASTID", -1); }
 
 	}
 
