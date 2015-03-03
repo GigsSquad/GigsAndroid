@@ -202,9 +202,9 @@ public class MainActivity extends FragmentActivity {
 		if (position == 0)
 			fragment = new SearchFragment();
 		else if (position == 1)
-            fragment = new RecentFragment();
-        else if (position == 2)
-            fragment = new PastFragment();
+            		fragment = new RecentFragment();
+        	else if (position == 2)
+            		fragment = new PastFragment();
 		else if (position == 3)
 			fragment = new FavoriteFragment();
 		else if (position == 4)
@@ -241,8 +241,10 @@ public class MainActivity extends FragmentActivity {
 		navDrawerItems.get(1).setCount("" + dbMgr.getSize(dbManager.CONCERTS_TABLE));
 		navDrawerItems.get(1).setCounterVisibility(true);
 
-		navDrawerItems.get(2).setCount("" + dbMgr.getSize(dbManager.FAVOURITES_TABLE));
-		navDrawerItems.get(2).setCounterVisibility(true);
+		//TODO: setCount dla Past (nie miałem czasu już, sry)
+
+		navDrawerItems.get(3).setCount("" + dbMgr.getSize(dbManager.FAVOURITES_TABLE));
+		navDrawerItems.get(3).setCounterVisibility(true);
 
 		adapter = new NavDrawerAdapter(context, navDrawerItems);
 		drawerList.setAdapter(adapter);
