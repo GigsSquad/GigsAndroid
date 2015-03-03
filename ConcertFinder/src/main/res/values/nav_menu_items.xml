@@ -21,6 +21,11 @@
     </array>
     
     <string-array name="agencje_submenu">
+        <item>TicketPro</item>
+        <item>Livenation</item>
+        <item>Ebilet</item>
+        <item>Songkick</item>
+        <item>AlterArt</item>
         <item>GoAhead</item>
     </string-array>
 
