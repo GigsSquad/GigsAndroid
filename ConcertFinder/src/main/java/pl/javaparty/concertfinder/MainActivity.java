@@ -67,11 +67,12 @@ public class MainActivity extends FragmentActivity {
 		navDrawerItems = new ArrayList<>();
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
-		navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
-		navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
-		navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
-		navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1)));
-		navDrawerItems.add(new NavDrawerItem(navMenuTitles[6], navMenuIcons.getResourceId(3, -1), agencies));//TODO icona
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(1, -1)));
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(2, -1)));
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(3, -1)));
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(4, -1)));
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[6], navMenuIcons.getResourceId(5, -1)));
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[7], navMenuIcons.getResourceId(3, -1), agencies));//TODO icona
 		navMenuIcons.recycle();
 
 		adapter = new NavDrawerAdapter(context, navDrawerItems);
@@ -201,14 +202,16 @@ public class MainActivity extends FragmentActivity {
 		if (position == 0)
 			fragment = new SearchFragment();
 		else if (position == 1)
-			fragment = new RecentFragment();
-		else if (position == 2)
-			fragment = new FavoriteFragment();
+            fragment = new RecentFragment();
+        else if (position == 2)
+            fragment = new PastFragment();
 		else if (position == 3)
-			Log.e("MainActivity", "IMPOSSIBRUUU! Zaminia fragment z pozycji Aktualizuj :O");
+			fragment = new FavoriteFragment();
 		else if (position == 4)
-			fragment = new SettingsFragment();
+			Log.e("MainActivity", "IMPOSSIBRUUU! Zaminia fragment z pozycji Aktualizuj :O");
 		else if (position == 5)
+			fragment = new SettingsFragment();
+		else if (position == 6)
 			fragment = new AboutFragment();
 		else if (position >= 30) {
 			int pos = position - 30;

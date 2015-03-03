@@ -66,15 +66,7 @@ public class RecentFragment extends Fragment {
         });
 
         lv.addFooterView(nextButton);
-        Calendar localCalendar = Calendar.getInstance(TimeZone.getDefault());
-        int currentDay = localCalendar.get(Calendar.DATE);
-        int currentMonth = localCalendar.get(Calendar.MONTH) + 1;
-        int currentYear = localCalendar.get(Calendar.YEAR);
-        Log.i("DATE", String.valueOf(currentDay));
-        Log.i("DATE", String.valueOf(currentMonth));
-        Log.i("DATE", String.valueOf(currentYear));
-
-        adapter = new ConcertAdapter(getActivity(), cutArray(dbm.getConcertsByDateRange(currentDay, currentMonth, currentYear, 33, 13, 2050, filterAgencies())));
+        adapter = new ConcertAdapter(getActivity(), cutArray(dbm.getFutureConcerts(filterAgencies())));
         lv.setAdapter(adapter);
         lv.setEmptyView(view.findViewById(R.id.emptyList));
 
@@ -125,12 +117,8 @@ public class RecentFragment extends Fragment {
     }
 
     public void refresh() {
-        Calendar localCalendar = Calendar.getInstance(TimeZone.getDefault());
-        int currentDay = localCalendar.get(Calendar.DATE);
-        int currentMonth = localCalendar.get(Calendar.MONTH) + 1;
-        int currentYear = localCalendar.get(Calendar.YEAR);
         //adapter = new ConcertAdapter(getActivity(), cutArray(dbm.getAllConcerts(filterAgencies())));
-        adapter.changeData(cutArray(dbm.getConcertsByDateRange(currentDay, currentMonth, currentYear, 33, 13, 2050, filterAgencies())));
+        adapter.changeData(cutArray(dbm.getFutureConcerts(filterAgencies())));
         //lv.setAdapter(adapter);
     }
 
