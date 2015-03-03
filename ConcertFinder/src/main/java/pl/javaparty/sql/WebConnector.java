@@ -1,7 +1,6 @@
 package pl.javaparty.sql;
 
 
-import android.util.Log;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -10,7 +9,7 @@ import java.net.URLConnection;
 
 public class WebConnector
 {
-    public final static String URL = "http://javaparty.com.pl/concertfinder.php";
+    public final static String URL = "http://37.187.52.160/concertfinder.php";
     public final static String CHARSET = "UTF-8";
 
     /**

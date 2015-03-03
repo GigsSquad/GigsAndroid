@@ -16,36 +16,22 @@ import java.util.Scanner;
 
 public class PhpParser {
 	private final static String SEPARATOR = ";";
-	private final static String END_SEPARATOR = ";;";
+	private final static String END_SEPARATOR = "#";
 	private final Activity activity;
 	private final dbManager dbm;
 
 	public PhpParser(Activity activity, dbManager dbm) {
 		this.activity = activity;
 		this.dbm = dbm;
-
 	}
 
 	public void parse(InputStream is) {
-
-
 		if (is != null) {
-			//            BufferedReader br = null;
-			//
-			//
-			//            String line;
 			try {
 				Document doc = Jsoup.parse(is, WebConnector.CHARSET, WebConnector.URL);
-				//                br = new BufferedReader(new InputStreamReader(is));
 				int lastID = -1;
-				//                while ((line = br.readLine()) != null)
-				//                {
-				//                    lastID = addToDatabase(line);
-				//                }
 				String line = doc.text();
 				Scanner sc = new Scanner(line).useDelimiter(END_SEPARATOR);
-				int thelastID = sc.nextInt(); //TODO <--------- RAFAŁKU TUTAJ!
-				Log.i("int", "int: " + thelastID);
 				while (sc.hasNext()) {
 					String next = sc.next();
 					lastID = addToDatabase(next);
@@ -56,19 +42,6 @@ public class PhpParser {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			//            finally
-			//            {
-			//                if (br != null)
-			//                {
-			//                    try
-			//                    {
-			//                        br.close();
-			//                    } catch (IOException e)
-			//                    {
-			//                        e.printStackTrace();
-			//                    }
-			//                }
-			//            }
 		}
 
 	}

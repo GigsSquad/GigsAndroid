@@ -2,7 +2,6 @@ package pl.javaparty.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.location.Address;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -12,26 +11,15 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
-
-import com.google.android.gms.maps.model.LatLng;
-
 import pl.javaparty.adapters.ConcertAdapter;
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.fragments.FilterDialogFragment.FilterDialogListener;
 import pl.javaparty.items.Concert;
 import pl.javaparty.items.Concert.AgencyName;
-import pl.javaparty.map.MapHelper;
-import pl.javaparty.prefs.Prefs;
 import pl.javaparty.sql.dbManager;
 
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 
 public class RecentFragment extends Fragment {
 
@@ -113,62 +101,20 @@ public class RecentFragment extends Fragment {
 
 
     private Concert[] cutArray(Concert[] array) {
-        if (array != null && array.length != 0) {
-            String hometownString = Prefs.getCity(context); //nasza lokalizacja z prefs
-            MapHelper mapHelper = new MapHelper(context);//do znajdowanie lokalizacji i odleglosci
-            long start = System.currentTimeMillis();
-            try {
-                // Log.i("Sort",""+Prefs.getLat(context)); // wersja z latLon zapisanymi w prefs
-                // double homeLat = Prefs.getLat(context);
-                // double homeLon = Prefs.getLon(context);
-                //pobranie wspolrzednych lokalizacji miasta z Preferencji
-
-                Address adress = mapHelper.getAddress(hometownString);
-                double homeLat = adress.getLatitude();
-                double homeLon = adress.getLongitude();
-
-
-               for (Concert C : array) {
-                    C.setDistance(CalculateDistance(homeLat, homeLon, C.getLat(), C.getLon()));
-                   // Log.i("ODLEGLOSC ", String.valueOf(C.getDistance()));
-                }
-
-
-            } catch (NullPointerException exc) {
-                //Log.i("Sortowanie", hometownString);
-                Log.e("Sortowanie","Google nie pobrał współrzednych miasta..");
-                //  Log.i("Sortowanie",hometown.getLati);
-               // exc.printStackTrace();
-            }
-            //sortowanie kocnertow - najpierw sortuje po dacie, potem po odleglosci
-            Arrays.sort(array, new Comparator<Concert>() {
-                @Override
-                public int compare(Concert lhs, Concert rhs) {
-                    int c;
-                    c = lhs.getYear() - rhs.getYear();
-                    if (c == 0)
-                        c = lhs.getMonth() - rhs.getMonth();
-                    if (c == 0)
-                        c = lhs.getDay() - rhs.getDay();
-                    if (c == 0)
-                        c = (int) (lhs.getDistance() - rhs.getDistance());
-                    return c;
-                }
-            });
-
-            long stop = System.currentTimeMillis() - start;
-           Log.i("Sortowanie-Czas Pobrania współrzednych i posortowania:", String.valueOf(stop));
-
-
-            Log.i("EMPTYLIST", String.valueOf(array.length));
-            if (showedConcerts >= dbm.getSize(dbManager.CONCERTS_TABLE) - 1) {
-                showedConcerts = dbm.getSize(dbManager.CONCERTS_TABLE) - 1;
-                nextButton.setVisibility(View.GONE);
-                return array;
-            } else
-                return Arrays.copyOfRange(array, 0, showedConcerts);
-        }
-        return new Concert[0];
+		//fc4355eb184e82380296c170cc0bd2dc664fc195 cut array
+		if (array != null &&  array.length != 0)
+		{
+			Log.i("EMPTYLIST", String.valueOf(array.length));
+			if (showedConcerts >= dbm.getSize(dbManager.CONCERTS_TABLE) - 1)
+			{
+				showedConcerts = dbm.getSize(dbManager.CONCERTS_TABLE) - 1;
+				nextButton.setVisibility(View.GONE);
+				return array;
+			}
+			else
+				return Arrays.copyOfRange(array, 0, showedConcerts);
+		}
+		return new Concert[0];
     }
 
     private double CalculateDistance(double homeLat, double homeLon, String lat, String lon) {
