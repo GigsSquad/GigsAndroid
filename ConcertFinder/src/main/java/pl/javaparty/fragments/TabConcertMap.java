@@ -33,47 +33,13 @@ public class TabConcertMap extends Fragment {
 
 		setHasOptionsMenu(true);
 
-		ID = (getArguments().getInt("ID", -1)); // -1 bo bazadanych numeruje od 1 a nie od 0
-		dbm = MainActivity.getDBManager();
+//		ID = (getArguments().getInt("ID", -1)); // -1 bo bazadanych numeruje od 1 a nie od 0
+//		dbm = MainActivity.getDBManager();
+//
+//        Concert con = dbm.getConcertByID(ID);
+//        final String artist = con.getArtist();
+//        String city = con.getCity();
 
-        Concert con = dbm.getConcertByID(ID);
-        final String artist = con.getArtist();
-        String city = con.getCity();
-        int[] date = con.getDayMonthYear();
-        int d = date[0], m = date[1], y = date[2];
-
-        tv = (TextView) view.findViewById(R.id.textView3);
-        lv = (ListView) view.findViewById(R.id.songs);
-
-        ArrayList<String> setlista;
-        try{
-            setlista = SetList.getSetlist(artist,city,d,m,y);
-        } catch (IOException e){
-            setlista = null;
-        }
-        if(setlista!=null) {
-            tv.setText("Setlist (click on song to get to YT)");
-            adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, setlista);
-            lv.setAdapter(adapter);
-            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                          @Override
-                                          public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                              String song = (String) parent.getAdapter().getItem(position);
-                                              String videoUrl = null;
-                                              try {
-                                                  videoUrl = SetList.getYT(artist, song);
-                                              } catch (IOException e) {
-                                              }
-
-                                              if (videoUrl != null) {
-                                                  Intent openYT = new Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl));
-                                                  startActivity(openYT);
-                                              } else
-                                                  Toast.makeText(getActivity(), "Video unavailable", Toast.LENGTH_SHORT);
-                                          }
-                                      }
-            );
-        }
         return view;
     }
 

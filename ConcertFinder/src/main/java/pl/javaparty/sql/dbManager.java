@@ -258,6 +258,17 @@ public class dbManager extends SQLiteOpenHelper {
 		return res;
 	}
 
+    public int[] dateArray(int ID){
+        String[] columns = { "ORD", "DAY", "MONTH", "YEAR" };
+        Cursor c = database.query(CONCERTS_TABLE, columns, "ORD = " + ID, null, null, null, null);
+        c.moveToFirst();
+        int day = c.getInt(1);
+        int month = c.getInt(2);
+        int year = c.getInt(3);
+        c.close();
+        return new int[]{day,month,year};
+    }
+
 	/**
 	 * metoda dodajaca id ulubionego koncertu do tabeli Favourite
 	 */
@@ -368,14 +379,6 @@ public class dbManager extends SQLiteOpenHelper {
 		return getConcertsBy(condition)[0];
 	}
 
-	/*
-	 * public Concert[] getConcertsByDate(int day, int month, int year) { String condition = "DAY = " + day +
-	 * " AND MONTH = " + month + " AND YEAR = " + year; return getConcertsBy(condition); }
-	 */
-//    public Concert[] getSortedConcerts(Concert[] array)
-//    {
-//
-//    }
 
 	public Concert[] getConcertsByDateRange(int dF, int mF, int yF, int dT, int mT, int yT, String filter) {
 		String[] columns = { "ORD", "ARTIST", "CITY", "SPOT", "DAY", "MONTH", "YEAR", "AGENCY", "URL","LAT","LON" };

@@ -34,20 +34,20 @@ public class Concert {
         this.distance = 0;
     }
 
-    public Concert(int ID) {
-        this.ID = ID;
-    }
+	public Concert(int ID) {
+		this.ID = ID;
+	}
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((artist == null) ? 0 : artist.hashCode());
-        result = prime * result + ((city == null) ? 0 : city.hashCode());
-        result = prime * result + ((date == null) ? 0 : date.hashCode());
-        result = prime * result + ((spot == null) ? 0 : spot.hashCode());
-        return result;
-    }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((artist == null) ? 0 : artist.hashCode());
+		result = prime * result + ((city == null) ? 0 : city.hashCode());
+		result = prime * result + ((date == null) ? 0 : date.hashCode());
+		result = prime * result + ((spot == null) ? 0 : spot.hashCode());
+		return result;
+	}
 
     // jeszcze sa adresy do stron gdzie mozna kupic bilet, ale na razie tego nie dodaje
     @Override
@@ -106,6 +106,9 @@ public class Concert {
         return lon;
     }
 
+	public Calendar getCalendar() {
+		return date;
+	}
     public int getYear() {
         return date.get(Calendar.YEAR);
     }
@@ -114,6 +117,51 @@ public class Concert {
         return date.get(Calendar.MONTH);
     }
 
+	public String dateToString() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+		String day = "";
+		switch (date.get(Calendar.DAY_OF_WEEK)) {
+		case 1:
+			day = "niedziela";
+			break;
+		case 2:
+			day = "poniedziałek";
+			break;
+		case 3:
+			day = "wtorek";
+			break;
+		case 4:
+			day = "środa";
+			break;
+		case 5:
+			day = "czwartek";
+			break;
+		case 6:
+			day = "piątek";
+			break;
+		case 7:
+			day = "sobota";
+			break;
+		default:
+			break;
+		}
+		return dateFormat.format(date.getTime()) + " (" + day + ")";
+	}
+
+    public boolean happened(){
+        Calendar today = Calendar.getInstance();
+        //boolean sameDate = date.YEAR == today.YEAR && date.MONTH == today.MONTH && date.DAY_OF_MONTH == today.DAY_OF_MONTH;
+        return date.before(Calendar.getInstance()) &&!isSameDay(today,date);
+    }
+
+    public static boolean isSameDay(Calendar cal1, Calendar cal2) {
+        if (cal1 == null || cal2 == null) {
+            throw new IllegalArgumentException("The dates must not be null");
+        }
+        return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) &&
+                cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR));
+    }
     public int getDay() {
         return date.get(Calendar.DAY_OF_MONTH);
     }
