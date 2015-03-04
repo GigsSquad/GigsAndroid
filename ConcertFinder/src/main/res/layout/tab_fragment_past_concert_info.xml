@@ -3,18 +3,18 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginTop="50dp"
-              android:orientation="vertical" >
+              android:orientation="vertical">
 
     <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content">
 
         <ImageView
                 android:id="@+id/artist_image_past"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/stock_pic" />
+                android:src="@drawable/stock_pic"/>
 
         <ImageView
                 android:id="@+id/dark_past"
@@ -22,7 +22,7 @@
                 android:layout_height="300dp"
                 android:alpha="0.7"
                 android:scaleType="fitXY"
-                android:src="@drawable/bg" />
+                android:src="@drawable/bg"/>
 
         <RelativeLayout
                 android:id="@+id/relativeLayout1"
@@ -30,7 +30,7 @@
                 android:layout_height="250dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentTop="false"
-                android:layout_centerHorizontal="true" >
+                android:layout_centerHorizontal="true">
 
             <LinearLayout
                     android:layout_width="fill_parent"
@@ -44,13 +44,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
-                        android:layout_marginTop="10dp" >
+                        android:layout_marginTop="10dp">
 
                     <ImageView
                             android:id="@+id/imageView1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_action_place" />
+                            android:src="@drawable/ic_action_place"/>
 
                     <TextView
                             android:id="@+id/place_past"
@@ -64,7 +64,7 @@
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="#616161"
                             android:textSize="18sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"/>
                 </LinearLayout>
 
                 <TextView
@@ -73,18 +73,18 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="40dp"
                         android:text="200km od miejsca zamieszkania"
-                        android:textColor="#757575" />
+                        android:textColor="#757575"/>
 
                 <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp" >
+                        android:layout_marginLeft="8dp">
 
                     <ImageView
                             android:id="@+id/imageView2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_action_event" />
+                            android:src="@drawable/ic_action_event"/>
 
                     <TextView
                             android:id="@+id/date_past"
@@ -98,7 +98,7 @@
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="#616161"
                             android:textSize="18sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"/>
                 </LinearLayout>
 
 
@@ -112,18 +112,21 @@
                             android:layout_centerHorizontal="true"/>
                     <ListView android:layout_width="match_parent" android:layout_height="60dp"
                               android:id="@+id/songs"
+                              android:textColor="#616161"
                               android:layout_gravity="center_horizontal" android:layout_alignParentTop="true"
                               android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
                               android:layout_alignParentBottom="true"/>
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                               android:textAppearance="?android:attr/textAppearanceMedium"
                               android:text="Setlist not available :(" android:id="@+id/textView3"
+                              android:textColor="#616161"
                               android:layout_centerVertical="true" android:layout_centerHorizontal="true"/>
                     <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceSmall"
                             android:text="Ładuje setlistę"
+                            android:textColor="#616161"
                             android:id="@+id/loading_text"
                             android:layout_below="@+id/setlist_progress" android:layout_centerHorizontal="true"/>
                 </RelativeLayout>
@@ -153,7 +156,7 @@
                 android:textColor="#ffffff"
                 android:textSize="28sp"
                 android:textStyle="bold"
-                android:typeface="sans" />
+                android:typeface="sans"/>
 
     </RelativeLayout>
 

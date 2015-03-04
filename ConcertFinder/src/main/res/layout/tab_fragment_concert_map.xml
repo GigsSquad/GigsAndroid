@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_marginTop="50dp"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/mapLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    map:cameraTargetLat="52.0170506"
-    map:cameraTargetLng="19.2112829"
-    map:cameraZoom="7" >
+                android:id="@+id/mapLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
 
     <ImageView
@@ -16,20 +12,4 @@
             android:id="@+id/concert_map" android:layout_alignParentRight="true" android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true" android:layout_alignParentLeft="true" android:layout_alignParentStart="true" android:src="@drawable/dummy"
             android:focusableInTouchMode="true"/>
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Setlist not available"
-            android:id="@+id/textView3" android:layout_below="@+id/concert_map" android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"/>
-
-    <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/songs"
-            android:layout_below="@+id/textView3" android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"/>
-
 </RelativeLayout>
