@@ -1,21 +1,16 @@
 package pl.javaparty.fragments;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import pl.javaparty.concertfinder.R;
-import pl.javaparty.fragments.FilterDialogFragment.FilterDialogListener;
-import pl.javaparty.items.Concert.AgencyName;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
+import pl.javaparty.concertfinder.R;
+import pl.javaparty.fragments.FilterDialogFragment.FilterDialogListener;
+import pl.javaparty.items.Concert.AgencyName;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SearchFragment extends Fragment{
 
@@ -44,11 +39,11 @@ public class SearchFragment extends Fragment{
 		setHasOptionsMenu(true);
 		conditions = new Bundle();
 		conditions.putString("CONDITIONS", filterAgencies());
-		
-		
+
+
 		mTabHost = new FragmentTabHost(getActivity());
 		
-		mTabHost.setup(getActivity(), getChildFragmentManager(), R.id.tab_host);
+		mTabHost.setup(getActivity(), getChildFragmentManager(), R.id.realtabcontent);
 		
 		mTabHost.addTab(mTabHost.newTabSpec("Artist").setIndicator("Artysta"), ArtistSearch.class, conditions);
 		mTabHost.addTab(mTabHost.newTabSpec("Place").setIndicator("Miejsce"), PlaceSearch.class, conditions);

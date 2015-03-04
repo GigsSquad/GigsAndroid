@@ -4,7 +4,7 @@
     <string-array name="nav_menu">
         <item>Szukaj</item>
         <item>Najbliższe koncerty</item>
-        <item>Odbyte Koncerty</item>
+        <item>Minione koncerty</item>
         <item>Twoje koncerty</item>
         <item>Aktualizuj</item>
         <item>Preferencje</item>
