@@ -1,5 +1,7 @@
 package pl.javaparty.fragments;
 
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -23,6 +25,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 /**
  * Created by Kuba on 23/02/2015.
@@ -30,24 +33,24 @@ import java.io.InputStreamReader;
 public class TabComment extends Fragment {
 
 	private Button addComment;
-	private Button clearField;
-	// private TextView infoAdd;
-	private TextView infoRead;
+	private TextView concertInfo;
 	private EditText commentField;
-	private ListView commentList;
+	private ListView commentListView;
 	private int ID;
+	private ProgressDialog pDialog;
+	ArrayList commentList;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
 		View view = inflater.inflate(R.layout.tab_fragment_comment, container, false);
 
+		addComment = (Button) view.findViewById(R.id.add_comment);
+		concertInfo = (TextView) view.findViewById(R.id.comment_info);
+		commentField = (EditText) view.findViewById(R.id.user_comment);
+		commentListView = (ListView) view.findViewById(R.id.comments);
+		commentList = new ArrayList<>();
 		//todo ustawienie Visibility na gone do dodawania komentarzy jeśli już dodalismy komentarz
 
-		addComment = (Button) view.findViewById(R.id.add_comment);
-		clearField = (Button) view.findViewById(R.id.clear_field);
-		infoRead = (TextView) view.findViewById(R.id.comment_info);
-		commentField = (EditText) view.findViewById(R.id.user_comment);
-		commentList = (ListView) view.findViewById(R.id.comments);
 		ID = (getArguments().getInt("ID", -1));
 
 		addComment.setOnClickListener(new View.OnClickListener() {
@@ -63,38 +66,19 @@ public class TabComment extends Fragment {
 						Toast.makeText(getActivity(), "Komentarz został dodany", Toast.LENGTH_LONG).show();
 						commentField.setVisibility(View.GONE);
 						addComment.setVisibility(View.GONE);
-						clearField.setVisibility(View.GONE);
 					}
 				}
 			}
 		});
 
-		clearField.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				commentField.setText("");
-			}
-		});
-
-		try {
-			//tu będzie ściaganie komentarzy
-			String[] comments = { "WYJEBANE KONCERCIDŁO", "Udany występ", "Oddajcie hajsy" }; //jakaś fajna metoda
-			ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, comments);
-			commentList.setAdapter(adapter);
-
-		} catch (Exception e) {
-			Log.i("Comment", "Coś jebło");
-		}
+		new getComments().execute();
 
 		return view;
 	}
 
-	private void getComments() {
-	}
-
 	private boolean insertComment(int userID, int concertID, String comment) throws JSONException {
 		HttpClient httpclient = new DefaultHttpClient();
-		HttpPost httppost = new HttpPost("http://www.javaparty.com.pl/addcomment.php");
+		HttpPost httppost = new HttpPost("http://37.187.52.160/comments.php");
 		JSONObject json = new JSONObject();
 
 		try {
@@ -151,6 +135,37 @@ public class TabComment extends Fragment {
 		}
 		Log.i("JSON", "Dodano komentarz");
 		return true;
+	}
+
+	private class getComments extends AsyncTask<Void, Void, Void> {
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			// Showing progress dialog
+			pDialog = new ProgressDialog(getActivity());
+			pDialog.setMessage("Pobieram komentarze...");
+			pDialog.setCancelable(false);
+			pDialog.show();
+
+		}
+
+		@Override
+		protected Void doInBackground(Void... arg0) {
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			if (pDialog.isShowing())
+				pDialog.dismiss();
+
+			ListAdapter adapter = new SimpleAdapter(getActivity(), commentList, android.R.layout.simple_list_item_1, new String[] { "author", "comment" }, new int[] {});
+			commentListView.setAdapter(adapter);
+
+		}
+
 	}
 
 }

@@ -2,13 +2,9 @@ package pl.javaparty.sql;
 
 
 import android.app.ProgressDialog;
-import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.Toast;
-
-import java.io.InputStream;
-
 import pl.javaparty.jsoup.PhpParser;
 import pl.javaparty.prefs.Prefs;
 
@@ -31,7 +27,7 @@ public class DatabaseUpdater
     {
 
 		progressDialog = new ProgressDialog(activity);
-		progressDialog.setMessage("Synchronizacja kurwa bazy");
+		progressDialog.setMessage("Synchronizacja bazy");
 		progressDialog.setCancelable(false);
 		progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 		progressDialog.setIndeterminate(true);

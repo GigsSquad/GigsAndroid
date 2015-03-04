@@ -382,7 +382,7 @@ public class dbManager extends SQLiteOpenHelper {
     public Concert[] getPastConcerts(String filter){
         Calendar yesterday = Calendar.getInstance();
         yesterday.add(Calendar.DATE,-1);
-        int [] date = new int[]{yesterday.get(Calendar.DAY_OF_MONTH),yesterday.get(Calendar.MONTH)+1c,yesterday.get(Calendar.YEAR)};
+        int [] date = new int[]{yesterday.get(Calendar.DAY_OF_MONTH),yesterday.get(Calendar.MONTH)+1,yesterday.get(Calendar.YEAR)};
         return getConcertsByDateRange(0, 0, 0, date[0], date[1], date[2], filter);
     }
 

@@ -51,7 +51,6 @@ public class MainActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-
 		dbMgr = new dbManager(getApplicationContext());
 		context = getApplicationContext();
 		dbu = new DatabaseUpdater(dbMgr, this);
@@ -67,8 +66,8 @@ public class MainActivity extends FragmentActivity {
 		navDrawerItems = new ArrayList<>();
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(1, -1)));
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(2, -1)));
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(1, -1)));
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(2, -1)));
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(3, -1)));
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(4, -1)));
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[6], navMenuIcons.getResourceId(5, -1)));
@@ -105,7 +104,7 @@ public class MainActivity extends FragmentActivity {
 				Log.i("DRAWER", "Group: " + groupPosition);
 				if (navDrawerItems.get(groupPosition).getSubmenu() == null) {
 					drawerLayout.closeDrawers();
-					if (groupPosition == 3)
+					if (groupPosition == 4)
 						dbu.update(new Refresh());
 					else if (currentFragment != groupPosition)
 						changeFragment(groupPosition);
@@ -202,9 +201,9 @@ public class MainActivity extends FragmentActivity {
 		if (position == 0)
 			fragment = new SearchFragment();
 		else if (position == 1)
-            		fragment = new RecentFragment();
-        	else if (position == 2)
-            		fragment = new PastFragment();
+			fragment = new RecentFragment();
+		else if (position == 2)
+			fragment = new PastFragment();
 		else if (position == 3)
 			fragment = new FavoriteFragment();
 		else if (position == 4)
@@ -223,7 +222,7 @@ public class MainActivity extends FragmentActivity {
 			fragment = rfragment;
 		}
 
-		if (position != 3)// takie zabezpieczenie choc to sie nie powinno wydarzyc
+		if (position != 4)// takie zabezpieczenie choc to sie nie powinno wydarzyc
 			currentFragment = position;
 
 		if (fragment != null) {

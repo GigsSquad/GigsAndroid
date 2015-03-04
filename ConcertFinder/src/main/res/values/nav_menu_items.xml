@@ -4,7 +4,7 @@
     <string-array name="nav_menu">
         <item>Szukaj</item>
         <item>Najbliższe koncerty</item>
-        <item>Zakończone koncerty</item>
+        <item>Odbyte Koncerty</item>
         <item>Twoje koncerty</item>
         <item>Aktualizuj</item>
         <item>Preferencje</item>
@@ -25,8 +25,8 @@
         <item>TicketPro</item>
         <item>Livenation</item>
         <item>Ebilet</item>
-        <item>Songkick</item>
-        <item>AlterArt</item>
+        <item>SongKick</item>
+        <item>AlaterArt</item>
         <item>GoAhead</item>
     </string-array>
 

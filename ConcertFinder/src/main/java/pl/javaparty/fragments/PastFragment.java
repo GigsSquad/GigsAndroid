@@ -47,7 +47,7 @@ public class PastFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = inflater.inflate(R.layout.fragment_recent, container, false);
-        getActivity().getActionBar().setTitle("Najbliższe koncerty");
+        getActivity().getActionBar().setTitle("Zakończone koncerty");
         context = inflater.getContext();
         lv = (ListView) view.findViewById(R.id.recentList);
         dbm = MainActivity.getDBManager();

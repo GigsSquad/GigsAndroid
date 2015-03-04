@@ -5,25 +5,23 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.*;
-import android.widget.*;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.items.Concert;
-import pl.javaparty.jsoup.SetList;
 import pl.javaparty.sql.dbManager;
-
-
-import java.io.IOException;
-import java.util.ArrayList;
 
 public class TabConcertMap extends Fragment {
 
 	private ImageView image;
 	private static dbManager dbm;
 	private int ID;
-    private ListView lv;
-    private ArrayAdapter<String> adapter;
-    private TextView tv;
+	private ListView lv;
+	private ArrayAdapter<String> adapter;
+	private TextView tv;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
@@ -33,20 +31,19 @@ public class TabConcertMap extends Fragment {
 
 		setHasOptionsMenu(true);
 
-//		ID = (getArguments().getInt("ID", -1)); // -1 bo bazadanych numeruje od 1 a nie od 0
-//		dbm = MainActivity.getDBManager();
-//
-//        Concert con = dbm.getConcertByID(ID);
-//        final String artist = con.getArtist();
-//        String city = con.getCity();
+		ID = (getArguments().getInt("ID", -1)); // -1 bo bazadanych numeruje od 1 a nie od 0
+		dbm = MainActivity.getDBManager();
 
-        return view;
-    }
+		Concert con = dbm.getConcertByID(ID);
+		final String artist = con.getArtist();
+		String city = con.getCity();
 
+		return view;
+	}
 
-    //TODO tu będziemy pobierac mapkę koncertu
+	//TODO tu będziemy pobierac mapkę koncertu
 
-    private ImageView downloadConcertMap() {
+	private ImageView downloadConcertMap() {
 		return null;
 	}
 
