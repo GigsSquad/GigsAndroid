@@ -35,10 +35,13 @@ public class RecentFragment extends Fragment {
     public RecentFragment() {
         super();
 
-        checkedAgencies = new HashMap<>();
+        checkedAgencies = new TreeMap<>();
         AgencyName[] vals = AgencyName.values();
         for (AgencyName val : vals)
+        {
             checkedAgencies.put(val.name(), true);
+        }
+
     }
 
     @Override
@@ -173,6 +176,7 @@ public class RecentFragment extends Fragment {
 
                 CharSequence[] agencies = new CharSequence[checkedAgencies.size()];
                 checkedAgencies.keySet().toArray(agencies);
+
                 args.putCharSequenceArray("AGENCIES", agencies);
                 dialog.setArguments(args);
 
