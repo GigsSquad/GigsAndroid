@@ -13,10 +13,18 @@
             android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
             android:layout_alignParentRight="true" android:layout_alignParentEnd="true" android:layout_centerVertical="true" android:layout_marginRight="30dp"
             android:layout_marginLeft="30dp"/>
+
+
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pomiń"
+            android:id="@+id/skipBtn" android:layout_below="@+id/authButton" android:layout_alignLeft="@+id/authButton"
+            android:layout_alignStart="@+id/authButton" android:layout_alignRight="@+id/authButton" android:layout_alignEnd="@+id/authButton"/>
     <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageView" android:layout_alignParentBottom="true" android:layout_centerHorizontal="true" android:src="@drawable/splashbg"
-            android:scaleType="fitEnd"/>
+            android:src="@drawable/splashbg"
+            android:scaleType="fitEnd" android:layout_alignParentTop="true" android:layout_alignParentLeft="true" android:layout_alignParentStart="true"/>
 
 </RelativeLayout>

@@ -10,6 +10,7 @@ public class SplashScreen extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_splash_screen);
 		if (savedInstanceState == null) {
 			// Add the fragment on initial activity setup
 			facebookFragment = new FacebookFragment();

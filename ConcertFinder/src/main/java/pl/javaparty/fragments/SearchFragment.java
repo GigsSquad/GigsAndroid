@@ -25,12 +25,11 @@ public class SearchFragment extends Fragment{
 		 * checked = new boolean[AgencyName.values().length];
 		 * for(int i = 0; i<checked.length; i++)
 		 *  	checked[i] = true;
-		 */		
+		 */
 		checkedAgencies = new HashMap<>();
 		AgencyName[] vals = AgencyName.values();
-		for(int i = 0; i< vals.length; i++)
-		{
-			checkedAgencies.put(vals[i].name(), true);
+		for (AgencyName val : vals) {
+			checkedAgencies.put(val.name(), true);
 		}
 		
 		getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -42,7 +41,6 @@ public class SearchFragment extends Fragment{
 
 
 		mTabHost = new FragmentTabHost(getActivity());
-		
 		mTabHost.setup(getActivity(), getChildFragmentManager(), R.id.realtabcontent);
 		
 		mTabHost.addTab(mTabHost.newTabSpec("Artist").setIndicator("Artysta"), ArtistSearch.class, conditions);
