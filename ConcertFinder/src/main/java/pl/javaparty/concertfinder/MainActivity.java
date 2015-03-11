@@ -141,6 +141,24 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public void onBackPressed() {
 		drawerLayout.closeDrawer(drawerList);
+        int count = fragmentManager.getBackStackEntryCount();
+        if(count>0)
+        {
+            Fragment curr = fragmentManager.getFragments().get(count-1);
+            //to bedzie zalosne... uwaga:
+            int pos = 1;
+            if (curr instanceof SearchFragment)
+                pos = 0;
+            else if (curr instanceof RecentFragment)
+                pos = 1;
+            else if (curr instanceof FavoriteFragment)
+                pos = 2;
+            else if (curr instanceof SettingsFragment)
+                pos = 4;
+            else if (curr instanceof AboutFragment)
+                pos = 5;
+            currentFragment = pos;
+        }
 		super.onBackPressed();
 	}
 
@@ -267,4 +285,6 @@ public class MainActivity extends FragmentActivity {
 			return fragmentNumber;
 		}
 	}
+
+
 }
