@@ -30,7 +30,7 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 	public ConcertAdapter(Context context, Concert[] items) {
 		super(context, R.layout.card_layout, toArrL(items));
 		this.items = items;
-		imageLoader = new ImageLoader(context);
+		imageLoader = ImageLoader.init(context);
 		tf = Typeface.createFromAsset(getContext().getAssets(), "font/robotocondensed-light.ttf");
 	}
 
