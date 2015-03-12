@@ -11,7 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.Toast;
 import com.facebook.*;
 import com.facebook.model.GraphUser;
@@ -62,7 +62,7 @@ public class FacebookFragment extends Fragment {
 			StrictMode.setThreadPolicy(policy);
 		}
 
-		ImageView skip = (ImageView) view.findViewById(R.id.imageView);
+		Button skip = (Button) view.findViewById(R.id.skipBtn);
 		skip.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -110,6 +110,9 @@ public class FacebookFragment extends Fragment {
 						try {
 							insertUser(user.getFirstName(), user.getLastName(), user.getProperty("email").toString(),
 									user.getBirthday(), user.getLocation().getProperty("name").toString(), user.getId());
+
+							Intent intent = new Intent(getActivity(), MainActivity.class);
+							startActivity(intent);
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -117,8 +120,7 @@ public class FacebookFragment extends Fragment {
 					}
 				}
 			});
-			Intent intent = new Intent(getActivity(), MainActivity.class);
-			startActivity(intent);
+
 		} else if (state.isClosed()) {
 			Log.i(TAG, "Logged out...");
 		}

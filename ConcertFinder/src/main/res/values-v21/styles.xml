@@ -1,10 +1,9 @@
 <resources>
 
     <!-- Application theme. -->
-    <style name="AppTheme" parent="@android:style/Theme.Holo">
+    <style name="AppTheme" parent="ThemeOverlay.AppCompat.Dark">
         <item name="android:textAppearance">@android:style/TextAppearance</item>
         <item name="colorControlNormal">#90CAF9</item>
-
         <item name="android:textColorPrimary">#90CAF9</item>
         <item name="android:textColorSecondary">#90CAF9</item>
         <item name="android:textColorTertiary">#90CAF9</item>
@@ -12,11 +11,15 @@
         <item name="android:textColorSecondaryInverse">#90CAF9</item>
         <item name="android:textColorTertiaryInverse">#90CAF9</item>
         <item name="android:tabWidgetStyle">@style/CustomTabWidget</item>
+        <item name="colorPrimary">#90CAF9</item>
+        <item name="colorPrimaryDark">#90CAF9</item>
+        <item name="colorAccent">#90CAF9</item>
+
+
     </style>
 
     <style name="CustomTabWidget" parent="@android:style/Widget.TabWidget">
         <item name="android:textColor">#90CAF9</item>
-        <item name="android:actionBarSize">60dp</item>
         <item name="android:colorActivatedHighlight">#90CAF9</item>
         <item name="android:textColorHighlight">#90CAF9</item>
         <item name="android:textSize">14sp</item>
