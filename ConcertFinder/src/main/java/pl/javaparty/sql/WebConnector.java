@@ -33,7 +33,7 @@ public class WebConnector
         try
         {
             URLConnection connection = new URL(URL).openConnection();
-
+            connection.setReadTimeout(60000);
             connection.setDoOutput(true); // Triggers POST.
             connection.setRequestProperty("Accept-Charset", CHARSET);
             connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + CHARSET);
