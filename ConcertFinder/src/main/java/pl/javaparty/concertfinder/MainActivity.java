@@ -27,124 +27,125 @@ import java.util.Arrays;
 
 public class MainActivity extends FragmentActivity {
 
-	/* Drawer */
-	private static ArrayList<NavDrawerItem> navDrawerItems;
-	private static NavDrawerAdapter adapter;
-	private static ExpandableListView drawerList;
-	private static Context context;
-	private ActionBarDrawerToggle drawerToggle;
-	private DrawerLayout drawerLayout;
-	TypedArray navMenuIcons;
-	String[] navMenuTitles;
+    /* Drawer */
+    private static ArrayList<NavDrawerItem> navDrawerItems;
+    private static NavDrawerAdapter adapter;
+    private static ExpandableListView drawerList;
+    private static Context context;
+    private ActionBarDrawerToggle drawerToggle;
+    private DrawerLayout drawerLayout;
+    TypedArray navMenuIcons;
+    String[] navMenuTitles;
+    FacebookFragment facebookFragment;
 
-	/* Fragmenty */
-	FragmentManager fragmentManager;
-	private int currentFragment = 1;
-	private Bundle arguments;
+    /* Fragmenty */
+    FragmentManager fragmentManager;
+    private int currentFragment = 1;
+    private Bundle arguments;
 
-	/* Baza */
-	static dbManager dbMgr;
-	DatabaseUpdater dbu;
+    /* Baza */
+    static dbManager dbMgr;
+    DatabaseUpdater dbu;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-		dbMgr = new dbManager(getApplicationContext());
-		context = getApplicationContext();
-		dbu = new DatabaseUpdater(dbMgr, this);
-		fragmentManager = getSupportFragmentManager();
+        dbMgr = new dbManager(getApplicationContext());
+        context = getApplicationContext();
+        dbu = new DatabaseUpdater(dbMgr, this);
+        fragmentManager = getSupportFragmentManager();
 
-		navMenuTitles = getResources().getStringArray(R.array.nav_menu);
-		navMenuIcons = getResources().obtainTypedArray(R.array.nav_menu_icons);
-		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		drawerList = (ExpandableListView) findViewById(R.id.left_drawer);
-		drawerList.setGroupIndicator(null);
-		ArrayList<String> agencies = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.agencje_submenu)));
+        navMenuTitles = getResources().getStringArray(R.array.nav_menu);
+        navMenuIcons = getResources().obtainTypedArray(R.array.nav_menu_icons);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerList = (ExpandableListView) findViewById(R.id.left_drawer);
+        drawerList.setGroupIndicator(null);
+        ArrayList<String> agencies = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.agencje_submenu)));
 
-		navDrawerItems = new ArrayList<>();
-		navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
-		navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
-		navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(1, -1)));
-		navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(2, -1)));
-		navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(3, -1)));
-		navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(4, -1)));
-		navDrawerItems.add(new NavDrawerItem(navMenuTitles[6], navMenuIcons.getResourceId(5, -1)));
-		navDrawerItems.add(new NavDrawerItem(navMenuTitles[7], navMenuIcons.getResourceId(3, -1), agencies));//TODO icona
-		navMenuIcons.recycle();
+        navDrawerItems = new ArrayList<>();
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(1, -1)));
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(2, -1)));
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(3, -1)));
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(4, -1)));
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[6], navMenuIcons.getResourceId(5, -1)));
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[7], navMenuIcons.getResourceId(3, -1), agencies));//TODO icona
+        navMenuIcons.recycle();
 
-		adapter = new NavDrawerAdapter(context, navDrawerItems);
-		drawerList.setAdapter(adapter);
+        adapter = new NavDrawerAdapter(context, navDrawerItems);
+        drawerList.setAdapter(adapter);
 
 		/* ustawianie actionbara by mozna go bylo wcisnac */
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setHomeButtonEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
 
-		drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
-				R.drawable.ic_drawer, // ikonka
-				R.string.app_name
-		) {
-			public void onDrawerClosed(View view) {
-				invalidateOptionsMenu();
-			}
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
+                R.drawable.ic_drawer, // ikonka
+                R.string.app_name
+        ) {
+            public void onDrawerClosed(View view) {
+                invalidateOptionsMenu();
+            }
 
-			public void onDrawerOpened(View drawerView) {
-				invalidateOptionsMenu();
-			}
-		};
+            public void onDrawerOpened(View drawerView) {
+                invalidateOptionsMenu();
+            }
+        };
 
-		drawerLayout.setDrawerListener(drawerToggle);
-		drawerList.setSelector(android.R.color.holo_blue_dark);
-		drawerList.setOnGroupClickListener(new OnGroupClickListener() {
+        drawerLayout.setDrawerListener(drawerToggle);
+        drawerList.setSelector(android.R.color.holo_blue_dark);
+        drawerList.setOnGroupClickListener(new OnGroupClickListener() {
 
-			@Override
-			public boolean onGroupClick(ExpandableListView parent, View v,
-					int groupPosition, long id) {
-				Log.i("DRAWER", "Group: " + groupPosition);
-				if (navDrawerItems.get(groupPosition).getSubmenu() == null) {
-					drawerLayout.closeDrawers();
-					if (groupPosition == 4)
-						dbu.update(new Refresh());
-					else if (currentFragment != groupPosition)
-						changeFragment(groupPosition);
-					return true;
-				}
-				return false;
-			}
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v,
+                                        int groupPosition, long id) {
+                Log.i("DRAWER", "Group: " + groupPosition);
+                if (navDrawerItems.get(groupPosition).getSubmenu() == null) {
+                    drawerLayout.closeDrawers();
+                    if (groupPosition == 4)
+                        dbu.update(new Refresh());
+                    else if (currentFragment != groupPosition)
+                        changeFragment(groupPosition);
+                    return true;
+                }
+                return false;
+            }
 
-		});
-		drawerList.setOnChildClickListener(new OnChildClickListener() {
+        });
+        drawerList.setOnChildClickListener(new OnChildClickListener() {
 
-			@Override
-			public boolean onChildClick(ExpandableListView parent, View v,
-					int groupPosition, int childPosition, long id) {
-				Log.i("DRAWER", "Child: " + childPosition);
-				drawerLayout.closeDrawers();
-				if (currentFragment != groupPosition || currentFragment != 30 + childPosition) {
-					changeFragment(30 + childPosition);
-				}
-				return false;
-			}
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v,
+                                        int groupPosition, int childPosition, long id) {
+                Log.i("DRAWER", "Child: " + childPosition);
+                drawerLayout.closeDrawers();
+                if (currentFragment != groupPosition || currentFragment != 30 + childPosition) {
+                    changeFragment(30 + childPosition);
+                }
+                return false;
+            }
 
-		});
+        });
 
-		dbu.update(new Refresh());
+        dbu.update(new Refresh());
 
-		updateCounters();
-		// pierwsza inicjalizacja
-		fragmentManager.beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
-				android.R.anim.slide_out_right).replace(R.id.content_frame, new RecentFragment()).commit();
-		drawerLayout.openDrawer(drawerList);
-	}
+        updateCounters();
 
-	@Override
-	public void onBackPressed() {
-		drawerLayout.closeDrawer(drawerList);
+        // pierwsza inicjalizacja
+        fragmentManager.beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
+                android.R.anim.slide_out_right).replace(R.id.content_frame, new RecentFragment()).commit();
+        drawerLayout.openDrawer(drawerList);
+    }
+
+    @Override
+    public void onBackPressed() {
+        drawerLayout.closeDrawer(drawerList);
         int count = fragmentManager.getBackStackEntryCount();
-        if(count>0)
-        {
-            Fragment curr = fragmentManager.getFragments().get(count-1);
+        if (count > 0) {
+            Fragment curr = fragmentManager.getFragments().get(count - 1);
             //to bedzie zalosne... uwaga:
             int pos = 1;
             if (curr instanceof SearchFragment)
@@ -159,132 +160,132 @@ public class MainActivity extends FragmentActivity {
                 pos = 5;
             currentFragment = pos;
         }
-		super.onBackPressed();
-	}
+        super.onBackPressed();
+    }
 
-	@Override
-	public boolean onKeyDown(int keycode, KeyEvent e) {
-		switch (keycode) {
-		case KeyEvent.KEYCODE_MENU:
+    @Override
+    public boolean onKeyDown(int keycode, KeyEvent e) {
+        switch (keycode) {
+            case KeyEvent.KEYCODE_MENU:
 
-			if (drawerLayout.isDrawerOpen(drawerList))
-				drawerLayout.closeDrawer(drawerList);
-			else
-				drawerLayout.openDrawer(drawerList);
-			return true;
-		}
-		return super.onKeyDown(keycode, e);
-	}
+                if (drawerLayout.isDrawerOpen(drawerList))
+                    drawerLayout.closeDrawer(drawerList);
+                else
+                    drawerLayout.openDrawer(drawerList);
+                return true;
+        }
+        return super.onKeyDown(keycode, e);
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// toggle nav drawer on selecting action bar app icon/title
-		if (drawerToggle.onOptionsItemSelected(item)) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // toggle nav drawer on selecting action bar app icon/title
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
-	@Override
-	protected void onPostCreate(Bundle savedInstanceState) {
-		super.onPostCreate(savedInstanceState);
-		// Sync the toggle state after onRestoreInstanceState has occurred.
-		drawerToggle.syncState();
-	}
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        drawerToggle.syncState();
+    }
 
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		super.onConfigurationChanged(newConfig);
-		drawerToggle.onConfigurationChanged(newConfig);
-	}
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
+    }
 
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		// No call for super(). Bug on API Level > 11. lol
-	}
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        // No call for super(). Bug on API Level > 11. lol
+    }
 
-	// odswieza aktualny fragment (laduje go od nowa)
-	private class Refresh implements Runnable {
-		@Override
-		public void run() {
-			Log.i("RF", "Olaboga, refreshyk.");
-			changeFragment(currentFragment);// odswieza dany fragment
-			updateCounters();
-			Log.i("RF", "To tez wyszlo.");
-		}
-	}
+    // odswieza aktualny fragment (laduje go od nowa)
+    private class Refresh implements Runnable {
+        @Override
+        public void run() {
+            Log.i("RF", "Olaboga, refreshyk.");
+            changeFragment(currentFragment);// odswieza dany fragment
+            updateCounters();
+            Log.i("RF", "To tez wyszlo.");
+        }
+    }
 
-	private void changeFragment(int position) {
-		Fragment fragment = null;
-		if (position == 0)
-			fragment = new SearchFragment();
-		else if (position == 1)
-			fragment = new RecentFragment();
-		else if (position == 2)
-			fragment = new PastFragment();
-		else if (position == 3)
-			fragment = new FavoriteFragment();
-		else if (position == 4)
-			Log.e("MainActivity", "IMPOSSIBRUUU! Zaminia fragment z pozycji Aktualizuj :O");
-		else if (position == 5)
-			fragment = new SettingsFragment();
-		else if (position == 6)
-			fragment = new AboutFragment();
-		else if (position >= 30) {
-			int pos = position - 30;
-			RecentFragment rfragment = new RecentFragment();
-			for (CharSequence ch : rfragment.checkedAgencies.keySet())
-				if (ch != rfragment.checkedAgencies.keySet().toArray()[pos])
-					rfragment.checkedAgencies.put(ch, false);
+    private void changeFragment(int position) {
+        Fragment fragment = null;
+        if (position == 0)
+            fragment = new SearchFragment();
+        else if (position == 1)
+            fragment = new RecentFragment();
+        else if (position == 2)
+            fragment = new PastFragment();
+        else if (position == 3)
+            fragment = new FavoriteFragment();
+        else if (position == 4)
+            Log.e("MainActivity", "IMPOSSIBRUUU! Zaminia fragment z pozycji Aktualizuj :O");
+        else if (position == 5)
+            fragment = new SettingsFragment();
+        else if (position == 6)
+            fragment = new AboutFragment();
+        else if (position >= 30) {
+            int pos = position - 30;
+            RecentFragment rfragment = new RecentFragment();
+            for (CharSequence ch : rfragment.checkedAgencies.keySet())
+                if (ch != rfragment.checkedAgencies.keySet().toArray()[pos])
+                    rfragment.checkedAgencies.put(ch, false);
 
-			fragment = rfragment;
-		}
+            fragment = rfragment;
+        }
 
-		if (position != 4)// takie zabezpieczenie choc to sie nie powinno wydarzyc
-			currentFragment = position;
+        if (position != 4)// takie zabezpieczenie choc to sie nie powinno wydarzyc
+            currentFragment = position;
 
-		if (fragment != null) {
-			updateCounters();
-			fragment.setArguments(arguments);
-			fragmentManager
-					.beginTransaction()
-					.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-					.replace(R.id.content_frame, fragment)
-					.addToBackStack(null).commitAllowingStateLoss();
-		}
-	}
+        if (fragment != null) {
+            updateCounters();
+            fragment.setArguments(arguments);
+            fragmentManager
+                    .beginTransaction()
+                    .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                    .replace(R.id.content_frame, fragment)
+                    .addToBackStack(null).commitAllowingStateLoss();
+        }
+    }
 
-	public static void updateCounters() {
-		navDrawerItems.get(1).setCount("" + dbMgr.getSize(dbManager.CONCERTS_TABLE));
-		navDrawerItems.get(1).setCounterVisibility(true);
+    public static void updateCounters() {
+        navDrawerItems.get(1).setCount("" + dbMgr.getSize(dbManager.CONCERTS_TABLE));
+        navDrawerItems.get(1).setCounterVisibility(true);
 
-		//TODO: setCount dla Past (nie miałem czasu już, sry)
+        //TODO: setCount dla Past (nie miałem czasu już, sry)
 
-		navDrawerItems.get(3).setCount("" + dbMgr.getSize(dbManager.FAVOURITES_TABLE));
-		navDrawerItems.get(3).setCounterVisibility(true);
+        navDrawerItems.get(3).setCount("" + dbMgr.getSize(dbManager.FAVOURITES_TABLE));
+        navDrawerItems.get(3).setCounterVisibility(true);
 
-		adapter = new NavDrawerAdapter(context, navDrawerItems);
-		drawerList.setAdapter(adapter);
-	}
+        adapter = new NavDrawerAdapter(context, navDrawerItems);
+        drawerList.setAdapter(adapter);
+    }
 
-	// przekazuje DBmanagera
-	public static dbManager getDBManager() {
-		return dbMgr;
-	}
+    // przekazuje DBmanagera
+    public static dbManager getDBManager() {
+        return dbMgr;
+    }
 
-	enum AgencyFragments {
-		//zakladka 3 (bo RecentFragment) a druga liczba to wybrana zakladka podmenu
-		GOAHEAD(30), SONGKICK(40), LIVENATION(50), TICKETPRO(60);
-		private int fragmentNumber;
+    enum AgencyFragments {
+        //zakladka 3 (bo RecentFragment) a druga liczba to wybrana zakladka podmenu
+        GOAHEAD(30), SONGKICK(40), LIVENATION(50), TICKETPRO(60);
+        private int fragmentNumber;
 
-		AgencyFragments(int fragment) {
-			fragmentNumber = fragment;
-		}
+        AgencyFragments(int fragment) {
+            fragmentNumber = fragment;
+        }
 
-		public int nr() {
-			return fragmentNumber;
-		}
-	}
+        public int nr() {
+            return fragmentNumber;
+        }
+    }
 
 
 }

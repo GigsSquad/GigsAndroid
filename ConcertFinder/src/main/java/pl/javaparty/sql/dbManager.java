@@ -19,8 +19,7 @@ public class dbManager extends SQLiteOpenHelper {
 	private static SQLiteDatabase database;
 	public final static String CONCERTS_TABLE = "Concerts";
 	public final static String FAVOURITES_TABLE = "Favourites";
-	public final static String HASHCODES_TABLE = "Hashcodes";
-	
+
 	private static String CreateConcertTable =
 			"CREATE TABLE " + CONCERTS_TABLE + "(" +
 					"ORD INTEGER PRIMARY KEY," +
@@ -34,12 +33,6 @@ public class dbManager extends SQLiteOpenHelper {
 					"URL TEXT," +
 					"LAT TEXT," +
 					"LON TEXT)";
-
-	// tablica hash odpowiada za hashcode najnowszego eventu danej agencji
-	private static String CreateHashcodeTable =
-			"CREATE TABLE " + HASHCODES_TABLE + "(" +
-					"AGENCY TEXT PRIMARY KEY," +
-					"HASH INTEGER)";
 
 	// nowa tabela zawieraj�ca ulubione koncerty
 	private static String CreateFavouriteTable =
@@ -57,9 +50,7 @@ public class dbManager extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		Log.i("Rafal", "W EXECSQL");
 		db.execSQL(CreateConcertTable);
-		db.execSQL(CreateHashcodeTable);
 		db.execSQL(CreateFavouriteTable);
 	}
 
@@ -72,7 +63,6 @@ public class dbManager extends SQLiteOpenHelper {
 	{
 		database.delete(CONCERTS_TABLE, null, null);
 		database.delete(FAVOURITES_TABLE, null, null);
-		database.delete(HASHCODES_TABLE, null, null);
 	}
 
 	public void addConcert(long id, String artistName, String city, String spot,
@@ -142,19 +132,6 @@ public class dbManager extends SQLiteOpenHelper {
 		return count;
 	}
 
-	public boolean agencyHashCodeExists(String agencyName) {
-		String column[] = { "AGENCY" };
-		SQLiteDatabase db = getReadableDatabase();
-		Cursor c = db.query(HASHCODES_TABLE, column, null, null, null, null, null);
-		boolean check = false;
-		while (c.moveToNext() && !check) {
-			if (c.getString(0).equals(agencyName))
-				check = true;
-		}
-		c.close();
-		return check;
-	}
-
 	public void deleteOldConcerts() // wypierdalator starch koncert�w //<- L
 	{
 		Log.i("Deleter", "Szukam starych koncertow");
@@ -204,8 +181,8 @@ public class dbManager extends SQLiteOpenHelper {
 	{
 		database.close();
 		context.deleteDatabase(DATABASE_NAME);
-		Log.i("DB", "Baza usuni�ta");
-		new dbManager(context);
+        Log.i("DB", "Baza usunięta");
+        new dbManager(context);
 	}
 
 	public String[] getArtists(String condition) {

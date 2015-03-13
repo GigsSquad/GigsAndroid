@@ -42,8 +42,8 @@ public class SpotifyActivity extends Activity implements PlayerNotificationCallb
 		Button backBtn = (Button) findViewById(R.id.backBtn);
 		backBtn.setOnClickListener(new View.OnClickListener() {
 			@Override public void onClick(View v) {
-				Intent intent = new Intent(getApplicationContext(), SplashScreen.class);
-				startActivity(intent);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
 			}
 		});
 

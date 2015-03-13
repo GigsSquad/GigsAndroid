@@ -4,48 +4,35 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class Prefs {
-	public final static String SETTINGS = "Settings";
+    public final static String SETTINGS = "Settings";
 
-	public static SharedPreferences getPrefs(Context context) {
-		return context.getSharedPreferences(SETTINGS, 0);
-	}
+    public static SharedPreferences getPrefs(Context context) {
+        return context.getSharedPreferences(SETTINGS, 0);
+    }
 
-	// Miasto
-	public static String getCity(Context context) {
-		return getPrefs(context).getString("CITY", "");
-	}
+    // Miasto
+    public static String getCity(Context context) {
+        return getPrefs(context).getString("CITY", "");
+    }
 
-	public static void setCity(Context context, String value) {
-		getPrefs(context).edit().putString("CITY", value).commit();
-	}
+    public static void setCity(Context context, String value) {
+        getPrefs(context).edit().putString("CITY", value).commit();
+    }
 
-	public static void setLon(Context context, long lon) {
-		getPrefs(context).edit().putLong("LON", lon);
+    //zewnetrzna baza
+    public static int getLastID(Context context) {
+        return getPrefs(context).getInt("LASTID", -1);
+    }
 
-	}
+    public static void setLastID(Context context, int value) {
+        getPrefs(context).edit().putInt("LASTID", value).commit();
+    }
 
-	public static double getLat(Context context) {
-		return Double.longBitsToDouble(getPrefs(context).getLong("LAT", 0));
-	}
+    public static void setUserID(Context context, int value) {
+        getPrefs(context).edit().putInt("USERID", value).commit();
+    }
 
-	public static double getLon(Context context) {
-		return Double.longBitsToDouble(getPrefs(context).getLong("LON", 0));
-	}
-
-	//zewnetrzna baza
-	public static int getLastID(Context context) {
-		return getPrefs(context).getInt("LASTID", -1);
-	}
-
-	public static void setLastID(Context context, int value) {
-		getPrefs(context).edit().putInt("LASTID", value).commit();
-	}
-
-	public static void setUserID(Context context, int value) {
-		getPrefs(context).edit().putInt("USERID", value).commit();
-	}
-
-	public static int getUserID(Context context) {
-		return getPrefs(context).getInt("USERID", -1);
-	}
+    public static int getUserID(Context context) {
+        return getPrefs(context).getInt("USERID", -1);
+    }
 }
