@@ -7,11 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.ListView;
 import pl.javaparty.adapters.ConcertAdapter;
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
@@ -24,6 +21,8 @@ public class PlaceSearch extends Fragment {
 	ListView concertList;
 	ArrayAdapter<String> adapterSearchBox;
 	ConcertAdapter adapter;
+    Switch switchCon;
+    private boolean future = true;
 	Context context;
 	dbManager dbm;
 	private String lastSearching;
@@ -39,7 +38,8 @@ public class PlaceSearch extends Fragment {
 		context = inflater.getContext();
 
 		searchBox = (AutoCompleteTextView) view.findViewById(R.id.searchBoxPlace);
-		concertList = (ListView) view.findViewById(R.id.concertListPlace);
+        switchCon = (Switch) view.findViewById(R.id.switchCon2);
+        concertList = (ListView) view.findViewById(R.id.concertListPlace);
 		String filter = getArguments().getString("CONDITIONS");
 		adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, dbm.getCities(filter));
 
@@ -53,7 +53,8 @@ public class PlaceSearch extends Fragment {
 					long id) {
 				String city = searchBox.getText().toString();
 				String filter = getArguments().getString("CONDITIONS");
-				adapter = new ConcertAdapter(getActivity(), dbm.getConcertsByCity(city, filter));
+				adapter = new ConcertAdapter(getActivity(), future?
+                        dbm.getFutureConcertsByCity(city,filter):dbm.getPastConcertsByCity(city,filter));
 				concertList.setAdapter(adapter);
 				// zapisywanie danych, coby potem przywrocic
 				lastSearching = searchBox.getText().toString();
@@ -73,6 +74,26 @@ public class PlaceSearch extends Fragment {
 				startActivity(concertInfo);
 			}
 		});
+
+        switchCon.setChecked(true);
+        switchCon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                future = isChecked;
+                String city = lastSearching;
+                String filter = getArguments().getString("CONDITIONS");
+                adapter = new ConcertAdapter(getActivity(), future?
+                        dbm.getFutureConcertsByCity(city, filter):dbm.getPastConcertsByCity(city, filter));
+                concertList.setAdapter(adapter);
+                // zapisywanie danych, coby potem przywrocic
+                getActivity().getActionBar().setTitle("Szukaj: " + city);
+                searchBox.setText("");
+                if(adapter.getCount() == 0 && city.length()>0)
+                    Toast.makeText(getActivity(),(future? switchCon.getTextOn():switchCon.getTextOff())+
+                            " koncerty niedostępne dla "+city,Toast.LENGTH_LONG).show();
+
+            }
+        });
 
 		return view;
 	}

@@ -1,5 +1,6 @@
 package pl.javaparty.fragments;
 
+import android.widget.*;
 import pl.javaparty.adapters.ConcertAdapter;
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
@@ -12,21 +13,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.ListView;
 
 public class ArtistSearch extends Fragment {
 
 	AutoCompleteTextView searchBox;
+    Switch switchCon;
 	ListView concertList;
 	ArrayAdapter<String> adapterSearchBox, adapterList;
 	ConcertAdapter adapter;
 	dbManager dbm;
 	private String lastSearching;
 	private int lastPosition;
+    private boolean future = true;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
@@ -36,10 +35,11 @@ public class ArtistSearch extends Fragment {
 		dbm = MainActivity.getDBManager();// przekazujemy dbm od mainActivity
 
 		searchBox = (AutoCompleteTextView) view.findViewById(R.id.searchBoxArtist);
+        switchCon = (Switch) view.findViewById(R.id.switchCon);
 		concertList = (ListView) view.findViewById(R.id.concertListArtist);
 		String filter = getArguments().getString("CONDITIONS");
 		Log.i("FILTRUJE", filter);
-		adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, dbm.getArtists(filter));
+		adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, dbm.getFutureArtists(filter));
 
 		searchBox.setAdapter(adapterSearchBox);
 		searchBox.setThreshold(1);
@@ -50,7 +50,12 @@ public class ArtistSearch extends Fragment {
 					long id) {
 				String artist = searchBox.getText().toString();
 				String filter = getArguments().getString("CONDITIONS");
-				adapter = new ConcertAdapter(getActivity(), dbm.getConcertsByArtist(artist, filter));
+                adapter = new ConcertAdapter(getActivity(), future?
+                        dbm.getFutureConcertsByArtist(artist, filter):dbm.getPastConcertsByArtist(artist, filter));
+                adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line,
+                        future? dbm.getFutureArtists(filter) : dbm.getPastArtists(filter));
+                searchBox.setAdapter(adapterSearchBox);
+                searchBox.setThreshold(1);
 				concertList.setAdapter(adapter);
 				// zapisywanie danych, coby potem przywrocic
 				lastSearching = searchBox.getText().toString();
@@ -70,6 +75,29 @@ public class ArtistSearch extends Fragment {
 				startActivity(concertInfo);
 			}
 		});
+
+        switchCon.setChecked(true);
+        switchCon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                future = isChecked;
+                String artist = lastSearching;
+                String filter = getArguments().getString("CONDITIONS");
+                adapter = new ConcertAdapter(getActivity(), future?
+                        dbm.getFutureConcertsByArtist(artist, filter):dbm.getPastConcertsByArtist(artist, filter));
+                adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line,
+                        future? dbm.getFutureArtists(filter) : dbm.getPastArtists(filter));
+                searchBox.setAdapter(adapterSearchBox);
+                searchBox.setThreshold(1);
+                concertList.setAdapter(adapter);
+                // zapisywanie danych, coby potem przywrocic
+                getActivity().getActionBar().setTitle("Szukaj: " + artist);
+                searchBox.setText("");
+                if(adapter.getCount() == 0 && artist.length()>0)
+                    Toast.makeText(getActivity(),(future? switchCon.getTextOn():switchCon.getTextOff())+
+                            " koncerty niedostępne dla "+artist,Toast.LENGTH_LONG).show();
+                }
+        });
 
 		return view;
 	}

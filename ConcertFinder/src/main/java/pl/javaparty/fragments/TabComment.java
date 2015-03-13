@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import pl.javaparty.concertfinder.R;
+import pl.javaparty.jsoup.PhpParser;
 import pl.javaparty.prefs.Prefs;
 
 import java.io.BufferedReader;
@@ -37,7 +38,7 @@ public class TabComment extends Fragment {
 	private EditText commentField;
 	private ListView commentListView;
 	private int ID;
-	private ProgressDialog pDialog;
+//	private ProgressDialog pDialog;
 	ArrayList commentList;
 
 	@Override
@@ -67,61 +68,66 @@ public class TabComment extends Fragment {
 						commentField.setVisibility(View.GONE);
 						addComment.setVisibility(View.GONE);
 					}
+                    else{
+                        Toast.makeText(getActivity(), "Nie można dodać pustego komentarza", Toast.LENGTH_LONG).show();
+                    }
 				}
 			}
 		});
 
-		new getComments().execute();
+		//new getComments().execute();
 
 		return view;
 	}
-
+    //mode = 0
 	private boolean insertComment(int userID, int concertID, String comment) throws JSONException {
+        if(comment==null || comment.equals(""))
+            return false;
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpPost httppost = new HttpPost("http://37.187.52.160/comments.php");
 		JSONObject json = new JSONObject();
 
 		try {
-			httppost.setEntity(new ByteArrayEntity(json.toString().getBytes("UTF-8")));
-			json.put("userID", userID);
-			json.put("concertID", concertID);
-			json.put("comment", comment);
-			//data i godzina z serwera żeby niezaginać czasoprzestrzeni
+                    httppost.setEntity(new ByteArrayEntity(json.toString().getBytes("UTF-8")));
+                    json.put("userID", userID);
+                    json.put("concertID", concertID);
+                    json.put("comment", comment);
+                    //data i godzina z serwera żeby niezaginać czasoprzestrzeni
 
-			JSONArray postjson = new JSONArray();
-			postjson.put(json);
+                    JSONArray postjson = new JSONArray();
+                    postjson.put(json);
 
-			// Post the data:
-			httppost.setHeader("json", json.toString());
-			httppost.getParams().setParameter("jsonpost", postjson);
+                    // Post the data:
+                    httppost.setHeader("json", json.toString());
+                    httppost.getParams().setParameter("jsonpost", postjson);
 
-			// Execute HTTP Post Request
-			System.out.print(json);
-			HttpResponse response = httpclient.execute(httppost);
+                    // Execute HTTP Post Request
+                    System.out.print(json);
+                    HttpResponse response = httpclient.execute(httppost);
 
-			// for JSON:
-			if (response != null) {
-				InputStream is = response.getEntity().getContent();
+                    // for JSON:
+                    if (response != null) {
+                        InputStream is = response.getEntity().getContent();
 
-				BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-				StringBuilder sb = new StringBuilder();
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+                        StringBuilder sb = new StringBuilder();
 
-				String line = null;
-				try {
-					while ((line = reader.readLine()) != null) {
-						sb.append(line + "\n");
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-					return false;
-				} finally {
-					try {
-						is.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-						return false;
-					}
-				}
+                        String line = null;
+                        try {
+                            while ((line = reader.readLine()) != null) {
+                                sb.append(line + "\n");
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            return false;
+                        } finally {
+                            try {
+                                is.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                                return false;
+                            }
+                        }
 
 				Log.i("JSON", "Co wypluł serwer: " + sb.toString());
 			}
@@ -137,35 +143,80 @@ public class TabComment extends Fragment {
 		return true;
 	}
 
-	private class getComments extends AsyncTask<Void, Void, Void> {
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			// Showing progress dialog
-			pDialog = new ProgressDialog(getActivity());
-			pDialog.setMessage("Pobieram komentarze...");
-			pDialog.setCancelable(false);
-			pDialog.show();
-
-		}
-
-		@Override
-		protected Void doInBackground(Void... arg0) {
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Void result) {
-			super.onPostExecute(result);
-			if (pDialog.isShowing())
-				pDialog.dismiss();
-
-			ListAdapter adapter = new SimpleAdapter(getActivity(), commentList, android.R.layout.simple_list_item_1, new String[] { "author", "comment" }, new int[] {});
-			commentListView.setAdapter(adapter);
-
-		}
-
-	}
+    //mode = 1
+//	private class getComments extends AsyncTask<Void, Void, Void> {
+//
+//        ArrayAdapter<String> adapter;
+//
+//		@Override
+//		protected void onPreExecute() {
+//			super.onPreExecute();
+//			// Showing progress dialog
+////			pDialog = new ProgressDialog(getActivity());
+////			pDialog.setMessage("Pobieram komentarze...");
+////			pDialog.setCancelable(false);
+////			pDialog.show();
+//
+//		}
+//
+//		@Override
+//		protected Void doInBackground(Void... arg0){
+//            HttpClient httpclient = new DefaultHttpClient();
+//            HttpPost httppost = new HttpPost("http://37.187.52.160/comments.php");
+//            JSONObject json = new JSONObject();
+//            try {
+//                httppost.setEntity(new ByteArrayEntity(json.toString().getBytes("UTF-8")));
+//                json.put("mode", 1);
+//                json.put("conId",ID);
+//                JSONArray postjson = new JSONArray();
+//                postjson.put(json);
+//
+//                // Post the data:
+//                httppost.setHeader("json", json.toString());
+//                httppost.getParams().setParameter("jsonpost", postjson);
+//
+//                // Execute HTTP Post Request
+//                System.out.print(json);
+//                HttpResponse response = httpclient.execute(httppost);
+//
+//                // for JSON:
+//                if (response != null) {
+//                    adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1, PhpParser.g
+//                    }
+//
+//                Log.i("JSON", "Co wypluł serwer: " + sb.toString());
+//            } catch (ClientProtocolException cpe) {
+//                cpe.printStackTrace();
+//            } catch (IOException ioe) {
+//                ioe.printStackTrace();
+//            } catch(JSONException jse){
+//                jse.printStackTrace();
+//            }
+//            Log.i("JSON", "Dodano komentarz");
+//
+//        return null;
+//		}
+//
+//		@Override
+//		protected void onPostExecute(Void result) {
+//			super.onPostExecute(result);
+////			if (pDialog.isShowing())
+////				pDialog.dismiss();
+//
+//			ListAdapter adapter = new SimpleAdapter(getActivity(), commentList, android.R.layout.simple_list_item_1, new String[] { "author", "comment" }, new int[] {});
+//			commentListView.setAdapter(adapter);
+//
+//		}
+//
+//        private ArrayList<String> getCommentList(int concertId){
+//            HttpClient httpclient = new DefaultHttpClient();
+//            HttpPost httppost = new HttpPost("http://37.187.52.160/comments.php");
+//            JSONArray jsonArr = new JSONArray();
+//
+//
+//            return null;
+//        }
+//
+//	}
 
 }
