@@ -74,7 +74,8 @@ public class RecentFragment extends Fragment {
         Log.i("DATE", String.valueOf(currentMonth));
         Log.i("DATE", String.valueOf(currentYear));
 
-        adapter = new ConcertAdapter(getActivity(), cutArray(dbm.getConcertsByDateRange(currentDay, currentMonth, currentYear, 33, 13, 2050, filterAgencies())));
+
+        adapter = new ConcertAdapter(getActivity(), cutArray(dbm.getFutureConcerts(filterAgencies())));
         lv.setAdapter(adapter);
         lv.setEmptyView(view.findViewById(R.id.emptyList));
 
@@ -117,21 +118,9 @@ public class RecentFragment extends Fragment {
 		return new Concert[0];
     }
 
-    private double CalculateDistance(double homeLat, double homeLon, String lat, String lon) {
-        double a = Math.abs(Double.parseDouble(lat) - homeLat);
-        double b = Math.abs(Double.parseDouble(lon) - homeLon);
-
-        return (Math.sqrt((a * a) + (b * b)));
-    }
-
     public void refresh() {
-        Calendar localCalendar = Calendar.getInstance(TimeZone.getDefault());
-        int currentDay = localCalendar.get(Calendar.DATE);
-        int currentMonth = localCalendar.get(Calendar.MONTH) + 1;
-        int currentYear = localCalendar.get(Calendar.YEAR);
-        //adapter = new ConcertAdapter(getActivity(), cutArray(dbm.getAllConcerts(filterAgencies())));
         adapter.changeData(cutArray(dbm.getFutureConcerts(filterAgencies())));
-        //lv.setAdapter(adapter);
+
     }
 
     @Override

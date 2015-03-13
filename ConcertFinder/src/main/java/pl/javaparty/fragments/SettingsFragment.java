@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -58,7 +59,7 @@ public class SettingsFragment extends Fragment {
 		context = inflater.getContext();
 		getActivity().getActionBar().setTitle("Preferencje");
 		dbm = MainActivity.getDBManager();// przekazujemy dbm od mainActivity
-		citySearchBox = (AutoCompleteTextView) view.findViewById(R.id.cityAutoComplete);
+		//citySearchBox = (AutoCompleteTextView) view.findViewById(R.id.cityTextView);
 		saveButton = (Button) view.findViewById(R.id.saveSettingsButton);
 		clearButton = (Button) view.findViewById(R.id.clearFilesButton);
 
@@ -73,7 +74,7 @@ public class SettingsFragment extends Fragment {
 		saveButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Prefs.setCity(getActivity(), citySearchBox.getText().toString());
+			Prefs.setCity(getActivity(), citySearchBox.getText().toString());
 				Log.i("SETTINGS", "Zapisano");
 				Log.i("SETTINGS", "Miasto: " + citySearchBox.getText().toString());
 				Toast.makeText(getActivity(), "Zapisano!", Toast.LENGTH_SHORT).show();

@@ -31,9 +31,9 @@ public class SearchFragment extends Fragment{
 		for (AgencyName val : vals) {
 			checkedAgencies.put(val.name(), true);
 		}
-		
-		getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActivity().getActionBar().setHomeButtonEnabled(true);
+
+        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActivity().getActionBar().setHomeButtonEnabled(true);
 		
 		setHasOptionsMenu(true);
 		conditions = new Bundle();

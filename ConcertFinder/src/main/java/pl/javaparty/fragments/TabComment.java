@@ -37,9 +37,10 @@ public class TabComment extends Fragment {
 	private EditText commentField;
 	private ListView commentListView;
 	private int ID;
-	private ProgressDialog pDialog;
+	private ProgressBar pBar;
 	ArrayList commentList;
 
+    ListAdapter adapter;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
 		View view = inflater.inflate(R.layout.tab_fragment_comment, container, false);
@@ -48,6 +49,7 @@ public class TabComment extends Fragment {
 		concertInfo = (TextView) view.findViewById(R.id.comment_info);
 		commentField = (EditText) view.findViewById(R.id.user_comment);
 		commentListView = (ListView) view.findViewById(R.id.comments);
+      //  pBar = (ProgressBar) view.findViewById(R.id.comments_progress);
 		commentList = new ArrayList<>();
 		//todo ustawienie Visibility na gone do dodawania komentarzy jeśli już dodalismy komentarz
 
@@ -143,26 +145,24 @@ public class TabComment extends Fragment {
 		protected void onPreExecute() {
 			super.onPreExecute();
 			// Showing progress dialog
-			pDialog = new ProgressDialog(getActivity());
-			pDialog.setMessage("Pobieram komentarze...");
-			pDialog.setCancelable(false);
-			pDialog.show();
+           pBar.setVisibility(View.VISIBLE);
 
 		}
 
 		@Override
 		protected Void doInBackground(Void... arg0) {
-			return null;
+
+            adapter = new SimpleAdapter(getActivity(), commentList, android.R.layout.simple_list_item_1, new String[] { "author", "comment" }, new int[] {});
+            commentListView.setAdapter(adapter);
+            return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
-			if (pDialog.isShowing())
-				pDialog.dismiss();
+          //  if (adapter != null) {
 
-			ListAdapter adapter = new SimpleAdapter(getActivity(), commentList, android.R.layout.simple_list_item_1, new String[] { "author", "comment" }, new int[] {});
-			commentListView.setAdapter(adapter);
+           pBar.setVisibility(View.GONE);
 
 		}
 
