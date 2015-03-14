@@ -1,12 +1,5 @@
 package pl.javaparty.fragments;
 
-import java.util.Calendar;
-
-import pl.javaparty.adapters.ConcertAdapter;
-import pl.javaparty.concertfinder.MainActivity;
-import pl.javaparty.concertfinder.R;
-import pl.javaparty.items.Concert;
-import pl.javaparty.sql.dbManager;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Context;
@@ -19,10 +12,17 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
+import pl.javaparty.adapters.ConcertAdapter;
+import pl.javaparty.concertfinder.MainActivity;
+import pl.javaparty.concertfinder.R;
+import pl.javaparty.items.Concert;
+import pl.javaparty.sql.dbManager;
+
+import java.util.Calendar;
 
 public class DateSearch extends Fragment {
 
@@ -85,9 +85,9 @@ public class DateSearch extends Fragment {
 			public void onClick(View v) {
 				String filter = getArguments().getString("CONDITIONS");
                // Log.i("DATE",filter);
-				Log.i("DATE", "Ilość: " + dbm.getConcertsByDateRange(dF, mF, yF, dT, mT, yT, filter,"YEAR,MONTH,DAY").length);
-				adapter = new ConcertAdapter(context, dbm.getConcertsByDateRange(dF, mF, yF, dT, mT, yT, filter,"YEAR,MONTH,DAY DIST"));
-				concertList.setAdapter(adapter);
+                Log.i("DATE", "Ilość: " + dbm.getConcertsByDateRange(dF, mF, yF, dT, mT, yT, filter, "YEAR, MONTH, DAY").length);
+                adapter = new ConcertAdapter(context, dbm.getConcertsByDateRange(dF, mF, yF, dT, mT, yT, filter, "YEAR, MONTH, DAY, DIST"));
+                concertList.setAdapter(adapter);
 				lastSearching = dF + "." + mF + "." + yF + " - " + dT + "." + mT + "." + yT;
 				getActivity().getActionBar().setTitle("Szukaj: " + lastSearching);
 				bFrom.setText("Wybierz datę od");

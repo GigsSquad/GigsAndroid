@@ -2,7 +2,6 @@ package pl.javaparty.adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +51,6 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 
     public View getView(int position, View convertView, ViewGroup parent) {
         rowItem = getItem(position);
-        Log.d("DB", "ID: " + rowItem.getID());
         LayoutInflater mInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
 

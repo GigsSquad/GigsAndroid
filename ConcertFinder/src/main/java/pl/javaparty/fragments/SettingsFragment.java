@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -59,8 +58,8 @@ public class SettingsFragment extends Fragment {
 		context = inflater.getContext();
 		getActivity().getActionBar().setTitle("Preferencje");
 		dbm = MainActivity.getDBManager();// przekazujemy dbm od mainActivity
-		//citySearchBox = (AutoCompleteTextView) view.findViewById(R.id.cityTextView);
-		saveButton = (Button) view.findViewById(R.id.saveSettingsButton);
+        citySearchBox = (AutoCompleteTextView) view.findViewById(R.id.cityAutoComplete);
+        saveButton = (Button) view.findViewById(R.id.saveSettingsButton);
 		clearButton = (Button) view.findViewById(R.id.clearFilesButton);
 
 		adapter = ArrayAdapter.createFromResource(getActivity(), R.array.COUNTIES, android.R.layout.simple_dropdown_item_1line);

@@ -19,6 +19,7 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.Toast;
+import com.google.android.gms.maps.model.LatLng;
 import org.apache.http.NameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,6 +28,7 @@ import pl.javaparty.adapters.NavDrawerAdapter;
 import pl.javaparty.enums.PHPurls;
 import pl.javaparty.fragments.*;
 import pl.javaparty.items.NavDrawerItem;
+import pl.javaparty.map.MapHelper;
 import pl.javaparty.prefs.Prefs;
 import pl.javaparty.sql.JSONthing;
 import pl.javaparty.sql.dbManager;
@@ -47,6 +49,7 @@ public class MainActivity extends FragmentActivity {
     TypedArray navMenuIcons;
     String[] navMenuTitles;
     ProgressDialog loadingDialog;
+    MapHelper mapHelper;
 
     /* Fragmenty */
     FragmentManager fragmentManager;
@@ -67,6 +70,8 @@ public class MainActivity extends FragmentActivity {
         loadingDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         loadingDialog.setProgress(0);
         loadingDialog.setMax(100);
+
+        mapHelper = new MapHelper(this);
 
         dbMgr = new dbManager(getApplicationContext());
         context = getApplicationContext();
@@ -292,6 +297,13 @@ public class MainActivity extends FragmentActivity {
             JSONObject mJsonObject = JSONthing.getThisShit(PHPurls.getConcerts, params);
             Log.d("All: ", mJsonObject.toString());
 
+            LatLng latlng;
+            try {
+                latlng = mapHelper.getLatLng("Wrocław");
+            } catch (NullPointerException npexc) {
+                latlng = new LatLng(52.2289922, 21.0034725); //Wrocław
+            }
+
             try {
                 int success = mJsonObject.getInt("success");
                 int lastid = Integer.parseInt(mJsonObject.getString("last_id"));
@@ -314,7 +326,9 @@ public class MainActivity extends FragmentActivity {
                         String url = JSONconcert.getString("url");
                         String lat = JSONconcert.getString("lat");
                         String lon = JSONconcert.getString("lon");
-                        dbMgr.addConcert(Long.parseLong(id), artist, city, spot, Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year), agency, url, lat, lon);
+
+                        double distance = mapHelper.inaccurateDistanceTo(new LatLng(Double.parseDouble(lat), Double.parseDouble(lon)), latlng);
+                        dbMgr.addConcert(Long.parseLong(id), artist, city, spot, Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year), agency, url, lat, lon, distance);
                         loadingDialog.setProgress(Integer.parseInt(id));
                     }
                     updateNeeded = true;

@@ -12,96 +12,96 @@ import java.io.IOException;
 import java.util.List;
 
 public class MapHelper {
-	private Geocoder geoCoder;
+    private Geocoder geoCoder;
     private List<Address> addressList;
 
-	private Address destinationAddress; // to zadane
-	private Address hometownAddress; // to z ustawie�
-	private String hometownString;
+    private Address destinationAddress; // to zadane
+    private Address hometownAddress; // to z ustawie�
+    private String hometownString;
 
-	public MapHelper(Context context) {
-		geoCoder = new Geocoder(context);
-		hometownString = Prefs.getCity(context);
-	}
+    public MapHelper(Context context) {
+        geoCoder = new Geocoder(context);
+        hometownString = Prefs.getCity(context);
+    }
 
-	/**
-	 * Oblicza odleglosc miedzy zadanym miastem w stringu a miastem ktore zostalo zapisane w ustawieniach.
-	 *
-	 * @param city nazwa miasta
-	 * @return zwraca odleglosc w kilometrach
-	 */
+    /**
+     * Oblicza odleglosc miedzy zadanym miastem w stringu a miastem ktore zostalo zapisane w ustawieniach.
+     *
+     * @param city nazwa miasta
+     * @return zwraca odleglosc w kilometrach
+     */
 
-	public int distanceTo(final String city) {
-		destinationAddress = getAddress(city);
-		hometownAddress = getAddress(hometownString);
+    public int distanceTo(final String city) {
+        destinationAddress = getAddress(city);
+        hometownAddress = getAddress(hometownString);
 
-		Log.i("MAP", "Miasto:" + city);
-		float[] distanceFloat = new float[3];
+        Log.i("MAP", "Miasto:" + city);
+        float[] distanceFloat = new float[3];
 
-		try {
-			Location.distanceBetween(
-					hometownAddress.getLatitude(), hometownAddress.getLongitude(),
-					destinationAddress.getLatitude(), destinationAddress.getLongitude(),
-					distanceFloat);
-		} catch (NullPointerException ne) {
-			return 0;
-		}
-		Log.i("MAP", "Dystans w km: " + (int) (distanceFloat[0] / 1000));
-		return (int) (distanceFloat[0] / 1000);
-	}
+        try {
+            Location.distanceBetween(
+                    hometownAddress.getLatitude(), hometownAddress.getLongitude(),
+                    destinationAddress.getLatitude(), destinationAddress.getLongitude(),
+                    distanceFloat);
+        } catch (NullPointerException ne) {
+            return 0;
+        }
+        Log.i("MAP", "Dystans w km: " + (int) (distanceFloat[0] / 1000));
+        return (int) (distanceFloat[0] / 1000);
+    }
 
-	//wynik zwracany w jakimś gównie a nie w kilometrach
-	//obliczam odległość między dwoma punktami z pitagorasa
-	public double inaccurateDistanceTo(LatLng spot) {
-		LatLng hometown = getLatLng(hometownString);
+    //wynik zwracany w jakimś gównie a nie w kilometrach
+    //obliczam odległość między dwoma punktami z pitagorasa
+    public double inaccurateDistanceTo(LatLng spot, LatLng hometown) {
+        double a = Math.abs(spot.latitude - hometown.latitude);
+        double b = Math.abs(spot.longitude - hometown.longitude);
+        a = a * 2;//To wynika z geografi
+        return (Math.sqrt((a * a) + (b * b)));
+    }
 
-		double a = Math.abs(spot.latitude - hometown.latitude);
-		double b = Math.abs(spot.longitude - hometown.longitude);
+    public int distanceTo(final LatLng spot) {
+        hometownAddress = getAddress(hometownString);
 
-		return (Math.sqrt((a * a) + (b * b)));
-	}
+        Log.i("MAP", "Miasto:" + spot);
+        float[] distanceFloat = new float[3];
 
-	public int distanceTo(final LatLng spot) {
-		hometownAddress = getAddress(hometownString);
+        try {
+            Location.distanceBetween(
+                    hometownAddress.getLongitude(), hometownAddress.getLatitude(),
+                    spot.latitude, spot.longitude,
+                    distanceFloat);
+        } catch (NullPointerException ne) {
+            return 0;
+        }
+        Log.i("MAP", "Dystans w km: " + (int) (distanceFloat[0] / 1000));
+        return (int) (distanceFloat[0] / 1000);
+    }
 
-		Log.i("MAP", "Miasto:" + spot);
-		float[] distanceFloat = new float[3];
+    public Address getAddress(String place) {
+        Address address = null;
+        try {
+            addressList = geoCoder.getFromLocationName(place, 1);
+            while (addressList.size() == 0)
+                addressList = geoCoder.getFromLocationName(place, 1);
+            if (addressList.size() > 0)
+                address = addressList.get(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return address;
+    }
 
-		try {
-			Location.distanceBetween(
-					hometownAddress.getLongitude(), hometownAddress.getLatitude(),
-					spot.latitude, spot.longitude,
-					distanceFloat);
-		} catch (NullPointerException ne) {
-			return 0;
-		}
-		Log.i("MAP", "Dystans w km: " + (int) (distanceFloat[0] / 1000));
-		return (int) (distanceFloat[0] / 1000);
-	}
+    public LatLng getLatLng(String place) {
+        return (new LatLng(getAddress(place).getLatitude(), getAddress(place).getLongitude()));
 
-	public Address getAddress(String place) {
-		Address address = null;
-		try {
-			addressList = geoCoder.getFromLocationName(place, 1);
-			while (addressList.size() == 0)
-				addressList = geoCoder.getFromLocationName(place, 1);
-			if (addressList.size() > 0)
-				address = addressList.get(0);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return address;
-	}
+    }
 
-	public LatLng getLatLng(String place) {
-		return (new LatLng(getAddress(place).getLatitude(), getAddress(place).getLongitude()));
-
-	}
-    public double getLat(String place){
-        Log.i("HomeTownPlace",place);
+    public double getLat(String place) {
+        Log.i("HomeTownPlace", place);
         return getAddress(place).getLatitude();
     }
-    public double getLon(String place){
+
+    public double getLon(String place) {
         return getAddress(place).getLongitude();
     }
 }

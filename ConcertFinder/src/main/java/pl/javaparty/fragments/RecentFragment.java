@@ -79,8 +79,7 @@ public class RecentFragment extends Fragment {
         int currentMonth = localCalendar.get(Calendar.MONTH) + 1;
         int currentYear = localCalendar.get(Calendar.YEAR);
 
-        concertsAdapter = new ConcertAdapter(getActivity(), cutArray(dbm.getConcertsByDateRange(currentDay, currentMonth, currentYear, 33, 13, 2050, filterAgencies())));
-        Log.d("RF", dbm.getConcertsByDateRange(currentDay, currentMonth, currentYear, 33, 13, 2050, filterAgencies()).length + "");
+        concertsAdapter = new ConcertAdapter(getActivity(), cutArray(dbm.getFutureConcerts(filterAgencies())));
 
         concertsListView.setAdapter(concertsAdapter);
         concertsListView.setEmptyView(view.findViewById(R.id.emptyList));
