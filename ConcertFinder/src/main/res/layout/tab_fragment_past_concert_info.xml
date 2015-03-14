@@ -124,7 +124,7 @@
                     <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
+                              android:textAppearance="?android:attr/textAppearanceSmall"
                             android:text="Ładuje setlistę"
                             android:textColor="#616161"
                             android:id="@+id/loading_text"
