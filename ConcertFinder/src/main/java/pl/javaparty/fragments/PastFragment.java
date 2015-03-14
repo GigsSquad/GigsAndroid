@@ -47,7 +47,7 @@ public class PastFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = inflater.inflate(R.layout.fragment_recent, container, false);
-        getActivity().getActionBar().setTitle("Minione koncerty");
+        getActivity().getActionBar().setTitle(getString(R.string.past_concerts));
         context = inflater.getContext();
         lv = (ListView) view.findViewById(R.id.recentList);
         dbm = MainActivity.getDBManager();
@@ -56,7 +56,7 @@ public class PastFragment extends Fragment {
 
         // button na koncu listy ktory rozwija liste o wincyj jesli sie da
         nextButton = new Button(context);
-        nextButton.setText("Pokaż więcej");
+        nextButton.setText(getString(R.string.show_moar));
         nextButton.setOnClickListener(new OnClickListener()
         {
 

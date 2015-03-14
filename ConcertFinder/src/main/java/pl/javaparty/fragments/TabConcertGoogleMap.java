@@ -53,8 +53,8 @@ public class TabConcertGoogleMap extends Fragment {
 					.snippet(dbm.getArtist(ID) + " " + dbm.getDate(ID))); // ustawia marker
 			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f)); // przybliza do markera
 		} catch (NumberFormatException nfe) {
-			Toast.makeText(context, "Brak poprawnego adresu", Toast.LENGTH_SHORT).show();
-			Log.w("MAP", "Brak adresu");
+            Toast.makeText(context, context.getString(R.string.wrong_adress), Toast.LENGTH_SHORT).show();
+            Log.w("MAP", "Brak adresu");
 		}
 	}
 
@@ -86,8 +86,8 @@ public class TabConcertGoogleMap extends Fragment {
 		if (isOnline()) {
 			setUpMapIfNeeded();
 		} else {
-			Toast.makeText(getActivity(), "Brak połączenia", Toast.LENGTH_LONG).show();
-			Log.w("MAP", "Urządzenie nie ma dostępu do internetu");
+            Toast.makeText(getActivity(), context.getString(R.string.no_connection), Toast.LENGTH_LONG).show();
+            Log.w("MAP", "Urządzenie nie ma dostępu do internetu");
 		}
 
 		return view;

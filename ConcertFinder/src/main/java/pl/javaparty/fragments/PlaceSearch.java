@@ -31,7 +31,7 @@ public class PlaceSearch extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = inflater.inflate(R.layout.tab_search_place, container, false);
-        getActivity().getActionBar().setTitle("Szukaj wg miejsca");
+        getActivity().getActionBar().setTitle(getString(R.string.search_by_place));
 
         dbm = MainActivity.getDBManager();// przekazujemy dbm od mainActivity
 
@@ -58,7 +58,7 @@ public class PlaceSearch extends Fragment {
                 concertList.setAdapter(adapter);
                 // zapisywanie danych, coby potem przywrocic
                 lastSearching = searchBox.getText().toString();
-                getActivity().getActionBar().setTitle("Szukaj: " + searchBox.getText().toString());
+                getActivity().getActionBar().setTitle(getString(R.string.search) + ": " + searchBox.getText().toString());
                 searchBox.setText("");
             }
         });
@@ -86,14 +86,14 @@ public class PlaceSearch extends Fragment {
                         dbm.getFutureConcertsByCity(city, filter) : dbm.getPastConcertsByCity(city, filter));
                 concertList.setAdapter(adapter);
                 // zapisywanie danych, coby potem przywrocic
-                getActivity().getActionBar().setTitle("Szukaj: " + city);
+                getActivity().getActionBar().setTitle(getString(R.string.search) + ": " + city);
                 searchBox.setText("");
                 try {
                     if (adapter.getCount() == 0 && city.length() > 0) {
-                        Toast.makeText(getActivity(), (future ? switchCon.getTextOn() : switchCon.getTextOff()) + " koncerty niedostępne dla " + city, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), (future ? switchCon.getTextOn() : switchCon.getTextOff()) + " " + getString(R.string.concerts_unavailable_for) + " " + city, Toast.LENGTH_LONG).show();
                     }
                 } catch (NullPointerException npe) {
-                    Toast.makeText(getActivity(), (future ? switchCon.getTextOn() : switchCon.getTextOff()) + " koncerty niedostępne", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), (future ? switchCon.getTextOn() : switchCon.getTextOff()) + " " + getString(R.string.concerts_unavailable_for), Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -110,7 +110,7 @@ public class PlaceSearch extends Fragment {
             concertList.setSelection(lastPosition);
         }
         if (lastSearching != null)
-            getActivity().getActionBar().setTitle("Szukaj: " + lastSearching);
+            getActivity().getActionBar().setTitle(getString(R.string.search) + ": " + lastSearching);
 
     }
 

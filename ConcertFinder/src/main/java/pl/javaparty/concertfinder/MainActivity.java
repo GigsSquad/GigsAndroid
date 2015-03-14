@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -125,7 +127,7 @@ public class MainActivity extends FragmentActivity {
                 Log.i("DRAWER", "Group: " + groupPosition);
                 if (navDrawerItems.get(groupPosition).getSubmenu() == null) {
                     drawerLayout.closeDrawers();
-                    if (groupPosition == 4)
+                    if (groupPosition == 4 && isOnline())
                         new DownloadConcerts().execute();
                     else if (currentFragment != groupPosition)
                         changeFragment(groupPosition);
@@ -150,7 +152,8 @@ public class MainActivity extends FragmentActivity {
 
         });
 
-        new DownloadConcerts().execute(); //nowa lepsza kurwa funkcja stary
+        if (isOnline())
+            new DownloadConcerts().execute(); //nowa lepsza kurwa funkcja stary
 
         // pierwsza inicjalizacja
         fragmentManager.beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
@@ -287,7 +290,7 @@ public class MainActivity extends FragmentActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            loadingDialog.setMessage("Synchronizacja bazy");
+            loadingDialog.setMessage(getString(R.string.database_update));
             loadingDialog.show();
         }
 
@@ -347,11 +350,17 @@ public class MainActivity extends FragmentActivity {
             if (updateNeeded)
                 changeFragment(currentFragment);// odswieza dany fragment po synchronizacji bazy
             else
-                Toast.makeText(getApplicationContext(), "Baza jest aktualna", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.database_is_up_to_date), Toast.LENGTH_SHORT).show();
 
             loadingDialog.dismiss();
             super.onPostExecute(s);
         }
+    }
+
+    private boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
 

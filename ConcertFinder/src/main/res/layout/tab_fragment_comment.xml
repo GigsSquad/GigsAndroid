@@ -14,19 +14,19 @@
             android:ems="10"
             android:id="@+id/user_comment" android:layout_gravity="center_horizontal"
             android:gravity="top"
-            android:hint="Wyraź swoją opinię o koncercie..."
+            android:hint="@string/your_opinion_hint"
             />
     <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Dodaj"
+            android:text="@string/add"
             android:id="@+id/add_comment"/>
 
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Brak komentarzy"
+            android:text="@string/no_comments"
             android:id="@+id/comment_info" android:layout_gravity="center_horizontal"/>
     <ListView
             android:layout_width="match_parent"

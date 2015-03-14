@@ -60,7 +60,6 @@
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp"
                             android:paddingTop="4dp"
-                            android:text="miejsce"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="#616161"
                             android:textSize="18sp"
@@ -72,7 +71,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="40dp"
-                        android:text="200km od miejsca zamieszkania"
                         android:textColor="#757575"/>
 
                 <LinearLayout
@@ -94,7 +92,6 @@
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp"
                             android:paddingTop="4dp"
-                            android:text="data"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="#616161"
                             android:textSize="18sp"
@@ -118,14 +115,14 @@
                               android:layout_alignParentBottom="true"/>
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                               android:textAppearance="?android:attr/textAppearanceMedium"
-                              android:text="Setlist not available :(" android:id="@+id/textView3"
+                              android:text="@string/no_setlist" android:id="@+id/textView3"
                               android:textColor="#616161"
                               android:layout_centerVertical="true" android:layout_centerHorizontal="true"/>
                     <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                               android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:text="Ładuje setlistę"
+                            android:text="@string/loading_setlist"
                             android:textColor="#616161"
                             android:id="@+id/loading_text"
                             android:layout_below="@+id/setlist_progress" android:layout_centerHorizontal="true"/>
@@ -151,7 +148,6 @@
                 android:shadowDx="1"
                 android:shadowDy="1"
                 android:shadowRadius="2"
-                android:text="title"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="#ffffff"
                 android:textSize="28sp"

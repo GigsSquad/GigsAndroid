@@ -13,7 +13,6 @@
         android:id="@+id/FavouriteList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Koncerty dodane do ulubionych, ulubieni wykonawcy, koncerty w mieście ustawionym w preferencjach"
         android:textAppearance="?android:attr/textAppearanceLarge" >
     </ListView>
 

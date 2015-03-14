@@ -16,7 +16,7 @@
         <AutoCompleteTextView android:id="@+id/searchBoxPlace" android:layout_width="wrap_content"
                               android:layout_height="wrap_content" android:ems="10" android:textColor="#2196F3"
                               android:textColorHighlight="#2196F3" android:textColorLink="#2196F3"
-                              android:hint="@string/searchBoxPlc" android:inputType="textAutoComplete"
+                              android:hint="@string/place" android:inputType="textAutoComplete"
                               android:layout_weight="0.45"/>
         <Switch
                 android:layout_width="wrap_content"

@@ -56,8 +56,8 @@ public class SettingsFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
 		View view = inflater.inflate(R.layout.fragment_settings, container, false);
 		context = inflater.getContext();
-		getActivity().getActionBar().setTitle("Preferencje");
-		dbm = MainActivity.getDBManager();// przekazujemy dbm od mainActivity
+        getActivity().getActionBar().setTitle(getString(R.string.action_settings));
+        dbm = MainActivity.getDBManager();// przekazujemy dbm od mainActivity
         citySearchBox = (AutoCompleteTextView) view.findViewById(R.id.cityAutoComplete);
         saveButton = (Button) view.findViewById(R.id.saveSettingsButton);
 		clearButton = (Button) view.findViewById(R.id.clearFilesButton);
@@ -76,8 +76,8 @@ public class SettingsFragment extends Fragment {
 			Prefs.setCity(getActivity(), citySearchBox.getText().toString());
 				Log.i("SETTINGS", "Zapisano");
 				Log.i("SETTINGS", "Miasto: " + citySearchBox.getText().toString());
-				Toast.makeText(getActivity(), "Zapisano!", Toast.LENGTH_SHORT).show();
-			}
+                Toast.makeText(getActivity(), getString(R.string.saved), Toast.LENGTH_SHORT).show();
+            }
 
 		});
 
@@ -110,30 +110,30 @@ public class SettingsFragment extends Fragment {
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-			builder.setTitle("Czy na pewno chcesz wyczyścić pamięć?")
-					.setMessage("Wszystkie obrazki zespołów, oraz cała baza danych zostanie usunięta!")
-					.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            builder.setTitle(getString(R.string.question_clear))
+                    .setMessage(getString(R.string.msg_clear))
+                    .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
 
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							FileExplorer f = new FileExplorer(getActivity());
-							f.clear();
-							Log.i("SETTINGS", "Usunięto obrazki z dysku");
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            FileExplorer f = new FileExplorer(getActivity());
+                            f.clear();
+                            Log.i("SETTINGS", "Usunięto obrazki z dysku");
                             dbm.deleteTables();
                             Log.i("SETTINGS", "Wyczyszczono bazę");
-							MainActivity.updateCounters();
-							Prefs.setLastID(getActivity(), -1);
-							Toast.makeText(getActivity(), "Wyczyszczono pamięć!", Toast.LENGTH_SHORT).show();
-						}
-					})
-					.setNegativeButton("Anuluj", new DialogInterface.OnClickListener() {
+                            MainActivity.updateCounters();
+                            Prefs.setLastID(getActivity(), -1);
+                            Toast.makeText(getActivity(), getString(R.string.cleared), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
 
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							//puste :(
-						}
-					});
-			return builder.create();
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //puste :(
+                        }
+                    });
+            return builder.create();
 		}
 	}
 

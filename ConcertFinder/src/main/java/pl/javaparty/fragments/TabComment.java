@@ -75,7 +75,7 @@ public class TabComment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            loadingDialog.setMessage("Dodawanie komentarza");
+            loadingDialog.setMessage(getString(R.string.add_comment_progress));
             loadingDialog.show();
         }
 
@@ -109,7 +109,7 @@ public class TabComment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            loadingDialog.setMessage("Pobieram komentarze");
+            loadingDialog.setMessage(getString(R.string.download_comments_progress));
             loadingDialog.show();
             commentArrayList = new ArrayList<>();
         }
