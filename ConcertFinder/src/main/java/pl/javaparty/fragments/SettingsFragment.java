@@ -116,16 +116,14 @@ public class SettingsFragment extends Fragment {
 
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							//dbm.deleteDB(context); Czemu tak? :O
 							FileExplorer f = new FileExplorer(getActivity());
 							f.clear();
 							Log.i("SETTINGS", "Usunięto obrazki z dysku");
-							dbm.deleteBase();
-							Log.i("SETTINGS", "Wyczyszczono bazę");
+                            dbm.deleteTables();
+                            Log.i("SETTINGS", "Wyczyszczono bazę");
 							MainActivity.updateCounters();
 							Prefs.setLastID(getActivity(), -1);
 							Toast.makeText(getActivity(), "Wyczyszczono pamięć!", Toast.LENGTH_SHORT).show();
-							Prefs.setLastID(getActivity(), -1);
 						}
 					})
 					.setNegativeButton("Anuluj", new DialogInterface.OnClickListener() {

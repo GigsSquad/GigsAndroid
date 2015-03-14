@@ -31,10 +31,11 @@ public class ConcertFragment extends FragmentActivity {
 		}
         else {
             mTabHost.addTab(mTabHost.newTabSpec("infoFragment").setIndicator("Informacje"), TabConcertInfo.class, getIntent().getExtras());
-            mTabHost.addTab(mTabHost.newTabSpec("mapFragment").setIndicator("Mapa koncertu"), TabConcertMap.class, getIntent().getExtras());
+//            mTabHost.addTab(mTabHost.newTabSpec("mapFragment").setIndicator("Mapa koncertu"), TabConcertMap.class, getIntent().getExtras());
             mTabHost.addTab(mTabHost.newTabSpec("googleMapFragment").setIndicator("Dojazd"), TabConcertGoogleMap.class, getIntent().getExtras());
+
         }
-	}
+    }
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

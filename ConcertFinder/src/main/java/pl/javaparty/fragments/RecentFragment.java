@@ -53,10 +53,8 @@ public class RecentFragment extends Fragment {
         dbm = MainActivity.getDBManager();
 
 
-        if (android.os.Build.VERSION.SDK_INT > 9) {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-        }
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         setHasOptionsMenu(true);
 
@@ -81,8 +79,9 @@ public class RecentFragment extends Fragment {
         int currentMonth = localCalendar.get(Calendar.MONTH) + 1;
         int currentYear = localCalendar.get(Calendar.YEAR);
 
-
         concertsAdapter = new ConcertAdapter(getActivity(), cutArray(dbm.getConcertsByDateRange(currentDay, currentMonth, currentYear, 33, 13, 2050, filterAgencies())));
+        Log.d("RF", dbm.getConcertsByDateRange(currentDay, currentMonth, currentYear, 33, 13, 2050, filterAgencies()).length + "");
+
         concertsListView.setAdapter(concertsAdapter);
         concertsListView.setEmptyView(view.findViewById(R.id.emptyList));
 

@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
+import android.widget.Toast;
 import org.apache.http.NameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,7 +27,7 @@ import pl.javaparty.adapters.NavDrawerAdapter;
 import pl.javaparty.enums.PHPurls;
 import pl.javaparty.fragments.*;
 import pl.javaparty.items.NavDrawerItem;
-import pl.javaparty.sql.DatabaseUpdater;
+import pl.javaparty.prefs.Prefs;
 import pl.javaparty.sql.JSONthing;
 import pl.javaparty.sql.dbManager;
 
@@ -46,7 +47,6 @@ public class MainActivity extends FragmentActivity {
     TypedArray navMenuIcons;
     String[] navMenuTitles;
     ProgressDialog loadingDialog;
-    FacebookFragment facebookFragment;
 
     /* Fragmenty */
     FragmentManager fragmentManager;
@@ -55,7 +55,6 @@ public class MainActivity extends FragmentActivity {
 
     /* Baza */
     static dbManager dbMgr;
-    DatabaseUpdater dbu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,10 +64,12 @@ public class MainActivity extends FragmentActivity {
 
         loadingDialog = new ProgressDialog(this);
         loadingDialog.setCancelable(false);
+        loadingDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        loadingDialog.setProgress(0);
+        loadingDialog.setMax(100);
 
         dbMgr = new dbManager(getApplicationContext());
         context = getApplicationContext();
-        dbu = new DatabaseUpdater(dbMgr, this);
         fragmentManager = getSupportFragmentManager();
 
         navMenuTitles = getResources().getStringArray(R.array.nav_menu);
@@ -120,7 +121,7 @@ public class MainActivity extends FragmentActivity {
                 if (navDrawerItems.get(groupPosition).getSubmenu() == null) {
                     drawerLayout.closeDrawers();
                     if (groupPosition == 4)
-                        dbu.update(new Refresh());
+                        new DownloadConcerts().execute();
                     else if (currentFragment != groupPosition)
                         changeFragment(groupPosition);
                     return true;
@@ -144,10 +145,7 @@ public class MainActivity extends FragmentActivity {
 
         });
 
-        //dbu.update(new Refresh());
         new DownloadConcerts().execute(); //nowa lepsza kurwa funkcja stary
-
-        updateCounters();
 
         // pierwsza inicjalizacja
         fragmentManager.beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
@@ -219,17 +217,6 @@ public class MainActivity extends FragmentActivity {
         // No call for super(). Bug on API Level > 11. lol
     }
 
-    // odswieza aktualny fragment (laduje go od nowa)
-    private class Refresh implements Runnable {
-        @Override
-        public void run() {
-            Log.i("RF", "Olaboga, refreshyk.");
-            changeFragment(currentFragment);// odswieza dany fragment
-            updateCounters();
-            Log.i("RF", "To tez wyszlo.");
-        }
-    }
-
     private void changeFragment(int position) {
         Fragment fragment = null;
         if (position == 0)
@@ -288,43 +275,31 @@ public class MainActivity extends FragmentActivity {
         return dbMgr;
     }
 
-    enum AgencyFragments {
-        //zakladka 3 (bo RecentFragment) a druga liczba to wybrana zakladka podmenu
-        GOAHEAD(30), SONGKICK(40), LIVENATION(50), TICKETPRO(60);
-        private int fragmentNumber;
-
-        AgencyFragments(int fragment) {
-            fragmentNumber = fragment;
-        }
-
-        public int nr() {
-            return fragmentNumber;
-        }
-    }
-
     class DownloadConcerts extends AsyncTask<String, Void, String> {
 
-//        ArrayAdapter arrayAdapter = null;
-//        ArrayList commentArrayList = null;
+        boolean updateNeeded = false;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             loadingDialog.setMessage("Synchronizacja bazy");
             loadingDialog.show();
-            dbMgr.deleteDB(getApplicationContext());
-//            commentArrayList = new ArrayList<>();
         }
 
         @Override
         protected String doInBackground(String... args) {
-            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            List<NameValuePair> params = new ArrayList<>();
             JSONObject mJsonObject = JSONthing.getThisShit(PHPurls.getConcerts, params);
             Log.d("All: ", mJsonObject.toString());
 
             try {
                 int success = mJsonObject.getInt("success");
-                if (success == 1) {
+                int lastid = Integer.parseInt(mJsonObject.getString("last_id"));
+                int count = mJsonObject.getInt("count");
+                //chłopcy i dziewczęta pamiętajmy iż last_id != count
+                loadingDialog.setMax(count);
+                if (success == 1 && lastid != Prefs.getLastID(getApplicationContext())) {
+                    Prefs.setLastID(getApplicationContext(), lastid);
                     JSONArray mJsonArray = mJsonObject.getJSONArray("concerts");
                     for (int i = 0; i < mJsonArray.length(); i++) {
                         JSONObject JSONconcert = mJsonArray.getJSONObject(i);
@@ -338,12 +313,11 @@ public class MainActivity extends FragmentActivity {
                         String agency = JSONconcert.getString("agency");
                         String url = JSONconcert.getString("url");
                         String lat = JSONconcert.getString("lat");
-                        String lon = JSONconcert.getString("ord");
+                        String lon = JSONconcert.getString("lon");
                         dbMgr.addConcert(Long.parseLong(id), artist, city, spot, Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year), agency, url, lat, lon);
-                        Log.i("JSON", id + "");
-//                        commentArrayList.add(comment + " ~" + author);
+                        loadingDialog.setProgress(Integer.parseInt(id));
                     }
-//                    arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, commentArrayList);
+                    updateNeeded = true;
                 }
 
             } catch (JSONException e) {
@@ -355,10 +329,11 @@ public class MainActivity extends FragmentActivity {
 
         @Override
         protected void onPostExecute(String s) {
-//            commentListView.setAdapter(arrayAdapter);
-
-//            if (!commentArrayList.isEmpty())
-//                concertInfo.setVisibility(View.GONE);
+            updateCounters();
+            if (updateNeeded)
+                changeFragment(currentFragment);// odswieza dany fragment po synchronizacji bazy
+            else
+                Toast.makeText(getApplicationContext(), "Baza jest aktualna", Toast.LENGTH_SHORT).show();
 
             loadingDialog.dismiss();
             super.onPostExecute(s);
