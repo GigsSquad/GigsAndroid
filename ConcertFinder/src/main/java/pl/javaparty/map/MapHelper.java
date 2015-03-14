@@ -55,7 +55,6 @@ public class MapHelper {
     public double inaccurateDistanceTo(LatLng spot, LatLng hometown) {
         double a = Math.abs(spot.latitude - hometown.latitude);
         double b = Math.abs(spot.longitude - hometown.longitude);
-        a = a * 2;//To wynika z geografi
         return (Math.sqrt((a * a) + (b * b)));
     }
 

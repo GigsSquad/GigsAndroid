@@ -234,9 +234,6 @@ public class dbManager extends SQLiteOpenHelper {
         return getArtistsByDateRange(date[0], date[1], date[2], 32, 13, 3000, filter);
     }
 
-	public String[] getCities(String condition) {
-		return deleteDuplicates(universalGetter3000("CITY", condition));
-	}
     public String getArtist(int ID) {
         return fieldGetter(ID, "ARTIST");
     }
@@ -396,11 +393,6 @@ public class dbManager extends SQLiteOpenHelper {
 		String condition = "ORD = " + ID;
 		return getConcertsBy(condition)[0];
 	}
-    public Concert getConcertByID(int ID) {
-        String condition = "ORD = " + ID;
-        return getConcertsBy(condition)[0];
-    }
-
 
     public Concert[] getPastConcerts(String filter) {
         Calendar yesterday = Calendar.getInstance();
@@ -412,7 +404,7 @@ public class dbManager extends SQLiteOpenHelper {
     public Concert[] getFutureConcerts(String filter) {
         Calendar today = Calendar.getInstance();
         int [] date = new int[]{today.get(Calendar.DAY_OF_MONTH),today.get(Calendar.MONTH)+1,today.get(Calendar.YEAR)};
-        return getConcertsByDateRange(date[0],date[1],date[2],32,13,3000,filter);
+        return getConcertsByDateRange(date[0], date[1], date[2], 32, 13, 3000, filter, "DIST");
     }
 
     public Concert[] getPastConcertsByArtist(String artist,String filter){
@@ -420,9 +412,12 @@ public class dbManager extends SQLiteOpenHelper {
         return getPastConcerts(condition);
     }
 
+
     public Concert[] getFutureConcertsByArtist(String artist,String filter){
-        String condition = "ARTIST = '"+artist+"' AND (" + filter + ")";
-        return getFutureConcerts(condition);
+
+        // String condition = "ARTIST = '"+artist+"' AND (" + filter + ")";
+        //return getFutureConcerts(condition);
+        Calendar today = Calendar.getInstance();
         int[] date = new int[]{today.get(Calendar.DAY_OF_MONTH), today.get(Calendar.MONTH) + 1, today.get(Calendar.YEAR)};
         Concert[] firstPart = getConcertsByDateRange(date[0], date[1], date[2], date[0], (date[1] + 1) % 12, date[2], filter, "DIST");
         Concert[] secondPart = getConcertsByDateRange(date[0], (date[1] + 1) % 12, date[2], 32, 12, 3000, filter, "YEAR, MONTH, DAY, DIST");
