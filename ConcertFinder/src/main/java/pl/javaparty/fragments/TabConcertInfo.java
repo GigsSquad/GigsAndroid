@@ -58,7 +58,7 @@ public class TabConcertInfo extends Fragment {
 		String artistName = dbm.getArtist(ID);
 		getActivity().getActionBar().setTitle(artistName);
 
-		new ImageLoader(inflater.getContext()).DisplayImage(artistName, image);
+		ImageLoader.init(inflater.getContext()).DisplayImage(artistName, image);
 		new calculateDistance().execute();
 
 		artistName = artistName.replace(" - ", "\n");

@@ -69,7 +69,7 @@ public class TabPastConcertInfo extends Fragment {
 		lv.setVisibility(View.INVISIBLE);
 		tv.setVisibility(View.INVISIBLE);
 
-		new ImageLoader(inflater.getContext()).DisplayImage(artistName, image);
+		ImageLoader.init(inflater.getContext()).DisplayImage(artistName, image);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			new calculateDistance().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			new GetSetlist().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
