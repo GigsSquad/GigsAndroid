@@ -16,37 +16,20 @@
             android:gravity="top"
             android:hint="Wyraź swoją opinię o koncercie..."
             />
-    <LinearLayout
-            android:orientation="horizontal"
+    <Button
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:layout_gravity="center_horizontal"
-            android:weightSum="1">
-        <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Dodaj"
-                android:id="@+id/add_comment"/>
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:text="Dodaj"
+            android:id="@+id/add_comment"/>
+
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Brak komentarzy"
             android:id="@+id/comment_info" android:layout_gravity="center_horizontal"/>
-    <ScrollView
-            android:layout_width="wrap_content"
+    <ListView
+            android:layout_width="match_parent"
             android:layout_height="fill_parent"
-            android:id="@+id/scrollView">
-
-        <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:layout_gravity="center_horizontal">
-
-            <ListView
-                    android:layout_width="match_parent"
-                    android:layout_height="350dp"
-                    android:id="@+id/comments"/>
-        </LinearLayout>
-    </ScrollView>
+            android:id="@+id/comments"/>
 </LinearLayout>

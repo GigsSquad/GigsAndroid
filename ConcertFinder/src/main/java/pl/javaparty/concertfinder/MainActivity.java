@@ -1,8 +1,10 @@
 package pl.javaparty.concertfinder;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -16,14 +18,21 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
+import org.apache.http.NameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import pl.javaparty.adapters.NavDrawerAdapter;
+import pl.javaparty.enums.PHPurls;
 import pl.javaparty.fragments.*;
 import pl.javaparty.items.NavDrawerItem;
 import pl.javaparty.sql.DatabaseUpdater;
+import pl.javaparty.sql.JSONthing;
 import pl.javaparty.sql.dbManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends FragmentActivity {
 
@@ -36,6 +45,7 @@ public class MainActivity extends FragmentActivity {
     private DrawerLayout drawerLayout;
     TypedArray navMenuIcons;
     String[] navMenuTitles;
+    ProgressDialog loadingDialog;
     FacebookFragment facebookFragment;
 
     /* Fragmenty */
@@ -51,6 +61,10 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        loadingDialog = new ProgressDialog(this);
+        loadingDialog.setCancelable(false);
 
         dbMgr = new dbManager(getApplicationContext());
         context = getApplicationContext();
@@ -130,7 +144,8 @@ public class MainActivity extends FragmentActivity {
 
         });
 
-        dbu.update(new Refresh());
+        //dbu.update(new Refresh());
+        new DownloadConcerts().execute(); //nowa lepsza kurwa funkcja stary
 
         updateCounters();
 
@@ -284,6 +299,69 @@ public class MainActivity extends FragmentActivity {
 
         public int nr() {
             return fragmentNumber;
+        }
+    }
+
+    class DownloadConcerts extends AsyncTask<String, Void, String> {
+
+//        ArrayAdapter arrayAdapter = null;
+//        ArrayList commentArrayList = null;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            loadingDialog.setMessage("Synchronizacja bazy");
+            loadingDialog.show();
+            dbMgr.deleteDB(getApplicationContext());
+//            commentArrayList = new ArrayList<>();
+        }
+
+        @Override
+        protected String doInBackground(String... args) {
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            JSONObject mJsonObject = JSONthing.getThisShit(PHPurls.getConcerts, params);
+            Log.d("All: ", mJsonObject.toString());
+
+            try {
+                int success = mJsonObject.getInt("success");
+                if (success == 1) {
+                    JSONArray mJsonArray = mJsonObject.getJSONArray("concerts");
+                    for (int i = 0; i < mJsonArray.length(); i++) {
+                        JSONObject JSONconcert = mJsonArray.getJSONObject(i);
+                        String id = JSONconcert.getString("ord");
+                        String artist = JSONconcert.getString("artist");
+                        String city = JSONconcert.getString("city");
+                        String spot = JSONconcert.getString("spot");
+                        String day = JSONconcert.getString("day");
+                        String month = JSONconcert.getString("month");
+                        String year = JSONconcert.getString("year");
+                        String agency = JSONconcert.getString("agency");
+                        String url = JSONconcert.getString("url");
+                        String lat = JSONconcert.getString("lat");
+                        String lon = JSONconcert.getString("ord");
+                        dbMgr.addConcert(Long.parseLong(id), artist, city, spot, Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year), agency, url, lat, lon);
+                        Log.i("JSON", id + "");
+//                        commentArrayList.add(comment + " ~" + author);
+                    }
+//                    arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, commentArrayList);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+//            commentListView.setAdapter(arrayAdapter);
+
+//            if (!commentArrayList.isEmpty())
+//                concertInfo.setVisibility(View.GONE);
+
+            loadingDialog.dismiss();
+            super.onPostExecute(s);
         }
     }
 

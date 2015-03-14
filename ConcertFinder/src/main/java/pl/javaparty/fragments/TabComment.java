@@ -9,25 +9,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
-import org.apache.http.HttpResponse;
+import android.widget.*;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.enums.PHPurls;
+import pl.javaparty.prefs.Prefs;
+import pl.javaparty.sql.JSONthing;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,8 +28,11 @@ import java.util.List;
  */
 public class TabComment extends Fragment {
 
-    ArrayList commentList;
+    Button addComment;
     ProgressDialog loadingDialog;
+    ListView commentListView;
+    EditText commentField;
+    TextView concertInfo;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
@@ -49,14 +44,14 @@ public class TabComment extends Fragment {
             StrictMode.setThreadPolicy(policy);
         }
 
-        Button addComment = (Button) view.findViewById(R.id.add_comment);
-        TextView concertInfo = (TextView) view.findViewById(R.id.comment_info);
-        EditText commentField = (EditText) view.findViewById(R.id.user_comment);
-        ListView commentListView = (ListView) view.findViewById(R.id.comments);
-        commentList = new ArrayList<>();
-        //todo ustawienie Visibility na gone do dodawania komentarzy jeśli już dodalismy komentarz
+        loadingDialog = new ProgressDialog(getActivity());
+        loadingDialog.setCancelable(false);
 
-        int ID = (getArguments().getInt("ID", -1));
+        addComment = (Button) view.findViewById(R.id.add_comment);
+        concertInfo = (TextView) view.findViewById(R.id.comment_info);
+        commentField = (EditText) view.findViewById(R.id.user_comment);
+        commentListView = (ListView) view.findViewById(R.id.comments);
+        //todo ustawienie Visibility na gone do dodawania komentarzy jeśli już dodalismy komentarz
 
         addComment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,62 +60,32 @@ public class TabComment extends Fragment {
             }
         });
 
+
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        new DownloadComments().execute();
+        super.onResume();
     }
 
     class InsertComment extends AsyncTask<String, Void, String> {
 
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            loadingDialog = new ProgressDialog(getActivity());
             loadingDialog.setMessage("Dodawanie komentarza");
-            loadingDialog.setCancelable(false);
             loadingDialog.show();
         }
 
         @Override
-        protected String doInBackground(String... param) {
-
-            try {
-                HttpClient mHttpClient = new DefaultHttpClient();
-                HttpPost mHttpPost = new HttpPost(PHPurls.insertComment.toString());
-
-                List<NameValuePair> params = new ArrayList<NameValuePair>();
-                params.add(new BasicNameValuePair("user_id", "2"));
-                params.add(new BasicNameValuePair("concert_id", "23"));
-                params.add(new BasicNameValuePair("comment", "asdasfsafas"));
-                mHttpPost.setEntity(new UrlEncodedFormEntity(params));
-                HttpResponse mHttpResponse = mHttpClient.execute(mHttpPost);
-
-                // for JSON:
-                if (mHttpResponse != null) {
-                    InputStream is = mHttpResponse.getEntity().getContent();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-                    StringBuilder sb = new StringBuilder();
-                    String line = null;
-                    try {
-                        while ((line = reader.readLine()) != null) {
-                            sb.append(line + "\n");
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } finally {
-                        try {
-                            is.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    Log.i("JSON", "SERVER: " + sb.toString());
-                }
-
-            } catch (ClientProtocolException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        protected String doInBackground(String... args) {
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("user_id", Prefs.getUserID(getActivity()) + ""));
+            params.add(new BasicNameValuePair("concert_id", getArguments().getInt("ID", -1) + ""));
+            params.add(new BasicNameValuePair("comment", commentField.getText().toString()));
+            JSONthing.makeRequest(PHPurls.insertComment, params); //TIGHT and ELEGANT
             return null;
         }
 
@@ -128,9 +93,65 @@ public class TabComment extends Fragment {
         protected void onPostExecute(String s) {
             loadingDialog.dismiss();
 
+            addComment.setEnabled(false); //blokujemy możliwość wysłania kolejnych komentarzy
+            commentField.setEnabled(false); //TODO: nie wiem czy dawać do na GONE czy blokować żeby móc np później edytować komentarz
+
+            new DownloadComments().execute(); //po dodaniu komentarza niech pobierze od nowa komentarze zeby wyświetlić nasz
             super.onPostExecute(s);
         }
     }
 
+    class DownloadComments extends AsyncTask<String, Void, String> {
+
+        ArrayAdapter arrayAdapter = null;
+        ArrayList commentArrayList = null;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            loadingDialog.setMessage("Pobieram komentarze");
+            loadingDialog.show();
+            commentArrayList = new ArrayList<>();
+        }
+
+        @Override
+        protected String doInBackground(String... args) {
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            JSONObject mJsonObject = JSONthing.getThisShit(PHPurls.getComments, params);
+            Log.d("All: ", mJsonObject.toString());
+
+            try {
+                int success = mJsonObject.getInt("success");
+                if (success == 1) {
+                    JSONArray mJsonArray = mJsonObject.getJSONArray("comments");
+                    for (int i = 0; i < mJsonArray.length(); i++) {
+                        JSONObject JSONcomment = mJsonArray.getJSONObject(i);
+                        String author = JSONcomment.getString("user_id");
+                        //String concert_id = JSONcomment.getString("concert_id");
+                        String comment = JSONcomment.getString("comment");
+
+                        commentArrayList.add(comment + " ~" + author);
+                    }
+                    arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, commentArrayList);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            commentListView.setAdapter(arrayAdapter);
+
+            if (!commentArrayList.isEmpty())
+                concertInfo.setVisibility(View.GONE);
+
+            loadingDialog.dismiss();
+            super.onPostExecute(s);
+        }
+    }
 
 }
