@@ -16,11 +16,11 @@ public class Concert {
 	String url; // url do strony ze szczegolowymi informacjami o danym koncercie
 	String lat;
 	String lon;
-	AgencyName agency;
+	Agencies agency;
 	double distance;
 	// private List<Address> addressList; // do czego to jest? nie używane nigdzie
 
-	public Concert(int ID, String artist, String city, String spot, int day, int month, int year, AgencyName agency, String url, String lat, String lon) {
+	public Concert(int ID, String artist, String city, String spot, int day, int month, int year, Agencies agency, String url, String lat, String lon) {
 		this.ID = ID;
 		this.agency = agency;
 		this.artist = artist.trim();
@@ -190,9 +190,5 @@ public class Concert {
 	@Override
 	public String toString() {
 		return artist + " " + getPlace() + " " + dateToString() + "\n";
-	}
-
-	public enum AgencyName {
-		GOAHEAD, ALTERART, EBILET, LIVENATION, TICKETPRO, SONGKICK
 	}
 }

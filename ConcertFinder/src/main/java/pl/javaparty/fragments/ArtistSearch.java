@@ -18,6 +18,9 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class ArtistSearch extends Fragment {
 
 	AutoCompleteTextView searchBox;
@@ -39,7 +42,8 @@ public class ArtistSearch extends Fragment {
 		concertList = (ListView) view.findViewById(R.id.concertListArtist);
 		String filter = getArguments().getString("CONDITIONS");
 		Log.i("FILTRUJE", filter);
-		adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, dbm.getArtists(filter));
+        ArrayList<String> artists = new ArrayList<>(Arrays.asList(dbm.getArtists(filter)));
+		adapterSearchBox = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line, artists);
 
 		searchBox.setAdapter(adapterSearchBox);
 		searchBox.setThreshold(1);
@@ -90,8 +94,15 @@ public class ArtistSearch extends Fragment {
 	public void refresh()
 	{
 		String filter = getArguments().getString("CONDITIONS");
-		adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, dbm.getArtists(filter));
+		//adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, dbm.getArtists(filter));
+        if(adapter!=null)
+        {
+            adapter.changeData(dbm.getConcertsByArtist(lastSearching, filter));
+        }
 
-		searchBox.setAdapter(adapterSearchBox);
+        adapterSearchBox.clear();
+        adapterSearchBox.addAll(dbm.getArtists(filter));
+        adapterSearchBox.notifyDataSetChanged();
+		//searchBox.setAdapter(adapterSearchBox);
 	}
 }

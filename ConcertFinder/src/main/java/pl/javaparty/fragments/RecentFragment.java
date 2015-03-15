@@ -15,8 +15,8 @@ import pl.javaparty.adapters.ConcertAdapter;
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.fragments.FilterDialogFragment.FilterDialogListener;
+import pl.javaparty.items.Agencies;
 import pl.javaparty.items.Concert;
-import pl.javaparty.items.Concert.AgencyName;
 import pl.javaparty.sql.dbManager;
 
 import java.util.*;
@@ -30,15 +30,13 @@ public class RecentFragment extends Fragment {
     Button nextButton;
     private int lastPosition = 0;
     private int showedConcerts = 20;
-    public Map<CharSequence, Boolean> checkedAgencies;
+//    public Map<CharSequence, Boolean> checkedAgencies;
+    public Map<Agencies, Boolean> checkedAgencies;
 
     public RecentFragment() {
         super();
 
-        checkedAgencies = new HashMap<>();
-        AgencyName[] vals = AgencyName.values();
-        for (AgencyName val : vals)
-            checkedAgencies.put(val.name(), true);
+        checkedAgencies = Agencies.AgenciesMethods.initialize();
     }
 
     @Override
@@ -74,7 +72,7 @@ public class RecentFragment extends Fragment {
         Log.i("DATE", String.valueOf(currentMonth));
         Log.i("DATE", String.valueOf(currentYear));
 
-        adapter = new ConcertAdapter(getActivity(), cutArray(dbm.getConcertsByDateRange(currentDay, currentMonth, currentYear, 33, 13, 2050, filterAgencies())));
+        adapter = new ConcertAdapter(getActivity(), cutArray(dbm.getConcertsByDateRange(currentDay, currentMonth, currentYear, 33, 13, 2050, Agencies.AgenciesMethods.filterAgencies(checkedAgencies))));
         lv.setAdapter(adapter);
         lv.setEmptyView(view.findViewById(R.id.emptyList));
 
@@ -144,12 +142,28 @@ public class RecentFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.filter_icon:
                 FilterDialogFragment dialog = new FilterDialogFragment();
+
+                Bundle args = new Bundle();
+
+                boolean[] checked = new boolean[checkedAgencies.size()];
+                int i = 0;
+                for (Boolean b : checkedAgencies.values()) {
+                    checked[i++] = b;
+                }
+                args.putBooleanArray("CHECKED", checked);
+
+//                CharSequence[] agencies = new CharSequence[checkedAgencies.size()];
+//                checkedAgencies.keySet().toArray(agencies);
+//                args.putCharSequenceArray("AGENCIES", agencies);
+                dialog.setArguments(args);
+
                 dialog.setFilterDialogListener(new FilterDialogListener() {
                     @Override
                     public void onDialogPositiveClick(boolean[] checked) {
                         // this.checked = checked;
                         int i = 0;
-                        for (CharSequence c : checkedAgencies.keySet()) {
+                        for (Agencies c : checkedAgencies.keySet()) {
+
                             checkedAgencies.put(c, checked[i++]);
                         }
 
@@ -162,19 +176,6 @@ public class RecentFragment extends Fragment {
                         // nevermind
                     }
                 });
-                Bundle args = new Bundle();
-
-                boolean[] checked = new boolean[checkedAgencies.size()];
-                int i = 0;
-                for (Boolean b : checkedAgencies.values()) {
-                    checked[i++] = b;
-                }
-                args.putBooleanArray("CHECKED", checked);
-
-                CharSequence[] agencies = new CharSequence[checkedAgencies.size()];
-                checkedAgencies.keySet().toArray(agencies);
-                args.putCharSequenceArray("AGENCIES", agencies);
-                dialog.setArguments(args);
 
                 dialog.show(getActivity().getFragmentManager(), "FILTER");
                 return true;
@@ -185,9 +186,9 @@ public class RecentFragment extends Fragment {
 
     private String filterAgencies() {
         String returned = "'1'='0'";
-        for (CharSequence c : checkedAgencies.keySet()) {
+        for (Agencies c : checkedAgencies.keySet()) {
             if (checkedAgencies.get(c)) {
-                returned += " OR AGENCY = '" + c + "'";
+                returned += " OR AGENCY = '" + c.name() + "'";
             }
         }
         return returned;

@@ -6,9 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import pl.javaparty.items.Agencies;
 import pl.javaparty.items.Concert;
-import pl.javaparty.items.Concert.AgencyName;
-
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -335,9 +334,9 @@ public class dbManager extends SQLiteOpenHelper {
 		return res;
 	}
 
-	private AgencyName getAgency(String s) {
-		AgencyName agency = null;
-        AgencyName[] agencyNames = AgencyName.values();
+	private Agencies getAgency(String s) {
+		Agencies agency = null;
+        Agencies[] agencyNames = Agencies.values();
         for(int i = 0; i < agencyNames.length && agency==null ; i++)
         {
             if(agencyNames[i].name().equals(s))

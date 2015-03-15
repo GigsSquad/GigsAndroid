@@ -18,6 +18,9 @@ import pl.javaparty.concertfinder.R;
 import pl.javaparty.items.Concert;
 import pl.javaparty.sql.dbManager;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class PlaceSearch extends Fragment {
 
 	AutoCompleteTextView searchBox;
@@ -41,7 +44,8 @@ public class PlaceSearch extends Fragment {
 		searchBox = (AutoCompleteTextView) view.findViewById(R.id.searchBoxPlace);
 		concertList = (ListView) view.findViewById(R.id.concertListPlace);
 		String filter = getArguments().getString("CONDITIONS");
-		adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, dbm.getCities(filter));
+        ArrayList<String> cities = new ArrayList<>(Arrays.asList(dbm.getCities(filter)));
+		adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, cities);
 
 		searchBox.setAdapter(adapterSearchBox);
 		searchBox.setThreshold(1);
@@ -93,9 +97,20 @@ public class PlaceSearch extends Fragment {
 
 	public void refresh()
 	{
-		String filter = getArguments().getString("CONDITIONS");
-		adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, dbm.getCities(filter));
+//		String filter = getArguments().getString("CONDITIONS");
+//		adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, dbm.getCities(filter));
+//
+//		searchBox.setAdapter(adapterSearchBox);
 
-		searchBox.setAdapter(adapterSearchBox);
+        String filter = getArguments().getString("CONDITIONS");
+        //adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, dbm.getCities(filter));
+        if(adapter!=null)
+        {
+            adapter.changeData(dbm.getConcertsByCity(lastSearching, filter));
+        }
+
+        adapterSearchBox.clear();
+        adapterSearchBox.addAll(dbm.getCities(filter));
+        adapterSearchBox.notifyDataSetChanged();
 	}
 }

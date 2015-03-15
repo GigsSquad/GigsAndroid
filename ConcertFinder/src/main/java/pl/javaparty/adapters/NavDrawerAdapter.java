@@ -1,6 +1,7 @@
 package pl.javaparty.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,15 +66,15 @@ public class NavDrawerAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
-		NavDrawerItem group = (NavDrawerItem) getGroup(groupPosition);
+		NavDrawerItem group = items.get(groupPosition);
 		if (group.getSubmenu() == null) {
 			/*
 			 * W przypadku gdy brak submenu, czyli normalny przycisk.
 			 */
-			if (convertView == null) {
+			//if (convertView == null) {
 				LayoutInflater li = LayoutInflater.from(context);
 				convertView = li.inflate(R.layout.drawer_list_item, null);
-			}
+			//}
 			ImageView imgIcon = (ImageView) convertView.findViewById(R.id.icon);
 			TextView txtTitle = (TextView) convertView.findViewById(R.id.title);
 			TextView txtCount = (TextView) convertView.findViewById(R.id.counter);
@@ -92,17 +93,20 @@ public class NavDrawerAdapter extends BaseExpandableListAdapter {
 		 * Rozwijane menu.
 		 */
 		else {
-			if (convertView == null) {
+			//if (convertView == null) { //nie wiem co tu sie odjebalo ale dziala
 				LayoutInflater li = LayoutInflater.from(context);
 				convertView = li.inflate(R.layout.nav_drawer_expandable_group, null);
-			}
+			//}
+
 			ImageView imgIcon = (ImageView) convertView.findViewById(R.id.iconEx);
 			TextView text = (TextView) convertView.findViewById(R.id.expTextView);
 			ImageView indicator = (ImageView) convertView.findViewById(R.id.explist_indicator);
 			TextView txtCount = (TextView) convertView.findViewById(R.id.counterEx);
+            //Log.i("IkonaKurwa", text.getText() + String.valueOf(items.get(groupPosition).getIcon()));
 
-			imgIcon.setImageResource(items.get(groupPosition).getIcon());
-			text.setText(group.getTitle());
+            imgIcon.setImageResource(items.get(groupPosition).getIcon());
+            text.setText(group.getTitle());
+
 
 			if (isExpanded)
 				indicator.getDrawable().setState(new int[] { android.R.attr.state_expanded });

@@ -10,6 +10,7 @@
         <item>Preferencje</item>
         <item>Informacje</item>
         <item>Agencje</item>
+        <item>Bileterie</item>
     </string-array>
 
     <array name="nav_menu_icons">
@@ -22,12 +23,9 @@
     </array>
     
     <string-array name="agencje_submenu">
-        <item>TicketPro</item>
-        <item>Livenation</item>
-        <item>Ebilet</item>
-        <item>SongKick</item>
-        <item>AlaterArt</item>
         <item>GoAhead</item>
+        <item>Kayax</item>
+        <item>Prestige</item>
     </string-array>
 
 </resources>

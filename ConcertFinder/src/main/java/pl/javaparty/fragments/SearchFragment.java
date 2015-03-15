@@ -7,37 +7,28 @@ import android.util.Log;
 import android.view.*;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.fragments.FilterDialogFragment.FilterDialogListener;
-import pl.javaparty.items.Concert.AgencyName;
-
-import java.util.HashMap;
+import pl.javaparty.items.Agencies;
 import java.util.Map;
 
+//FILTRY TODO!!!!!
 public class SearchFragment extends Fragment{
 
 	private FragmentTabHost mTabHost;
 	//private boolean[] checked;
-	private Map<CharSequence, Boolean> checkedAgencies;
+	private Map<Agencies, Boolean> checkedAgencies;
 	private Bundle conditions;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
-		/*
-		 * checked = new boolean[AgencyName.values().length];
-		 * for(int i = 0; i<checked.length; i++)
-		 *  	checked[i] = true;
-		 */
-		checkedAgencies = new HashMap<>();
-		AgencyName[] vals = AgencyName.values();
-		for (AgencyName val : vals) {
-			checkedAgencies.put(val.name(), true);
-		}
+		checkedAgencies = Agencies.AgenciesMethods.initialize();
+
 		
 		getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActivity().getActionBar().setHomeButtonEnabled(true);
 		
 		setHasOptionsMenu(true);
 		conditions = new Bundle();
-		conditions.putString("CONDITIONS", filterAgencies());
+		conditions.putString("CONDITIONS", Agencies.AgenciesMethods.filterAgencies(checkedAgencies));
 
 
 		mTabHost = new FragmentTabHost(getActivity());
@@ -64,29 +55,7 @@ public class SearchFragment extends Fragment{
 		switch (item.getItemId()) {
 		case R.id.filter_icon:
 			FilterDialogFragment dialog = new FilterDialogFragment();
-			dialog.setFilterDialogListener(new FilterDialogListener()
-			{
-					@Override
-					public void onDialogPositiveClick(boolean[] checked)
-					{
-						//this.checked = checked;
-						int i = 0;
-						for(CharSequence c: checkedAgencies.keySet())
-						{
-							checkedAgencies.put(c, checked[i++]);
-						}
-						conditions.putString("CONDITIONS", filterAgencies());
-						//mTabHost.invalidate();
-						refreshTab();
-						//mTabHost.getTabWidget().getChildAt(mTabHost.getCurrentTab())
-					}
 
-					@Override
-					public void onDialogNegativeClick(boolean[] checked)
-					{
-						//nevermind
-					}
-			});
 			Bundle args = new Bundle();
 			
 			boolean[] checked = new boolean[checkedAgencies.size()];
@@ -96,11 +65,31 @@ public class SearchFragment extends Fragment{
 				checked[i++]=b;
 			}
 			args.putBooleanArray("CHECKED", checked);
-			
-			CharSequence[] agencies = new CharSequence[checkedAgencies.size()];
-			checkedAgencies.keySet().toArray(agencies);
-			args.putCharSequenceArray("AGENCIES", agencies);
 			dialog.setArguments(args);
+
+            dialog.setFilterDialogListener(new FilterDialogListener()
+            {
+                @Override
+                public void onDialogPositiveClick(boolean[] checked)
+                {
+                    //this.checked = checked;
+                    int i = 0;
+                    for(Agencies c: checkedAgencies.keySet())
+                    {
+                        checkedAgencies.put(c, checked[i++]);
+                    }
+                    conditions.putString("CONDITIONS", Agencies.AgenciesMethods.filterAgencies(checkedAgencies));
+                    //mTabHost.invalidate();
+                    refreshTab();
+                    //mTabHost.getTabWidget().getChildAt(mTabHost.getCurrentTab())
+                }
+
+                @Override
+                public void onDialogNegativeClick(boolean[] checked)
+                {
+                    //nevermind
+                }
+            });
 			
 			dialog.show(getActivity().getFragmentManager(), "FILTER");
 			return true;
@@ -113,7 +102,7 @@ public class SearchFragment extends Fragment{
 	private String filterAgencies()
 	{
 		String returned = "'1'='0'";
-		for(CharSequence c: checkedAgencies.keySet())
+		for(Agencies c: checkedAgencies.keySet())
 		{
 			if(checkedAgencies.get(c))
 			{

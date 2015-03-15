@@ -18,6 +18,7 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import pl.javaparty.adapters.NavDrawerAdapter;
 import pl.javaparty.fragments.*;
+import pl.javaparty.items.Agencies;
 import pl.javaparty.items.NavDrawerItem;
 import pl.javaparty.sql.DatabaseUpdater;
 import pl.javaparty.sql.dbManager;
@@ -61,7 +62,18 @@ public class MainActivity extends FragmentActivity {
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		drawerList = (ExpandableListView) findViewById(R.id.left_drawer);
 		drawerList.setGroupIndicator(null);
-		ArrayList<String> agencies = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.agencje_submenu)));
+
+		ArrayList<String> agencies = new ArrayList<>();//Arrays.asList(getResources().getStringArray(R.array.agencje_submenu)));
+        ArrayList<String> ticketers = new ArrayList<>();
+
+        for(Agencies a: Agencies.values())
+        {
+            int posInDrawer = a.fragmentNumber/100;
+            if(posInDrawer == 7)
+                agencies.add(a.toString);
+            if(posInDrawer == 8)
+                ticketers.add(a.toString);
+        }
 
 		navDrawerItems = new ArrayList<>();
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
@@ -71,7 +83,8 @@ public class MainActivity extends FragmentActivity {
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(3, -1)));
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(4, -1)));
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[6], navMenuIcons.getResourceId(5, -1)));
-		navDrawerItems.add(new NavDrawerItem(navMenuTitles[7], navMenuIcons.getResourceId(3, -1), agencies));//TODO icona
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[7], navMenuIcons.getResourceId(4, -1), agencies));//TODO icona
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[8], navMenuIcons.getResourceId(3, -1), ticketers));
 		navMenuIcons.recycle();
 
 		adapter = new NavDrawerAdapter(context, navDrawerItems);
@@ -122,7 +135,7 @@ public class MainActivity extends FragmentActivity {
 				Log.i("DRAWER", "Child: " + childPosition);
 				drawerLayout.closeDrawers();
 				if (currentFragment != groupPosition || currentFragment != 30 + childPosition) {
-					changeFragment(30 + childPosition);
+					changeFragment(groupPosition*100 + childPosition);
 				}
 				return false;
 			}
@@ -212,11 +225,11 @@ public class MainActivity extends FragmentActivity {
 			fragment = new SettingsFragment();
 		else if (position == 6)
 			fragment = new AboutFragment();
-		else if (position >= 30) {
-			int pos = position - 30;
+		else if (position >= 100) {
+            Log.i("MainActivity", "POS: " + position);
 			RecentFragment rfragment = new RecentFragment();
-			for (CharSequence ch : rfragment.checkedAgencies.keySet())
-				if (ch != rfragment.checkedAgencies.keySet().toArray()[pos])
+			for (Agencies ch : rfragment.checkedAgencies.keySet())
+				if (ch.fragmentNumber != position)
 					rfragment.checkedAgencies.put(ch, false);
 
 			fragment = rfragment;
@@ -252,19 +265,5 @@ public class MainActivity extends FragmentActivity {
 	// przekazuje DBmanagera
 	public static dbManager getDBManager() {
 		return dbMgr;
-	}
-
-	enum AgencyFragments {
-		//zakladka 3 (bo RecentFragment) a druga liczba to wybrana zakladka podmenu
-		GOAHEAD(30), SONGKICK(40), LIVENATION(50), TICKETPRO(60);
-		private int fragmentNumber;
-
-		AgencyFragments(int fragment) {
-			fragmentNumber = fragment;
-		}
-
-		public int nr() {
-			return fragmentNumber;
-		}
 	}
 }

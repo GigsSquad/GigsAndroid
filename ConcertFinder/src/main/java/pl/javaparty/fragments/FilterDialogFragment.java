@@ -1,6 +1,6 @@
 package pl.javaparty.fragments;
 
-import pl.javaparty.items.Concert.AgencyName;
+import pl.javaparty.items.Agencies;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -12,6 +12,7 @@ import android.os.Bundle;
 public class FilterDialogFragment extends DialogFragment
 {
 	boolean[] checked;
+    CharSequence[] agenciesNames;
 	FilterDialogListener mListener;
 
 	public interface FilterDialogListener
@@ -24,50 +25,48 @@ public class FilterDialogFragment extends DialogFragment
 	public Dialog onCreateDialog(Bundle savedInstanceState)
 	{	
 		checked = getArguments().getBooleanArray("CHECKED");
-		
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setTitle("Filtruj agencje:")
-		.setMultiChoiceItems(getArguments().getCharSequenceArray("AGENCIES"), checked, new OnMultiChoiceClickListener()
-		{
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which, boolean isChecked)
-			{
-				checked[which] = isChecked;	
+
+        agenciesNames = new CharSequence[checked.length];
+        int i =0;
+        for(Agencies a: Agencies.values())
+        {
+            if(a.fragmentNumber>=700)
+                agenciesNames[i++] = a.toString;
+        }
+
+		final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Filtruj agencje:")
+                .setMultiChoiceItems(agenciesNames, checked, new OnMultiChoiceClickListener()
+                {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which, boolean isChecked)
+                    {
+                        checked[which] = isChecked;
 			}
-		})
-		.setPositiveButton("OK", new OnClickListener()
-		{
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which)
-			{
-				mListener.onDialogPositiveClick(checked);	
+                })
+                .setPositiveButton("OK", new OnClickListener()
+                {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        if (mListener != null)
+                            mListener.onDialogPositiveClick(checked);
 			}
-		})
-		.setNegativeButton("Anuluj", new OnClickListener()//TODO zmienic xD
-		{
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which)
-			{
-				mListener.onDialogNegativeClick(null);
+                })
+                .setNegativeButton("Anuluj", new OnClickListener()//TODO zmienic xD
+                {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        if (mListener != null)
+                            mListener.onDialogNegativeClick(null);
 			}
 		});
 
 		return builder.create();
-	}
-
-	private CharSequence[] getAgencies()
-	{
-		AgencyName[] agencies = AgencyName.values();
-		CharSequence[] returned = new CharSequence[agencies.length];
-		int i = 0;
-		for(AgencyName a: agencies)
-		{
-			returned[i++] = a.name();
-		}
-		return returned;
 	}
 	
 	public void setFilterDialogListener(FilterDialogListener f)
