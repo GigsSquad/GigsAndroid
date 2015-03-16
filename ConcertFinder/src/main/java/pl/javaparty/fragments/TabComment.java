@@ -3,169 +3,155 @@ package pl.javaparty.fragments;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import pl.javaparty.concertfinder.R;
+import pl.javaparty.enums.PHPurls;
 import pl.javaparty.prefs.Prefs;
+import pl.javaparty.sql.JSONthing;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Kuba on 23/02/2015.
  */
 public class TabComment extends Fragment {
 
-	private Button addComment;
-	private TextView concertInfo;
-	private EditText commentField;
-	private ListView commentListView;
-	private int ID;
-	private ProgressDialog pDialog;
-	ArrayList commentList;
+    Button addComment;
+    ProgressDialog loadingDialog;
+    ListView commentListView;
+    EditText commentField;
+    TextView concertInfo;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
-		View view = inflater.inflate(R.layout.tab_fragment_comment, container, false);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
+        View view = inflater.inflate(R.layout.tab_fragment_comment, container, false);
 
-		addComment = (Button) view.findViewById(R.id.add_comment);
-		concertInfo = (TextView) view.findViewById(R.id.comment_info);
-		commentField = (EditText) view.findViewById(R.id.user_comment);
-		commentListView = (ListView) view.findViewById(R.id.comments);
-		commentList = new ArrayList<>();
-		//todo ustawienie Visibility na gone do dodawania komentarzy jeśli już dodalismy komentarz
 
-		ID = (getArguments().getInt("ID", -1));
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
 
-		addComment.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				boolean commentAdded = false;
-				try {
-					commentAdded = insertComment(Prefs.getUserID(getActivity()), ID, commentField.getText().toString());
-				} catch (JSONException e) {
-					e.printStackTrace();
-				} finally {
-					if (commentAdded) {
-						Toast.makeText(getActivity(), "Komentarz został dodany", Toast.LENGTH_LONG).show();
-						commentField.setVisibility(View.GONE);
-						addComment.setVisibility(View.GONE);
-					}
-				}
-			}
-		});
+        loadingDialog = new ProgressDialog(getActivity());
+        loadingDialog.setCancelable(false);
 
-		new getComments().execute();
+        addComment = (Button) view.findViewById(R.id.add_comment);
+        concertInfo = (TextView) view.findViewById(R.id.comment_info);
+        commentField = (EditText) view.findViewById(R.id.user_comment);
+        commentListView = (ListView) view.findViewById(R.id.comments);
+        //todo ustawienie Visibility na gone do dodawania komentarzy jeśli już dodalismy komentarz
 
-		return view;
-	}
+        addComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new InsertComment().execute();
+            }
+        });
 
-	private boolean insertComment(int userID, int concertID, String comment) throws JSONException {
-		HttpClient httpclient = new DefaultHttpClient();
-		HttpPost httppost = new HttpPost("http://37.187.52.160/comments.php");
-		JSONObject json = new JSONObject();
 
-		try {
-			httppost.setEntity(new ByteArrayEntity(json.toString().getBytes("UTF-8")));
-			json.put("userID", userID);
-			json.put("concertID", concertID);
-			json.put("comment", comment);
-			//data i godzina z serwera żeby niezaginać czasoprzestrzeni
+        return view;
+    }
 
-			JSONArray postjson = new JSONArray();
-			postjson.put(json);
+    @Override
+    public void onResume() {
+        new DownloadComments().execute();
+        super.onResume();
+    }
 
-			// Post the data:
-			httppost.setHeader("json", json.toString());
-			httppost.getParams().setParameter("jsonpost", postjson);
+    class InsertComment extends AsyncTask<String, Void, String> {
 
-			// Execute HTTP Post Request
-			System.out.print(json);
-			HttpResponse response = httpclient.execute(httppost);
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            loadingDialog.setMessage(getString(R.string.add_comment_progress));
+            loadingDialog.show();
+        }
 
-			// for JSON:
-			if (response != null) {
-				InputStream is = response.getEntity().getContent();
+        @Override
+        protected String doInBackground(String... args) {
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("user_id", Prefs.getUserID(getActivity()) + ""));
+            params.add(new BasicNameValuePair("concert_id", getArguments().getInt("ID", -1) + ""));
+            params.add(new BasicNameValuePair("comment", commentField.getText().toString()));
+            JSONthing.makeRequest(PHPurls.insertComment, params); //TIGHT and ELEGANT
+            return null;
+        }
 
-				BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-				StringBuilder sb = new StringBuilder();
+        @Override
+        protected void onPostExecute(String s) {
+            loadingDialog.dismiss();
 
-				String line = null;
-				try {
-					while ((line = reader.readLine()) != null) {
-						sb.append(line + "\n");
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-					return false;
-				} finally {
-					try {
-						is.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-						return false;
-					}
-				}
+            addComment.setEnabled(false); //blokujemy możliwość wysłania kolejnych komentarzy
+            commentField.setEnabled(false); //TODO: nie wiem czy dawać do na GONE czy blokować żeby móc np później edytować komentarz
 
-				Log.i("JSON", "Co wypluł serwer: " + sb.toString());
-			}
+            new DownloadComments().execute(); //po dodaniu komentarza niech pobierze od nowa komentarze zeby wyświetlić nasz
+            super.onPostExecute(s);
+        }
+    }
 
-		} catch (ClientProtocolException cpe) {
-			cpe.printStackTrace();
-			return false;
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-			return false;
-		}
-		Log.i("JSON", "Dodano komentarz");
-		return true;
-	}
+    class DownloadComments extends AsyncTask<String, Void, String> {
 
-	private class getComments extends AsyncTask<Void, Void, Void> {
+        ArrayAdapter arrayAdapter = null;
+        ArrayList commentArrayList = null;
 
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			// Showing progress dialog
-			pDialog = new ProgressDialog(getActivity());
-			pDialog.setMessage("Pobieram komentarze...");
-			pDialog.setCancelable(false);
-			pDialog.show();
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            loadingDialog.setMessage(getString(R.string.download_comments_progress));
+            loadingDialog.show();
+            commentArrayList = new ArrayList<>();
+        }
 
-		}
+        @Override
+        protected String doInBackground(String... args) {
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            JSONObject mJsonObject = JSONthing.getThisShit(PHPurls.getComments, params);
+            Log.d("All: ", mJsonObject.toString());
 
-		@Override
-		protected Void doInBackground(Void... arg0) {
-			return null;
-		}
+            try {
+                int success = mJsonObject.getInt("success");
+                if (success == 1) {
+                    JSONArray mJsonArray = mJsonObject.getJSONArray("comments");
+                    for (int i = 0; i < mJsonArray.length(); i++) {
+                        JSONObject JSONcomment = mJsonArray.getJSONObject(i);
+                        String author = JSONcomment.getString("user_id");
+                        //String concert_id = JSONcomment.getString("concert_id");
+                        String comment = JSONcomment.getString("comment");
 
-		@Override
-		protected void onPostExecute(Void result) {
-			super.onPostExecute(result);
-			if (pDialog.isShowing())
-				pDialog.dismiss();
+                        commentArrayList.add(comment + " ~" + author);
+                    }
+                    arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, commentArrayList);
+                }
 
-			ListAdapter adapter = new SimpleAdapter(getActivity(), commentList, android.R.layout.simple_list_item_1, new String[] { "author", "comment" }, new int[] {});
-			commentListView.setAdapter(adapter);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
-		}
+            return null;
+        }
 
-	}
+        @Override
+        protected void onPostExecute(String s) {
+            commentListView.setAdapter(arrayAdapter);
+
+            if (!commentArrayList.isEmpty())
+                concertInfo.setVisibility(View.GONE);
+
+            loadingDialog.dismiss();
+            super.onPostExecute(s);
+        }
+    }
 
 }

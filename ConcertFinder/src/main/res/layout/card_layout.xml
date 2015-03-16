@@ -1,9 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/card"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/card"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
 
     <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -55,7 +54,6 @@
                     android:shadowDx="1"
                     android:shadowDy="1"
                     android:shadowRadius="2"
-                    android:text="title"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="#ffffff"
                     android:textSize="28sp"
@@ -92,7 +90,6 @@
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp"
                             android:paddingTop="4dp"
-                            android:text="miejsce"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="#616161"
                             android:textSize="18sp"
@@ -119,7 +116,6 @@
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp"
                             android:paddingTop="4dp"
-                            android:text="data"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="#616161"
                             android:textSize="18sp"

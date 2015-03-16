@@ -2,28 +2,27 @@
 
     <!-- Application theme. -->
     <style name="AppTheme" parent="ThemeOverlay.AppCompat.Dark">
-        <item name="android:textAppearance">@android:style/TextAppearance</item>
-        <item name="colorControlNormal">#90CAF9</item>
-        <item name="android:textColorPrimary">#90CAF9</item>
-        <item name="android:textColorSecondary">#90CAF9</item>
-        <item name="android:textColorTertiary">#90CAF9</item>
-        <item name="android:textColorPrimaryInverse">#90CAF9</item>
-        <item name="android:textColorSecondaryInverse">#90CAF9</item>
-        <item name="android:textColorTertiaryInverse">#90CAF9</item>
+
+        <item name="android:textColorPrimary">@color/blue</item>
+        <item name="android:textColorSecondary">@color/blue</item>
+        <item name="android:textColorTertiary">@color/blue</item>
         <item name="android:tabWidgetStyle">@style/CustomTabWidget</item>
-        <item name="colorPrimary">#90CAF9</item>
-        <item name="colorPrimaryDark">#90CAF9</item>
-        <item name="colorAccent">#90CAF9</item>
 
-
+        <!-- Main theme colors -->
+        <!--   your app branding color for the app bar -->
+        <item name="android:colorPrimary">@color/dark</item>
+        <!--   darker variant for the status bar and contextual app bars -->
+        <item name="android:colorPrimaryDark">@color/dark</item>
+        <!--   theme UI controls like checkboxes and text fields -->
+        <item name="android:colorAccent">@color/dark</item>
     </style>
 
-    <style name="CustomTabWidget" parent="@android:style/Widget.TabWidget">
-        <item name="android:textColor">#90CAF9</item>
-        <item name="android:colorActivatedHighlight">#90CAF9</item>
-        <item name="android:textColorHighlight">#90CAF9</item>
+    <style name="CustomTabWidget" parent="@android:style/Theme.Holo">
+        <item name="android:textColor">@color/blue</item>
+        <item name="android:background">@color/dark</item>
+        <item name="android:colorActivatedHighlight">@color/blue</item>
+        <item name="android:textColorHighlight">@color/blue</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
     </style>
-
 </resources>

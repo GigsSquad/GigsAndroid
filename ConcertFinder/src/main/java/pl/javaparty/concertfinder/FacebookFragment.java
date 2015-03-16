@@ -1,9 +1,11 @@
 package pl.javaparty.concertfinder;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
@@ -16,210 +18,176 @@ import android.widget.Toast;
 import com.facebook.*;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import pl.javaparty.enums.PHPurls;
 import pl.javaparty.prefs.Prefs;
+import pl.javaparty.sql.JSONthing;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class FacebookFragment extends Fragment {
 
-	private static final String TAG = "MainFragment";
-	private UiLifecycleHelper uiHelper;
-	private Session.StatusCallback callback = new Session.StatusCallback() {
-		@Override
-		public void call(Session session, SessionState state, Exception exception) {
-			onSessionStateChange(session, state, exception);
-		}
-	};
+    private UiLifecycleHelper uiHelper;
+    private Session.StatusCallback callback = new Session.StatusCallback() {
+        @Override
+        public void call(Session session, SessionState state, Exception exception) {
+            onSessionStateChange(session, state, exception);
+        }
+    };
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		uiHelper = new UiLifecycleHelper(getActivity(), callback);
-		uiHelper.onCreate(savedInstanceState);
-	}
+    ProgressDialog loadingDialog;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater,
-			ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.activity_splash_screen, container, false);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        uiHelper = new UiLifecycleHelper(getActivity(), callback);
+        uiHelper.onCreate(savedInstanceState);
+    }
 
-		//ja pierdole... potrzebne  bo inaczej rzuca wyjątkiem, bez pozdrowień
-		if (android.os.Build.VERSION.SDK_INT > 9) {
-			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-			StrictMode.setThreadPolicy(policy);
-		}
+    @Override
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.activity_splash_screen, container, false);
 
-		Button skip = (Button) view.findViewById(R.id.skipBtn);
-		skip.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
 
-				Intent intent = new Intent(getActivity(), MainActivity.class);
-				startActivity(intent);
-			}
-		});
+        loadingDialog = new ProgressDialog(getActivity());
+        loadingDialog.setCancelable(false);
 
-		//		Button spotifyBtn = (Button) view.findViewById(R.id.spotifyBtn);
-		//		spotifyBtn.setOnClickListener(new View.OnClickListener() {
-		//			@Override public void onClick(View v) {
-		//				Intent intent = new Intent(getActivity(), SpotifyActivity.class);
-		//				startActivity(intent);
-		//			}
-		//		});
+        //ja pierdole... potrzebne  bo inaczej rzuca wyjątkiem, bez pozdrowień
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        Button skip = (Button) view.findViewById(R.id.skipBtn);
+        skip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-		LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
-		authButton.setFragment(this);
-		authButton.setReadPermissions(Arrays.asList("user_location", "user_birthday", "user_likes", "email"));
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
-		return view;
-	}
+        LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
+        authButton.setFragment(this);
+        authButton.setReadPermissions(Arrays.asList("user_location", "user_birthday", "user_likes", "email"));
 
-	private boolean isOnline() {
-		ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo netInfo = cm.getActiveNetworkInfo();
-		return netInfo != null && netInfo.isConnectedOrConnecting();
-	}
+        return view;
+    }
 
-	private void onSessionStateChange(Session session, SessionState state, Exception exception) {
-		if (state.isOpened()) {
-			Log.i(TAG, "Logged in...");
+    private boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
 
-			// Request user data and show the results
-			Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
+    private void onSessionStateChange(Session session, SessionState state, Exception exception) {
+        if (state.isOpened()) {
+            Log.i("FB", "Logged in...");
 
-				@Override
-				public void onCompleted(GraphUser user, Response response) {
-					if (user != null && isOnline()) {
-						Toast.makeText(getActivity(), "Uszanowanko, " + user.getFirstName(), Toast.LENGTH_SHORT).show();
-						Prefs.setCity(getActivity(), "" + user.getLocation().getProperty("name").toString().trim());
-						//TODO jak chcesz zrobić rejstrację to jestes w dobrym miejscu
-						//TODO tutaj jakieś rejestracje się porobi i dałnlołder który bedzie pobierać nagie foteczki if(sex() == woman && scale() >= 8)
-						try {
-							insertUser(user.getFirstName(), user.getLastName(), user.getProperty("email").toString(),
-									user.getBirthday(), user.getLocation().getProperty("name").toString(), user.getId());
+            // Request user data and show the results
+            Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
 
-							Intent intent = new Intent(getActivity(), MainActivity.class);
-							startActivity(intent);
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				}
-			});
+                @Override
+                public void onCompleted(GraphUser user, Response response) {
+                    if (user != null && isOnline()) {
+                        String[] columns = new String[10];
+                        columns[0] = user.getFirstName().trim();
+                        columns[1] = user.getLastName().trim();
+                        columns[2] = user.getProperty("email").toString().trim();
+                        columns[3] = user.getBirthday().trim();
+                        columns[4] = user.getLocation().getProperty("name").toString().trim();
+                        columns[5] = user.getId();
+                        new InsertUser(columns).execute();
 
-		} else if (state.isClosed()) {
-			Log.i(TAG, "Logged out...");
-		}
-	}
+                        Prefs.setCity(getActivity(), columns[4]);
+                        Toast.makeText(getActivity(), getString(R.string.hello) + ", " + columns[0], Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
 
-	@Override
-	public void onResume() {
-		super.onResume();
+        } else if (state.isClosed())
 
-		Session session = Session.getActiveSession();
+        {
+            Log.i("FB", "Logged out...");
+        }
+    }
 
-		if (session != null &&
-				(session.isOpened() || session.isClosed())) {
-			onSessionStateChange(session, session.getState(), null);
-		}
+    @Override
+    public void onResume() {
+        super.onResume();
 
-		uiHelper.onResume();
-	}
+        Session session = Session.getActiveSession();
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		uiHelper.onActivityResult(requestCode, resultCode, data);
-	}
+        if (session != null &&
+                (session.isOpened() || session.isClosed())) {
+            onSessionStateChange(session, session.getState(), null);
+        }
 
-	@Override
-	public void onPause() {
-		super.onPause();
-		uiHelper.onPause();
-	}
+        uiHelper.onResume();
+    }
 
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		uiHelper.onDestroy();
-	}
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        uiHelper.onActivityResult(requestCode, resultCode, data);
+    }
 
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		uiHelper.onSaveInstanceState(outState);
-	}
+    @Override
+    public void onPause() {
+        super.onPause();
+        uiHelper.onPause();
+    }
 
-	//dodaje użytkownika do bazy
-	private void insertUser(String firstName, String lastName, String email, String birthday, String location, String fbId) throws JSONException {
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        uiHelper.onDestroy();
+    }
 
-		HttpClient httpclient = new DefaultHttpClient();
-		HttpPost httppost = new HttpPost("http://www.javaparty.com.pl/register.php");
-		JSONObject json = new JSONObject();
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        uiHelper.onSaveInstanceState(outState);
+    }
 
-		try {
-			httppost.setEntity(new ByteArrayEntity(json.toString().getBytes("UTF8")));
-			json.put("firstName", firstName);
-			json.put("lastName", lastName);
-			json.put("email", email);
-			json.put("birthday", birthday);
-			json.put("location", location);
-			json.put("fbId", fbId);
 
-			JSONArray postjson = new JSONArray();
-			postjson.put(json);
+    class InsertUser extends AsyncTask<String, Void, String> {
 
-			// Post the data:
-			httppost.setHeader("json", json.toString());
-			httppost.getParams().setParameter("jsonpost", postjson);
+        String[] array = new String[10];
 
-			// Execute HTTP Post Request
-			System.out.print(json);
-			HttpResponse response = httpclient.execute(httppost);
+        public InsertUser(String[] array) {
+            this.array = Arrays.copyOf(array, array.length, String[].class);
+        }
 
-			// for JSON:
-			if (response != null) {
-				InputStream is = response.getEntity().getContent();
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            loadingDialog.setMessage(getString(R.string.add_comment_progress));
+            loadingDialog.show();
+        }
 
-				BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-				StringBuilder sb = new StringBuilder();
+        @Override
+        protected String doInBackground(String... args) {
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("firstName", array[0]));
+            params.add(new BasicNameValuePair("lastName", array[1]));
+            params.add(new BasicNameValuePair("email", array[2]));
+            params.add(new BasicNameValuePair("birthday", array[3]));
+            params.add(new BasicNameValuePair("location", array[4]));
+            params.add(new BasicNameValuePair("fb_id", array[5]));
+            JSONthing.makeRequest(PHPurls.login, params); //TIGHT and ELEGANT
+            return null;
+        }
 
-				String line = null;
-				try {
-					while ((line = reader.readLine()) != null) {
-						sb.append(line);
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				} finally {
-					try {
-						is.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-
-				Log.i("JSON", "Co wypluł serwer: " + sb.toString());
-				Prefs.setUserID(getActivity(), Integer.parseInt(sb.toString()));
-			}
-
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
-		Log.i("JSON", "REJESTRACJA POSZŁA");
-	}
+        @Override
+        protected void onPostExecute(String s) {
+            loadingDialog.dismiss();
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            startActivity(intent);
+            super.onPostExecute(s);
+        }
+    }
 }

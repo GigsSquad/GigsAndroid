@@ -20,7 +20,7 @@
         <item>@drawable/ic_action_settings</item>
         <item>@drawable/ic_action_about</item>
     </array>
-    
+
     <string-array name="agencje_submenu">
         <item>AlaterArt</item>
         <item>Ebilet</item>

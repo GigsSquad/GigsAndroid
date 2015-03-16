@@ -17,7 +17,7 @@
             android:textColor="#2196F3"
             android:textColorHighlight="#2196F3"
             android:textColorLink="#2196F3"
-            android:hint="Wpisz tu swoje miasto">
+            android:hint="@string/your_city_hint">
 
         <requestFocus/>
     </AutoCompleteTextView>
@@ -38,7 +38,7 @@
                 android:id="@+id/saveSettingsButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Zapisz"
+                android:text="@string/save"
                 android:layout_above="@+id/authButton" android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
                 android:layout_alignParentRight="true" android:layout_alignParentEnd="true"/>
 
@@ -46,7 +46,7 @@
                 android:id="@+id/clearFilesButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Wyczyść pamięć"
+                android:text="@string/clear"
                 android:layout_above="@+id/saveSettingsButton" android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
                 android:layout_alignParentRight="true" android:layout_alignParentEnd="true"/>
 

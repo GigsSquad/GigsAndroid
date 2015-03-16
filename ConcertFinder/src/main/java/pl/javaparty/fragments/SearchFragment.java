@@ -31,9 +31,9 @@ public class SearchFragment extends Fragment{
 		for (AgencyName val : vals) {
 			checkedAgencies.put(val.name(), true);
 		}
-		
-		getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActivity().getActionBar().setHomeButtonEnabled(true);
+
+        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActivity().getActionBar().setHomeButtonEnabled(true);
 		
 		setHasOptionsMenu(true);
 		conditions = new Bundle();
@@ -42,11 +42,11 @@ public class SearchFragment extends Fragment{
 
 		mTabHost = new FragmentTabHost(getActivity());
 		mTabHost.setup(getActivity(), getChildFragmentManager(), R.id.realtabcontent);
-		
-		mTabHost.addTab(mTabHost.newTabSpec("Artist").setIndicator("Artysta"), ArtistSearch.class, conditions);
-		mTabHost.addTab(mTabHost.newTabSpec("Place").setIndicator("Miejsce"), PlaceSearch.class, conditions);
-		mTabHost.addTab(mTabHost.newTabSpec("Date").setIndicator("Data"), DateSearch.class, conditions);
-		for (int i = 0; i < 3; i++)
+
+        mTabHost.addTab(mTabHost.newTabSpec("Artist").setIndicator(getString(R.string.artist)), ArtistSearch.class, conditions);
+        mTabHost.addTab(mTabHost.newTabSpec("Place").setIndicator(getString(R.string.place)), PlaceSearch.class, conditions);
+        mTabHost.addTab(mTabHost.newTabSpec("Date").setIndicator(getString(R.string.date)), DateSearch.class, conditions);
+        for (int i = 0; i < 3; i++)
 			mTabHost.getTabWidget().getChildAt(i).setFocusable(false);
 		
 		return mTabHost;

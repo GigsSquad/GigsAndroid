@@ -32,7 +32,7 @@
         android:layout_alignBottom="@+id/bTo"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/bFr"
-        android:text="Szukaj" />
+        android:text="@string/search"/>
 
     <Button
         android:id="@+id/bFr"
@@ -41,7 +41,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/bSe"
-        android:text="Ustaw datę od" />
+        android:text="@string/date_from"/>
 
     <Button
         android:id="@+id/bTo"
@@ -50,6 +50,6 @@
         android:layout_alignParentLeft="true"
         android:layout_alignRight="@+id/bFr"
         android:layout_below="@+id/bFr"
-        android:text="Ustaw datę do" />
+        android:text="@string/date_to"/>
 
 </RelativeLayout>

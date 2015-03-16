@@ -26,8 +26,9 @@ public class ImageLoader {
 	ExecutorService executorService;
 	Context context;
 	private Map<ImageView, String> imageViews; //do tej pory uzyte ImageView i nazwa zespolu do niego przypisana
+    private static ImageLoader iloader;
 
-	public ImageLoader(Context context) {
+	private ImageLoader(Context context) {
 		this.context = context;
 		imageViews = Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
 		fileExplorer = new FileExplorer(context);
@@ -35,6 +36,15 @@ public class ImageLoader {
 		executorService = Executors.newFixedThreadPool(5);
 
 	}
+
+    public static ImageLoader init(Context context)
+    {
+        if(iloader==null)
+        {
+            iloader = new ImageLoader(context);
+        }
+        return iloader;
+    }
 
 	private static String parseName(String bandName) {
 		String edited = bandName;

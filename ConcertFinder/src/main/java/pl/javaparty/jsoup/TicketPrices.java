@@ -105,10 +105,13 @@ public class TicketPrices extends AsyncTask<String, Void, String> {
 			Element el = doc.getElementsByClass("kk2").get(6);
 			return getRealPrices(el.text());
 		} catch (IOException e) {
-			// Log.i("PobieranieCenyKoncertu", "Blad podczas pobierania cennika");
-			return null;
-		}
-	}
+            Log.i("PobieranieCenyKoncertu", "Blad podczas pobierania cennika");
+            return "";
+        } catch (RuntimeException re) {
+            Log.i("PobieranieCenyKoncertu", "Blad podczas pobierania cennika");
+            return "";
+        }
+    }
 
 	private String getRealPrices(String rawString) {
 		String[] potentialPrices;
