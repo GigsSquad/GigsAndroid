@@ -11,6 +11,7 @@
         <item>Informacje</item>
         <item>Agencje</item>
         <item>Bileterie</item>
+        <item>Festiwale</item>
     </string-array>
 
     <array name="nav_menu_icons">
@@ -22,10 +23,9 @@
         <item>@drawable/ic_action_about</item>
     </array>
     
-    <string-array name="agencje_submenu">
-        <item>GoAhead</item>
-        <item>Kayax</item>
-        <item>Prestige</item>
+    <string-array name="events_submenu">
+        <item>Jarocin</item>
+        <item>LifeFestival</item>
     </string-array>
 
 </resources>

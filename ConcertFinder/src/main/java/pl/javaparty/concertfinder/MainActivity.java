@@ -75,6 +75,8 @@ public class MainActivity extends FragmentActivity {
                 ticketers.add(a.toString);
         }
 
+        ArrayList<String> events = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.events_submenu)));
+
 		navDrawerItems = new ArrayList<>();
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
@@ -85,6 +87,7 @@ public class MainActivity extends FragmentActivity {
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[6], navMenuIcons.getResourceId(5, -1)));
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[7], navMenuIcons.getResourceId(4, -1), agencies));//TODO icona
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[8], navMenuIcons.getResourceId(3, -1), ticketers));
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[9]/*TODO!*/, navMenuIcons.getResourceId(3, -1), events));
 		navMenuIcons.recycle();
 
 		adapter = new NavDrawerAdapter(context, navDrawerItems);
@@ -114,7 +117,6 @@ public class MainActivity extends FragmentActivity {
 			@Override
 			public boolean onGroupClick(ExpandableListView parent, View v,
 					int groupPosition, long id) {
-				Log.i("DRAWER", "Group: " + groupPosition);
 				if (navDrawerItems.get(groupPosition).getSubmenu() == null) {
 					drawerLayout.closeDrawers();
 					if (groupPosition == 4)
@@ -132,11 +134,16 @@ public class MainActivity extends FragmentActivity {
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v,
 					int groupPosition, int childPosition, long id) {
-				Log.i("DRAWER", "Child: " + childPosition);
 				drawerLayout.closeDrawers();
-				if (currentFragment != groupPosition || currentFragment != 30 + childPosition) {
+				if (currentFragment != groupPosition*100 + childPosition && groupPosition < 9) {
 					changeFragment(groupPosition*100 + childPosition);
+                    return true;
 				}
+                else if (groupPosition == 9)
+                {
+                    changeFragment(groupPosition*10 + childPosition);
+                    return true;
+                }
 				return false;
 			}
 
@@ -225,8 +232,16 @@ public class MainActivity extends FragmentActivity {
 			fragment = new SettingsFragment();
 		else if (position == 6)
 			fragment = new AboutFragment();
+        else if (position >= 90 && position <100)
+        {
+            FestivalFragment ffragment = new FestivalFragment();
+            if(position%90 == 0)
+                ffragment.setFestival("Jarocin Festival", R.drawable.jarocin);
+            else if(position%90 == 1)
+                ffragment.setFestival("Life Festival Oświęcim", R.drawable.lifefestival);
+            fragment = ffragment;
+        }
 		else if (position >= 100) {
-            Log.i("MainActivity", "POS: " + position);
 			RecentFragment rfragment = new RecentFragment();
 			for (Agencies ch : rfragment.checkedAgencies.keySet())
 				if (ch.fragmentNumber != position)
