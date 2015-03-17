@@ -4,6 +4,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -17,7 +20,14 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
+import android.widget.Toast;
+import com.google.android.gms.maps.model.LatLng;
+import org.apache.http.NameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import pl.javaparty.adapters.NavDrawerAdapter;
+import pl.javaparty.enums.PHPurls;
 import pl.javaparty.fragments.*;
 import pl.javaparty.items.Agencies;
 import pl.javaparty.items.NavDrawerItem;
@@ -127,9 +137,9 @@ public class MainActivity extends FragmentActivity {
 					int groupPosition, long id) {
 				if (navDrawerItems.get(groupPosition).getSubmenu() == null) {
 					drawerLayout.closeDrawers();
-					if (groupPosition == 4)
-						dbu.update(new Refresh());
-					else if (currentFragment != groupPosition)
+                    if (groupPosition == 4 && isOnline())
+                        new DownloadConcerts().execute();
+                    else if (currentFragment != groupPosition)
 						changeFragment(groupPosition);
 					return true;
 				}

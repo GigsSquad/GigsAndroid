@@ -1,12 +1,5 @@
 package pl.javaparty.adapters;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import pl.javaparty.concertfinder.MainActivity;
-import pl.javaparty.concertfinder.R;
-import pl.javaparty.imageloader.ImageLoader;
-import pl.javaparty.items.Concert;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
@@ -18,6 +11,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import pl.javaparty.concertfinder.MainActivity;
+import pl.javaparty.concertfinder.R;
+import pl.javaparty.imageloader.ImageLoader;
+import pl.javaparty.items.Concert;
+
+import java.util.ArrayList;
 
 public class ConcertAdapter extends ArrayAdapter<Concert> {
 
@@ -69,7 +68,6 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 			holder.title.setTypeface(tf);
 			holder.place.setTypeface(tf);
 			holder.date.setTypeface(tf);
-
 			convertView.setTag(holder);
 		} else
 			holder = (ViewHolder) convertView.getTag();

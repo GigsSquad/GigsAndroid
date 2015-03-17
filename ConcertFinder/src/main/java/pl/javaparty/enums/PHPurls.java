@@ -1,6 +1,7 @@
 package pl.javaparty.enums;
 
 /**
+ *
  * Created by Jakub on 2015-03-13.
  */
 public enum PHPurls {

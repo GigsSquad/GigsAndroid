@@ -46,8 +46,8 @@ public class ArtistSearch extends Fragment {
         ArrayList<String> artists = new ArrayList<>(Arrays.asList(dbm.getArtists(filter)));
         adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, dbm.getFutureArtists(filter));
 
-		searchBox.setAdapter(adapterSearchBox);
-		searchBox.setThreshold(1);
+        searchBox.setAdapter(adapterSearchBox);
+        searchBox.setThreshold(1);
 
         searchBox.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -104,31 +104,32 @@ public class ArtistSearch extends Fragment {
                             " " + getString(R.string.concerts_unavailable_for) + " " + artist, Toast.LENGTH_LONG).show();
             }
         });
-	@Override
-	public void onResume()
-	{
-		super.onResume();
-		if (adapter != null)
-		{
-			concertList.setAdapter(adapter);
-			concertList.setSelection(lastPosition);
-		}
-		if (lastSearching != null)
-			getActivity().getActionBar().setTitle("Szukaj: " + lastSearching);
-	}
-	
-	public void refresh()
-	{
-		String filter = getArguments().getString("CONDITIONS");
-		//adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, dbm.getArtists(filter));
-        if(adapter!=null)
-        {
+
+        return view;
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (adapter != null) {
+            concertList.setAdapter(adapter);
+            concertList.setSelection(lastPosition);
+        }
+        if (lastSearching != null)
+            getActivity().getActionBar().setTitle("Szukaj: " + lastSearching);
+    }
+
+    public void refresh() {
+        String filter = getArguments().getString("CONDITIONS");
+        //adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, dbm.getArtists(filter));
+        if (adapter != null) {
             adapter.changeData(dbm.getConcertsByArtist(lastSearching, filter));
         }
 
         adapterSearchBox.clear();
         adapterSearchBox.addAll(dbm.getArtists(filter));
         adapterSearchBox.notifyDataSetChanged();
-		//searchBox.setAdapter(adapterSearchBox);
-	}
+        //searchBox.setAdapter(adapterSearchBox);
+    }
 }

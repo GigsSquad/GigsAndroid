@@ -9,13 +9,13 @@ import java.util.TreeMap;
 public enum Agencies
 {
     ALTERART(0, "Alterart"),
-    EBILET(800, "EBilet"),
+    EBILET(0, "EBilet"),
     GOAHEAD(700, "GoAhead"),
     KAYAX(701, "Kayax"),
     LIVENATION(0, "Livenation"),
     PRESTIGE(702, "Prestige"),
-    SONGKICK(801, "SongKick"),
-    TICKETPRO(802, "TicketPro");
+    SONGKICK(0, "SongKick"),
+    TICKETPRO(0, "TicketPro");
 
     public int fragmentNumber;
     public String toString;

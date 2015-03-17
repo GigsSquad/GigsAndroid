@@ -20,8 +20,8 @@ public class Concert {
 	double distance;
 	// private List<Address> addressList; // do czego to jest? nie używane nigdzie
 
-	public Concert(int ID, String artist, String city, String spot, int day, int month, int year, AgencyName agency, String url, String lat, String lon,double dist) {
-		this.ID = ID;
+    public Concert(int ID, String artist, String city, String spot, int day, int month, int year, Agencies agency, String url, String lat, String lon, double dist) {
+        this.ID = ID;
 		this.agency = agency;
 		this.artist = artist.trim();
 		this.city = city.trim();
