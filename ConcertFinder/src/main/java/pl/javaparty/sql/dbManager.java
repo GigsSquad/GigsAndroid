@@ -415,18 +415,18 @@ public class dbManager extends SQLiteOpenHelper {
 
     public Concert[] getFutureConcertsByArtist(String artist, String filter) {
 
-        // String condition = "ARTIST = '"+artist+"' AND (" + filter + ")";
-        //return getFutureConcerts(condition);
-        Calendar today = Calendar.getInstance();
-        int[] date = new int[]{today.get(Calendar.DAY_OF_MONTH), today.get(Calendar.MONTH) + 1, today.get(Calendar.YEAR)};
-        Concert[] firstPart = getConcertsByDateRange(date[0], date[1], date[2], date[0], (date[1] + 1) % 12, date[2], filter, "DIST");
-        Concert[] secondPart = getConcertsByDateRange(date[0], (date[1] + 1) % 12, date[2], 32, 12, 3000, filter, "YEAR, MONTH, DAY, DIST");
-//        for(int i = 0; i<firstPart.length;i++)
-//        {
-//            Log.i("firstPartConcertARTYSTA",firstPart[i].getArtist());
-//            Log.i("firstPartConcertARTYSTA",String.valueOf(firstPart[i].getDistance()));
-//        }
-        return joinConcertArray(firstPart, secondPart);
+        String condition = "ARTIST = '"+artist+"' AND (" + filter + ")";
+        return getFutureConcerts(condition);
+//        Calendar today = Calendar.getInstance();
+//        int[] date = new int[]{today.get(Calendar.DAY_OF_MONTH), today.get(Calendar.MONTH) + 1, today.get(Calendar.YEAR)};
+//        Concert[] firstPart = getConcertsByDateRange(date[0], date[1], date[2], date[0], (date[1] + 1) % 12, date[2], filter, "DIST");
+//        Concert[] secondPart = getConcertsByDateRange(date[0], (date[1] + 1) % 12, date[2], 32, 12, 3000, filter, "YEAR, MONTH, DAY, DIST");
+////        for(int i = 0; i<firstPart.length;i++)
+////        {
+////            Log.i("firstPartConcertARTYSTA",firstPart[i].getArtist());
+////            Log.i("firstPartConcertARTYSTA",String.valueOf(firstPart[i].getDistance()));
+////        }
+//        return joinConcertArray(firstPart, secondPart);
     }
 
     public Concert[] joinConcertArray(Concert[] a, Concert[] b) {

@@ -176,7 +176,7 @@ public class RecentFragment extends Fragment {
 
                             checkedAgencies.put(c, checked[i++]);
                         }
-
+                        lastPosition = 0;
                         refresh();
 
                     }
