@@ -101,9 +101,10 @@ public class PastFragment extends Fragment {
         if (array != null &&  array.length != 0)
         {
             Log.i("EMPTYLIST", String.valueOf(array.length));
-            if (showedConcerts >= dbm.getSize(dbManager.CONCERTS_TABLE) - 1)
+            if (showedConcerts >= array.length-1) //dbm.getSize(dbManager.CONCERTS_TABLE) - 1)
             {
-                showedConcerts = dbm.getSize(dbManager.CONCERTS_TABLE) - 1;
+                //showedConcerts = dbm.getSize(dbManager.CONCERTS_TABLE) - 1;
+                showedConcerts = array.length-1;
                 nextButton.setVisibility(View.GONE);
                 return array;
             }
