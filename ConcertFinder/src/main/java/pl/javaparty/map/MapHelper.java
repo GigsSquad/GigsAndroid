@@ -79,9 +79,8 @@ public class MapHelper {
     public Address getAddress(String place) {
         Address address = null;
         try {
+            //TODO ZROBI TO KURWA
             addressList = geoCoder.getFromLocationName(place, 1);
-            while (addressList.size() == 0)
-                addressList = geoCoder.getFromLocationName(place, 1);
             if (addressList.size() > 0)
                 address = addressList.get(0);
         } catch (IOException e) {

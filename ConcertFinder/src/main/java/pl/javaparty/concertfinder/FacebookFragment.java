@@ -97,13 +97,20 @@ public class FacebookFragment extends Fragment {
                         columns[0] = user.getFirstName().trim();
                         columns[1] = user.getLastName().trim();
                         columns[2] = user.getProperty("email").toString().trim();
-                        columns[3] = user.getBirthday().trim();
-                        columns[4] = user.getLocation().getProperty("name").toString().trim();
                         columns[5] = user.getId();
-                        new InsertUser(columns).execute();
+
+                        try {
+                            columns[3] = user.getBirthday().trim();
+                            columns[4] = user.getLocation().getProperty("name").toString().trim();
+                        } catch (NullPointerException e) {
+                            e.printStackTrace();
+                            columns[3] = "";
+                            columns[4] = "";
+                        }
 
                         Prefs.setCity(getActivity(), columns[4]);
                         Toast.makeText(getActivity(), getString(R.string.hello) + ", " + columns[0], Toast.LENGTH_SHORT).show();
+                        new InsertUser(columns).execute();
                     }
                 }
             });
@@ -184,9 +191,11 @@ public class FacebookFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String s) {
-            loadingDialog.dismiss();
-            Intent intent = new Intent(getActivity(), MainActivity.class);
-            startActivity(intent);
+            if (isAdded()) {
+                loadingDialog.dismiss();
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
+            }
             super.onPostExecute(s);
         }
     }

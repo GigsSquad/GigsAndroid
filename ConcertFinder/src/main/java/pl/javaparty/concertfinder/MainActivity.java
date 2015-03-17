@@ -52,6 +52,7 @@ public class MainActivity extends FragmentActivity {
     TypedArray navMenuIcons;
     String[] navMenuTitles;
     ProgressDialog loadingDialog;
+    ProgressDialog mapDialog;
     MapHelper mapHelper;
 
     /* Fragmenty */
@@ -76,6 +77,9 @@ public class MainActivity extends FragmentActivity {
         loadingDialog.setCancelable(false);
         loadingDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         loadingDialog.setProgress(0);
+
+        mapDialog = new ProgressDialog(this);
+        mapDialog.setCancelable(false);
 
         ArrayList<String> agencies = new ArrayList<>();//Arrays.asList(getResources().getStringArray(R.array.agencje_submenu)));
         ArrayList<String> ticketers = new ArrayList<>();
@@ -136,7 +140,7 @@ public class MainActivity extends FragmentActivity {
                     drawerLayout.closeDrawers();
                     if (groupPosition == 4) {
                         if (isOnline())
-                            new DownloadConcerts().execute();
+                            new GetLatLng().execute(); //nowa lepsza kurwa funkcja stary
                         else
                             Toast.makeText(getApplication(), getString(R.string.no_connection), Toast.LENGTH_SHORT).show();
                     } else if (currentFragment != groupPosition)
@@ -223,10 +227,6 @@ public class MainActivity extends FragmentActivity {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
         drawerToggle.syncState();
-
-        if (isOnline())
-            new DownloadConcerts().execute(); //nowa lepsza kurwa funkcja stary
-
         updateCounters();
     }
 
@@ -305,6 +305,42 @@ public class MainActivity extends FragmentActivity {
         return dbMgr;
     }
 
+
+    class GetLatLng extends AsyncTask<String, Void, String> {
+        LatLng latlng;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mapDialog.setMessage("Łączę się z mapami");
+            mapDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String city = Prefs.getCity(getApplicationContext());
+            if (!city.isEmpty()) {
+                try {
+                    latlng = mapHelper.getLatLng(Prefs.getCity(getApplicationContext()));
+                } catch (NullPointerException npexc) {
+                    latlng = new LatLng(50.0528282, 19.972944); //Kraków, bo tam bedzie pokazywana, cwele
+                }
+            }
+            return city;
+        }
+
+        @Override
+        protected void onPostExecute(String city) {
+            if (!city.isEmpty()) {
+                Prefs.setLat(getApplicationContext(), String.valueOf(latlng.latitude));
+                Prefs.setLon(getApplicationContext(), String.valueOf(latlng.longitude));
+            }
+            new DownloadConcerts().execute();
+            mapDialog.dismiss();
+            super.onPostExecute(city);
+        }
+    }
+
     class DownloadConcerts extends AsyncTask<String, Void, String> {
 
         boolean updateNeeded = false;
@@ -322,12 +358,7 @@ public class MainActivity extends FragmentActivity {
             JSONObject mJsonObject = JSONthing.getThisShit(PHPurls.getConcerts, params);
             //Log.d("All: ", mJsonObject.toString());
 
-            LatLng latlng;
-            try {
-                latlng = mapHelper.getLatLng(Prefs.getCity(getApplicationContext()));
-            } catch (NullPointerException npexc) {
-                latlng = new LatLng(50.0528282, 19.972944); //Kraków, bo tam bedzie pokazywana, cwele
-            }
+            LatLng latLng = new LatLng(Double.parseDouble(Prefs.getLon(getApplicationContext())), Double.parseDouble(Prefs.getLat(getApplicationContext())));
 
             try {
                 int success = mJsonObject.getInt("success");
@@ -352,7 +383,10 @@ public class MainActivity extends FragmentActivity {
                         String lat = JSONconcert.getString("lat");
                         String lon = JSONconcert.getString("lon");
 
-                        double distance = mapHelper.inaccurateDistanceTo(new LatLng(Double.parseDouble(lat), Double.parseDouble(lon)), latlng);
+                        double distance = 0;
+                        if (latLng.longitude != -1 || latLng.latitude != -1)
+                            distance = mapHelper.inaccurateDistanceTo(new LatLng(Double.parseDouble(lat), Double.parseDouble(lon)), latLng);
+
                         dbMgr.addConcert(Long.parseLong(id), artist, city, spot, Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year), agency, url, lat, lon, distance);
                         loadingDialog.incrementProgressBy(1);
                     }

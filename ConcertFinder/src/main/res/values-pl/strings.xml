@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Wyszukiwarka koncertów</string>
+    <string name="app_name">GigsMap</string>
     <string name="drawer_open">open drawer</string>
     <string name="drawer_close">close drawer</string>
     <string name="app_id">519087094900041</string>

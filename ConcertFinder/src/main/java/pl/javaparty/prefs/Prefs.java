@@ -32,6 +32,22 @@ public class Prefs {
         getPrefs(context).edit().putInt("USERID", value).commit();
     }
 
+    public static void setLat(Context context, String value) {
+        getPrefs(context).edit().putString("LAT", value).commit();
+    }
+
+    public static void setLon(Context context, String value) {
+        getPrefs(context).edit().putString("LON", value).commit();
+    }
+
+    public static String getLat(Context context) {
+        return getPrefs(context).getString("LAT", "-1");
+    }
+
+    public static String getLon(Context context) {
+        return getPrefs(context).getString("LON", "-1");
+    }
+
     public static int getUserID(Context context) {
         return getPrefs(context).getInt("USERID", -1);
     }
