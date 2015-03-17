@@ -9,13 +9,13 @@ import java.util.TreeMap;
 public enum Agencies
 {
     ALTERART(0, "Alterart"),
-    EBILET(0, "EBilet"),
+    EBILET(800, "EBilet"),
     GOAHEAD(700, "GoAhead"),
     KAYAX(701, "Kayax"),
     LIVENATION(0, "Livenation"),
     PRESTIGE(702, "Prestige"),
-    SONGKICK(0, "SongKick"),
-    TICKETPRO(0, "TicketPro");
+    SONGKICK(801, "SongKick"),
+    TICKETPRO(802, "TicketPro");
 
     public int fragmentNumber;
     public String toString;
@@ -29,14 +29,33 @@ public enum Agencies
     public static class AgenciesMethods
     {
         public static String filterAgencies(Map<Agencies, Boolean> checkedAgencies) {
-            String returned = "'1'='0'";
-            for (Agencies c : checkedAgencies.keySet()) {
-                if (checkedAgencies.get(c)) {
-                    returned += " OR AGENCY = '" + c.name() + "'";
+            String returned = "'1'='1'";
+            if(!allChecked(checkedAgencies))
+            {
+                returned = "'1'='0'";
+                for (Agencies c : checkedAgencies.keySet())
+                {
+                    if (checkedAgencies.get(c))
+                    {
+                        returned += " OR AGENCY = '" + c.name() + "'";
+                    }
                 }
             }
             return returned;
 
+        }
+
+        private static boolean allChecked(Map<Agencies, Boolean> checkedAgencies)
+        {
+            boolean allchecked = true;
+            for(Agencies a : checkedAgencies.keySet())
+            {
+                if (!checkedAgencies.get(a)) {
+                    allchecked = false;
+                    break;
+                }
+            }
+            return allchecked;
         }
 
         public static TreeMap<Agencies, Boolean> initialize()
