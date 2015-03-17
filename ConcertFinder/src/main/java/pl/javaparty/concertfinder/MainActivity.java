@@ -67,7 +67,6 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         navMenuTitles = getResources().getStringArray(R.array.nav_menu);
         navMenuIcons = getResources().obtainTypedArray(R.array.nav_menu_icons);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -77,7 +76,6 @@ public class MainActivity extends FragmentActivity {
         loadingDialog.setCancelable(false);
         loadingDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         loadingDialog.setProgress(0);
-        loadingDialog.setMax(100);
 
         ArrayList<String> agencies = new ArrayList<>();//Arrays.asList(getResources().getStringArray(R.array.agencje_submenu)));
         ArrayList<String> ticketers = new ArrayList<>();
@@ -167,15 +165,12 @@ public class MainActivity extends FragmentActivity {
 
         });
 
-        if (isOnline())
-            new DownloadConcerts().execute(); //nowa lepsza kurwa funkcja stary
-
-        updateCounters();
         // pierwsza inicjalizacja
         fragmentManager.beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
                 android.R.anim.slide_out_right).replace(R.id.content_frame, new RecentFragment()).commit();
         drawerLayout.openDrawer(drawerList);
     }
+
 
     @Override
     public void onBackPressed() {
@@ -228,6 +223,11 @@ public class MainActivity extends FragmentActivity {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
         drawerToggle.syncState();
+
+        if (isOnline())
+            new DownloadConcerts().execute(); //nowa lepsza kurwa funkcja stary
+
+        updateCounters();
     }
 
     @Override
@@ -320,13 +320,13 @@ public class MainActivity extends FragmentActivity {
         protected String doInBackground(String... args) {
             List<NameValuePair> params = new ArrayList<>();
             JSONObject mJsonObject = JSONthing.getThisShit(PHPurls.getConcerts, params);
-            Log.d("All: ", mJsonObject.toString());
+            //Log.d("All: ", mJsonObject.toString());
 
             LatLng latlng;
             try {
-                latlng = mapHelper.getLatLng("Wrocław");
+                latlng = mapHelper.getLatLng(Prefs.getCity(getApplicationContext()));
             } catch (NullPointerException npexc) {
-                latlng = new LatLng(52.2289922, 21.0034725); //Wrocław
+                latlng = new LatLng(50.0528282, 19.972944); //Kraków, bo tam bedzie pokazywana, cwele
             }
 
             try {
@@ -354,7 +354,7 @@ public class MainActivity extends FragmentActivity {
 
                         double distance = mapHelper.inaccurateDistanceTo(new LatLng(Double.parseDouble(lat), Double.parseDouble(lon)), latlng);
                         dbMgr.addConcert(Long.parseLong(id), artist, city, spot, Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year), agency, url, lat, lon, distance);
-                        loadingDialog.setProgress(Integer.parseInt(id));
+                        loadingDialog.incrementProgressBy(1);
                     }
                     updateNeeded = true;
                 }
@@ -365,6 +365,7 @@ public class MainActivity extends FragmentActivity {
 
             return null;
         }
+
 
         @Override
         protected void onPostExecute(String s) {

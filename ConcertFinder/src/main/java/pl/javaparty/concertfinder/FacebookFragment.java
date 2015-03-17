@@ -165,7 +165,7 @@ public class FacebookFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            loadingDialog.setMessage(getString(R.string.add_comment_progress));
+            loadingDialog.setMessage("Logowanie");
             loadingDialog.show();
         }
 
