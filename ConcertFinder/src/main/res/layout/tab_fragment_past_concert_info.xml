@@ -19,7 +19,7 @@
         <ImageView
                 android:id="@+id/dark_past"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="fill_parent"
                 android:alpha="0.7"
                 android:scaleType="fitXY"
                 android:src="@drawable/bg"/>

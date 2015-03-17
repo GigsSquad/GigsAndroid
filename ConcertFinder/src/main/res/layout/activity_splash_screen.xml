@@ -3,30 +3,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:context="pl.javaparty.concertfinder.SplashScreen" android:id="@+id/ut">
-
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/launch_vertical_01"
+            android:scaleType="centerCrop" android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:contentDescription=""/>
 
     <com.facebook.widget.LoginButton
             android:id="@+id/authButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
-            android:layout_alignParentRight="true" android:layout_alignParentEnd="true" android:layout_centerVertical="true" android:layout_marginRight="30dp"
-            android:layout_marginLeft="30dp"/>
+            android:layout_alignParentBottom="true" android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" android:layout_marginBottom="60dp"
+            android:layout_alignParentRight="true" android:layout_alignParentEnd="true"/>
 
 
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/skip"
-            android:id="@+id/skipBtn" android:layout_below="@+id/authButton" android:layout_alignLeft="@+id/authButton"
-            android:layout_alignStart="@+id/authButton" android:layout_alignRight="@+id/authButton" android:layout_alignEnd="@+id/authButton"/>
-    <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/splashbg"
-            android:scaleType="fitEnd" android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:contentDescription=""/>
+            android:id="@+id/skipBtn" android:layout_alignParentBottom="true" android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+
 
 </RelativeLayout>
