@@ -42,6 +42,7 @@ public class PlaceSearch extends Fragment {
 
         searchBox = (AutoCompleteTextView) view.findViewById(R.id.searchBoxPlace);
         concertList = (ListView) view.findViewById(R.id.concertListPlace);
+        switchCon = (Switch) view.findViewById(R.id.switchCon2);
         String filter = getArguments().getString("CONDITIONS");
         ArrayList<String> cities = new ArrayList<>(Arrays.asList(dbm.getCities(filter)));
         adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, cities);

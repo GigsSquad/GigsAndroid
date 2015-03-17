@@ -14,15 +14,17 @@
             android:layout_width="match_parent"
             android:layout_height="53dp" android:layout_gravity="center_horizontal">
         <AutoCompleteTextView android:id="@+id/searchBoxArtist" android:layout_width="wrap_content"
-                              android:layout_height="wrap_content" android:ems="10" android:textColor="#2196F3"
-                              android:textColorHighlight="#2196F3" android:textColorLink="#2196F3"
+                              android:layout_height="wrap_content"
+                              android:textColor="#2196F3"
+                              android:textColorHighlight="#2196F3"
+                              android:textColorLink="#2196F3"
                               android:hint="@string/artist" android:inputType="textAutoComplete"
                               android:layout_weight="0.45"/>
         <Switch
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/switchCon" android:checked="false"
-                android:showText="true" android:textOff="Przeszłe" android:textOn="Przyszłe"/>
+                android:showText="false" android:textOff="Przeszłe" android:textOn="Przyszłe"/>
     </LinearLayout>
     <ListView
         android:id="@+id/concertListArtist"

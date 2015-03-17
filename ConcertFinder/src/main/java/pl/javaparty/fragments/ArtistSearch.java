@@ -99,9 +99,13 @@ public class ArtistSearch extends Fragment {
                 getActivity().getActionBar().setTitle(getString(R.string.search) + ": " + artist);
                 searchBox.setText("");
 
-                if (adapter.getCount() == 0 && artist.length() > 0)
-                    Toast.makeText(getActivity(), (future ? switchCon.getTextOn() : switchCon.getTextOff()) +
-                            " " + getString(R.string.concerts_unavailable_for) + " " + artist, Toast.LENGTH_LONG).show();
+                try {
+                    if (adapter.getCount() == 0 && artist.length() > 0) {
+                        Toast.makeText(getActivity(), (future ? switchCon.getTextOn() : switchCon.getTextOff()) + " " + getString(R.string.concerts_unavailable_for) + " " + artist, Toast.LENGTH_LONG).show();
+                    }
+                } catch (NullPointerException npe) {
+                    Toast.makeText(getActivity(), (future ? switchCon.getTextOn() : switchCon.getTextOff()) + " " + getString(R.string.concerts_unavailable_for), Toast.LENGTH_LONG).show();
+                }
             }
         });
 

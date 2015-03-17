@@ -22,7 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/switchCon2" android:checked="false"
-                android:showText="true" android:textOff="Przeszłe" android:textOn="Przyszłe"/>
+                android:showText="false" android:textOff="Przeszłe" android:textOn="Przyszłe"/>
     </LinearLayout>
 
     <ListView
