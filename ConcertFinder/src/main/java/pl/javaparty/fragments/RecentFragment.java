@@ -74,12 +74,8 @@ public class RecentFragment extends Fragment {
 
 
         concertsListView.addFooterView(nextButton);
-        Calendar localCalendar = Calendar.getInstance(TimeZone.getDefault());
-        int currentDay = localCalendar.get(Calendar.DATE);
-        int currentMonth = localCalendar.get(Calendar.MONTH) + 1;
-        int currentYear = localCalendar.get(Calendar.YEAR);
-
         concertsAdapter = new ConcertAdapter(getActivity(), cutArray(dbm.getFutureConcerts(filterAgencies())));
+
 
         concertsListView.setAdapter(concertsAdapter);
         concertsListView.setEmptyView(view.findViewById(R.id.emptyList));
@@ -109,10 +105,15 @@ public class RecentFragment extends Fragment {
 
     private Concert[] cutArray(Concert[] array) {
         //fc4355eb184e82380296c170cc0bd2dc664fc195 cut array
+
+        Log.i("Koncerty", "Length: " + array.length + ", " + array[array.length-1]);
+
         if (array != null && array.length != 0) {
             Log.i("EMPTYLIST", String.valueOf(array.length));
-            if (showedConcerts >= dbm.getSize(dbManager.CONCERTS_TABLE) - 1) {
-                showedConcerts = dbm.getSize(dbManager.CONCERTS_TABLE) - 1;
+            if (showedConcerts >= array.length-1) //dbm.getSize(dbManager.CONCERTS_TABLE) - 1) {
+            {
+                showedConcerts = array.length-1;
+                //showedConcerts = dbm.getSize(dbManager.CONCERTS_TABLE) - 1;
                 nextButton.setVisibility(View.GONE);
                 return array;
             } else
@@ -129,11 +130,7 @@ public class RecentFragment extends Fragment {
     }
 
     public void refresh() {
-        Calendar localCalendar = Calendar.getInstance(TimeZone.getDefault());
-        int currentDay = localCalendar.get(Calendar.DATE);
-        int currentMonth = localCalendar.get(Calendar.MONTH) + 1;
-        int currentYear = localCalendar.get(Calendar.YEAR);
-        concertsAdapter = new ConcertAdapter(getActivity(), cutArray(dbm.getAllConcerts(filterAgencies())));
+        //concertsAdapter = new ConcertAdapter(getActivity(), cutArray(dbm.getAllConcerts(filterAgencies())));
         concertsAdapter.changeData(cutArray(dbm.getFutureConcerts(filterAgencies())));
         concertsListView.setAdapter(concertsAdapter);
     }
