@@ -15,6 +15,9 @@ import pl.javaparty.concertfinder.R;
 import pl.javaparty.items.Concert;
 import pl.javaparty.sql.dbManager;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class ArtistSearch extends Fragment {
 
     AutoCompleteTextView searchBox;
@@ -37,12 +40,14 @@ public class ArtistSearch extends Fragment {
         searchBox = (AutoCompleteTextView) view.findViewById(R.id.searchBoxArtist);
         switchCon = (Switch) view.findViewById(R.id.switchCon);
         concertList = (ListView) view.findViewById(R.id.concertListArtist);
+
         String filter = getArguments().getString("CONDITIONS");
         Log.i("FILTRUJE", filter);
+        ArrayList<String> artists = new ArrayList<>(Arrays.asList(dbm.getArtists(filter)));
         adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, dbm.getFutureArtists(filter));
 
-        searchBox.setAdapter(adapterSearchBox);
-        searchBox.setThreshold(1);
+		searchBox.setAdapter(adapterSearchBox);
+		searchBox.setThreshold(1);
 
         searchBox.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -99,25 +104,31 @@ public class ArtistSearch extends Fragment {
                             " " + getString(R.string.concerts_unavailable_for) + " " + artist, Toast.LENGTH_LONG).show();
             }
         });
-
-        return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (adapter != null) {
-            concertList.setAdapter(adapter);
-            concertList.setSelection(lastPosition);
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		if (adapter != null)
+		{
+			concertList.setAdapter(adapter);
+			concertList.setSelection(lastPosition);
+		}
+		if (lastSearching != null)
+			getActivity().getActionBar().setTitle("Szukaj: " + lastSearching);
+	}
+	
+	public void refresh()
+	{
+		String filter = getArguments().getString("CONDITIONS");
+		//adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, dbm.getArtists(filter));
+        if(adapter!=null)
+        {
+            adapter.changeData(dbm.getConcertsByArtist(lastSearching, filter));
         }
-        if (lastSearching != null)
-            getActivity().getActionBar().setTitle(getString(R.string.search) + ": " + lastSearching);
-    }
 
-    public void refresh() {
-        String filter = getArguments().getString("CONDITIONS");
-        adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, dbm.getArtists(filter));
-
-        searchBox.setAdapter(adapterSearchBox);
-    }
+        adapterSearchBox.clear();
+        adapterSearchBox.addAll(dbm.getArtists(filter));
+        adapterSearchBox.notifyDataSetChanged();
+		//searchBox.setAdapter(adapterSearchBox);
+	}
 }

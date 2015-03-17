@@ -15,12 +15,11 @@ import pl.javaparty.adapters.ConcertAdapter;
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.fragments.FilterDialogFragment.FilterDialogListener;
+import pl.javaparty.items.Agencies;
 import pl.javaparty.items.Concert;
-import pl.javaparty.items.Concert.AgencyName;
 import pl.javaparty.sql.dbManager;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
 public class PastFragment extends Fragment {
@@ -32,16 +31,13 @@ public class PastFragment extends Fragment {
     Button nextButton;
     private int lastPosition = 0;
     private int showedConcerts = 20;
-    public Map<CharSequence, Boolean> checkedAgencies;
+    public Map<Agencies, Boolean> checkedAgencies;
 
     public PastFragment()
     {
         super();
 
-        checkedAgencies = new HashMap<>();
-        AgencyName[] vals = AgencyName.values();
-        for (AgencyName val : vals)
-            checkedAgencies.put(val.name(), true);
+        checkedAgencies = Agencies.AgenciesMethods.initialize();
     }
 
     @Override
@@ -72,7 +68,7 @@ public class PastFragment extends Fragment {
 
         lv.addFooterView(nextButton);
 
-        adapter = new ConcertAdapter(getActivity(), cutArray(dbm.getPastConcerts(filterAgencies())));
+        adapter = new ConcertAdapter(getActivity(), cutArray(dbm.getPastConcerts(Agencies.AgenciesMethods.filterAgencies(checkedAgencies))));
         lv.setAdapter(adapter);
         lv.setEmptyView(view.findViewById(R.id.emptyList));
 
@@ -120,7 +116,7 @@ public class PastFragment extends Fragment {
     public void refresh()
     {
         //adapter = new ConcertAdapter(getActivity(), cutArray(dbm.getAllConcerts(filterAgencies())));
-        adapter.changeData(cutArray(dbm.getPastConcerts(filterAgencies())));
+        adapter.changeData(cutArray(dbm.getPastConcerts(Agencies.AgenciesMethods.filterAgencies(checkedAgencies))));
         //lv.setAdapter(adapter);
     }
 
@@ -143,7 +139,7 @@ public class PastFragment extends Fragment {
                     {
                         // this.checked = checked;
                         int i = 0;
-                        for (CharSequence c : checkedAgencies.keySet())
+                        for (Agencies c : checkedAgencies.keySet())
                         {
                             checkedAgencies.put(c, checked[i++]);
                         }
@@ -167,10 +163,6 @@ public class PastFragment extends Fragment {
                     checked[i++] = b;
                 }
                 args.putBooleanArray("CHECKED", checked);
-
-                CharSequence[] agencies = new CharSequence[checkedAgencies.size()];
-                checkedAgencies.keySet().toArray(agencies);
-                args.putCharSequenceArray("AGENCIES", agencies);
                 dialog.setArguments(args);
 
                 dialog.show(getActivity().getFragmentManager(), "FILTER");
@@ -178,19 +170,5 @@ public class PastFragment extends Fragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private String filterAgencies()
-    {
-        String returned = "'1'='0'";
-        for (CharSequence c : checkedAgencies.keySet())
-        {
-            if (checkedAgencies.get(c))
-            {
-                returned += " OR AGENCY = '" + c + "'";
-            }
-        }
-        return returned;
-
     }
 }

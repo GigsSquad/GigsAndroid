@@ -4,9 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -20,15 +17,9 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
-import android.widget.Toast;
-import com.google.android.gms.maps.model.LatLng;
-import org.apache.http.NameValuePair;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import pl.javaparty.adapters.NavDrawerAdapter;
-import pl.javaparty.enums.PHPurls;
 import pl.javaparty.fragments.*;
+import pl.javaparty.items.Agencies;
 import pl.javaparty.items.NavDrawerItem;
 import pl.javaparty.map.MapHelper;
 import pl.javaparty.prefs.Prefs;
@@ -41,125 +32,140 @@ import java.util.List;
 
 public class MainActivity extends FragmentActivity {
 
-    /* Drawer */
-    private static ArrayList<NavDrawerItem> navDrawerItems;
-    private static NavDrawerAdapter adapter;
-    private static ExpandableListView drawerList;
-    private static Context context;
-    private ActionBarDrawerToggle drawerToggle;
-    private DrawerLayout drawerLayout;
-    TypedArray navMenuIcons;
-    String[] navMenuTitles;
+	/* Drawer */
+	private static ArrayList<NavDrawerItem> navDrawerItems;
+	private static NavDrawerAdapter adapter;
+	private static ExpandableListView drawerList;
+	private static Context context;
+	private ActionBarDrawerToggle drawerToggle;
+	private DrawerLayout drawerLayout;
+	TypedArray navMenuIcons;
+	String[] navMenuTitles;
     ProgressDialog loadingDialog;
     MapHelper mapHelper;
 
-    /* Fragmenty */
-    FragmentManager fragmentManager;
-    private int currentFragment = 1;
-    private Bundle arguments;
+	/* Fragmenty */
+	FragmentManager fragmentManager;
+	private int currentFragment = 1;
+	private Bundle arguments;
 
     /* Baza */
     static dbManager dbMgr;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
 
 
+		navMenuTitles = getResources().getStringArray(R.array.nav_menu);
+		navMenuIcons = getResources().obtainTypedArray(R.array.nav_menu_icons);
+		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		drawerList = (ExpandableListView) findViewById(R.id.left_drawer);
+		drawerList.setGroupIndicator(null);
         loadingDialog = new ProgressDialog(this);
         loadingDialog.setCancelable(false);
         loadingDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         loadingDialog.setProgress(0);
         loadingDialog.setMax(100);
 
+		ArrayList<String> agencies = new ArrayList<>();//Arrays.asList(getResources().getStringArray(R.array.agencje_submenu)));
+        ArrayList<String> ticketers = new ArrayList<>();
+
+        for(Agencies a: Agencies.values())
+        {
+            int posInDrawer = a.fragmentNumber/100;
+            if(posInDrawer == 7)
+                agencies.add(a.toString);
+            if(posInDrawer == 8)
+                ticketers.add(a.toString);
+        }
+
+        ArrayList<String> events = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.events_submenu)));
+
+		navDrawerItems = new ArrayList<>();
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(1, -1)));
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(2, -1)));
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(3, -1)));
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(4, -1)));
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[6], navMenuIcons.getResourceId(5, -1)));
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[7], navMenuIcons.getResourceId(4, -1), agencies));//TODO icona
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[8], navMenuIcons.getResourceId(3, -1), ticketers));
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[9]/*TODO!*/, navMenuIcons.getResourceId(3, -1), events));
+		navMenuIcons.recycle();
         mapHelper = new MapHelper(this);
 
         dbMgr = new dbManager(getApplicationContext());
         context = getApplicationContext();
         fragmentManager = getSupportFragmentManager();
 
-        navMenuTitles = getResources().getStringArray(R.array.nav_menu);
-        navMenuIcons = getResources().obtainTypedArray(R.array.nav_menu_icons);
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerList = (ExpandableListView) findViewById(R.id.left_drawer);
-        drawerList.setGroupIndicator(null);
-        ArrayList<String> agencies = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.agencje_submenu)));
-
-        navDrawerItems = new ArrayList<>();
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(1, -1)));
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(2, -1)));
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(3, -1)));
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(4, -1)));
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[6], navMenuIcons.getResourceId(5, -1)));
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[7], navMenuIcons.getResourceId(3, -1), agencies));//TODO icona
-        navMenuIcons.recycle();
-
-        adapter = new NavDrawerAdapter(context, navDrawerItems);
-        drawerList.setAdapter(adapter);
-
 		/* ustawianie actionbara by mozna go bylo wcisnac */
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setHomeButtonEnabled(true);
 
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
-                R.drawable.ic_drawer, // ikonka
-                R.string.app_name
-        ) {
-            public void onDrawerClosed(View view) {
-                invalidateOptionsMenu();
-            }
+		drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
+				R.drawable.ic_drawer, // ikonka
+				R.string.app_name
+		) {
+			public void onDrawerClosed(View view) {
+				invalidateOptionsMenu();
+			}
 
-            public void onDrawerOpened(View drawerView) {
-                invalidateOptionsMenu();
-            }
-        };
+			public void onDrawerOpened(View drawerView) {
+				invalidateOptionsMenu();
+			}
+		};
 
-        drawerLayout.setDrawerListener(drawerToggle);
-        drawerList.setSelector(android.R.color.holo_blue_dark);
-        drawerList.setOnGroupClickListener(new OnGroupClickListener() {
+		drawerLayout.setDrawerListener(drawerToggle);
+		drawerList.setSelector(android.R.color.holo_blue_dark);
+		drawerList.setOnGroupClickListener(new OnGroupClickListener() {
 
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v,
-                                        int groupPosition, long id) {
-                Log.i("DRAWER", "Group: " + groupPosition);
-                if (navDrawerItems.get(groupPosition).getSubmenu() == null) {
-                    drawerLayout.closeDrawers();
-                    if (groupPosition == 4 && isOnline())
-                        new DownloadConcerts().execute();
-                    else if (currentFragment != groupPosition)
-                        changeFragment(groupPosition);
+			@Override
+			public boolean onGroupClick(ExpandableListView parent, View v,
+					int groupPosition, long id) {
+				if (navDrawerItems.get(groupPosition).getSubmenu() == null) {
+					drawerLayout.closeDrawers();
+					if (groupPosition == 4)
+						dbu.update(new Refresh());
+					else if (currentFragment != groupPosition)
+						changeFragment(groupPosition);
+					return true;
+				}
+				return false;
+			}
+
+		});
+		drawerList.setOnChildClickListener(new OnChildClickListener() {
+
+			@Override
+			public boolean onChildClick(ExpandableListView parent, View v,
+					int groupPosition, int childPosition, long id) {
+				drawerLayout.closeDrawers();
+				if (currentFragment != groupPosition*100 + childPosition && groupPosition < 9) {
+					changeFragment(groupPosition*100 + childPosition);
+                    return true;
+				}
+                else if (groupPosition == 9)
+                {
+                    changeFragment(groupPosition*10 + childPosition);
                     return true;
                 }
-                return false;
-            }
+				return false;
+			}
 
-        });
-        drawerList.setOnChildClickListener(new OnChildClickListener() {
-
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v,
-                                        int groupPosition, int childPosition, long id) {
-                Log.i("DRAWER", "Child: " + childPosition);
-                drawerLayout.closeDrawers();
-                if (currentFragment != groupPosition || currentFragment != 30 + childPosition) {
-                    changeFragment(30 + childPosition);
-                }
-                return false;
-            }
-
-        });
+		});
 
         if (isOnline())
             new DownloadConcerts().execute(); //nowa lepsza kurwa funkcja stary
 
-        // pierwsza inicjalizacja
-        fragmentManager.beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
-                android.R.anim.slide_out_right).replace(R.id.content_frame, new RecentFragment()).commit();
-        drawerLayout.openDrawer(drawerList);
-    }
+		updateCounters();
+		// pierwsza inicjalizacja
+		fragmentManager.beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
+				android.R.anim.slide_out_right).replace(R.id.content_frame, new RecentFragment()).commit();
+		drawerLayout.openDrawer(drawerList);
+	}
 
     @Override
     public void onBackPressed() {
@@ -184,105 +190,123 @@ public class MainActivity extends FragmentActivity {
         super.onBackPressed();
     }
 
-    @Override
-    public boolean onKeyDown(int keycode, KeyEvent e) {
-        switch (keycode) {
-            case KeyEvent.KEYCODE_MENU:
+	@Override
+	public boolean onKeyDown(int keycode, KeyEvent e) {
+		switch (keycode) {
+		case KeyEvent.KEYCODE_MENU:
 
-                if (drawerLayout.isDrawerOpen(drawerList))
-                    drawerLayout.closeDrawer(drawerList);
-                else
-                    drawerLayout.openDrawer(drawerList);
-                return true;
+			if (drawerLayout.isDrawerOpen(drawerList))
+				drawerLayout.closeDrawer(drawerList);
+			else
+				drawerLayout.openDrawer(drawerList);
+			return true;
+		}
+		return super.onKeyDown(keycode, e);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// toggle nav drawer on selecting action bar app icon/title
+		if (drawerToggle.onOptionsItemSelected(item)) {
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		// Sync the toggle state after onRestoreInstanceState has occurred.
+		drawerToggle.syncState();
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		drawerToggle.onConfigurationChanged(newConfig);
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// No call for super(). Bug on API Level > 11. lol
+	}
+
+	// odswieza aktualny fragment (laduje go od nowa)
+	private class Refresh implements Runnable {
+		@Override
+		public void run() {
+			Log.i("RF", "Olaboga, refreshyk.");
+			changeFragment(currentFragment);// odswieza dany fragment
+			updateCounters();
+			Log.i("RF", "To tez wyszlo.");
+		}
+	}
+
+	private void changeFragment(int position) {
+		Fragment fragment = null;
+		if (position == 0)
+			fragment = new SearchFragment();
+		else if (position == 1)
+			fragment = new RecentFragment();
+		else if (position == 2)
+			fragment = new PastFragment();
+		else if (position == 3)
+			fragment = new FavoriteFragment();
+		else if (position == 4)
+			Log.e("MainActivity", "IMPOSSIBRUUU! Zaminia fragment z pozycji Aktualizuj :O");
+		else if (position == 5)
+			fragment = new SettingsFragment();
+		else if (position == 6)
+			fragment = new AboutFragment();
+        else if (position >= 90 && position <100)
+        {
+            FestivalFragment ffragment = new FestivalFragment();
+            if(position%90 == 0)
+                ffragment.setFestival("Jarocin Festival", R.drawable.jarocin);
+            else if(position%90 == 1)
+                ffragment.setFestival("Life Festival Oświęcim", R.drawable.lifefestival);
+            fragment = ffragment;
         }
-        return super.onKeyDown(keycode, e);
-    }
+		else if (position >= 100) {
+			RecentFragment rfragment = new RecentFragment();
+			for (Agencies ch : rfragment.checkedAgencies.keySet())
+				if (ch.fragmentNumber != position)
+					rfragment.checkedAgencies.put(ch, false);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // toggle nav drawer on selecting action bar app icon/title
-        if (drawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+			fragment = rfragment;
+		}
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        drawerToggle.syncState();
-    }
+		if (position != 4)// takie zabezpieczenie choc to sie nie powinno wydarzyc
+			currentFragment = position;
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        drawerToggle.onConfigurationChanged(newConfig);
-    }
+		if (fragment != null) {
+			updateCounters();
+			fragment.setArguments(arguments);
+			fragmentManager
+					.beginTransaction()
+					.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+					.replace(R.id.content_frame, fragment)
+					.addToBackStack(null).commitAllowingStateLoss();
+		}
+	}
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        // No call for super(). Bug on API Level > 11. lol
-    }
+	public static void updateCounters() {
+		navDrawerItems.get(1).setCount("" + dbMgr.getSize(dbManager.CONCERTS_TABLE));
+		navDrawerItems.get(1).setCounterVisibility(true);
 
-    private void changeFragment(int position) {
-        Fragment fragment = null;
-        if (position == 0)
-            fragment = new SearchFragment();
-        else if (position == 1)
-            fragment = new RecentFragment();
-        else if (position == 2)
-            fragment = new PastFragment();
-        else if (position == 3)
-            fragment = new FavoriteFragment();
-        else if (position == 4)
-            Log.e("MainActivity", "IMPOSSIBRUUU! Zaminia fragment z pozycji Aktualizuj :O");
-        else if (position == 5)
-            fragment = new SettingsFragment();
-        else if (position == 6)
-            fragment = new AboutFragment();
-        else if (position >= 30) {
-            int pos = position - 30;
-            RecentFragment rfragment = new RecentFragment();
-            for (CharSequence ch : rfragment.checkedAgencies.keySet())
-                if (ch != rfragment.checkedAgencies.keySet().toArray()[pos])
-                    rfragment.checkedAgencies.put(ch, false);
+		//TODO: setCount dla Past (nie miałem czasu już, sry)
 
-            fragment = rfragment;
-        }
+		navDrawerItems.get(3).setCount("" + dbMgr.getSize(dbManager.FAVOURITES_TABLE));
+		navDrawerItems.get(3).setCounterVisibility(true);
 
-        if (position != 4)// takie zabezpieczenie choc to sie nie powinno wydarzyc
-            currentFragment = position;
+		adapter = new NavDrawerAdapter(context, navDrawerItems);
+		drawerList.setAdapter(adapter);
+	}
 
-        if (fragment != null) {
-            updateCounters();
-            fragment.setArguments(arguments);
-            fragmentManager
-                    .beginTransaction()
-                    .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                    .replace(R.id.content_frame, fragment)
-                    .addToBackStack(null).commitAllowingStateLoss();
-        }
-    }
-
-    public static void updateCounters() {
-        navDrawerItems.get(1).setCount("" + dbMgr.getSize(dbManager.CONCERTS_TABLE));
-        navDrawerItems.get(1).setCounterVisibility(true);
-
-        //TODO: setCount dla Past (nie miałem czasu już, sry)
-
-        navDrawerItems.get(3).setCount("" + dbMgr.getSize(dbManager.FAVOURITES_TABLE));
-        navDrawerItems.get(3).setCounterVisibility(true);
-
-        adapter = new NavDrawerAdapter(context, navDrawerItems);
-        drawerList.setAdapter(adapter);
-    }
-
-    // przekazuje DBmanagera
-    public static dbManager getDBManager() {
-        return dbMgr;
-    }
-
+	// przekazuje DBmanagera
+	public static dbManager getDBManager() {
+		return dbMgr;
+	}
     class DownloadConcerts extends AsyncTask<String, Void, String> {
 
         boolean updateNeeded = false;
