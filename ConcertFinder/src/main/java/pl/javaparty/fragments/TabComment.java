@@ -1,6 +1,9 @@
 package pl.javaparty.fragments;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -56,7 +59,10 @@ public class TabComment extends Fragment {
         addComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new InsertComment().execute();
+                if (isOnline())
+                    new InsertComment().execute();
+                else
+                    Toast.makeText(getActivity(), getString(R.string.no_connection), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -66,7 +72,8 @@ public class TabComment extends Fragment {
 
     @Override
     public void onResume() {
-        new DownloadComments().execute();
+        if (isOnline())
+            new DownloadComments().execute();
         super.onResume();
     }
 
@@ -144,14 +151,23 @@ public class TabComment extends Fragment {
 
         @Override
         protected void onPostExecute(String s) {
-            commentListView.setAdapter(arrayAdapter);
+            if (isAdded()) {
+                commentListView.setAdapter(arrayAdapter);
 
-            if (!commentArrayList.isEmpty())
-                concertInfo.setVisibility(View.GONE);
+                if (!commentArrayList.isEmpty())
+                    concertInfo.setVisibility(View.GONE);
 
-            loadingDialog.dismiss();
+                loadingDialog.dismiss();
+            }
             super.onPostExecute(s);
         }
     }
+
+    private boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
 
 }

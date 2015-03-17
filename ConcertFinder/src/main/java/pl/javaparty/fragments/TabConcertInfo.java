@@ -229,15 +229,17 @@ public class TabConcertInfo extends Fragment {
 
         @Override
         protected void onPostExecute(Void result) {
-            try {
-                distance.setText(distanceInt + "km " + getString(R.string.distance_to) + hometown);
-            } catch (NullPointerException npe) {
-                distance.setText(distanceInt + "km " + getString(R.string.distance_to) + getString(R.string.hometown));
-            } catch (IllegalStateException ise) {
-                distance.setVisibility(View.GONE);
-            } finally {
-                if (distanceInt != 0)
-                    distance.setVisibility(View.VISIBLE);
+            if (isAdded()) {
+                try {
+                    distance.setText(distanceInt + "km " + getString(R.string.distance_to) + " " + hometown);
+                } catch (NullPointerException npe) {
+                    distance.setText(distanceInt + "km " + getString(R.string.distance_to) + " " + getString(R.string.hometown));
+                } catch (IllegalStateException ise) {
+                    //trorelolol
+                } finally {
+                    if (distanceInt != 0)
+                        distance.setVisibility(View.VISIBLE);
+                }
             }
             super.onPostExecute(result);
         }

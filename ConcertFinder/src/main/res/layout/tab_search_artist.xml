@@ -17,6 +17,7 @@
                               android:layout_height="wrap_content"
                               android:textColor="#2196F3"
                               android:textColorHighlight="#2196F3"
+                              android:textColorHint="@color/light_blue"
                               android:textColorLink="#2196F3"
                               android:hint="@string/artist" android:inputType="textAutoComplete"
                               android:layout_weight="0.45"/>

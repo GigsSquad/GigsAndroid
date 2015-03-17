@@ -163,13 +163,17 @@ public class TabPastConcertInfo extends Fragment {
 
         @Override
         protected void onPostExecute(Void result) {
-            try {
-                distance.setText(distanceInt + "km " + getString(R.string.distance_to) + Prefs.getCity(getActivity()));
-            } catch (NullPointerException npe) {
-                distance.setText(distanceInt + "km " + getString(R.string.distance_to) + getString(R.string.hometown));
-            } finally {
-                if (distanceInt != 0)
-                    distance.setVisibility(View.VISIBLE);
+            if (isAdded()) {
+                try {
+                    distance.setText(distanceInt + "km " + getString(R.string.distance_to) + " " + Prefs.getCity(getActivity()));
+                } catch (NullPointerException npe) {
+                    distance.setText(distanceInt + "km " + getString(R.string.distance_to) + " " + getString(R.string.hometown));
+                } catch (IllegalStateException ise) {
+                    //trolololol
+                } finally {
+                    if (distanceInt != 0)
+                        distance.setVisibility(View.VISIBLE);
+                }
             }
             super.onPostExecute(result);
         }

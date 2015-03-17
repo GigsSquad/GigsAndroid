@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="15dp" >
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center"
+              android:orientation="vertical"
+              android:paddingBottom="@dimen/activity_vertical_margin"
+              android:paddingLeft="@dimen/activity_horizontal_margin"
+              android:paddingRight="@dimen/activity_horizontal_margin"
+              android:paddingTop="15dp">
 
     <LinearLayout
             android:orientation="horizontal"
@@ -16,6 +16,7 @@
         <AutoCompleteTextView android:id="@+id/searchBoxPlace" android:layout_width="wrap_content"
                               android:layout_height="wrap_content" android:ems="10" android:textColor="#2196F3"
                               android:textColorHighlight="#2196F3" android:textColorLink="#2196F3"
+                              android:textColorHint="@color/light_blue"
                               android:hint="@string/place" android:inputType="textAutoComplete"
                               android:layout_weight="0.45"/>
         <Switch
@@ -26,20 +27,20 @@
     </LinearLayout>
 
     <ListView
-        android:id="@+id/concertListPlace"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:cacheColorHint="@android:color/transparent"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="10dp"
-        android:fastScrollEnabled="true"
-        android:footerDividersEnabled="true"
-        android:listSelector="@android:color/transparent"
-        android:paddingLeft="10dip"
-        android:paddingRight="10dip"
-        android:paddingTop="1dip"
-        android:smoothScrollbar="true" >
+            android:id="@+id/concertListPlace"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:cacheColorHint="@android:color/transparent"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="10dp"
+            android:fastScrollEnabled="true"
+            android:footerDividersEnabled="true"
+            android:listSelector="@android:color/transparent"
+            android:paddingLeft="10dip"
+            android:paddingRight="10dip"
+            android:paddingTop="1dip"
+            android:smoothScrollbar="true">
     </ListView>
 
 </LinearLayout>
