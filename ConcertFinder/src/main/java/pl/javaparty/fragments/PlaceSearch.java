@@ -1,5 +1,6 @@
 package pl.javaparty.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import pl.javaparty.adapters.ConcertAdapter;
@@ -55,6 +57,9 @@ public class PlaceSearch extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
+
+                hideSoftKeyboard(getActivity(),searchBox);
+
                 String city = searchBox.getText().toString();
                 String filter = getArguments().getString("CONDITIONS");
                 adapter = new ConcertAdapter(getActivity(), future ?
@@ -104,6 +109,12 @@ public class PlaceSearch extends Fragment {
         });
 
         return view;
+    }
+    private static void hideSoftKeyboard(Context mContext,EditText username){  // dziala, kod ze stacka
+        if(((Activity) mContext).getCurrentFocus()!=null && ((Activity) mContext).getCurrentFocus() instanceof EditText){
+            InputMethodManager imm = (InputMethodManager)mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(username.getWindowToken(), 0);
+        }
     }
 
     @Override

@@ -20,7 +20,8 @@
                               android:textColorHint="@color/light_blue"
                               android:textColorLink="#2196F3"
                               android:hint="@string/artist" android:inputType="textAutoComplete"
-                              android:layout_weight="0.45"/>
+                              android:layout_weight="0.45"
+                              android:imeOptions="actionDone"/>
         <Switch
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
