@@ -14,7 +14,7 @@ public enum Agencies
     KAYAX(701, "Kayax"),
     LIVENATION(0, "Livenation"),
     PRESTIGE(702, "Prestige"),
-    SONGKICK(801, "SongKick"),
+    SONGKICK(800, "SongKick"),
     TICKETPRO(0, "TicketPro");
 
     public int fragmentNumber;
