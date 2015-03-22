@@ -191,11 +191,9 @@ public class FacebookFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String s) {
-            if (isAdded()) {
-                loadingDialog.dismiss();
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                startActivity(intent);
-            }
+            loadingDialog.dismiss();
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            startActivity(intent);
             super.onPostExecute(s);
         }
     }

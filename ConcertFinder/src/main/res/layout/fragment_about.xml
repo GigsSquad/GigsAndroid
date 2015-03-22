@@ -26,13 +26,13 @@
                     android:text="Jakub Pomykała\nJakub Amanowicz\nSzymon Bartczak\nRafał Pieniążek"
                     android:textAppearance="@style/Theme.AppCompat" android:layout_marginTop="20dp"/>
             <ImageView
-                    android:layout_width="400dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/imageView" android:layout_below="@+id/aboutTextView"
                     android:layout_centerHorizontal="true" android:src="@drawable/logo_musicart"
                     android:layout_marginTop="100dp"/>
             <ImageView
-                    android:layout_width="400dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:scaleType="centerInside"
                     android:id="@+id/imageButton" android:layout_below="@+id/imageView"

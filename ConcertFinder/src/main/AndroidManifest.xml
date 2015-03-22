@@ -51,6 +51,11 @@
                 android:label="@string/app_name"
                 android:screenOrientation="portrait">
         </activity>
+
+        <activity android:name="pl.javaparty.fragments.AboutFragment$EsterEgg"
+                  android:label="@string/app_name"
+                  android:screenOrientation="portrait"
+                  />
         <activity
                 android:name="pl.javaparty.fragments.ConcertFragment"
                 android:label="@string/app_name"
