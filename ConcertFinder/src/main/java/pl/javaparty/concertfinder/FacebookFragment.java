@@ -164,6 +164,7 @@ public class FacebookFragment extends Fragment {
     class InsertUser extends AsyncTask<String, Void, String> {
 
         String[] array = new String[10];
+        JSONthing jsonthing;
 
         public InsertUser(String[] array) {
             this.array = Arrays.copyOf(array, array.length, String[].class);
@@ -174,6 +175,7 @@ public class FacebookFragment extends Fragment {
             super.onPreExecute();
             loadingDialog.setMessage("Logowanie");
             loadingDialog.show();
+            jsonthing = new JSONthing();
         }
 
         @Override
@@ -186,6 +188,16 @@ public class FacebookFragment extends Fragment {
             params.add(new BasicNameValuePair("location", array[4]));
             params.add(new BasicNameValuePair("fb_id", array[5]));
             JSONthing.makeRequest(PHPurls.login, params); //TIGHT and ELEGANT
+
+            //JSONObject mJsonObject = jsonthing.makeHttpRequest(PHPurls.login.toString(), "POST", params); //TIGHT and ELEGANT
+
+//            try {
+//               // if (mJsonObject.getInt("success") == 1)
+//                    //Prefs.setUserID(getActivity(), mJsonObject.getInt("user_id"));
+//
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
             return null;
         }
 

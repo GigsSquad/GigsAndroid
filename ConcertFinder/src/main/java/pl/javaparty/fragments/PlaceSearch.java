@@ -97,6 +97,7 @@ public class PlaceSearch extends Fragment {
                 // zapisywanie danych, coby potem przywrocic
                 getActivity().getActionBar().setTitle(getString(R.string.search) + ": " + city);
                 searchBox.setText("");
+                searchBox.setHint(getString(R.string.place) + " " + (future ? "(przyszłe kocnerty)" : "(minione koncerty)"));
                 try {
                     if (adapter.getCount() == 0 && city.length() > 0) {
                         Toast.makeText(getActivity(), (future ? switchCon.getTextOn() : switchCon.getTextOff()) + " " + getString(R.string.concerts_unavailable_for) + " " + city, Toast.LENGTH_LONG).show();

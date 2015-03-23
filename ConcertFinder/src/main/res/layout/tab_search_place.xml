@@ -14,10 +14,12 @@
             android:layout_width="match_parent"
             android:layout_height="53dp" android:layout_gravity="center_horizontal">
         <AutoCompleteTextView android:id="@+id/searchBoxPlace" android:layout_width="wrap_content"
-                              android:layout_height="wrap_content" android:ems="10" android:textColor="#2196F3"
-                              android:textColorHighlight="#2196F3" android:textColorLink="#2196F3"
-                              android:textColorHint="@color/light_blue"
-                              android:hint="@string/place" android:inputType="textAutoComplete"
+                              android:layout_height="wrap_content" android:ems="10"
+                              android:textColor="@color/dark"
+                              android:textColorHighlight="@color/dark"
+                              android:textColorHint="#78909c"
+                              android:textColorLink="@color/dark"
+                              android:hint="Miejsca (przyszłe koncerty)" android:inputType="textAutoComplete"
                               android:layout_weight="0.45"/>
         <Switch
                 android:layout_width="wrap_content"

@@ -10,6 +10,7 @@ import pl.javaparty.prefs.Prefs;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class MapHelper {
     private Geocoder geoCoder;
@@ -77,16 +78,18 @@ public class MapHelper {
     }
 
     public Address getAddress(String place) {
-        Address address = null;
+        int tryDownload = 0;
         try {
-            //TODO ZROBI TO KURWA
-            addressList = geoCoder.getFromLocationName(place, 1);
-            if (addressList.size() > 0)
-                address = addressList.get(0);
-        } catch (IOException e) {
+            while (tryDownload++ < 3) {
+                addressList = geoCoder.getFromLocationName(place, 1);
+                if (addressList.size() > 0)
+                    return addressList.get(0);
+                TimeUnit.SECONDS.sleep(3);
+            }
+        } catch (InterruptedException | IOException | NullPointerException e) {
             e.printStackTrace();
         }
-        return address;
+        return null;
     }
 
     public LatLng getLatLng(String place) {

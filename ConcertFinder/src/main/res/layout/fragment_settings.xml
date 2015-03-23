@@ -14,10 +14,10 @@
             android:id="@+id/cityAutoComplete"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:textColor="#2196F3"
-            android:textColorHint="@color/light_blue"
-            android:textColorHighlight="#2196F3"
-            android:textColorLink="#2196F3"
+            android:textColor="@color/dark"
+            android:textColorHighlight="@color/dark"
+            android:textColorHint="@color/dark"
+            android:textColorLink="@color/dark"
             android:hint="@string/your_city_hint">
 
         <requestFocus/>

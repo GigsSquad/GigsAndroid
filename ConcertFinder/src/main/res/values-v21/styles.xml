@@ -3,9 +3,9 @@
     <!-- Application theme. -->
     <style name="AppTheme" parent="ThemeOverlay.AppCompat.Dark">
 
-        <item name="android:textColorPrimary">@color/blue</item>
-        <item name="android:textColorSecondary">@color/blue</item>
-        <item name="android:textColorTertiary">@color/blue</item>
+        <item name="android:textColorPrimary">@color/very_light_red</item>
+        <item name="android:textColorSecondary">@color/very_light_red</item>
+        <item name="android:textColorTertiary">@color/very_light_red</item>
         <item name="android:tabWidgetStyle">@style/CustomTabWidget</item>
 
         <!-- Main theme colors -->
@@ -18,10 +18,10 @@
     </style>
 
     <style name="CustomTabWidget" parent="@android:style/Theme.Holo">
-        <item name="android:textColor">@color/blue</item>
+        <item name="android:textColor">@color/very_light_red</item>
         <item name="android:background">@color/dark</item>
-        <item name="android:colorActivatedHighlight">@color/blue</item>
-        <item name="android:textColorHighlight">@color/blue</item>
+        <item name="android:colorActivatedHighlight">@color/very_light_red</item>
+        <item name="android:textColorHighlight">@color/very_light_red</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
     </style>

@@ -1,7 +1,9 @@
 package pl.javaparty.concertfinder;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.net.ConnectivityManager;
@@ -17,6 +19,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
@@ -168,6 +171,30 @@ public class MainActivity extends FragmentActivity {
             }
 
         });
+
+        final EditText input = new EditText(this);
+
+        if (isOnline() && dbMgr.getSize("Concerts") < 10 && Prefs.getCity(getApplicationContext()).isEmpty()) {
+            //Toast.makeText(getApplicationContext(), "Pobierz koncerty", Toast.LENGTH_LONG).show();
+
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("Wprowadź swoje miasto")
+                    .setMessage("Potrzebujemy nazwy Twojej miejscowości, aby dobrze posortować koncerty :)")
+                    .setView(input)
+                    .setCancelable(false)
+                    .setPositiveButton("Zapisz", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            Prefs.setCity(getApplicationContext(), input.getText().toString());
+                            new GetLatLng().execute();
+                        }
+                    }).setNegativeButton("Anuluj", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    new DownloadConcerts().execute();
+                    // Do nothing.
+                }
+            }).show();
+
+        }
 
         // pierwsza inicjalizacja
         fragmentManager.beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,

@@ -3,9 +3,11 @@ package pl.javaparty.fragments;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -21,9 +23,11 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.LoginButton;
+import com.google.android.gms.maps.model.LatLng;
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.imageloader.FileExplorer;
+import pl.javaparty.map.MapHelper;
 import pl.javaparty.prefs.Prefs;
 import pl.javaparty.sql.dbManager;
 
@@ -36,6 +40,8 @@ public class SettingsFragment extends Fragment {
 	Context context;
 	ArrayAdapter<CharSequence> adapter;
 	static dbManager dbm;
+    ProgressDialog mapDialog;
+    MapHelper mapHelper;
 
 	private static final String TAG = "Facebook";
 	private UiLifecycleHelper uiHelper;
@@ -61,6 +67,8 @@ public class SettingsFragment extends Fragment {
         citySearchBox = (AutoCompleteTextView) view.findViewById(R.id.cityAutoComplete);
         saveButton = (Button) view.findViewById(R.id.saveSettingsButton);
 		clearButton = (Button) view.findViewById(R.id.clearFilesButton);
+        mapDialog = new ProgressDialog(getActivity());
+        mapDialog.setCancelable(false);
 
 		adapter = ArrayAdapter.createFromResource(getActivity(), R.array.COUNTIES, android.R.layout.simple_dropdown_item_1line);
 		citySearchBox.setAdapter(adapter);
@@ -77,6 +85,7 @@ public class SettingsFragment extends Fragment {
 				Log.i("SETTINGS", "Zapisano");
 				Log.i("SETTINGS", "Miasto: " + citySearchBox.getText().toString());
                 Toast.makeText(getActivity(), getString(R.string.saved), Toast.LENGTH_SHORT).show();
+                new GetLatLng().execute();
             }
 
 		});
@@ -174,4 +183,42 @@ public class SettingsFragment extends Fragment {
 		super.onSaveInstanceState(outState);
 		uiHelper.onSaveInstanceState(outState);
 	}
+
+
+    class GetLatLng extends AsyncTask<String, Void, String> {
+        LatLng latlng;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mapDialog.setMessage("Łączę się z mapami");
+            mapDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String city = Prefs.getCity(getActivity());
+            if (!city.isEmpty()) {
+                try {
+                    latlng = mapHelper.getLatLng(Prefs.getCity(getActivity()));
+                } catch (NullPointerException npexc) {
+                    latlng = new LatLng(50.0528282, 19.972944); //Kraków, bo tam bedzie pokazywana, cwele
+                }
+            }
+            return city;
+        }
+
+        @Override
+        protected void onPostExecute(String city) {
+            if (isAdded()) {
+
+                if (!city.isEmpty()) {
+                    Prefs.setLat(getActivity(), String.valueOf(latlng.latitude));
+                    Prefs.setLon(getActivity(), String.valueOf(latlng.longitude));
+                }
+                mapDialog.dismiss();
+            }
+            super.onPostExecute(city);
+        }
+    }
 }

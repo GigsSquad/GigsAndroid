@@ -15,11 +15,11 @@
             android:layout_height="53dp" android:layout_gravity="center_horizontal">
         <AutoCompleteTextView android:id="@+id/searchBoxArtist" android:layout_width="wrap_content"
                               android:layout_height="wrap_content"
-                              android:textColor="#2196F3"
-                              android:textColorHighlight="#2196F3"
-                              android:textColorHint="@color/light_blue"
-                              android:textColorLink="#2196F3"
-                              android:hint="@string/artist" android:inputType="textAutoComplete"
+                              android:textColor="@color/dark"
+                              android:textColorHighlight="@color/dark"
+                              android:textColorHint="#78909c"
+                              android:textColorLink="@color/dark"
+                              android:hint="Artysta (przyszłe kocnert)" android:inputType="textAutoComplete"
                               android:layout_weight="0.45"
                               android:imeOptions="actionDone"/>
         <Switch
