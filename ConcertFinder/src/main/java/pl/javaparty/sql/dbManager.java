@@ -360,7 +360,9 @@ public class dbManager extends SQLiteOpenHelper {
 
     private Concert[] getConcertsBy(String condition) {
         String[] columns = {"ORD", "ARTIST", "CITY", "SPOT", "DAY", "MONTH", "YEAR", "AGENCY", "URL", "LAT", "LON", "DIST"};
-        Cursor c = database.query(CONCERTS_TABLE, columns, condition, null, null, null, "YEAR,MONTH,DAY,DIST");
+
+        Cursor c = database.query(CONCERTS_TABLE, columns, condition, null, null, null, SORT_ORDER);
+
         Concert[] concerts = new Concert[c.getCount()];
         for (int i = 0; c.moveToNext(); i++) {
             concerts[i] = new Concert(c.getInt(0), c.getString(1), c.getString(2), c.getString(3),
@@ -403,13 +405,25 @@ public class dbManager extends SQLiteOpenHelper {
         Calendar yesterday = Calendar.getInstance();
         yesterday.add(Calendar.DATE, -1);
         int[] date = new int[]{yesterday.get(Calendar.DAY_OF_MONTH), yesterday.get(Calendar.MONTH) + 1, yesterday.get(Calendar.YEAR)};
-        return getConcertsByDateRange(0, 0, 0, date[0], date[1], date[2], filter, "YEAR,MONTH,DAY");
+        return getConcertsByDateRange(0, 0, 0, date[0], date[1], date[2], filter);
     }
 
     public Concert[] getFutureConcerts(String filter) {
         Calendar today = Calendar.getInstance();
         int[] date = new int[]{today.get(Calendar.DAY_OF_MONTH), today.get(Calendar.MONTH) + 1, today.get(Calendar.YEAR)};
-        return getConcertsByDateRange(date[0], date[1], date[2], 32, 13, 3000, filter, "DIST");
+        return getConcertsByDateRange(date[0], date[1], date[2], 32, 13, 3000, filter);
+
+        //        Calendar today = Calendar.getInstance();
+//        int[] date = new int[]{today.get(Calendar.DAY_OF_MONTH), today.get(Calendar.MONTH) + 1, today.get(Calendar.YEAR)};
+//        Concert[] firstPart = getConcertsByDateRange(date[0], date[1], date[2], date[0], (date[1] + 1) % 12, date[2], filter, "DIST");
+//        Concert[] secondPart = getConcertsByDateRange(date[0], (date[1] + 1) % 12, date[2], 32, 12, 3000, filter, "YEAR, MONTH, DAY, DIST");
+////        for(int i = 0; i<firstPart.length;i++)
+////        {
+////            Log.i("firstPartConcertARTYSTA",firstPart[i].getArtist());
+////            Log.i("firstPartConcertARTYSTA",String.valueOf(firstPart[i].getDistance()));
+////        }
+//        return joinConcertArray(firstPart, secondPart);
+
     }
 
     public Concert[] getPastConcertsByArtist(String artist, String filter) {
@@ -420,18 +434,9 @@ public class dbManager extends SQLiteOpenHelper {
 
     public Concert[] getFutureConcertsByArtist(String artist, String filter) {
 
+
         String condition = "ARTIST = '"+artist+"' AND (" + filter + ")";
         return getFutureConcerts(condition);
-//        Calendar today = Calendar.getInstance();
-//        int[] date = new int[]{today.get(Calendar.DAY_OF_MONTH), today.get(Calendar.MONTH) + 1, today.get(Calendar.YEAR)};
-//        Concert[] firstPart = getConcertsByDateRange(date[0], date[1], date[2], date[0], (date[1] + 1) % 12, date[2], filter, "DIST");
-//        Concert[] secondPart = getConcertsByDateRange(date[0], (date[1] + 1) % 12, date[2], 32, 12, 3000, filter, "YEAR, MONTH, DAY, DIST");
-////        for(int i = 0; i<firstPart.length;i++)
-////        {
-////            Log.i("firstPartConcertARTYSTA",firstPart[i].getArtist());
-////            Log.i("firstPartConcertARTYSTA",String.valueOf(firstPart[i].getDistance()));
-////        }
-//        return joinConcertArray(firstPart, secondPart);
     }
 
     public Concert[] joinConcertArray(Concert[] a, Concert[] b) {
@@ -448,7 +453,7 @@ public class dbManager extends SQLiteOpenHelper {
 	 * " AND MONTH = " + month + " AND YEAR = " + year; return getConcertsBy(condition); }
 	 */
 
-    public Concert[] getConcertsByDateRange(int dF, int mF, int yF, int dT, int mT, int yT, String filter, String orderBy) {
+    public Concert[] getConcertsByDateRange(int dF, int mF, int yF, int dT, int mT, int yT, String filter) {
         String[] columns = {"ORD", "ARTIST", "CITY", "SPOT", "DAY", "MONTH", "YEAR", "AGENCY", "URL", "LAT", "LON", "DIST"};
         String condition = "(YEAR > ? OR (YEAR = ? AND MONTH > ?) OR (YEAR = ? AND MONTH = ? AND DAY >= ?))"
                 + "AND (YEAR < ? OR (YEAR = ? AND MONTH < ?) OR (YEAR = ? AND MONTH = ? AND DAY <= ?)) "
@@ -468,7 +473,7 @@ public class dbManager extends SQLiteOpenHelper {
                 String.valueOf(dT)
         };
         Cursor c
-                = database.query(CONCERTS_TABLE, columns, condition, selectionArgs, null, null, orderBy);
+                = database.query(CONCERTS_TABLE, columns, condition, selectionArgs, null, null, SORT_ORDER);
 //"YEAR,MONTH,DAY"
         Concert[] concerts = new Concert[c.getCount()];
         for (int i = 0; c.moveToNext(); i++) {
