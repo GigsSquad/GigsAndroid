@@ -51,4 +51,10 @@ public class Prefs {
     public static int getUserID(Context context) {
         return getPrefs(context).getInt("USERID", -1);
     }
+
+    public static String getSortOrder(Context context) {
+            return getPrefs(context).getString("SORTORDER","YEAR,MONTH,DAY");
+
+    }
+
 }

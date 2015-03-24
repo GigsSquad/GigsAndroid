@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import pl.javaparty.items.Agencies;
 import pl.javaparty.items.Concert;
+import pl.javaparty.prefs.Prefs;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -19,7 +20,7 @@ public class dbManager extends SQLiteOpenHelper {
     private static SQLiteDatabase database;
     public final static String CONCERTS_TABLE = "Concerts";
     public final static String FAVOURITES_TABLE = "Favourites";
-
+    public static String SORT_ORDER = "";
     private static String CreateConcertTable =
             "CREATE TABLE " + CONCERTS_TABLE + "(" +
                     "ORD INTEGER PRIMARY KEY," +
@@ -43,8 +44,12 @@ public class dbManager extends SQLiteOpenHelper {
     public dbManager(Context context) {
         super(context, DATABASE_NAME, null, 1);
         database = getWritableDatabase();
+        SORT_ORDER = getSortOrder(context);
     }
 
+    private String getSortOrder(Context context){
+       return  Prefs.getSortOrder(context);
+    }
     public void close() {
         database.close();
     }
@@ -462,7 +467,8 @@ public class dbManager extends SQLiteOpenHelper {
                 String.valueOf(mT),
                 String.valueOf(dT)
         };
-        Cursor c = database.query(CONCERTS_TABLE, columns, condition, selectionArgs, null, null, orderBy);
+        Cursor c
+                = database.query(CONCERTS_TABLE, columns, condition, selectionArgs, null, null, orderBy);
 //"YEAR,MONTH,DAY"
         Concert[] concerts = new Concert[c.getCount()];
         for (int i = 0; c.moveToNext(); i++) {
