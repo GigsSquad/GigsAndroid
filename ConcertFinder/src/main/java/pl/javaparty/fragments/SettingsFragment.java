@@ -84,9 +84,11 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Prefs.setCity(getActivity(), citySearchBox.getText().toString());
+
                 Prefs.setSortOrder(getActivity(), sortOrder);
                 Log.i("SETTINGS", "Zapisano");
                 Log.i("SETTINGS", "Miasto: " + citySearchBox.getText().toString());
+
                 Toast.makeText(getActivity(), getString(R.string.saved), Toast.LENGTH_SHORT).show();
                 new GetLatLng().execute();
             }
@@ -212,7 +214,7 @@ public class SettingsFragment extends Fragment {
 
 
     class GetLatLng extends AsyncTask<String, Void, String> {
-        LatLng latlng;
+        LatLng latLng;
 
         @Override
         protected void onPreExecute() {
@@ -226,10 +228,13 @@ public class SettingsFragment extends Fragment {
             String city = Prefs.getCity(getActivity());
             if (!city.isEmpty()) {
                 try {
-                    latlng = mapHelper.getLatLng(Prefs.getCity(getActivity()));
+                    latLng = mapHelper.getLatLng(Prefs.getCity(getActivity()));
                 } catch (NullPointerException npexc) {
-                    latlng = new LatLng(50.0528282, 19.972944); //Kraków, bo tam bedzie pokazywana, cwele
+                    latLng = new LatLng(50.0528282, 19.972944); //Kraków, bo tam bedzie pokazywana, cwele
                 }
+
+
+                MainActivity.getDBManager().update(latLng);
             }
             return city;
         }
@@ -239,8 +244,8 @@ public class SettingsFragment extends Fragment {
             if (isAdded()) {
 
                 if (!city.isEmpty()) {
-                    Prefs.setLat(getActivity(), String.valueOf(latlng.latitude));
-                    Prefs.setLon(getActivity(), String.valueOf(latlng.longitude));
+                    Prefs.setLat(getActivity(), String.valueOf(latLng.latitude));
+                    Prefs.setLon(getActivity(), String.valueOf(latLng.longitude));
                 }
                 mapDialog.dismiss();
             }

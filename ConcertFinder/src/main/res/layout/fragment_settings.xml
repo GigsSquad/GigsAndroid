@@ -81,7 +81,7 @@
                     android:textColorLink="@color/dark"
                     android:id="@+id/radioButtonDist" android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" android:checked="true" android:layout_alignParentRight="true"
+                    android:layout_alignParentStart="true" android:checked="false" android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"/>
             <RadioButton
                     android:layout_width="match_parent"
@@ -93,7 +93,7 @@
                     android:textColorLink="@color/dark"
                     android:id="@+id/radioButtonDate"
                     android:layout_below="@+id/radioButtonDist" android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" android:checked="false"
+                    android:layout_alignParentStart="true" android:checked="true"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"/>
         </RadioGroup>

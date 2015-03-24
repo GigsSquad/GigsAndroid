@@ -6,8 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import com.google.android.gms.maps.model.LatLng;
+
 import pl.javaparty.items.Agencies;
 import pl.javaparty.items.Concert;
+import pl.javaparty.map.MapHelper;
 import pl.javaparty.prefs.Prefs;
 
 import java.util.Arrays;
@@ -21,6 +25,7 @@ public class dbManager extends SQLiteOpenHelper {
     public final static String CONCERTS_TABLE = "Concerts";
     public final static String FAVOURITES_TABLE = "Favourites";
     public static String SORT_ORDER = "";
+    private Context context;
     private static String CreateConcertTable =
             "CREATE TABLE " + CONCERTS_TABLE + "(" +
                     "ORD INTEGER PRIMARY KEY," +
@@ -43,13 +48,16 @@ public class dbManager extends SQLiteOpenHelper {
 
     public dbManager(Context context) {
         super(context, DATABASE_NAME, null, 1);
+        this.context = context;
+
         database = getWritableDatabase();
-        SORT_ORDER = getSortOrder(context);
+        setSortOrder(context);
     }
 
-    private String getSortOrder(Context context){
-       return  Prefs.getSortOrder(context);
+    private void setSortOrder(Context context) {
+        SORT_ORDER =  Prefs.getSortOrder(context);
     }
+
     public void close() {
         database.close();
     }
@@ -350,9 +358,8 @@ public class dbManager extends SQLiteOpenHelper {
     private Agencies getAgency(String s) {
         Agencies agency = null;
         Agencies[] agencyNames = Agencies.values();
-        for(int i = 0; i < agencyNames.length && agency==null ; i++)
-        {
-            if(agencyNames[i].name().equals(s))
+        for (int i = 0; i < agencyNames.length && agency == null; i++) {
+            if (agencyNames[i].name().equals(s))
                 agency = agencyNames[i];
         }
         return agency;
@@ -396,10 +403,10 @@ public class dbManager extends SQLiteOpenHelper {
         return getFutureConcerts(condition);
     }
 
-	public Concert getConcertByID(int ID) {
-		String condition = "ORD = " + ID;
-		return getConcertsBy(condition)[0];
-	}
+    public Concert getConcertByID(int ID) {
+        String condition = "ORD = " + ID;
+        return getConcertsBy(condition)[0];
+    }
 
     public Concert[] getPastConcerts(String filter) {
         Calendar yesterday = Calendar.getInstance();
@@ -435,7 +442,7 @@ public class dbManager extends SQLiteOpenHelper {
     public Concert[] getFutureConcertsByArtist(String artist, String filter) {
 
 
-        String condition = "ARTIST = '"+artist+"' AND (" + filter + ")";
+        String condition = "ARTIST = '" + artist + "' AND (" + filter + ")";
         return getFutureConcerts(condition);
     }
 
@@ -449,7 +456,7 @@ public class dbManager extends SQLiteOpenHelper {
 
 
 	/*
-	 * public Concert[] getConcertsByDate(int day, int month, int year) { String condition = "DAY = " + day +
+     * public Concert[] getConcertsByDate(int day, int month, int year) { String condition = "DAY = " + day +
 	 * " AND MONTH = " + month + " AND YEAR = " + year; return getConcertsBy(condition); }
 	 */
 
@@ -482,6 +489,26 @@ public class dbManager extends SQLiteOpenHelper {
         }
         c.close();
         return concerts;
+    }
+
+    public void update(LatLng latLng) {
+        setSortOrder(context);
+        String[] columns = {"ORD", "LAT", "LON"};
+        MapHelper mapHelper = new MapHelper(context);
+
+        Cursor c = database.query(CONCERTS_TABLE, columns, null, null, null, null, null);
+
+
+        ContentValues cv = new ContentValues();
+        double distance;
+        for (int i = 0; c.moveToNext(); i++) { //trolololo nie uzywam i co Pan na to
+            long id = c.getInt(0);
+            distance = mapHelper.inaccurateDistanceTo(new LatLng(Double.parseDouble(c.getString(1)), Double.parseDouble(c.getString(2))), latLng);
+            cv.put("DIST", distance);
+            database.update(CONCERTS_TABLE, cv, "ORD=" + id, null);
+
+        }
+
     }
 
     private Concert getFavConcertByID(int id) {
