@@ -59,10 +59,14 @@ public class TabComment extends Fragment {
         addComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isOnline())
-                    new InsertComment().execute();
-                else
+                if (isOnline()) {
+                    if (Prefs.getUserID(getActivity()) != -1)
+                        new InsertComment().execute();
+                    else
+                        Toast.makeText(getActivity(), "Tylko zalogowani użytkownicy mogą komentować", Toast.LENGTH_LONG).show();
+                } else {
                     Toast.makeText(getActivity(), getString(R.string.no_connection), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

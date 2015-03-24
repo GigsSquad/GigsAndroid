@@ -21,6 +21,7 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.LoginButton;
 import com.google.android.gms.maps.model.LatLng;
+import org.json.JSONException;
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.imageloader.FileExplorer;
@@ -214,12 +215,12 @@ public class SettingsFragment extends Fragment {
 
 
     class GetLatLng extends AsyncTask<String, Void, String> {
-        LatLng latLng;
+        LatLng latlng;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mapDialog.setMessage("Łączę się z mapami");
+            mapDialog.setMessage("Łączę się z Google Maps");
             mapDialog.show();
         }
 
@@ -228,27 +229,33 @@ public class SettingsFragment extends Fragment {
             String city = Prefs.getCity(getActivity());
             if (!city.isEmpty()) {
                 try {
-                    latLng = mapHelper.getLatLng(Prefs.getCity(getActivity()));
+                    Log.i("MAPS", "Pobieram z Google Maps...");
+                    latlng = mapHelper.getLatLng(city);
                 } catch (NullPointerException npexc) {
-                    latLng = new LatLng(50.0528282, 19.972944); //Kraków, bo tam bedzie pokazywana, cwele
+                    Log.w("MAPS", "Nie udało się pobrać z Google Maps");
+
+                    try {
+                        Log.i("MAPS", "Pobieram z Open City Maps...");
+                        mapDialog.setMessage("Łączę się z Open City Maps");
+                        latlng = mapHelper.getAlternateLatLng(city);
+                    } catch (JSONException e) {
+                        Log.w("MAPS", "Nie udało się pobrać z Open City Maps");
+                        e.printStackTrace();
+                        latlng = new LatLng(51.9189046, 19.1343786); // Polska
+                    }
                 }
-
-
-                MainActivity.getDBManager().update(latLng);
+                MainActivity.getDBManager().update(latlng);
             }
             return city;
         }
 
         @Override
         protected void onPostExecute(String city) {
-            if (isAdded()) {
-
-                if (!city.isEmpty()) {
-                    Prefs.setLat(getActivity(), String.valueOf(latLng.latitude));
-                    Prefs.setLon(getActivity(), String.valueOf(latLng.longitude));
-                }
-                mapDialog.dismiss();
+            if (!city.isEmpty()) {
+                Prefs.setLat(getActivity(), String.valueOf(latlng.latitude));
+                Prefs.setLon(getActivity(), String.valueOf(latlng.longitude));
             }
+            mapDialog.dismiss();
             super.onPostExecute(city);
         }
     }

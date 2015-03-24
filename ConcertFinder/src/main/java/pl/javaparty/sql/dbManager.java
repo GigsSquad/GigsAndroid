@@ -5,10 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
-
 import com.google.android.gms.maps.model.LatLng;
-
 import pl.javaparty.items.Agencies;
 import pl.javaparty.items.Concert;
 import pl.javaparty.map.MapHelper;
@@ -55,7 +54,7 @@ public class dbManager extends SQLiteOpenHelper {
     }
 
     private void setSortOrder(Context context) {
-        SORT_ORDER =  Prefs.getSortOrder(context);
+        SORT_ORDER = Prefs.getSortOrder(context);
     }
 
     public void close() {
@@ -78,26 +77,35 @@ public class dbManager extends SQLiteOpenHelper {
         Log.i("DB", "Tabele usunięte");
     }
 
-    public void addConcert(long id, String artistName, String city, String spot,
+    public void beginTransaction() {
+        database.beginTransaction();
+    }
+
+    public void endTransaction() {
+        database.setTransactionSuccessful();
+        database.endTransaction();
+    }
+
+    public void addConcert(long id, String artist, String city, String spot,
                            int day, int month, int year, String agency, String url, String lat, String lon, double distance) {
-        if (!contains(artistName, city, spot, day, month, year)) {
-            ContentValues cv = new ContentValues();
-            cv.put("ORD", id);
-            cv.put("ARTIST", artistName);
-            cv.put("CITY", city);
-            cv.put("SPOT", spot);
-            cv.put("DAY", day);
-            cv.put("MONTH", month);
-            cv.put("YEAR", year);
-            cv.put("AGENCY", agency);
-            cv.put("URL", url);
-            cv.put("LAT", lat);
-            cv.put("LON", lon);
-            cv.put("DIST", distance);
-            database.insertOrThrow("Concerts", null, cv);
-        }
-        //else
-        //System.out.println("Nie dodano " + artistName + city);
+
+        String sql = "INSERT INTO " + CONCERTS_TABLE + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
+        SQLiteStatement statement = database.compileStatement(sql);
+        statement.clearBindings();
+        statement.bindLong(1, id);
+        statement.bindString(2, artist);
+        statement.bindString(3, city);
+        statement.bindString(4, spot);
+        statement.bindLong(5, day);
+        statement.bindLong(6, month);
+        statement.bindLong(7, year);
+        statement.bindString(8, agency);
+        statement.bindString(9, url);
+        statement.bindString(10, lat);
+        statement.bindString(11, lon);
+        statement.bindDouble(12, distance);
+        statement.execute();
     }
 
     public void deleteDatabase(Context context) {
@@ -503,7 +511,7 @@ public class dbManager extends SQLiteOpenHelper {
         double distance;
         for (int i = 0; c.moveToNext(); i++) { //trolololo nie uzywam i co Pan na to
             long id = c.getInt(0);
-            distance = mapHelper.inaccurateDistanceTo(new LatLng(Double.parseDouble(c.getString(1)), Double.parseDouble(c.getString(2))), latLng);
+            distance = mapHelper.inaccurateDistanceTo(Double.parseDouble(c.getString(1)), Double.parseDouble(c.getString(2)), latLng);
             cv.put("DIST", distance);
             database.update(CONCERTS_TABLE, cv, "ORD=" + id, null);
 

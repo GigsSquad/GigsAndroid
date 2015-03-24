@@ -6,6 +6,11 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.util.Log;
 import com.google.android.gms.maps.model.LatLng;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import pl.javaparty.prefs.Prefs;
 
 import java.io.IOException;
@@ -53,11 +58,12 @@ public class MapHelper {
 
     //wynik zwracany w jakimś gównie a nie w kilometrach
     //obliczam odległość między dwoma punktami z pitagorasa
-    public double inaccurateDistanceTo(LatLng spot, LatLng hometown) {
-        double a = Math.abs(spot.latitude - hometown.latitude);
-        double b = Math.abs(spot.longitude - hometown.longitude);
+    public double inaccurateDistanceTo(double lat, double lon, LatLng hometown) {
+        double a = Math.abs(lat - hometown.latitude);
+        double b = Math.abs(lon - hometown.longitude);
         return (Math.sqrt((a * a) + (b * b)));
     }
+
 
     public int distanceTo(final LatLng spot) {
         hometownAddress = getAddress(hometownString);
@@ -97,12 +103,28 @@ public class MapHelper {
 
     }
 
-    public double getLat(String place) {
-        Log.i("HomeTownPlace", place);
-        return getAddress(place).getLatitude();
+    private String url_front = "http://nominatim.openstreetmap.org/search?q=";
+    private String email = null; // do kontaktu z nominatim jakby coś się zjebało, coooo?
+
+    public LatLng getAlternateLatLng(String city) throws JSONException {
+        String params = city + "&format=json";
+        return getCoordinates(params);
     }
 
-    public double getLon(String place) {
-        return getAddress(place).getLongitude();
+    private LatLng getCoordinates(String params) throws JSONException {
+        params = params.replace(" ", "+") + (email != null ? email : "");
+        JSONObject jso;
+        try {
+            jso = getJSON(params).getJSONObject(0);
+        } catch (Exception e) {
+            return new LatLng(0, 0);
+        }
+        return new LatLng(Double.parseDouble(jso.getString("lat")), Double.parseDouble(jso.getString("lon")));
+    }
+
+    private JSONArray getJSON(String params) throws IOException, JSONException {
+        Document doc = Jsoup.connect(url_front + params).ignoreContentType(true).get();
+        String docContent = doc.toString().split("<body>")[1].split("</body>")[0];
+        return docContent.equals("[]") ? null : new JSONArray(docContent);
     }
 }

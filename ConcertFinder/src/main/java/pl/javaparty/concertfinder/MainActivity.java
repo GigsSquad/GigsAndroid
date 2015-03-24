@@ -367,7 +367,7 @@ public class MainActivity extends FragmentActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mapDialog.setMessage("Łączę się z mapami");
+            mapDialog.setMessage("Łączę się z Google Maps");
             mapDialog.show();
         }
 
@@ -376,9 +376,20 @@ public class MainActivity extends FragmentActivity {
             String city = Prefs.getCity(getApplicationContext());
             if (!city.isEmpty()) {
                 try {
-                    latlng = mapHelper.getLatLng(Prefs.getCity(getApplicationContext()));
+                    Log.i("MAPS", "Pobieram z Google Maps...");
+                    latlng = mapHelper.getLatLng(city);
                 } catch (NullPointerException npexc) {
-                    latlng = new LatLng(50.0528282, 19.972944); //Kraków, bo tam bedzie pokazywana, cwele
+                    Log.w("MAPS", "Nie udało się pobrać z Google Maps");
+
+                    try {
+                        Log.i("MAPS", "Pobieram z Open City Maps...");
+                        mapDialog.setMessage("Łączę się z Open City Maps");
+                        latlng = mapHelper.getAlternateLatLng(city);
+                    } catch (JSONException e) {
+                        Log.w("MAPS", "Nie udało się pobrać z Open City Maps");
+                        e.printStackTrace();
+                        latlng = new LatLng(51.9189046, 19.1343786); // Polska
+                    }
                 }
             }
             return city;
@@ -425,27 +436,32 @@ public class MainActivity extends FragmentActivity {
                 if (success == 1 && lastid != Prefs.getLastID(getApplicationContext())) {
                     Prefs.setLastID(getApplicationContext(), lastid);
                     JSONArray mJsonArray = mJsonObject.getJSONArray("concerts");
+                    double distance;
+                    dbMgr.beginTransaction();
                     for (int i = 0; i < mJsonArray.length(); i++) {
                         JSONObject JSONconcert = mJsonArray.getJSONObject(i);
-                        String id = JSONconcert.getString("ord");
-                        String artist = JSONconcert.getString("artist");
-                        String city = JSONconcert.getString("city");
-                        String spot = JSONconcert.getString("spot");
-                        String day = JSONconcert.getString("day");
-                        String month = JSONconcert.getString("month");
-                        String year = JSONconcert.getString("year");
-                        String agency = JSONconcert.getString("agency");
-                        String url = JSONconcert.getString("url");
-                        String lat = JSONconcert.getString("lat");
-                        String lon = JSONconcert.getString("lon");
+                        if (latLng.longitude != -1)
+                            distance = mapHelper.inaccurateDistanceTo(Double.parseDouble(JSONconcert.getString("lat")), Double.parseDouble(JSONconcert.getString("lon")), latLng);
+                        else
+                            distance = 0;
 
-                        double distance = 0;
-                        if (latLng.longitude != -1 || latLng.latitude != -1)
-                            distance = mapHelper.inaccurateDistanceTo(new LatLng(Double.parseDouble(lat), Double.parseDouble(lon)), latLng);
+                        dbMgr.addConcert(
+                                JSONconcert.getInt("ord"),
+                                JSONconcert.getString("artist"),
+                                JSONconcert.getString("city"),
+                                JSONconcert.getString("spot"),
+                                JSONconcert.getInt("day"),
+                                JSONconcert.getInt("month"),
+                                JSONconcert.getInt("year"),
+                                JSONconcert.getString("agency"),
+                                JSONconcert.getString("url"),
+                                JSONconcert.getString("lat"),
+                                JSONconcert.getString("lon"),
+                                distance);
 
-                        dbMgr.addConcert(Long.parseLong(id), artist, city, spot, Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year), agency, url, lat, lon, distance);
                         loadingDialog.incrementProgressBy(1);
                     }
+                    dbMgr.endTransaction();
                     updateNeeded = true;
                 }
 
