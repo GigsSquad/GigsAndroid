@@ -92,6 +92,11 @@ public class TabComment extends Fragment {
             params.add(new BasicNameValuePair("user_id", Prefs.getUserID(getActivity()) + ""));
             params.add(new BasicNameValuePair("concert_id", getArguments().getInt("ID", -1) + ""));
             params.add(new BasicNameValuePair("comment", commentField.getText().toString()));
+
+            Log.i("InsertComment", "user_id: " + Prefs.getUserID(getActivity()));
+            Log.i("InsertComment", "concert_id: " + getArguments().getInt("ID", -1));
+            Log.i("InsertComment", "comment: " + commentField.getText().toString());
+
             JSONthing.makeRequest(PHPurls.insertComment, params); //TIGHT and ELEGANT
             return null;
         }
@@ -127,7 +132,6 @@ public class TabComment extends Fragment {
         protected String doInBackground(String... args) {
             List<NameValuePair> params = new ArrayList<NameValuePair>();
             params.add(new BasicNameValuePair("concert_id", getArguments().getInt("ID", -1) + ""));
-
             Log.d("JSON", "Wysyłane id koncertu: " + getArguments().getInt("ID", -1));
 
             JSONObject mJsonObject = jsoNthing.makeHttpRequest(PHPurls.getComments.toString(), "GET", params);
