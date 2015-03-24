@@ -79,7 +79,6 @@ public class MainActivity extends FragmentActivity {
         loadingDialog = new ProgressDialog(this);
         loadingDialog.setCancelable(false);
         loadingDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        loadingDialog.setProgress(0);
 
         mapDialog = new ProgressDialog(this);
         mapDialog.setCancelable(false);
@@ -172,29 +171,6 @@ public class MainActivity extends FragmentActivity {
 
         });
 
-        final EditText input = new EditText(this);
-
-        if (isOnline() && dbMgr.getSize("Concerts") < 10 && Prefs.getCity(getApplicationContext()).isEmpty()) {
-            //Toast.makeText(getApplicationContext(), "Pobierz koncerty", Toast.LENGTH_LONG).show();
-
-            new AlertDialog.Builder(MainActivity.this)
-                    .setTitle("Wprowadź swoje miasto")
-                    .setMessage("Potrzebujemy nazwy Twojej miejscowości, aby dobrze posortować koncerty :)")
-                    .setView(input)
-                    .setCancelable(false)
-                    .setPositiveButton("Zapisz", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            Prefs.setCity(getApplicationContext(), input.getText().toString());
-                            new GetLatLng().execute();
-                        }
-                    }).setNegativeButton("Anuluj", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    new DownloadConcerts().execute();
-                    // Do nothing.
-                }
-            }).show();
-
-        }
 
         // pierwsza inicjalizacja
         fragmentManager.beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
@@ -202,6 +178,58 @@ public class MainActivity extends FragmentActivity {
         drawerLayout.openDrawer(drawerList);
     }
 
+    @Override
+    protected void onResume() {
+
+        //jeśli miasto w Prefs wciąż jest puste to wyświetlamy okienko z prośbą o wpisanie
+        if (Prefs.getCity(getApplicationContext()).isEmpty())
+            showCityDialog();
+
+        //żeby pobrać cokolwiek to użytkownik musi być online oraz mieć mniej niż np 100 koncertów (np jak przerwie pobieranie w którymś momencie, to wtedy będzie mieć mniej)
+        if (isOnline() && dbMgr.getSize(dbManager.CONCERTS_TABLE) < 100)
+            showDownloadDialog();
+
+        super.onResume();
+    }
+
+    private void showCityDialog() {
+        final EditText input = new EditText(this);
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Wprowadź swoje miasto")
+                .setMessage("Potrzebujemy nazwy Twojej miejscowości, aby dobrze posortować koncerty :)")
+                .setView(input)
+                .setCancelable(true)
+                .setPositiveButton("Zapisz", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        Prefs.setCity(getApplicationContext(), input.getText().toString());
+                        Toast.makeText(getApplication(), "Dziękujemy, " + input.getText().toString(), Toast.LENGTH_SHORT).show();
+
+                        //jeśli online to od razu łączymy sie z mapami i pobieramy latlng
+                        if (isOnline())
+                            new GetLatLng().execute();
+                    }
+                }).show();
+    }
+
+    private void showDownloadDialog() {
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Czy chcesz teraz pobrać koncerty z bazy?")
+                .setMessage("Zajmie nam to kilka minut, ale satysfakcja gwarantowana.")
+                .setCancelable(true)
+                .setPositiveButton("Pobierz", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                        //jeśli nie ma pobranyuch jeszcze współrzędnych dla swojego miasta, czyli w Prefs LAT i LON są na -1 to łączy sie z mapami żeby pobrać
+                        if (!Prefs.getLon(getApplication()).equals("-1") || !Prefs.getLat(getApplication()).equals("-1"))
+                            new GetLatLng().execute();
+                        else // w przeciwnym wypadku od razu przechodzimy do pobierania kocnertów
+                            new DownloadConcerts().execute();
+                    }
+                }).setNegativeButton("Później", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+            }
+        }).show();
+    }
 
     @Override
     public void onBackPressed() {
@@ -376,14 +404,15 @@ public class MainActivity extends FragmentActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             loadingDialog.setMessage(getString(R.string.database_update));
+            loadingDialog.setProgress(0);
             loadingDialog.show();
         }
 
         @Override
         protected String doInBackground(String... args) {
+
             List<NameValuePair> params = new ArrayList<>();
             JSONObject mJsonObject = JSONthing.getThisShit(PHPurls.getConcerts, params);
-            //Log.d("All: ", mJsonObject.toString());
 
             LatLng latLng = new LatLng(Double.parseDouble(Prefs.getLon(getApplicationContext())), Double.parseDouble(Prefs.getLat(getApplicationContext())));
 

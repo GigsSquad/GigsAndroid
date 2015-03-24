@@ -34,7 +34,6 @@ public class RecentFragment extends Fragment {
     Button nextButton;
     private int lastPosition = 0;
     private int showedConcerts = 20;
-    //    public Map<CharSequence, Boolean> checkedAgencies;
     public Map<Agencies, Boolean> checkedAgencies;
 
     public RecentFragment() {
@@ -74,13 +73,6 @@ public class RecentFragment extends Fragment {
 
         concertsListView.addFooterView(nextButton);
         Calendar localCalendar = Calendar.getInstance(TimeZone.getDefault());
-        int currentDay = localCalendar.get(Calendar.DATE);
-        int currentMonth = localCalendar.get(Calendar.MONTH) + 1;
-        int currentYear = localCalendar.get(Calendar.YEAR);
-        Log.i("DATE", String.valueOf(currentDay));
-        Log.i("DATE", String.valueOf(currentMonth));
-        Log.i("DATE", String.valueOf(currentYear));
-
         concertsAdapter = new ConcertAdapter(getActivity(), cutArray(dbm.getFutureConcerts(filterAgencies())));
 
         concertsListView.setAdapter(concertsAdapter);
@@ -125,18 +117,7 @@ public class RecentFragment extends Fragment {
         return new Concert[0];
     }
 
-    private double CalculateDistance(double homeLat, double homeLon, String lat, String lon) {
-        double a = Math.abs(Double.parseDouble(lat) - homeLat);
-        double b = Math.abs(Double.parseDouble(lon) - homeLon);
-
-        return (Math.sqrt((a * a) + (b * b)));
-    }
-
     public void refresh() {
-        Calendar localCalendar = Calendar.getInstance(TimeZone.getDefault());
-        int currentDay = localCalendar.get(Calendar.DATE);
-        int currentMonth = localCalendar.get(Calendar.MONTH) + 1;
-        int currentYear = localCalendar.get(Calendar.YEAR);
         // concertsAdapter = new ConcertAdapter(getActivity(), cutArray(dbm.getAllConcerts(filterAgencies())));
         concertsAdapter.changeData(cutArray(dbm.getFutureConcerts(filterAgencies())));
         //concertsListView.setAdapter(concertsAdapter);
@@ -161,10 +142,6 @@ public class RecentFragment extends Fragment {
                     checked[i++] = b;
                 }
                 args.putBooleanArray("CHECKED", checked);
-
-//                CharSequence[] agencies = new CharSequence[checkedAgencies.size()];
-//                checkedAgencies.keySet().toArray(agencies);
-//                args.putCharSequenceArray("AGENCIES", agencies);
                 dialog.setArguments(args);
 
                 dialog.setFilterDialogListener(new FilterDialogListener() {

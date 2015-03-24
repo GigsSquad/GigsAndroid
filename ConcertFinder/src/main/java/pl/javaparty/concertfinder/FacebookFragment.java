@@ -20,6 +20,9 @@ import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import pl.javaparty.enums.PHPurls;
 import pl.javaparty.prefs.Prefs;
 import pl.javaparty.sql.JSONthing;
@@ -30,6 +33,8 @@ import java.util.List;
 
 public class FacebookFragment extends Fragment {
 
+    LoginButton authButton;
+    Button skipButton;
     private UiLifecycleHelper uiHelper;
     private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
@@ -39,6 +44,7 @@ public class FacebookFragment extends Fragment {
     };
 
     ProgressDialog loadingDialog;
+    Intent mainActivity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,24 +59,22 @@ public class FacebookFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_splash_screen, container, false);
 
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         loadingDialog = new ProgressDialog(getActivity());
         loadingDialog.setCancelable(false);
+        mainActivity = new Intent(getActivity(), MainActivity.class);
 
-        //ja pierdole... potrzebne  bo inaczej rzuca wyjątkiem, bez pozdrowień
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        Button skip = (Button) view.findViewById(R.id.skipBtn);
-        skip.setOnClickListener(new View.OnClickListener() {
+        skipButton = (Button) view.findViewById(R.id.skipBtn);
+        skipButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                startActivity(intent);
+                startActivity(mainActivity);
             }
         });
 
-        LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
+        authButton = (LoginButton) view.findViewById(R.id.authButton);
         authButton.setFragment(this);
         authButton.setReadPermissions(Arrays.asList("user_location", "user_birthday", "user_likes", "email"));
 
@@ -115,9 +119,7 @@ public class FacebookFragment extends Fragment {
                 }
             });
 
-        } else if (state.isClosed())
-
-        {
+        } else if (state.isClosed()) {
             Log.i("FB", "Logged out...");
         }
     }
@@ -125,11 +127,21 @@ public class FacebookFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        int userId = Prefs.getUserID(getActivity());
+        if (userId == -1) {
+            // brak id użytwnika w Prefs, wiec dajemy mu szansę na zalogowanie się przez facebooka lub pominiecia logowania
+            Log.i("LOGIN", "Brak ID w Prefs");
+            authButton.setVisibility(View.VISIBLE);
+            skipButton.setVisibility(View.VISIBLE);
+        } else { // mamy id w Prefs więc nie pokazujemy przycisków tylko od razu idziemy do aplikacji
+            Log.i("LOGIN", "ID znajduje się w Prefs (" + userId + ")");
+            authButton.setVisibility(View.INVISIBLE);
+            skipButton.setVisibility(View.INVISIBLE);
+            startActivity(mainActivity);
+        }
 
         Session session = Session.getActiveSession();
-
-        if (session != null &&
-                (session.isOpened() || session.isClosed())) {
+        if (session != null && (session.isOpened() || session.isClosed())) {
             onSessionStateChange(session, session.getState(), null);
         }
 
@@ -181,31 +193,35 @@ public class FacebookFragment extends Fragment {
         @Override
         protected String doInBackground(String... args) {
             List<NameValuePair> params = new ArrayList<NameValuePair>();
+            //wysyłamy dane użytkownika, jeśli nie ma go już bazie to doda,
             params.add(new BasicNameValuePair("firstName", array[0]));
             params.add(new BasicNameValuePair("lastName", array[1]));
             params.add(new BasicNameValuePair("email", array[2]));
             params.add(new BasicNameValuePair("birthday", array[3]));
             params.add(new BasicNameValuePair("location", array[4]));
             params.add(new BasicNameValuePair("fb_id", array[5]));
-            JSONthing.makeRequest(PHPurls.login, params); //TIGHT and ELEGANT
 
-            //JSONObject mJsonObject = jsonthing.makeHttpRequest(PHPurls.login.toString(), "POST", params); //TIGHT and ELEGANT
+            JSONObject mJsonObject = jsonthing.makeHttpRequest(PHPurls.login.toString(), "GET", params); //TIGHT and ELEGANT
 
-//            try {
-//               // if (mJsonObject.getInt("success") == 1)
-//                    //Prefs.setUserID(getActivity(), mJsonObject.getInt("user_id"));
-//
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
+            int userId = -1;
+            try {
+                JSONArray mJsonArray = mJsonObject.getJSONArray("login");
+                for (int i = 0; i < mJsonArray.length(); i++) {
+                    JSONObject JSONlogin = mJsonArray.getJSONObject(i);
+                    userId = JSONlogin.getInt("user_id");
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            Log.i("LOGIN", "Pobrany ID z bazy: " + userId);
+            Prefs.setUserID(getActivity(), userId);
             return null;
         }
 
         @Override
         protected void onPostExecute(String s) {
             loadingDialog.dismiss();
-            Intent intent = new Intent(getActivity(), MainActivity.class);
-            startActivity(intent);
+            startActivity(mainActivity);
             super.onPostExecute(s);
         }
     }

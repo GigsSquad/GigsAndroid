@@ -166,6 +166,15 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        sortOrder = Prefs.getSortOrder(getActivity());
+        if (sortOrder.equals("DIST")) {
+            distanceSort.setChecked(true);
+            dateSort.setChecked(false);
+        } else if (sortOrder.equals("YEAR,MONTH,DAY")) {
+            distanceSort.setChecked(false);
+            dateSort.setChecked(true);
+        }
+
 
         Session session = Session.getActiveSession();
 

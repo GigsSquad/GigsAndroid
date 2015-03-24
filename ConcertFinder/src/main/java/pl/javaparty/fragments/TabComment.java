@@ -112,6 +112,7 @@ public class TabComment extends Fragment {
 
         ArrayAdapter arrayAdapter = null;
         ArrayList commentArrayList = null;
+        JSONthing jsoNthing;
 
         @Override
         protected void onPreExecute() {
@@ -119,13 +120,17 @@ public class TabComment extends Fragment {
             loadingDialog.setMessage(getString(R.string.download_comments_progress));
             loadingDialog.show();
             commentArrayList = new ArrayList<>();
+            jsoNthing = new JSONthing();
         }
 
         @Override
         protected String doInBackground(String... args) {
             List<NameValuePair> params = new ArrayList<NameValuePair>();
-            JSONObject mJsonObject = JSONthing.getThisShit(PHPurls.getComments, params);
-            Log.d("All: ", mJsonObject.toString());
+            params.add(new BasicNameValuePair("concert_id", getArguments().getInt("ID", -1) + ""));
+
+            Log.d("JSON", "Wysyłane id koncertu: " + getArguments().getInt("ID", -1));
+
+            JSONObject mJsonObject = jsoNthing.makeHttpRequest(PHPurls.getComments.toString(), "GET", params);
 
             try {
                 int success = mJsonObject.getInt("success");
@@ -134,7 +139,6 @@ public class TabComment extends Fragment {
                     for (int i = 0; i < mJsonArray.length(); i++) {
                         JSONObject JSONcomment = mJsonArray.getJSONObject(i);
                         String author = JSONcomment.getString("user_id");
-                        //String concert_id = JSONcomment.getString("concert_id");
                         String comment = JSONcomment.getString("comment");
 
                         commentArrayList.add(comment + " ~" + author);
