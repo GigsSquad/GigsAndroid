@@ -23,6 +23,16 @@
         <requestFocus/>
     </AutoCompleteTextView>
 
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Opcje sortowania"
+            android:textColor="@color/dark"
+            android:textColorHighlight="@color/dark"
+            android:textColorHint="@color/dark"
+            android:textColorLink="@color/dark"
+            android:id="@+id/textView" android:layout_marginTop="20dp"/>
     <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -32,7 +42,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_alignParentBottom="true" android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true" android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_alignParentRight="true" android:layout_alignParentEnd="true"/>
 
         <Button
@@ -40,7 +51,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/save"
-                android:layout_above="@+id/authButton" android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
+                android:layout_above="@+id/authButton" android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_alignParentRight="true" android:layout_alignParentEnd="true"/>
 
         <Button
@@ -48,8 +60,43 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/clear"
-                android:layout_above="@+id/saveSettingsButton" android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
+                android:layout_above="@+id/saveSettingsButton" android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_alignParentRight="true" android:layout_alignParentEnd="true"/>
+
+        <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+            <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="najpierw najbliższe"
+                    android:textColor="@color/dark"
+                    android:textColorHighlight="@color/dark"
+
+                    android:textColorHint="@color/dark"
+                    android:textColorLink="@color/dark"
+                    android:id="@+id/radioButtonDist" android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" android:checked="true" android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"/>
+            <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="najpierw najwcześniejsze"
+                    android:textColor="@color/dark"
+                    android:textColorHighlight="@color/dark"
+                    android:textColorHint="@color/dark"
+                    android:textColorLink="@color/dark"
+                    android:id="@+id/radioButtonDate"
+                    android:layout_below="@+id/radioButtonDist" android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" android:checked="false"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"/>
+        </RadioGroup>
 
     </RelativeLayout>
 

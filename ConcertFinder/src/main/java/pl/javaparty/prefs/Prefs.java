@@ -54,7 +54,10 @@ public class Prefs {
 
     public static String getSortOrder(Context context) {
             return getPrefs(context).getString("SORTORDER","YEAR,MONTH,DAY");
+    }
 
+    public static void setSortOrder(Context context, String value) { //data -> YEAR,MONTH,DAY, miejsce -> DIST
+        getPrefs(context).edit().putString("SORTORDER", value).commit();
     }
 
 }
