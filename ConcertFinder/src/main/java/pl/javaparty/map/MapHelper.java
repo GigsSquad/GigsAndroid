@@ -19,41 +19,13 @@ import java.util.concurrent.TimeUnit;
 
 public class MapHelper {
     private Geocoder geoCoder;
-    private List<Address> addressList;
 
-    private Address destinationAddress; // to zadane
     private Address hometownAddress; // to z ustawie�
     private String hometownString;
 
     public MapHelper(Context context) {
         geoCoder = new Geocoder(context);
         hometownString = Prefs.getCity(context);
-    }
-
-    /**
-     * Oblicza odleglosc miedzy zadanym miastem w stringu a miastem ktore zostalo zapisane w ustawieniach.
-     *
-     * @param city nazwa miasta
-     * @return zwraca odleglosc w kilometrach
-     */
-
-    public int distanceTo(final String city) {
-        destinationAddress = getAddress(city);
-        hometownAddress = getAddress(hometownString);
-
-        Log.i("MAP", "Miasto:" + city);
-        float[] distanceFloat = new float[3];
-
-        try {
-            Location.distanceBetween(
-                    hometownAddress.getLatitude(), hometownAddress.getLongitude(),
-                    destinationAddress.getLatitude(), destinationAddress.getLongitude(),
-                    distanceFloat);
-        } catch (NullPointerException ne) {
-            return 0;
-        }
-        Log.i("MAP", "Dystans w km: " + (int) (distanceFloat[0] / 1000));
-        return (int) (distanceFloat[0] / 1000);
     }
 
     //wynik zwracany w jakimś gównie a nie w kilometrach
@@ -83,48 +55,69 @@ public class MapHelper {
         return (int) (distanceFloat[0] / 1000);
     }
 
-    public Address getAddress(String place) {
+    private Address getAddress(String place) {
         int tryDownload = 0;
-        try {
-            while (tryDownload++ < 3) {
+        List<Address> addressList;
+        while (tryDownload++ < 5) {
+            try {
                 addressList = geoCoder.getFromLocationName(place, 1);
                 if (addressList.size() > 0)
                     return addressList.get(0);
-                TimeUnit.SECONDS.sleep(3);
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException | IOException | NullPointerException e) {
+                e.printStackTrace();
             }
-        } catch (InterruptedException | IOException | NullPointerException e) {
-            e.printStackTrace();
         }
         return null;
     }
 
     public LatLng getLatLng(String place) {
-        return (new LatLng(getAddress(place).getLatitude(), getAddress(place).getLongitude()));
+        LatLng latLng = null;
 
-    }
-
-    private String url_front = "http://nominatim.openstreetmap.org/search?q=";
-    private String email = null; // do kontaktu z nominatim jakby coś się zjebało, coooo?
-
-    public LatLng getAlternateLatLng(String city) throws JSONException {
-        String params = city + "&format=json";
-        return getCoordinates(params);
-    }
-
-    private LatLng getCoordinates(String params) throws JSONException {
-        params = params.replace(" ", "+") + (email != null ? email : "");
-        JSONObject jso;
-        try {
-            jso = getJSON(params).getJSONObject(0);
-        } catch (Exception e) {
-            return new LatLng(0, 0);
+        if (!hometownAddress.hasLatitude() && !hometownAddress.hasLongitude()) {
+            hometownAddress = getAddress(place);
         }
+        latLng = new LatLng(hometownAddress.getLatitude(), hometownAddress.getLongitude());
+        return latLng;
+
+    }
+
+    public LatLng getAlternateLatLng(String city) throws JSONException, IOException {
+        JSONObject jso = getJSON(city.replace(" ", "+") + "&format=json").getJSONObject(0);
+        Log.d("MAPS", jso.toString());
         return new LatLng(Double.parseDouble(jso.getString("lat")), Double.parseDouble(jso.getString("lon")));
     }
 
     private JSONArray getJSON(String params) throws IOException, JSONException {
+        String url_front = "http://nominatim.openstreetmap.org/search?q=";
         Document doc = Jsoup.connect(url_front + params).ignoreContentType(true).get();
         String docContent = doc.toString().split("<body>")[1].split("</body>")[0];
         return docContent.equals("[]") ? null : new JSONArray(docContent);
+    }
+
+
+    public LatLng getLocationFromAddress(String strAddress, Context context) {
+
+        Geocoder coder = new Geocoder(context);
+        List<Address> address;
+        LatLng p1 = null;
+
+        try {
+            address = coder.getFromLocationName(strAddress, 5);
+            if (address == null) {
+                return null;
+            }
+            Address location = address.get(0);
+            location.getLatitude();
+            location.getLongitude();
+
+            p1 = new LatLng((int) (location.getLatitude() * 1E6),
+                    (int) (location.getLongitude() * 1E6));
+
+            return p1;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

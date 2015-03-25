@@ -501,22 +501,27 @@ public class dbManager extends SQLiteOpenHelper {
 
     public void update(LatLng latLng) {
         setSortOrder(context);
+
         String[] columns = {"ORD", "LAT", "LON"};
         MapHelper mapHelper = new MapHelper(context);
-
         Cursor c = database.query(CONCERTS_TABLE, columns, null, null, null, null, null);
-
-
         ContentValues cv = new ContentValues();
         double distance;
+
+        beginTransaction();
         for (int i = 0; c.moveToNext(); i++) { //trolololo nie uzywam i co Pan na to
+            //String selectSql = "SELECT lat, lon" + CONCERTS_TABLE + " VALUES WHERE ORD = ?;";
             long id = c.getInt(0);
             distance = mapHelper.inaccurateDistanceTo(Double.parseDouble(c.getString(1)), Double.parseDouble(c.getString(2)), latLng);
             cv.put("DIST", distance);
             database.update(CONCERTS_TABLE, cv, "ORD=" + id, null);
-
+//            String updateSql = "UPDATE " + CONCERTS_TABLE + " SET DIST = ?;";
+//            SQLiteStatement statement = database.compileStatement(updateSql);
+//            statement.clearBindings();
+//            statement.bindDouble(1, distance);
+//            statement.execute();
         }
-
+        endTransaction();
     }
 
     private Concert getFavConcertByID(int id) {

@@ -21,7 +21,6 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.LoginButton;
 import com.google.android.gms.maps.model.LatLng;
-import org.json.JSONException;
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.imageloader.FileExplorer;
@@ -229,20 +228,9 @@ public class SettingsFragment extends Fragment {
             String city = Prefs.getCity(getActivity());
             if (!city.isEmpty()) {
                 try {
-                    Log.i("MAPS", "Pobieram z Google Maps...");
                     latlng = mapHelper.getLatLng(city);
-                } catch (NullPointerException npexc) {
-                    Log.w("MAPS", "Nie udało się pobrać z Google Maps");
-
-                    try {
-                        Log.i("MAPS", "Pobieram z Open City Maps...");
-                        mapDialog.setMessage("Łączę się z Open City Maps");
-                        latlng = mapHelper.getAlternateLatLng(city);
-                    } catch (JSONException e) {
-                        Log.w("MAPS", "Nie udało się pobrać z Open City Maps");
-                        e.printStackTrace();
-                        latlng = new LatLng(51.9189046, 19.1343786); // Polska
-                    }
+                } catch (NullPointerException npe) {
+                    latlng = new LatLng(52.232938, 21.0611941); // Warszawa
                 }
                 MainActivity.getDBManager().update(latlng);
             }

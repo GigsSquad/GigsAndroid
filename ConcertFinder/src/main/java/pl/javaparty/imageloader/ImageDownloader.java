@@ -20,6 +20,8 @@ public class ImageDownloader {
 		try {
 			String bandImgUrl = getBandPictureAdress(bandName);
 			saveImage(fileDir, bandImgUrl);
+		} catch (OutOfMemoryError oome) {
+
 		} catch (IOException e) {
 			//Log.e(TAG, "Przekroczono czas polaczenia. Nic nie pobrano.");
 		}

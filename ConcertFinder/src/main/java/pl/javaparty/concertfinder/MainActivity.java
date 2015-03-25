@@ -376,20 +376,9 @@ public class MainActivity extends FragmentActivity {
             String city = Prefs.getCity(getApplicationContext());
             if (!city.isEmpty()) {
                 try {
-                    Log.i("MAPS", "Pobieram z Google Maps...");
                     latlng = mapHelper.getLatLng(city);
-                } catch (NullPointerException npexc) {
-                    Log.w("MAPS", "Nie udało się pobrać z Google Maps");
-
-                    try {
-                        Log.i("MAPS", "Pobieram z Open City Maps...");
-                        mapDialog.setMessage("Łączę się z Open City Maps");
-                        latlng = mapHelper.getAlternateLatLng(city);
-                    } catch (JSONException e) {
-                        Log.w("MAPS", "Nie udało się pobrać z Open City Maps");
-                        e.printStackTrace();
-                        latlng = new LatLng(51.9189046, 19.1343786); // Polska
-                    }
+                } catch (NullPointerException npe) {
+                    latlng = new LatLng(52.232938, 21.0611941); // Warszawa
                 }
             }
             return city;
@@ -484,6 +473,7 @@ public class MainActivity extends FragmentActivity {
             loadingDialog.dismiss();
             super.onPostExecute(s);
         }
+
     }
 
     private boolean isOnline() {
