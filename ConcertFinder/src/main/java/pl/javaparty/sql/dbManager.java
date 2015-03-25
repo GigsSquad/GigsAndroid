@@ -23,6 +23,7 @@ public class dbManager extends SQLiteOpenHelper {
     private static SQLiteDatabase database;
     public final static String CONCERTS_TABLE = "Concerts";
     public final static String FAVOURITES_TABLE = "Favourites";
+    public final static String SEARCH_TABLE = "Search";
     public static String SORT_ORDER = "";
     private Context context;
     private static String CreateConcertTable =
@@ -45,6 +46,16 @@ public class dbManager extends SQLiteOpenHelper {
             "CREATE TABLE " + FAVOURITES_TABLE + "(" +
                     "ID INTEGER)";
 
+    //nowa tabela na wyszukiwania użytkownika
+    private static String CreateSearchTable =
+            "CREATE TABLE "+ SEARCH_TABLE + "("+
+                    "USER_ID INTEGER NOT NULL,"+
+                    "ARTIST TEXT,"+
+                    "CITY TEXT,"+
+                    "DAY INTEGER,"+     // data dodania rekord
+                    "MONTH INTEGER,"+
+                    "YEAR INTEGER)";
+
     public dbManager(Context context) {
         super(context, DATABASE_NAME, null, 1);
         this.context = context;
@@ -65,6 +76,7 @@ public class dbManager extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CreateConcertTable);
         db.execSQL(CreateFavouriteTable);
+        db.execSQL(CreateSearchTable);
     }
 
     @Override
@@ -529,4 +541,36 @@ public class dbManager extends SQLiteOpenHelper {
         return getConcertsBy(condition)[0]; // id jest unuikalne wiec bedzie to zawsze tablica jednoelementowa
     }
 
+    public void addSearch(int usrId,String artist, String city,int d, int m, int y){
+        if(!searchAlreadyIn(usrId,artist,city)){
+            ContentValues cv = new ContentValues();
+            cv.put("USER_ID", usrId);
+            cv.put("ARTIST",artist);
+            cv.put("CITY",city);
+            cv.put("DAY",d);
+            cv.put("MONTH",m);
+            cv.put("YEAR",y);
+            Log.i("SEARCH", "Wrzucomo [usrId = "+usrId+" ][artist = "+artist+" ][city = "+city+"]" +
+                    "[data: "+d+"."+m+"."+y+"]");
+            database.insertOrThrow(SEARCH_TABLE, null, cv);
+        }
+        else
+            Log.i("SEARCH", "Już jest [usrId = "+usrId+" ][artist = "+artist+" ][city = "+city+"]");
+    }
+
+    private boolean searchAlreadyIn (int usrId, String artist, String city){
+        String[] columns;
+        Cursor c;
+        String condition;
+        if(city == null){
+            columns = new String[]{"USER_ID","ARTIST"};
+            condition = "USER_ID = " + usrId +" AND ARTIST = '" + artist+"'";
+        }
+        else{
+            columns = new String[]{"USER_ID","CITY"};
+            condition = "USER_ID = " + usrId +" AND CITY = '" + city+"'";
+        }
+        c = database.query(SEARCH_TABLE, columns, condition, null, null, null, null);
+        return c.moveToFirst();
+    }
 }
