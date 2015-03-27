@@ -115,21 +115,6 @@ public class dbManager extends SQLiteOpenHelper {
         Log.i("DB", "Baza usunięta i stworzona na nowo");
     }
 
-    public boolean contains(String artistName, String city, String spot, int day, int month, int year) {
-        boolean contains = false;
-        int h1 = (artistName + city + spot + String.valueOf(day) + String.valueOf(month) + String.valueOf(year)).hashCode();
-        String[] columns = {"ARTIST", "CITY", "SPOT", "DAY", "MONTH", "YEAR"};
-        Cursor c = database.query(CONCERTS_TABLE, columns, null, null, null, null, null);
-        int h2;
-        while (c.moveToNext() && !contains) {
-            h2 = (c.getString(0) + c.getString(1) + c.getString(2) + String.valueOf(c.getInt(3)) +
-                    String.valueOf(c.getInt(4)) + String.valueOf(c.getInt(5))).hashCode();
-            contains = h1 == h2;
-        }
-        c.close();
-        return contains;
-    }
-
     public boolean contains(int id) {
         boolean contains = false;
         String[] columns = {"ID"};
@@ -232,7 +217,8 @@ public class dbManager extends SQLiteOpenHelper {
                 String.valueOf(mT),
                 String.valueOf(dT)
         };
-        Cursor c = database.query(CONCERTS_TABLE, columns, condition, selectionArgs, null, null, "YEAR,MONTH,DAY");
+        //Cursor c = database.query(CONCERTS_TABLE, columns, condition, selectionArgs, null, null, "YEAR,MONTH,DAY");
+        Cursor c = database.query(true, CONCERTS_TABLE, columns, condition, selectionArgs, null, null, SORT_ORDER, null);
         String[] artists = new String[c.getCount()];
         for (int i = 0; c.moveToNext(); i++) {
             artists[i] = c.getString(0);
@@ -347,7 +333,8 @@ public class dbManager extends SQLiteOpenHelper {
         boolean favourite = false;
         Cursor c = database.query(FAVOURITES_TABLE, columns, null, null, null, null, null);
         for (int i = 0; c.moveToNext(); i++)
-            // TODO wut? Czo to za niewykorzystane i?
+            // wut? Czo to za niewykorzystane i?
+            //no na chuj drazyc temat
             if (c.getInt(0) == id)
                 favourite = true;
         c.close();
@@ -385,10 +372,6 @@ public class dbManager extends SQLiteOpenHelper {
         }
         c.close();
         return concerts;
-    }
-
-    public Concert[] getAllConcerts(String filter) {
-        return getConcertsBy(filter);
     }
 
     public Concert[] getConcertsByArtist(String artist, String filter) {
@@ -462,12 +445,6 @@ public class dbManager extends SQLiteOpenHelper {
         return result;
     }
 
-
-	/*
-     * public Concert[] getConcertsByDate(int day, int month, int year) { String condition = "DAY = " + day +
-	 * " AND MONTH = " + month + " AND YEAR = " + year; return getConcertsBy(condition); }
-	 */
-
     public Concert[] getConcertsByDateRange(int dF, int mF, int yF, int dT, int mT, int yT, String filter) {
         String[] columns = {"ORD", "ARTIST", "CITY", "SPOT", "DAY", "MONTH", "YEAR", "AGENCY", "URL", "LAT", "LON", "DIST"};
         String condition = "(YEAR > ? OR (YEAR = ? AND MONTH > ?) OR (YEAR = ? AND MONTH = ? AND DAY >= ?))"
@@ -487,9 +464,8 @@ public class dbManager extends SQLiteOpenHelper {
                 String.valueOf(mT),
                 String.valueOf(dT)
         };
-        Cursor c
-                = database.query(CONCERTS_TABLE, columns, condition, selectionArgs, null, null, SORT_ORDER);
-//"YEAR,MONTH,DAY"
+        //Cursor c = database.query(CONCERTS_TABLE, columns, condition, selectionArgs, null, null, SORT_ORDER);
+        Cursor c = database.query(true, CONCERTS_TABLE, columns, condition, selectionArgs, null, null, SORT_ORDER, null);
         Concert[] concerts = new Concert[c.getCount()];
         for (int i = 0; c.moveToNext(); i++) {
             concerts[i] = new Concert(c.getInt(0), c.getString(1), c.getString(2), c.getString(3),

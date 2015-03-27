@@ -19,7 +19,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
@@ -176,24 +177,30 @@ public class MainActivity extends FragmentActivity {
         fragmentManager.beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
                 android.R.anim.slide_out_right).replace(R.id.content_frame, new RecentFragment()).commit();
         drawerLayout.openDrawer(drawerList);
-    }
 
-    @Override
-    protected void onResume() {
 
         //jeśli miasto w Prefs wciąż jest puste to wyświetlamy okienko z prośbą o wpisanie
-        if (Prefs.getCity(getApplicationContext()).isEmpty())
+        if (Prefs.getCity(getApplicationContext()).isEmpty() && Prefs.getStart(getApplicationContext()))
             showCityDialog();
 
         //żeby pobrać cokolwiek to użytkownik musi być online oraz mieć mniej niż np 100 koncertów (np jak przerwie pobieranie w którymś momencie, to wtedy będzie mieć mniej)
         if (isOnline() && dbMgr.getSize(dbManager.CONCERTS_TABLE) < 100)
             showDownloadDialog();
 
+    }
+
+    @Override
+    protected void onResume() {
         super.onResume();
     }
 
     private void showCityDialog() {
-        final EditText input = new EditText(this);
+        final AutoCompleteTextView input = new AutoCompleteTextView(this);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.COUNTIES, android.R.layout.simple_dropdown_item_1line);
+        input.setAdapter(adapter);
+
+        Prefs.setStart(getApplicationContext(), false); // żeby już nie pytało o miasto, infomacja o tym że apk już kiedyś była uruchamiana
+
         new AlertDialog.Builder(MainActivity.this)
                 .setTitle("Wprowadź swoje miasto")
                 .setMessage("Potrzebujemy nazwy Twojej miejscowości, aby dobrze posortować koncerty :)")
@@ -212,6 +219,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void showDownloadDialog() {
+
         new AlertDialog.Builder(MainActivity.this)
                 .setTitle("Czy chcesz teraz pobrać koncerty z bazy?")
                 .setMessage("Zajmie nam to kilka minut, ale satysfakcja gwarantowana.")
@@ -435,7 +443,7 @@ public class MainActivity extends FragmentActivity {
                             distance = 0;
 
                         dbMgr.addConcert(
-                                JSONconcert.getInt("ord"),
+                                JSONconcert.getInt("id"),
                                 JSONconcert.getString("artist"),
                                 JSONconcert.getString("city"),
                                 JSONconcert.getString("spot"),
