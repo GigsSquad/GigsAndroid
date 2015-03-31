@@ -16,10 +16,13 @@ import pl.javaparty.adapters.ConcertAdapter;
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.items.Concert;
+import pl.javaparty.prefs.Prefs;
 import pl.javaparty.sql.dbManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class ArtistSearch extends Fragment {
 
@@ -29,6 +32,7 @@ public class ArtistSearch extends Fragment {
     ArrayAdapter<String> adapterSearchBox;
     ConcertAdapter adapter;
     dbManager dbm;
+    Context context;
     private String lastSearching = "";
     private int lastPosition;
     private boolean future = true;
@@ -37,7 +41,7 @@ public class ArtistSearch extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = inflater.inflate(R.layout.tab_search_artist, container, false);
         getActivity().getActionBar().setTitle(getString(R.string.search_by_arist));
-
+        context = inflater.getContext();
         dbm = MainActivity.getDBManager();// przekazujemy dbm od mainActivity
 
         searchBox = (AutoCompleteTextView) view.findViewById(R.id.searchBoxArtist);
@@ -69,6 +73,15 @@ public class ArtistSearch extends Fragment {
                 searchBox.setAdapter(adapterSearchBox);
                 searchBox.setThreshold(1);
                 concertList.setAdapter(adapter);
+
+                //wrzucenie szukania do lokalnej
+                int usrId = Prefs.getUserID(context);
+                Calendar c = GregorianCalendar.getInstance();
+                int day = c.get(Calendar.DATE);
+                int month = c.get(Calendar.MONTH)+1;
+                int year = c.get(Calendar.YEAR);
+                dbm.addSearch(usrId,artist,null,day,month,year);
+
                 // zapisywanie danych, coby potem przywrocic
                 lastSearching = searchBox.getText().toString();
                 getActivity().getActionBar().setTitle(getString(R.string.search) + ": " + searchBox.getText().toString());

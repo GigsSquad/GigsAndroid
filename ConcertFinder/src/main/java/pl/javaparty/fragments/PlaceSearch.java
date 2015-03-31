@@ -15,10 +15,13 @@ import pl.javaparty.adapters.ConcertAdapter;
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.items.Concert;
+import pl.javaparty.prefs.Prefs;
 import pl.javaparty.sql.dbManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class PlaceSearch extends Fragment {
 
@@ -65,6 +68,15 @@ public class PlaceSearch extends Fragment {
                 adapter = new ConcertAdapter(getActivity(), future ?
                         dbm.getFutureConcertsByCity(city, filter) : dbm.getPastConcertsByCity(city, filter));
                 concertList.setAdapter(adapter);
+
+                //wrzucenie szukania do lokalnej
+                int usrId = Prefs.getUserID(context);
+                Calendar c = GregorianCalendar.getInstance();
+                int day = c.get(Calendar.DATE);
+                int month = c.get(Calendar.MONTH)+1;
+                int year = c.get(Calendar.YEAR);
+                dbm.addSearch(usrId,null,city,day,month,year);
+
                 // zapisywanie danych, coby potem przywrocic
                 lastSearching = searchBox.getText().toString();
                 getActivity().getActionBar().setTitle(getString(R.string.search) + ": " + searchBox.getText().toString());
