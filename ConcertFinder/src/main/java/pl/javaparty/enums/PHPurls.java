@@ -9,7 +9,9 @@ public enum PHPurls {
     getConcerts(main + "get_concerts.php"),
     insertComment(main + "insert_comment.php"),
     getComments(main + "get_comments.php"),
-    login(main + "login.php");
+    login(main + "login.php"),
+    getLatLng(main + "get_location.php"),
+    updateUser(main + "update_user.php");
 
     final String url;
 

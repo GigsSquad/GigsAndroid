@@ -30,7 +30,7 @@ public class MapHelper {
 
     //wynik zwracany w jakimś gównie a nie w kilometrach
     //obliczam odległość między dwoma punktami z pitagorasa
-    public double inaccurateDistanceTo(double lat, double lon, LatLng hometown) {
+    public double inaccurateDistanceTo(double lat, double lon, LatLng hometown) { //slicznie to wyglada
         double a = Math.abs(lat - hometown.latitude);
         double b = Math.abs(lon - hometown.longitude);
         return (Math.sqrt((a * a) + (b * b)));
@@ -72,15 +72,15 @@ public class MapHelper {
     }
 
     public LatLng getLatLng(String place) {
-        LatLng latLng = null;
+        LatLng latLng;
 
         if (!hometownAddress.hasLatitude() && !hometownAddress.hasLongitude()) {
             hometownAddress = getAddress(place);
         }
         latLng = new LatLng(hometownAddress.getLatitude(), hometownAddress.getLongitude());
         return latLng;
-
     }
+
 
     public LatLng getAlternateLatLng(String city) throws JSONException, IOException {
         JSONObject jso = getJSON(city.replace(" ", "+") + "&format=json").getJSONObject(0);

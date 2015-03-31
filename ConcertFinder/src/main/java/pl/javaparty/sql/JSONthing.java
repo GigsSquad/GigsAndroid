@@ -104,6 +104,7 @@ public class JSONthing {
             }
             is.close();
             json = sb.toString();
+            Log.i("JSON", "SERVER: " + sb.toString());
         } catch (Exception e) {
             Log.e("Buffer Error", "Error converting result " + e.toString());
         }
@@ -113,6 +114,8 @@ public class JSONthing {
         } catch (JSONException e) {
             Log.e("JSON Parser", "Error parsing data " + e.toString());
         }
+
+
         return jObj;
 
     }

@@ -21,14 +21,23 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.LoginButton;
 import com.google.android.gms.maps.model.LatLng;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
+import pl.javaparty.enums.PHPurls;
 import pl.javaparty.imageloader.FileExplorer;
 import pl.javaparty.map.MapHelper;
 import pl.javaparty.prefs.Prefs;
+import pl.javaparty.sql.JSONthing;
 import pl.javaparty.sql.dbManager;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class SettingsFragment extends Fragment {
 
@@ -215,27 +224,67 @@ public class SettingsFragment extends Fragment {
 
     class GetLatLng extends AsyncTask<String, Void, String> {
         LatLng latlng;
+        JSONthing jsonthing;
+        String id;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             mapDialog.setMessage("Łączę się z Google Maps");
             mapDialog.show();
+            jsonthing = new JSONthing();
+            id = String.valueOf(Prefs.getUserID(getActivity().getApplicationContext())); //stirng żeby się PHPy nie srały
         }
 
         @Override
         protected String doInBackground(String... params) {
             String city = Prefs.getCity(getActivity());
             if (!city.isEmpty()) {
-                try {
-                    latlng = mapHelper.getLatLng(city);
-                } catch (NullPointerException npe) {
-                    latlng = new LatLng(52.232938, 21.0611941); // Warszawa
-                }
+                if (!id.equals("-1"))
+                    updateServerLatLng(city);
+                latlng = getServerLatLng(city);
                 MainActivity.getDBManager().update(latlng);
             }
             return city;
         }
+
+        /**
+         * Aktualizuje miasto użytkownia na to któe pisał w okienku
+         *
+         * @param city
+         */
+        protected void updateServerLatLng(String city) {
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("location", city.split(" ")[0])); //biorę miasto do pierwszej spacji
+            params.add(new BasicNameValuePair("user_id", id));
+            new JSONthing().makeHttpRequest(PHPurls.getLatLng.toString(), "GET", params); //TIGHT and ELEGANT
+        }
+
+        /**
+         * pobiera długosć i szerokosć ze spots, bierze najpierw te latlng gdzie nie ma spotu
+         *
+         * @param city - miasto
+         * @return długość i szerokość zadanego miasta
+         */
+        protected LatLng getServerLatLng(String city) {
+            List<NameValuePair> params = new ArrayList<>();
+            params.add(new BasicNameValuePair("location", city.split(" ")[0]));
+            JSONObject mJsonObject = jsonthing.makeHttpRequest(PHPurls.getLatLng.toString(), "GET", params); //TIGHT and ELEGANT
+            try {
+                int success = mJsonObject.getInt("success");
+                if (success == 1) {
+                    JSONArray mJsonArray = mJsonObject.getJSONArray("latlng");
+                    for (int i = 0; i < mJsonArray.length(); i++) {
+                        JSONObject JSONlogin = mJsonArray.getJSONObject(i);
+                        return new LatLng(JSONlogin.getInt("lat"), JSONlogin.getInt("lon"));
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return new LatLng(52.232938, 21.0611941); // Warszawa
+        }
+
 
         @Override
         protected void onPostExecute(String city) {

@@ -34,6 +34,7 @@ public class Prefs {
 
     public static void setLat(Context context, String value) {
         getPrefs(context).edit().putString("LAT", value).commit();
+        getPrefs(context).edit().putString("LAT", value).commit();
     }
 
     public static void setLon(Context context, String value) {

@@ -27,6 +27,7 @@ import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
 import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -178,15 +179,13 @@ public class MainActivity extends FragmentActivity {
                 android.R.anim.slide_out_right).replace(R.id.content_frame, new RecentFragment()).commit();
         drawerLayout.openDrawer(drawerList);
 
-
-        //jeśli miasto w Prefs wciąż jest puste to wyświetlamy okienko z prośbą o wpisanie
-        if (Prefs.getCity(getApplicationContext()).isEmpty() && Prefs.getStart(getApplicationContext()))
-            showCityDialog();
-
         //żeby pobrać cokolwiek to użytkownik musi być online oraz mieć mniej niż np 100 koncertów (np jak przerwie pobieranie w którymś momencie, to wtedy będzie mieć mniej)
         if (isOnline() && dbMgr.getSize(dbManager.CONCERTS_TABLE) < 100)
             showDownloadDialog();
 
+        //jeśli miasto w Prefs wciąż jest puste to wyświetlamy okienko z prośbą o wpisanie
+        if (Prefs.getCity(getApplicationContext()).isEmpty() && Prefs.getStart(getApplicationContext()))
+            showCityDialog();
     }
 
     @Override
@@ -208,14 +207,21 @@ public class MainActivity extends FragmentActivity {
                 .setCancelable(true)
                 .setPositiveButton("Zapisz", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        Prefs.setCity(getApplicationContext(), input.getText().toString());
-                        Toast.makeText(getApplication(), "Dziękujemy, " + input.getText().toString(), Toast.LENGTH_SHORT).show();
+                        if (!input.getText().toString().isEmpty()) {
+                            Prefs.setCity(getApplicationContext(), input.getText().toString());
+                            Toast.makeText(getApplication(), "Dziękujemy, " + input.getText().toString(), Toast.LENGTH_SHORT).show();
+                        }
 
                         //jeśli online to od razu łączymy sie z mapami i pobieramy latlng
                         if (isOnline())
                             new GetLatLng().execute();
                     }
-                }).show();
+                }).setNegativeButton("Anluje", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        }).show();
     }
 
     private void showDownloadDialog() {
@@ -363,34 +369,71 @@ public class MainActivity extends FragmentActivity {
         drawerList.setAdapter(adapter);
     }
 
-    // przekazuje DBmanagera
     public static dbManager getDBManager() {
         return dbMgr;
     }
 
-
     class GetLatLng extends AsyncTask<String, Void, String> {
         LatLng latlng;
+        JSONthing jsonthing;
+        String id;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             mapDialog.setMessage("Łączę się z Google Maps");
             mapDialog.show();
+            jsonthing = new JSONthing();
+            id = String.valueOf(Prefs.getUserID(getApplication())); //stirng żeby się PHPy nie srały
         }
 
         @Override
-        protected String doInBackground(String... params) {
+        protected String doInBackground(String... args) {
             String city = Prefs.getCity(getApplicationContext());
             if (!city.isEmpty()) {
-                try {
-                    latlng = mapHelper.getLatLng(city);
-                } catch (NullPointerException npe) {
-                    latlng = new LatLng(52.232938, 21.0611941); // Warszawa
-                }
+                if (!id.equals("-1"))
+                    updateServerLatLng(city);
+                latlng = getServerLatLng(city);
             }
             return city;
         }
+
+        /**
+         * Aktualizuje miasto użytkownia na to któe pisał w okienku
+         *
+         * @param city
+         */
+        protected void updateServerLatLng(String city) {
+            List<NameValuePair> params = new ArrayList<>();
+            params.add(new BasicNameValuePair("location", city.split(" ")[0]));
+            params.add(new BasicNameValuePair("user_id", id));
+            jsonthing.makeHttpRequest(PHPurls.getLatLng.toString(), "GET", params); //TIGHT and ELEGANT
+        }
+
+        /**
+         * pobiera długosć i szerokosć ze spots, bierze najpierw te latlng gdzie nie ma spotu
+         *
+         * @param city - miasto
+         * @return długość i szerokość zadanego miasta
+         */
+        protected LatLng getServerLatLng(String city) {
+            List<NameValuePair> params = new ArrayList<>();
+            params.add(new BasicNameValuePair("location", city.split(" ")[0]));
+            params.add(new BasicNameValuePair("user_id", id));
+            JSONObject mJsonObject = jsonthing.makeHttpRequest(PHPurls.getLatLng.toString(), "GET", params); //TIGHT and ELEGANT
+
+            try {
+                if (mJsonObject.getInt("success") == 1) {
+                    JSONArray mJsonArray = mJsonObject.getJSONArray("latlng");
+                    JSONObject JSONlogin = mJsonArray.getJSONObject(0);
+                    return new LatLng(JSONlogin.getInt("lat"), JSONlogin.getInt("lon"));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return new LatLng(52.232938, 21.0611941); // Warszawa
+        }
+
 
         @Override
         protected void onPostExecute(String city) {
@@ -421,7 +464,7 @@ public class MainActivity extends FragmentActivity {
 
             List<NameValuePair> params = new ArrayList<>();
             JSONObject mJsonObject = JSONthing.getThisShit(PHPurls.getConcerts, params);
-
+            //współrzędne z prefs wpisane do latLng
             LatLng latLng = new LatLng(Double.parseDouble(Prefs.getLon(getApplicationContext())), Double.parseDouble(Prefs.getLat(getApplicationContext())));
 
             try {
@@ -468,7 +511,6 @@ public class MainActivity extends FragmentActivity {
 
             return null;
         }
-
 
         @Override
         protected void onPostExecute(String s) {
