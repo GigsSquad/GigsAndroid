@@ -475,17 +475,19 @@ public class MainActivity extends FragmentActivity {
                 count = mJsonObject.getInt("count");
                 //chłopcy i dziewczęta pamiętajmy iż last_id != count
 
-                //jak poprawnie pobierzemy z internetów koncerty
+                //jak poprawnie pobierzemy z internetów
                 if (success == 1) {
+                    loadingDialog.setMax(count - prefsLastId);
+
+                    //aktualizujemy obecne koncerty bez względu na wszystko
+                    updateConcerts();
+
                     if (jsonLastId > prefsLastId) { //aktualizacja - kiedy ID z internetu jest większe od tego ID które mamy w aplikacji, czyli w bazie na serwerze jest więcej koncertów
                         downloadConcerts();
                     } else if (jsonLastId < prefsLastId) { // tak nie powinno się nigdy stać
-                        Log.wtf("DB", "baza w aplikacji ma wiecej koncertów niż na serwerze?");
-                        dbMgr.deleteTables();
-                        downloadConcerts();
-                    } else if (jsonLastId == prefsLastId) {
-                        Log.i("DB", "Liczba koncertów jest okej ale sprawdźmy aktualność wszystkich koncertów");
-
+                        Log.wtf("DB", "Baza w aplikacji ma wiecej koncertów niż na serwerze?");
+                        dbMgr.deleteTables(); //wypierdol dziada
+                        downloadConcerts(); //i zapełnij od nowa
                     }
                 }
 
@@ -496,11 +498,47 @@ public class MainActivity extends FragmentActivity {
             return null;
         }
 
-        protected void downloadConcerts() throws JSONException {
+        protected void updateConcerts() throws JSONException {
             //współrzędne z prefs wpisane do latLng
             LatLng latLng = new LatLng(Double.parseDouble(Prefs.getLon(getApplicationContext())), Double.parseDouble(Prefs.getLat(getApplicationContext())));
 
             loadingDialog.setMax(count - prefsLastId);
+            Prefs.setLastID(getApplicationContext(), jsonLastId);
+            JSONArray mJsonArray = mJsonObject.getJSONArray("concerts");
+            double distance;
+            dbMgr.beginTransaction();
+            for (int i = 0; i < mJsonArray.length(); i++) {
+                JSONObject JSONconcert = mJsonArray.getJSONObject(i);
+                if (latLng.longitude != -1)
+                    distance = mapHelper.inaccurateDistanceTo(Double.parseDouble(JSONconcert.getString("lat")), Double.parseDouble(JSONconcert.getString("lon")), latLng);
+                else
+                    distance = 0;
+
+                dbMgr.updateConcert(
+                        JSONconcert.getInt("id"),
+                        JSONconcert.getString("artist"),
+                        JSONconcert.getString("city"),
+                        JSONconcert.getString("spot"),
+                        JSONconcert.getInt("day"),
+                        JSONconcert.getInt("month"),
+                        JSONconcert.getInt("year"),
+                        JSONconcert.getString("agency"),
+                        JSONconcert.getString("url"),
+                        JSONconcert.getString("updated"),
+                        JSONconcert.getString("lat"),
+                        JSONconcert.getString("lon"),
+                        distance);
+
+                loadingDialog.incrementProgressBy(1);
+            }
+            dbMgr.endTransaction();
+            updateNeeded = true;
+        }
+
+        protected void downloadConcerts() throws JSONException {
+            //współrzędne z prefs wpisane do latLng
+            LatLng latLng = new LatLng(Double.parseDouble(Prefs.getLon(getApplicationContext())), Double.parseDouble(Prefs.getLat(getApplicationContext())));
+
             Prefs.setLastID(getApplicationContext(), jsonLastId);
             JSONArray mJsonArray = mJsonObject.getJSONArray("concerts");
             double distance;
@@ -532,7 +570,6 @@ public class MainActivity extends FragmentActivity {
             dbMgr.endTransaction();
             updateNeeded = true;
         }
-
 
         @Override
         protected void onPostExecute(String s) {

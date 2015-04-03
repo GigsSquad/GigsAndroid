@@ -122,6 +122,29 @@ public class dbManager extends SQLiteOpenHelper {
         statement.execute();
     }
 
+    public void updateConcert(long id, String artist, String city, String spot,
+                              int day, int month, int year, String agency, String url, String updated, String lat, String lon, double distance) {
+
+        String sql = "UPDATE " + CONCERTS_TABLE + " SET artist = ?, city = ?, spot = ?, day = ?, month = ?, year = ?, agency = ?, url = ?, updated = ?, lat = ?, lon = ?, dist = ? WHERE ord = ?";
+
+        SQLiteStatement statement = database.compileStatement(sql);
+        statement.clearBindings();
+        statement.bindString(1, artist);
+        statement.bindString(2, city);
+        statement.bindString(3, spot);
+        statement.bindLong(4, day);
+        statement.bindLong(5, month);
+        statement.bindLong(6, year);
+        statement.bindString(7, agency);
+        statement.bindString(8, url);
+        statement.bindString(9, updated);
+        statement.bindString(10, lat);
+        statement.bindString(11, lon);
+        statement.bindDouble(12, distance);
+        statement.bindLong(13, id);
+        statement.execute();
+    }
+
     public void deleteDatabase(Context context) {
         database.close();
         context.deleteDatabase(DATABASE_NAME);
@@ -488,6 +511,7 @@ public class dbManager extends SQLiteOpenHelper {
         c.close();
         return concerts;
     }
+
 
     public void update(LatLng latLng) {
         setSortOrder(context);
