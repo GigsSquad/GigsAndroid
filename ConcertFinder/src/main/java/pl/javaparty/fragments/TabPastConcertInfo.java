@@ -31,9 +31,8 @@ public class TabPastConcertInfo extends Fragment {
     private static dbManager dbm;
     private int ID;
     private ListView lv;
-    private TextView tv, artist, placeTV, distance, dateTV, loadTV;
+    private TextView tv, artist, placeTV, dateTV, loadTV;
     private ProgressBar pbar;
-    MapHelper mapHelper;
     private String artistName, city, place;
     int d, m, y;
 
@@ -43,7 +42,6 @@ public class TabPastConcertInfo extends Fragment {
         image = (ImageView) view.findViewById(R.id.artist_image_past);
         artist = (TextView) view.findViewById(R.id.artist_past);
         placeTV = (TextView) view.findViewById(R.id.place_past);
-        distance = (TextView) view.findViewById(R.id.distance_past);
         dateTV = (TextView) view.findViewById(R.id.date_past);
         tv = (TextView) view.findViewById(R.id.textView3);
         lv = (ListView) view.findViewById(R.id.songs);
@@ -71,7 +69,6 @@ public class TabPastConcertInfo extends Fragment {
 
         ImageLoader.init(inflater.getContext()).DisplayImage(artistName, image);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            new calculateDistance().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             new GetSetlist().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
 
@@ -145,39 +142,7 @@ public class TabPastConcertInfo extends Fragment {
         }
     }
 
-    private class calculateDistance extends AsyncTask<Void, Void, Void> {
-        int distanceInt = 0;
 
-        @Override
-        protected void onPreExecute() {
-            distance.setVisibility(View.GONE);
-            mapHelper = new MapHelper(getActivity());
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            distanceInt = mapHelper.distanceTo(new LatLng(Double.parseDouble(dbm.getLon(ID)), Double.parseDouble(dbm.getLat(ID))));
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            if (isAdded()) {
-                try {
-                    distance.setText(distanceInt + "km " + getString(R.string.distance_to) + " " + Prefs.getCity(getActivity()));
-                } catch (NullPointerException npe) {
-                    distance.setText(distanceInt + "km " + getString(R.string.distance_to) + " " + getString(R.string.hometown));
-                } catch (IllegalStateException ise) {
-                    //trolololol
-                } finally {
-                    if (distanceInt != 0)
-                        distance.setVisibility(View.VISIBLE);
-                }
-            }
-            super.onPostExecute(result);
-        }
-    }
 
     private class GetSetlist extends AsyncTask<Void, Void, Void> {
 

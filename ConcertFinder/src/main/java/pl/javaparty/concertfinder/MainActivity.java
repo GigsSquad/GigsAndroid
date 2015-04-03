@@ -228,13 +228,13 @@ public class MainActivity extends FragmentActivity {
 
         new AlertDialog.Builder(MainActivity.this)
                 .setTitle("Czy chcesz teraz pobrać koncerty z bazy?")
-                .setMessage("Zajmie nam to kilka minut, ale satysfakcja gwarantowana.")
+                .setMessage("Może zająć nam to kilka minut.")
                 .setCancelable(true)
                 .setPositiveButton("Pobierz", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
 
                         //jeśli nie ma pobranyuch jeszcze współrzędnych dla swojego miasta, czyli w Prefs LAT i LON są na -1 to łączy sie z mapami żeby pobrać
-                        if (!Prefs.getLon(getApplication()).equals("-1") || !Prefs.getLat(getApplication()).equals("-1"))
+                        if (Prefs.getLon(getApplication()).equals("-1") || Prefs.getLat(getApplication()).equals("-1"))
                             new GetLatLng().execute();
                         else // w przeciwnym wypadku od razu przechodzimy do pobierania kocnertów
                             new DownloadConcerts().execute();
@@ -441,8 +441,9 @@ public class MainActivity extends FragmentActivity {
             if (!city.isEmpty()) {
                 Prefs.setLat(getApplicationContext(), String.valueOf(latlng.latitude));
                 Prefs.setLon(getApplicationContext(), String.valueOf(latlng.longitude));
+                Log.d("Zapisano", "Lat:" + Prefs.getLat(getApplicationContext()) + " LONG:" + Prefs.getLon(getApplicationContext()));
             }
-            new DownloadConcerts().execute();
+            //new DownloadConcerts().execute();
             mapDialog.dismiss();
             super.onPostExecute(city);
         }

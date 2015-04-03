@@ -46,14 +46,14 @@ public class MapHelper {
 
 
     public int distanceTo(final LatLng spot) {
-        hometownAddress = getAddress(hometownString);
+        LatLng hometownLatLng = MapHelper.getLatLongFromAddress(hometownString);
 
         Log.i("MAP", "Miasto:" + spot);
         float[] distanceFloat = new float[3];
 
         try {
             Location.distanceBetween(
-                    hometownAddress.getLongitude(), hometownAddress.getLatitude(),
+                    hometownLatLng.longitude, hometownLatLng.latitude,//bylo odwrotnie lat i long, moze mialo tak byc?
                     spot.latitude, spot.longitude,
                     distanceFloat);
         } catch (NullPointerException ne) {

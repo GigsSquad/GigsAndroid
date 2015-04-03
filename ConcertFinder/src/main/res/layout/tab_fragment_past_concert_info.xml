@@ -66,13 +66,6 @@
                             android:textStyle="bold"/>
                 </LinearLayout>
 
-                <TextView
-                        android:id="@+id/distance_past"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="40dp"
-                        android:textColor="#757575"/>
-
                 <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
