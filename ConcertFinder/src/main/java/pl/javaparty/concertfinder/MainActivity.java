@@ -459,6 +459,7 @@ public class MainActivity extends FragmentActivity {
             super.onPreExecute();
             loadingDialog.setMessage(getString(R.string.database_update));
             loadingDialog.setProgress(0);
+            loadingDialog.setMax(1);
             loadingDialog.show();
         }
 
@@ -477,16 +478,20 @@ public class MainActivity extends FragmentActivity {
 
                 //jak poprawnie pobierzemy z internetów
                 if (success == 1) {
-                    loadingDialog.setMax(count - prefsLastId);
+                    loadingDialog.setMax(prefsLastId + jsonLastId);
+
+                    Log.i("DB", "ID - Prefs: " + prefsLastId + " JSON: " + jsonLastId);
+                    Log.i("DB", "COUNT - Prefs: " + dbMgr.getSize(dbManager.CONCERTS_TABLE) + " JSON: " + count);
 
                     //aktualizujemy obecne koncerty bez względu na wszystko
                     updateConcerts();
 
-                    if (jsonLastId > prefsLastId) { //aktualizacja - kiedy ID z internetu jest większe od tego ID które mamy w aplikacji, czyli w bazie na serwerze jest więcej koncertów
+                    if (count > dbMgr.getSize(dbManager.CONCERTS_TABLE)) { //aktualizacja - kiedy liczba koncertów z internetu jest większa od liczby koncertów które mamy w aplikacji
                         downloadConcerts();
-                    } else if (jsonLastId < prefsLastId) { // tak nie powinno się nigdy stać
+                    } else { // tak nie powinno się nigdy stać
                         Log.wtf("DB", "Baza w aplikacji ma wiecej koncertów niż na serwerze?");
                         dbMgr.deleteTables(); //wypierdol dziada
+                        Prefs.setLastID(getApplicationContext(), -1); // zmieniamy ostatnie id na początkowe
                         downloadConcerts(); //i zapełnij od nowa
                     }
                 }
@@ -498,6 +503,7 @@ public class MainActivity extends FragmentActivity {
             return null;
         }
 
+        //Aktualizuje koncerty
         protected void updateConcerts() throws JSONException {
             //współrzędne z prefs wpisane do latLng
             LatLng latLng = new LatLng(Double.parseDouble(Prefs.getLon(getApplicationContext())), Double.parseDouble(Prefs.getLat(getApplicationContext())));
@@ -535,6 +541,7 @@ public class MainActivity extends FragmentActivity {
             updateNeeded = true;
         }
 
+        //Pobiera nowe koncerty
         protected void downloadConcerts() throws JSONException {
             //współrzędne z prefs wpisane do latLng
             LatLng latLng = new LatLng(Double.parseDouble(Prefs.getLon(getApplicationContext())), Double.parseDouble(Prefs.getLat(getApplicationContext())));

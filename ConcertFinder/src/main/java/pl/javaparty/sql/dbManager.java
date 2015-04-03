@@ -3,6 +3,7 @@ package pl.javaparty.sql;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
@@ -103,23 +104,27 @@ public class dbManager extends SQLiteOpenHelper {
                            int day, int month, int year, String agency, String url, String updated, String lat, String lon, double distance) {
 
         String sql = "INSERT INTO " + CONCERTS_TABLE + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-
-        SQLiteStatement statement = database.compileStatement(sql);
-        statement.clearBindings();
-        statement.bindLong(1, id);
-        statement.bindString(2, artist);
-        statement.bindString(3, city);
-        statement.bindString(4, spot);
-        statement.bindLong(5, day);
-        statement.bindLong(6, month);
-        statement.bindLong(7, year);
-        statement.bindString(8, agency);
-        statement.bindString(9, url);
-        statement.bindString(10, updated);
-        statement.bindString(11, lat);
-        statement.bindString(12, lon);
-        statement.bindDouble(13, distance);
-        statement.execute();
+        try {
+            SQLiteStatement statement = database.compileStatement(sql);
+            statement.clearBindings();
+            statement.bindLong(1, id);
+            statement.bindString(2, artist);
+            statement.bindString(3, city);
+            statement.bindString(4, spot);
+            statement.bindLong(5, day);
+            statement.bindLong(6, month);
+            statement.bindLong(7, year);
+            statement.bindString(8, agency);
+            statement.bindString(9, url);
+            statement.bindString(10, updated);
+            statement.bindString(11, lat);
+            statement.bindString(12, lon);
+            statement.bindDouble(13, distance);
+            statement.execute();
+        } catch (SQLiteConstraintException sqlce) {
+            Log.i("DB", "Takie samo id, więc update");
+            updateConcert(id, artist, city, spot, day, month, year, agency, url, updated, lat, lon, distance);
+        }
     }
 
     public void updateConcert(long id, String artist, String city, String spot,
