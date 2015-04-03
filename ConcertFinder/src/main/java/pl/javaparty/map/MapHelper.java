@@ -6,6 +6,12 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.util.Log;
 import com.google.android.gms.maps.model.LatLng;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,6 +20,8 @@ import org.jsoup.nodes.Document;
 import pl.javaparty.prefs.Prefs;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -93,6 +101,51 @@ public class MapHelper {
         Document doc = Jsoup.connect(url_front + params).ignoreContentType(true).get();
         String docContent = doc.toString().split("<body>")[1].split("</body>")[0];
         return docContent.equals("[]") ? null : new JSONArray(docContent);
+    }
+
+
+    public static LatLng getLatLongFromAddress(String address) {
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        try {
+            String uri = "http://maps.google.com/maps/api/geocode/json?address=" +
+                    URLEncoder.encode(address, "UTF-8") + "&sensor=false";
+            HttpGet httpGet = new HttpGet(uri);
+            HttpClient client = new DefaultHttpClient();
+            HttpResponse response;
+            response = client.execute(httpGet);
+            HttpEntity entity = response.getEntity();
+            InputStream stream = entity.getContent();
+            int b;
+            while ((b = stream.read()) != -1) {
+                stringBuilder.append((char) b);
+            }
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        JSONObject jsonObject;
+        try {
+            jsonObject = new JSONObject(stringBuilder.toString());
+
+            double lng = ((JSONArray) jsonObject.get("results")).getJSONObject(0)
+                    .getJSONObject("geometry").getJSONObject("location")
+                    .getDouble("lng");
+
+            double lat = ((JSONArray) jsonObject.get("results")).getJSONObject(0)
+                    .getJSONObject("geometry").getJSONObject("location")
+                    .getDouble("lat");
+            Log.d("LATLNGcity", address);
+            Log.d("LATLNGlatitude", "" + lat);
+            Log.d("LATLNGlongitude", "" + lng);
+            return new LatLng(lat, lng);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return new LatLng(52.232938, 21.0611941);
     }
 
 

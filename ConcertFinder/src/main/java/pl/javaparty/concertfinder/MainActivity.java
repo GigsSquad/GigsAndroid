@@ -393,7 +393,8 @@ public class MainActivity extends FragmentActivity {
             if (!city.isEmpty()) {
                 if (!id.equals("-1"))
                     updateServerLatLng(city);
-                latlng = getServerLatLng(city);
+                //latlng = getServerLatLng(city);
+                latlng = MapHelper.getLatLongFromAddress(city);
             }
             return city;
         }
@@ -450,6 +451,8 @@ public class MainActivity extends FragmentActivity {
     class DownloadConcerts extends AsyncTask<String, Void, String> {
 
         boolean updateNeeded = false;
+        int success, jsonLastId, prefsLastId, count;
+        JSONObject mJsonObject;
 
         @Override
         protected void onPreExecute() {
@@ -463,46 +466,27 @@ public class MainActivity extends FragmentActivity {
         protected String doInBackground(String... args) {
 
             List<NameValuePair> params = new ArrayList<>();
-            JSONObject mJsonObject = JSONthing.getThisShit(PHPurls.getConcerts, params);
-            //współrzędne z prefs wpisane do latLng
-            LatLng latLng = new LatLng(Double.parseDouble(Prefs.getLon(getApplicationContext())), Double.parseDouble(Prefs.getLat(getApplicationContext())));
+            mJsonObject = JSONthing.getThisShit(PHPurls.getConcerts, params);
 
             try {
-                int success = mJsonObject.getInt("success");
-                int lastid = Integer.parseInt(mJsonObject.getString("last_id"));
-                int count = mJsonObject.getInt("count");
+                success = mJsonObject.getInt("success");
+                jsonLastId = Integer.parseInt(mJsonObject.getString("last_id"));
+                prefsLastId = Prefs.getLastID(getApplicationContext());
+                count = mJsonObject.getInt("count");
                 //chłopcy i dziewczęta pamiętajmy iż last_id != count
-                loadingDialog.setMax(count);
-                if (success == 1 && lastid != Prefs.getLastID(getApplicationContext())) {
-                    Prefs.setLastID(getApplicationContext(), lastid);
-                    JSONArray mJsonArray = mJsonObject.getJSONArray("concerts");
-                    double distance;
-                    dbMgr.beginTransaction();
-                    for (int i = 0; i < mJsonArray.length(); i++) {
-                        JSONObject JSONconcert = mJsonArray.getJSONObject(i);
-                        if (latLng.longitude != -1)
-                            distance = mapHelper.inaccurateDistanceTo(Double.parseDouble(JSONconcert.getString("lat")), Double.parseDouble(JSONconcert.getString("lon")), latLng);
-                        else
-                            distance = 0;
 
-                        dbMgr.addConcert(
-                                JSONconcert.getInt("id"),
-                                JSONconcert.getString("artist"),
-                                JSONconcert.getString("city"),
-                                JSONconcert.getString("spot"),
-                                JSONconcert.getInt("day"),
-                                JSONconcert.getInt("month"),
-                                JSONconcert.getInt("year"),
-                                JSONconcert.getString("agency"),
-                                JSONconcert.getString("url"),
-                                JSONconcert.getString("lat"),
-                                JSONconcert.getString("lon"),
-                                distance);
+                //jak poprawnie pobierzemy z internetów koncerty
+                if (success == 1) {
+                    if (jsonLastId > prefsLastId) { //aktualizacja - kiedy ID z internetu jest większe od tego ID które mamy w aplikacji, czyli w bazie na serwerze jest więcej koncertów
+                        downloadConcerts();
+                    } else if (jsonLastId < prefsLastId) { // tak nie powinno się nigdy stać
+                        Log.wtf("DB", "baza w aplikacji ma wiecej koncertów niż na serwerze?");
+                        dbMgr.deleteTables();
+                        downloadConcerts();
+                    } else if (jsonLastId == prefsLastId) {
+                        Log.i("DB", "Liczba koncertów jest okej ale sprawdźmy aktualność wszystkich koncertów");
 
-                        loadingDialog.incrementProgressBy(1);
                     }
-                    dbMgr.endTransaction();
-                    updateNeeded = true;
                 }
 
             } catch (JSONException e) {
@@ -511,6 +495,43 @@ public class MainActivity extends FragmentActivity {
 
             return null;
         }
+
+        protected void downloadConcerts() throws JSONException {
+            //współrzędne z prefs wpisane do latLng
+            LatLng latLng = new LatLng(Double.parseDouble(Prefs.getLon(getApplicationContext())), Double.parseDouble(Prefs.getLat(getApplicationContext())));
+
+            loadingDialog.setMax(count - prefsLastId);
+            Prefs.setLastID(getApplicationContext(), jsonLastId);
+            JSONArray mJsonArray = mJsonObject.getJSONArray("concerts");
+            double distance;
+            dbMgr.beginTransaction();
+            for (int i = 0; i < mJsonArray.length(); i++) {
+                JSONObject JSONconcert = mJsonArray.getJSONObject(i);
+                if (latLng.longitude != -1)
+                    distance = mapHelper.inaccurateDistanceTo(Double.parseDouble(JSONconcert.getString("lat")), Double.parseDouble(JSONconcert.getString("lon")), latLng);
+                else
+                    distance = 0;
+
+                dbMgr.addConcert(
+                        JSONconcert.getInt("id"),
+                        JSONconcert.getString("artist"),
+                        JSONconcert.getString("city"),
+                        JSONconcert.getString("spot"),
+                        JSONconcert.getInt("day"),
+                        JSONconcert.getInt("month"),
+                        JSONconcert.getInt("year"),
+                        JSONconcert.getString("agency"),
+                        JSONconcert.getString("url"),
+                        JSONconcert.getString("lat"),
+                        JSONconcert.getString("lon"),
+                        distance);
+
+                loadingDialog.incrementProgressBy(1);
+            }
+            dbMgr.endTransaction();
+            updateNeeded = true;
+        }
+
 
         @Override
         protected void onPostExecute(String s) {

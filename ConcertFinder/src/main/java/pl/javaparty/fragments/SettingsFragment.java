@@ -242,7 +242,8 @@ public class SettingsFragment extends Fragment {
             if (!city.isEmpty()) {
                 if (!id.equals("-1"))
                     updateServerLatLng(city);
-                latlng = getServerLatLng(city);
+//                latlng = getServerLatLng(city);
+                latlng = MapHelper.getLatLongFromAddress(city);
                 MainActivity.getDBManager().update(latlng);
             }
             return city;
