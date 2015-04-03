@@ -522,6 +522,7 @@ public class MainActivity extends FragmentActivity {
                         JSONconcert.getInt("year"),
                         JSONconcert.getString("agency"),
                         JSONconcert.getString("url"),
+                        JSONconcert.getString("updated"),
                         JSONconcert.getString("lat"),
                         JSONconcert.getString("lon"),
                         distance);
