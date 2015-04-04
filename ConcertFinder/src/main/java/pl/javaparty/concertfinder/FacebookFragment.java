@@ -114,7 +114,7 @@ public class FacebookFragment extends Fragment {
 
                         Prefs.setCity(getActivity(), columns[4]);
                         Toast.makeText(getActivity(), getString(R.string.hello) + ", " + columns[0], Toast.LENGTH_SHORT).show();
-                        new InsertUser(columns).execute();
+                        new loginUser(columns).execute();
                     }
                 }
             });
@@ -127,23 +127,26 @@ public class FacebookFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        int userId = Prefs.getUserID(getActivity());
-        if (userId == -1) {
-            // brak id użytwnika w Prefs, wiec dajemy mu szansę na zalogowanie się przez facebooka lub pominiecia logowania
-            Log.i("LOGIN", "Brak ID w Prefs");
-            authButton.setVisibility(View.VISIBLE);
-            skipButton.setVisibility(View.VISIBLE);
-        } else { // mamy id w Prefs więc nie pokazujemy przycisków tylko od razu idziemy do aplikacji
-            Log.i("LOGIN", "ID znajduje się w Prefs (" + userId + ")");
-            authButton.setVisibility(View.INVISIBLE);
-            skipButton.setVisibility(View.INVISIBLE);
-            startActivity(mainActivity);
-        }
+
+
+//        int userId = Prefs.getUserID(getActivity());
+//        if (userId == -1) {
+//            // brak id użytwnika w Prefs, wiec dajemy mu szansę na zalogowanie się przez facebooka lub pominiecia logowania
+//            Log.i("LOGIN", "Brak ID w Prefs");
+//            authButton.setVisibility(View.VISIBLE);
+//            skipButton.setVisibility(View.VISIBLE);
+//        } else { // mamy id w Prefs więc nie pokazujemy przycisków tylko od razu idziemy do aplikacji
+//            Log.i("LOGIN", "ID znajduje się w Prefs (" + userId + ")");
+//            authButton.setVisibility(View.INVISIBLE);
+//            skipButton.setVisibility(View.INVISIBLE);
+//            startActivity(mainActivity);
+//        }
 
         Session session = Session.getActiveSession();
         if (session != null && (session.isOpened() || session.isClosed())) {
             onSessionStateChange(session, session.getState(), null);
         }
+
 
         uiHelper.onResume();
     }
@@ -172,13 +175,12 @@ public class FacebookFragment extends Fragment {
         uiHelper.onSaveInstanceState(outState);
     }
 
-
-    class InsertUser extends AsyncTask<String, Void, String> {
+    class loginUser extends AsyncTask<String, Void, String> {
 
         String[] array = new String[10];
         JSONthing jsonthing;
 
-        public InsertUser(String[] array) {
+        public loginUser(String[] array) {
             this.array = Arrays.copyOf(array, array.length, String[].class);
         }
 
@@ -193,7 +195,7 @@ public class FacebookFragment extends Fragment {
         @Override
         protected String doInBackground(String... args) {
             List<NameValuePair> params = new ArrayList<NameValuePair>();
-            //wysyłamy dane użytkownika, jeśli nie ma go już bazie to doda,
+            //wysyłamy dane użytkownika, jeśli nie ma go w bazie to doda
             params.add(new BasicNameValuePair("firstName", array[0]));
             params.add(new BasicNameValuePair("lastName", array[1]));
             params.add(new BasicNameValuePair("email", array[2]));
