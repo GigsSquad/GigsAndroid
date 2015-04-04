@@ -128,19 +128,18 @@ public class FacebookFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-
-//        int userId = Prefs.getUserID(getActivity());
-//        if (userId == -1) {
-//            // brak id użytwnika w Prefs, wiec dajemy mu szansę na zalogowanie się przez facebooka lub pominiecia logowania
-//            Log.i("LOGIN", "Brak ID w Prefs");
-//            authButton.setVisibility(View.VISIBLE);
+        int userId = Prefs.getUserID(getActivity());
+        if (userId == -1) {
+            // brak id użytwnika w Prefs, wiec dajemy mu szansę na zalogowanie się przez facebooka lub pominiecia logowania
+            Log.i("LOGIN", "Brak ID w Prefs");
+            authButton.setVisibility(View.VISIBLE);
 //            skipButton.setVisibility(View.VISIBLE);
-//        } else { // mamy id w Prefs więc nie pokazujemy przycisków tylko od razu idziemy do aplikacji
-//            Log.i("LOGIN", "ID znajduje się w Prefs (" + userId + ")");
-//            authButton.setVisibility(View.INVISIBLE);
+        } else { // mamy id w Prefs więc nie pokazujemy przycisków tylko od razu idziemy do aplikacji
+            Log.i("LOGIN", "ID znajduje się w Prefs (" + userId + ")");
+            authButton.setVisibility(View.INVISIBLE);
 //            skipButton.setVisibility(View.INVISIBLE);
-//            startActivity(mainActivity);
-//        }
+            startActivity(mainActivity);
+        }
 
         Session session = Session.getActiveSession();
         if (session != null && (session.isOpened() || session.isClosed())) {
@@ -194,7 +193,7 @@ public class FacebookFragment extends Fragment {
 
         @Override
         protected String doInBackground(String... args) {
-            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            List<NameValuePair> params = new ArrayList<>();
             //wysyłamy dane użytkownika, jeśli nie ma go w bazie to doda
             params.add(new BasicNameValuePair("firstName", array[0]));
             params.add(new BasicNameValuePair("lastName", array[1]));

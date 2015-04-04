@@ -393,7 +393,6 @@ public class MainActivity extends FragmentActivity {
             if (!city.isEmpty()) {
                 if (!id.equals("-1"))
                     updateServerLatLng(city);
-                //latlng = getServerLatLng(city);
                 latlng = MapHelper.getLatLongFromAddress(city);
             }
             return city;
@@ -408,31 +407,7 @@ public class MainActivity extends FragmentActivity {
             List<NameValuePair> params = new ArrayList<>();
             params.add(new BasicNameValuePair("location", city.split(" ")[0]));
             params.add(new BasicNameValuePair("user_id", id));
-            jsonthing.makeHttpRequest(PHPurls.getLatLng.toString(), "GET", params); //TIGHT and ELEGANT
-        }
-
-        /**
-         * pobiera długosć i szerokosć ze spots, bierze najpierw te latlng gdzie nie ma spotu
-         *
-         * @param city - miasto
-         * @return długość i szerokość zadanego miasta
-         */
-        protected LatLng getServerLatLng(String city) {
-            List<NameValuePair> params = new ArrayList<>();
-            params.add(new BasicNameValuePair("location", city.split(" ")[0]));
-            params.add(new BasicNameValuePair("user_id", id));
-            JSONObject mJsonObject = jsonthing.makeHttpRequest(PHPurls.getLatLng.toString(), "GET", params); //TIGHT and ELEGANT
-
-            try {
-                if (mJsonObject.getInt("success") == 1) {
-                    JSONArray mJsonArray = mJsonObject.getJSONArray("latlng");
-                    JSONObject JSONlogin = mJsonArray.getJSONObject(0);
-                    return new LatLng(JSONlogin.getInt("lat"), JSONlogin.getInt("lon"));
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return new LatLng(52.232938, 21.0611941); // Warszawa
+            jsonthing.makeHttpRequest(PHPurls.updateUser.toString(), "GET", params); //TIGHT and ELEGANT
         }
 
 
@@ -441,9 +416,8 @@ public class MainActivity extends FragmentActivity {
             if (!city.isEmpty()) {
                 Prefs.setLat(getApplicationContext(), String.valueOf(latlng.latitude));
                 Prefs.setLon(getApplicationContext(), String.valueOf(latlng.longitude));
-                Log.d("Zapisano", "Lat:" + Prefs.getLat(getApplicationContext()) + " LONG:" + Prefs.getLon(getApplicationContext()));
+                Log.d("LATLNG", "Lat:" + Prefs.getLat(getApplicationContext()) + " Long:" + Prefs.getLon(getApplicationContext()));
             }
-            //new DownloadConcerts().execute();
             mapDialog.dismiss();
             super.onPostExecute(city);
         }
