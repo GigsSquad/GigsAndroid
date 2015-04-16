@@ -71,6 +71,7 @@ public class FacebookFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 startActivity(mainActivity);
+                getActivity().finish();
             }
         });
 
@@ -137,15 +138,16 @@ public class FacebookFragment extends Fragment {
         } else { // mamy id w Prefs więc nie pokazujemy przycisków tylko od razu idziemy do aplikacji
             Log.i("LOGIN", "ID znajduje się w Prefs (" + userId + ")");
             authButton.setVisibility(View.INVISIBLE);
-//            skipButton.setVisibility(View.INVISIBLE);
+            skipButton.setVisibility(View.INVISIBLE);
             startActivity(mainActivity);
+            getActivity().finish();
         }
 
         Session session = Session.getActiveSession();
         if (session != null && (session.isOpened() || session.isClosed())) {
             onSessionStateChange(session, session.getState(), null);
         }
-        skipButton.setVisibility(View.INVISIBLE);
+        skipButton.setVisibility(View.VISIBLE);
 
         uiHelper.onResume();
     }

@@ -144,7 +144,7 @@ public class MainActivity extends FragmentActivity {
                     drawerLayout.closeDrawers();
                     if (groupPosition == 4) {
                         if (isOnline())
-                            new GetLatLng().execute(); //nowa lepsza kurwa funkcja stary
+                            new GetLatLng(getApplicationContext()).execute(); //nowa lepsza kurwa funkcja stary
                         else
                             Toast.makeText(getApplication(), getString(R.string.no_connection), Toast.LENGTH_SHORT).show();
                     } else if (currentFragment != groupPosition)
@@ -179,6 +179,16 @@ public class MainActivity extends FragmentActivity {
                 android.R.anim.slide_out_right).replace(R.id.content_frame, new RecentFragment()).commit();
         drawerLayout.openDrawer(drawerList);
 
+        //Sprawdzamy czy nie nastapily zmiany w tabeli koncertow (w razie gdyby zmieniono kolejnosc albo dodano kolumny)
+        if(dbMgr.checkIfConcertTableChanged())
+        {
+            dbMgr.deleteDatabase(context);
+            if(isOnline())
+            {
+                Toast.makeText(context, "Po aktualizacji konieczne jest ponowne pobranie bazy.", Toast.LENGTH_LONG).show();
+                new DownloadConcerts().execute();
+            }
+        } else
         //żeby pobrać cokolwiek to użytkownik musi być online oraz mieć mniej niż np 100 koncertów (np jak przerwie pobieranie w którymś momencie, to wtedy będzie mieć mniej)
         if (isOnline() && dbMgr.getSize(dbManager.CONCERTS_TABLE) < 100)
             showDownloadDialog();
@@ -214,7 +224,7 @@ public class MainActivity extends FragmentActivity {
 
                         //jeśli online to od razu łączymy sie z mapami i pobieramy latlng
                         if (isOnline())
-                            new GetLatLng().execute();
+                            new GetLatLng(getApplicationContext()).execute();
                     }
                 }).setNegativeButton("Anluje", new DialogInterface.OnClickListener() {
             @Override
@@ -235,7 +245,7 @@ public class MainActivity extends FragmentActivity {
 
                         //jeśli nie ma pobranyuch jeszcze współrzędnych dla swojego miasta, czyli w Prefs LAT i LON są na -1 to łączy sie z mapami żeby pobrać
                         if (Prefs.getLon(getApplication()).equals("-1") || Prefs.getLat(getApplication()).equals("-1"))
-                            new GetLatLng().execute();
+                            new GetLatLng(getApplicationContext()).execute();
                         else // w przeciwnym wypadku od razu przechodzimy do pobierania kocnertów
                             new DownloadConcerts().execute();
                     }
@@ -264,6 +274,10 @@ public class MainActivity extends FragmentActivity {
             else if (curr instanceof AboutFragment)
                 pos = 5;
             currentFragment = pos;
+        }
+        else
+        {
+            finish();
         }
         super.onBackPressed();
     }
@@ -377,6 +391,13 @@ public class MainActivity extends FragmentActivity {
         LatLng latlng;
         JSONthing jsonthing;
         String id;
+        Context cont;
+
+        public GetLatLng(Context context)
+        {
+            super();
+            cont = context;
+        }
 
         @Override
         protected void onPreExecute() {
@@ -419,7 +440,17 @@ public class MainActivity extends FragmentActivity {
                 Log.d("LATLNG", "Lat:" + Prefs.getLat(getApplicationContext()) + " Long:" + Prefs.getLon(getApplicationContext()));
             }
             mapDialog.dismiss();
-            new DownloadConcerts().execute();
+//            try
+//            {
+                new DownloadConcerts().execute();
+//            }
+//            catch (Exception e)
+//            {
+//                dbMgr.deleteDatabase(cont);
+//                Prefs.setLastID(cont, -1);
+//                new DownloadConcerts().execute();
+//
+//            }
             super.onPostExecute(city);
         }
     }
