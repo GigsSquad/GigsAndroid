@@ -66,7 +66,7 @@ public class dbManager extends SQLiteOpenHelper {
         setSortOrder(context);
     }
 
-    private void setSortOrder(Context context) {
+    private static void setSortOrder(Context context) {
         SORT_ORDER = Prefs.getSortOrder(context);
     }
 
@@ -153,8 +153,36 @@ public class dbManager extends SQLiteOpenHelper {
     public void deleteDatabase(Context context) {
         database.close();
         context.deleteDatabase(DATABASE_NAME);
-        new dbManager(context);
+        Prefs.setLastID(context, -1);
+        new dbManager(context); //jakie to jest glupie :D a najlepsze ze dziala xD
         Log.i("DB", "Baza usunięta i stworzona na nowo");
+    }
+
+    public boolean checkIfConcertTableChanged()
+    {
+        Cursor dbCursor = database.query(CONCERTS_TABLE, null, null, null, null, null, null);
+        String[] columnNames = dbCursor.getColumnNames();
+        String substring = CreateConcertTable.substring(CreateConcertTable.indexOf("(")+1);
+        String[] newColumns = substring.split(",");
+        boolean changed = false;
+        if((columnNames == null && newColumns != null) ||(columnNames != null && newColumns == null) || columnNames.length != newColumns.length)
+            changed = true;
+        else
+        {
+            Log.i("Checking Database", "Sprawdzam poprawnosc tabeli.");
+            for(int i = 0; i<columnNames.length && i<newColumns.length && !changed; i++)
+            {
+
+                String newColumn = newColumns[i].substring(0, newColumns[i].indexOf(" "));
+                Log.i("Checking Database", newColumns[i] + " " + newColumn + " " + columnNames[i] );
+                if(!columnNames[i].equals(newColumn))
+                {
+                    changed = true;
+                }
+            }
+        }
+
+        return changed;
     }
 
     public boolean contains(int id) {
