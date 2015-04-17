@@ -44,30 +44,39 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_alignParentBottom="true" android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentRight="true" android:layout_alignParentEnd="true"/>
+                android:layout_alignParentRight="true" android:layout_alignParentEnd="true" android:visibility="gone"/>
 
         <Button
                 android:id="@+id/saveSettingsButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/save"
-                android:layout_above="@+id/authButton" android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentRight="true" android:layout_alignParentEnd="true"/>
+                android:layout_above="@+id/betaButton"
+                android:text="@string/save" android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" android:layout_alignParentLeft="true"/>
 
         <Button
                 android:id="@+id/clearFilesButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/clear"
-                android:layout_above="@+id/saveSettingsButton" android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentRight="true" android:layout_alignParentEnd="true"/>
+                android:layout_alignParentBottom="true" android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"/>
+
+        <Button
+                android:id="@+id/betaButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dołącz do testerów"
+                android:layout_above="@+id/clearFilesButton"
+                android:layout_alignParentRight="true" android:layout_alignParentEnd="true"
+                android:layout_toRightOf="@+id/authButton"
+                android:layout_alignParentLeft="true"/>
 
         <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical" android:id="@+id/radioGroup">
 
 
             <RadioButton

@@ -319,15 +319,12 @@ public class FacebookFragment extends Fragment implements GoogleApiClient.Connec
             sdf.applyPattern(DB_FORMAT);
             columns[3] = sdf.format(d);
 
-            Log.i("LOGIN", "Imie: " + columns[0]);
-            Log.i("LOGIN", "Nazwisko: " + columns[1]);
-            Log.i("LOGIN", "Email: " + columns[2]);
-            Log.i("LOGIN", "Urodziny: " + columns[3]);
-            Log.i("LOGIN", "Lokalizacja: " + columns[4]);
-            Log.i("LOGIN", "Id: " + columns[5]);
-
-
-            Prefs.setCity(getActivity(), columns[4]);
+            try {
+                Prefs.setCity(getActivity(), columns[4]);
+            } catch (NullPointerException npe) {
+                Log.wtf("PREFS", "Kurwa npe przy prefs");
+                //kurwa no
+            }
             Toast.makeText(getActivity(), getString(R.string.hello) + ", " + columns[0], Toast.LENGTH_SHORT).show();
             if (isAdded())
                 new loginUser(columns).execute();
@@ -361,6 +358,7 @@ public class FacebookFragment extends Fragment implements GoogleApiClient.Connec
         protected String doInBackground(String... args) {
             List<NameValuePair> params = new ArrayList<>();
 
+            Log.i("LOGIN", array[5].equals("-1") ? "Zalogowano przez Google+" : "Zalogowano przez Facebooka");
             Log.i("LOGIN", "Imie:" + array[0]);
             Log.i("LOGIN", "Nazwisko: " + array[1]);
             Log.i("LOGIN", "Email: " + array[2]);

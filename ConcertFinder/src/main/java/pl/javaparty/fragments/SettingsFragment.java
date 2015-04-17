@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -39,7 +40,7 @@ import java.util.List;
 public class SettingsFragment extends Fragment {
 
     AutoCompleteTextView citySearchBox;
-    Button saveButton, clearButton;
+    Button saveButton, clearButton, betaButton;
     RadioButton distanceSort, dateSort;
     Context context;
     ArrayAdapter<CharSequence> adapter;
@@ -73,6 +74,7 @@ public class SettingsFragment extends Fragment {
         citySearchBox = (AutoCompleteTextView) view.findViewById(R.id.cityAutoComplete);
         saveButton = (Button) view.findViewById(R.id.saveSettingsButton);
         clearButton = (Button) view.findViewById(R.id.clearFilesButton);
+        betaButton = (Button) view.findViewById(R.id.betaButton);
         distanceSort = (RadioButton) view.findViewById(R.id.radioButtonDist);
         dateSort = (RadioButton) view.findViewById(R.id.radioButtonDate);
         mapDialog = new ProgressDialog(getActivity());
@@ -109,6 +111,15 @@ public class SettingsFragment extends Fragment {
                 dialog.show(getActivity().getFragmentManager(), "CLEAR");
             }
         });
+
+        betaButton.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/u/0/communities/118084215751714430151")));
+            }
+        });
+
 
         distanceSort.setOnClickListener(new OnClickListener() {
             @Override
