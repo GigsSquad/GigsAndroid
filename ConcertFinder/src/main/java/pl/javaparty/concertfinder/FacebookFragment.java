@@ -171,7 +171,7 @@ public class FacebookFragment extends Fragment implements GoogleApiClient.Connec
             // brak id użytwnika w Prefs, wiec dajemy mu szansę na zalogowanie się przez facebooka lub pominiecia logowania
             Log.i("LOGIN", "Brak ID w Prefs");
             authButton.setVisibility(View.VISIBLE);
-//            skipButton.setVisibility(View.VISIBLE);
+             skipButton.setVisibility(View.VISIBLE);
         } else { // mamy id w Prefs więc nie pokazujemy przycisków tylko od razu idziemy do aplikacji
             Log.i("LOGIN", "ID znajduje się w Prefs (" + userId + ")");
             authButton.setVisibility(View.INVISIBLE);
