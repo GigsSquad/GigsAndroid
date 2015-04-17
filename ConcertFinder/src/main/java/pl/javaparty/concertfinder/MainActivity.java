@@ -419,6 +419,7 @@ public class MainActivity extends FragmentActivity {
                 Log.d("LATLNG", "Lat:" + Prefs.getLat(getApplicationContext()) + " Long:" + Prefs.getLon(getApplicationContext()));
             }
             mapDialog.dismiss();
+            new DownloadConcerts().execute();
             super.onPostExecute(city);
         }
     }

@@ -145,7 +145,7 @@ public class FacebookFragment extends Fragment {
         if (session != null && (session.isOpened() || session.isClosed())) {
             onSessionStateChange(session, session.getState(), null);
         }
-
+        skipButton.setVisibility(View.INVISIBLE);
 
         uiHelper.onResume();
     }

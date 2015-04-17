@@ -73,7 +73,7 @@
             <RadioButton
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="najpierw najbliższe"
+                    android:text="sortowanie po odległości (najpierw najbliższe)"
                     android:textColor="@color/dark"
                     android:textColorHighlight="@color/dark"
 
@@ -86,7 +86,7 @@
             <RadioButton
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="najpierw najwcześniejsze"
+                    android:text="sortowanie po dacie (najpierw najwcześniejsze)"
                     android:textColor="@color/dark"
                     android:textColorHighlight="@color/dark"
                     android:textColorHint="@color/dark"
