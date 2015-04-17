@@ -445,7 +445,27 @@ public class dbManager extends SQLiteOpenHelper {
         Calendar yesterday = Calendar.getInstance();
         yesterday.add(Calendar.DATE, -1);
         int[] date = new int[]{yesterday.get(Calendar.DAY_OF_MONTH), yesterday.get(Calendar.MONTH) + 1, yesterday.get(Calendar.YEAR)};
-        return getConcertsByDateRange(0, 0, 0, date[0], date[1], date[2], filter);
+        String[] columns = {"ORD", "ARTIST", "CITY", "SPOT", "DAY", "MONTH", "YEAR", "AGENCY", "URL", "LAT", "LON", "DIST"};
+        String condition = "(YEAR < ? OR (YEAR = ? AND MONTH < ?) OR (YEAR = ? AND MONTH = ? AND DAY < ?))"
+                + "AND (" + filter + ")";
+        String[] selectionArgs = {
+                String.valueOf(date[2]),//year
+                String.valueOf(date[2]),//year
+                String.valueOf(date[1]),//month
+                String.valueOf(date[2]),//year
+                String.valueOf(date[1]),//month
+                String.valueOf(date[0]),//day
+
+        };
+        Cursor c = database.query(true, CONCERTS_TABLE, columns, condition, selectionArgs, null, null, "YEAR DESC, MONTH DESC, DAY DESC", null);
+        Concert[] concerts = new Concert[c.getCount()];
+        for (int i = 0; c.moveToNext(); i++) {
+            concerts[i] = new Concert(c.getInt(0), c.getString(1), c.getString(2), c.getString(3),
+                    c.getInt(4), c.getInt(5), c.getInt(6), getAgency(c.getString(7)), c.getString(8), c.getString(9), c.getString(10), c.getDouble(11));
+        }
+        c.close();
+        return concerts;
+        //    return getConcertsByDateRange(0, 0, 0, date[0], date[1], date[2], filter);
     }
 
     public Concert[] getFutureConcerts(String filter) {
