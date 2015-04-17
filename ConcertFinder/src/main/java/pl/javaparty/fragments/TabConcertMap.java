@@ -42,7 +42,6 @@ public class TabConcertMap extends Fragment {
 	}
 
 	//TODO tu będziemy pobierac mapkę koncertu
-
 	private ImageView downloadConcertMap() {
 		return null;
 	}

@@ -91,11 +91,12 @@ public class TicketPrices extends AsyncTask<String, Void, String> {
 			Document doc = Jsoup.connect(url).timeout(1000000).get();
 			el = doc.select("div[id=poleCena]").first();
 
-		} catch (IOException e) {
+		} catch (Exception e) {
 			Log.i("PobieranieCenyKoncertu", "Blad podczas pobierania cennika");
 		}
-
+		if (el != null)
 		return getRealPrices(el.text());
+		else return "";//gownolata trallala
 	}
 
 	private String getPricesFromGoAhead() {

@@ -19,7 +19,7 @@
                               android:textColorHighlight="@color/dark"
                               android:textColorHint="#78909c"
                               android:textColorLink="@color/dark"
-                              android:hint="Artysta (przyszłe kocnert)" android:inputType="textAutoComplete"
+                              android:hint="Artysta (przyszłe koncerty)" android:inputType="textAutoComplete"
                               android:layout_weight="0.45"
                               android:imeOptions="actionDone"/>
         <Switch

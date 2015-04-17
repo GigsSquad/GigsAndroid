@@ -37,8 +37,8 @@ public class dbManager extends SQLiteOpenHelper {
                     "MONTH INTEGER," +
                     "YEAR INTEGER," +
                     "AGENCY TEXT," +
-                    "UPDATED DATE," +
                     "URL TEXT," +
+                    "UPDATED DATE," +
                     "LAT TEXT," +
                     "LON TEXT," +
                     "DIST REAL)";

@@ -25,6 +25,7 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         android:gravity="center"
+        android:textColor="#000000"
         android:text="@string/empty_list"
         android:textSize="25dp" />
 
