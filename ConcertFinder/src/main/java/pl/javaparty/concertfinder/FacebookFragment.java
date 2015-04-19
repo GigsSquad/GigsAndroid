@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 import com.facebook.*;
 import com.facebook.model.GraphUser;
@@ -50,7 +49,6 @@ public class FacebookFragment extends Fragment implements GoogleApiClient.Connec
 
     /* FACEBOOK */
     LoginButton authButton;
-    Button skipButton;
     private UiLifecycleHelper uiHelper;
     private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
@@ -68,6 +66,8 @@ public class FacebookFragment extends Fragment implements GoogleApiClient.Connec
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mainActivity = new Intent(getActivity(), MainActivity.class);
 
         //FACEBOOK
         uiHelper = new UiLifecycleHelper(getActivity(), callback);
@@ -95,24 +95,14 @@ public class FacebookFragment extends Fragment implements GoogleApiClient.Connec
 
         loadingDialog = new ProgressDialog(getActivity());
         loadingDialog.setCancelable(false);
-        mainActivity = new Intent(getActivity(), MainActivity.class);
 
-        skipButton = (Button) view.findViewById(R.id.skipBtn);
-        skipButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(mainActivity);
-                getActivity().finish();
-            }
-        });
+        //GOOGLE PLUS
+        view.findViewById(R.id.sign_in_button).setOnClickListener(this);
 
         //FACEBOOK
         authButton = (LoginButton) view.findViewById(R.id.authButton);
         authButton.setFragment(this);
         authButton.setReadPermissions(Arrays.asList("user_location", "user_birthday", "user_likes", "email"));
-
-        //GOOGLE PLUS
-        view.findViewById(R.id.sign_in_button).setOnClickListener(this);
 
         return view;
     }
@@ -151,8 +141,10 @@ public class FacebookFragment extends Fragment implements GoogleApiClient.Connec
 
                         Prefs.setCity(getActivity(), columns[4]);
                         Toast.makeText(getActivity(), getString(R.string.hello) + ", " + columns[0], Toast.LENGTH_SHORT).show();
-                        if (isAdded())
+                        if (isAdded() && isOnline())
                             new loginUser(columns).execute();
+                        else
+                            Toast.makeText(getActivity().getApplicationContext(), "Brak połączenia", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -163,38 +155,12 @@ public class FacebookFragment extends Fragment implements GoogleApiClient.Connec
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-        int userId = Prefs.getUserID(getActivity());
-        if (userId == -1) {
-            // brak id użytwnika w Prefs, wiec dajemy mu szansę na zalogowanie się przez facebooka lub pominiecia logowania
-            Log.i("LOGIN", "Brak ID w Prefs");
-            authButton.setVisibility(View.VISIBLE);
-             skipButton.setVisibility(View.VISIBLE);
-        } else { // mamy id w Prefs więc nie pokazujemy przycisków tylko od razu idziemy do aplikacji
-            Log.i("LOGIN", "ID znajduje się w Prefs (" + userId + ")");
-            authButton.setVisibility(View.INVISIBLE);
-            skipButton.setVisibility(View.INVISIBLE);
-            startActivity(mainActivity);
-            getActivity().finish();
-        }
-
-        Session session = Session.getActiveSession();
-        if (session != null && (session.isOpened() || session.isClosed())) {
-            onSessionStateChange(session, session.getState(), null);
-        }
-        //DEBUG
-        //skipButton.setVisibility(View.VISIBLE);
-
-        uiHelper.onResume();
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i("LOGIN", "onActivityResult");
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_SIGN_IN) {
+            Log.i("LOGIN", "onActivityResult - Google");
             if (resultCode != Activity.RESULT_OK) {
                 mSignInClicked = false;
             }
@@ -205,9 +171,26 @@ public class FacebookFragment extends Fragment implements GoogleApiClient.Connec
                 mGoogleApiClient.reconnect();
             }
         } else {
+            Log.i("LOGIN", "onActivityResult - Facebook");
             uiHelper.onActivityResult(requestCode, resultCode, data);
         }
     }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i("LOGIN", "onResume");
+
+        //FACEBOOK
+        Session session = Session.getActiveSession();
+        if (session != null && (session.isOpened() || session.isClosed())) {
+            onSessionStateChange(session, session.getState(), null);
+        }
+
+        uiHelper.onResume();
+    }
+
 
     @Override
     public void onPause() {
@@ -226,7 +209,6 @@ public class FacebookFragment extends Fragment implements GoogleApiClient.Connec
         super.onSaveInstanceState(outState);
         uiHelper.onSaveInstanceState(outState);
     }
-
 
     /* GOOGLE PLUS */
     public void onStart() {
@@ -273,7 +255,6 @@ public class FacebookFragment extends Fragment implements GoogleApiClient.Connec
         mSignInClicked = false;
         Log.i("LOGIN", "Zalogowano przez Google+");
 
-
         if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
             Person currentPerson = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
             String email = Plus.AccountApi.getAccountName(mGoogleApiClient);
@@ -295,8 +276,6 @@ public class FacebookFragment extends Fragment implements GoogleApiClient.Connec
             columns[0] = currentPerson.getDisplayName().split(" ")[0].trim();
             columns[1] = currentPerson.getDisplayName().split(" ")[1].trim();
             columns[2] = email.trim();
-
-
             columns[5] = "-1";
 
             try {
@@ -309,35 +288,31 @@ public class FacebookFragment extends Fragment implements GoogleApiClient.Connec
             }
 
 
+            Date date = null;
             SimpleDateFormat sdf = new SimpleDateFormat(GOOGLE_FORMAT);
-            Date d = null;
             try {
-                d = sdf.parse(columns[3]);
+                date = sdf.parse(columns[3]);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
             sdf.applyPattern(DB_FORMAT);
-            columns[3] = sdf.format(d);
+            columns[3] = sdf.format(date);
 
-            try {
-                Prefs.setCity(getActivity(), columns[4]);
-            } catch (NullPointerException npe) {
-                Log.wtf("PREFS", "Kurwa npe przy prefs");
-                //kurwa no
-            }
+            Prefs.setCity(getActivity(), columns[4]);
             Toast.makeText(getActivity(), getString(R.string.hello) + ", " + columns[0], Toast.LENGTH_SHORT).show();
-            if (isAdded())
+            if (isAdded() && isOnline())
                 new loginUser(columns).execute();
+            else
+                Toast.makeText(getActivity().getApplicationContext(), "Brak połączenia", Toast.LENGTH_SHORT).show();
         }
     }
-
 
     public void onConnectionSuspended(int cause) {
         mGoogleApiClient.connect();
     }
 
-    /* BAZA DANYCH PHPY */
-    class loginUser extends AsyncTask<String, Void, String> {
+    /* BAZA DANYCH / PHPY */
+    class loginUser extends AsyncTask<String, Void, Integer> {
 
         String[] array = new String[10];
         JSONthing jsonthing;
@@ -355,16 +330,16 @@ public class FacebookFragment extends Fragment implements GoogleApiClient.Connec
         }
 
         @Override
-        protected String doInBackground(String... args) {
+        protected Integer doInBackground(String... args) {
             List<NameValuePair> params = new ArrayList<>();
 
             Log.i("LOGIN", array[5].equals("-1") ? "Zalogowano przez Google+" : "Zalogowano przez Facebooka");
-            Log.i("LOGIN", "Imie:" + array[0]);
-            Log.i("LOGIN", "Nazwisko: " + array[1]);
-            Log.i("LOGIN", "Email: " + array[2]);
-            Log.i("LOGIN", "Urodziny: " + array[3]);
-            Log.i("LOGIN", "Lokalizacja: " + array[4]);
-            Log.i("LOGIN", "Id: " + array[5]);
+            Log.i("LOGIN", "Imie: \t" + array[0]);
+            Log.i("LOGIN", "Nazwisko: \t" + array[1]);
+            Log.i("LOGIN", "Email: \t" + array[2]);
+            Log.i("LOGIN", "Urodziny: \t" + array[3]);
+            Log.i("LOGIN", "Lokalizacja: \t" + array[4]);
+            Log.i("LOGIN", "Id: \t" + array[5]);
 
             //wysyłamy dane użytkownika, jeśli nie ma go w bazie to doda
             params.add(new BasicNameValuePair("firstName", array[0]));
@@ -387,17 +362,17 @@ public class FacebookFragment extends Fragment implements GoogleApiClient.Connec
                 e.printStackTrace();
             }
             Log.i("LOGIN", "Pobrany ID z bazy: " + userId);
-            Prefs.setUserID(getActivity(), userId);
-            return null;
+
+            return userId;
         }
 
         @Override
-        protected void onPostExecute(String s) {
+        protected void onPostExecute(Integer userId) {
+            Log.i("LOGIN", "ID zapisany do Prefs: " + userId);
+            Prefs.setUserID(getActivity(), userId);
             loadingDialog.dismiss();
             startActivity(mainActivity);
-            super.onPostExecute(s);
+            super.onPostExecute(userId);
         }
     }
-
-
 }

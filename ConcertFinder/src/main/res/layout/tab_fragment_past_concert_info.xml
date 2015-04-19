@@ -102,21 +102,21 @@
                             android:layout_centerHorizontal="true"/>
                     <ListView android:layout_width="match_parent" android:layout_height="60dp"
                               android:id="@+id/songs"
-                              android:textColor="#616161"
+                              android:textColor="#424242"
                               android:layout_gravity="center_horizontal" android:layout_alignParentTop="true"
                               android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
                               android:layout_alignParentBottom="true"/>
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                               android:textAppearance="?android:attr/textAppearanceMedium"
                               android:text="@string/no_setlist" android:id="@+id/textView3"
-                              android:textColor="#616161"
+                              android:textColor="#424242"
                               android:layout_centerVertical="true" android:layout_centerHorizontal="true"/>
                     <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                               android:textAppearance="?android:attr/textAppearanceSmall"
                             android:text="@string/loading_setlist"
-                            android:textColor="#616161"
+                            android:textColor="#424242"
                             android:id="@+id/loading_text"
                             android:layout_below="@+id/setlist_progress" android:layout_centerHorizontal="true"/>
                 </RelativeLayout>
