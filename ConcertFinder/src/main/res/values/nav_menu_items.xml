@@ -12,6 +12,7 @@
         <item>Agencje</item>
         <item>Bileterie</item>
         <item>Festiwale</item>
+        <item>Spektakle</item>
     </string-array>
 
     <array name="nav_menu_icons">
