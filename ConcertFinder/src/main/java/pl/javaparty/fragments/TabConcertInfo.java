@@ -1,5 +1,7 @@
 package pl.javaparty.fragments;
 
+import android.app.SearchManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -10,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Events;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.*;
@@ -175,6 +178,16 @@ public class TabConcertInfo extends Fragment {
                 Intent websiteIntent = new Intent(Intent.ACTION_VIEW,
                         Uri.parse(dbm.getUrl(ID)));
                 startActivity(websiteIntent);
+                return true;
+
+            case R.id.spotify:
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.setAction(MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH);
+                intent.setComponent(new ComponentName(
+                        "com.spotify.music",
+                        "com.spotify.music.MainActivity"));
+                intent.putExtra(SearchManager.QUERY, artist.getText().toString());
+                this.startActivity(intent);
                 return true;
 
             case R.id.share:

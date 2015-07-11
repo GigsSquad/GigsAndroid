@@ -80,8 +80,6 @@ public class FacebookFragment extends Fragment implements GoogleApiClient.Connec
                 .addApi(Plus.API)
                 .addScope(Plus.SCOPE_PLUS_LOGIN)
                 .build();
-
-
     }
 
     @Override

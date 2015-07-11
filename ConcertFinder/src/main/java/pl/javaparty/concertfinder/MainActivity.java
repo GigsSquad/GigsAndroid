@@ -104,12 +104,13 @@ public class MainActivity extends FragmentActivity {
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(1, -1)));
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(2, -1)));
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(3, -1)));
+        navDrawerItems.add(new NavDrawerItem("Spektakle", navMenuIcons.getResourceId(0, -1)));
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(4, -1)));
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[6], navMenuIcons.getResourceId(5, -1)));
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[7], navMenuIcons.getResourceId(4, -1), agencies));//TODO icona
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[8], navMenuIcons.getResourceId(3, -1), ticketers));
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[9]/*TODO!*/, navMenuIcons.getResourceId(3, -1), events));
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[9], navMenuIcons.getResourceId(0, -1)));
+
         navMenuIcons.recycle();
         mapHelper = new MapHelper(this);
 
@@ -181,18 +182,16 @@ public class MainActivity extends FragmentActivity {
         drawerLayout.openDrawer(drawerList);
 
         //Sprawdzamy czy nie nastapily zmiany w tabeli koncertow (w razie gdyby zmieniono kolejnosc albo dodano kolumny)
-        if(dbMgr.checkIfConcertTableChanged())
-        {
+        if (dbMgr.checkIfConcertTableChanged()) {
             dbMgr.deleteDatabase(context);
-            if(isOnline())
-            {
+            if (isOnline()) {
                 Toast.makeText(context, "Po aktualizacji konieczne jest ponowne pobranie bazy.", Toast.LENGTH_LONG).show();
                 new DownloadConcerts().execute();
             }
         } else
-        //żeby pobrać cokolwiek to użytkownik musi być online oraz mieć mniej niż np 100 koncertów (np jak przerwie pobieranie w którymś momencie, to wtedy będzie mieć mniej)
-        if (isOnline() && dbMgr.getSize(dbManager.CONCERTS_TABLE) < 100)
-            showDownloadDialog();
+            //żeby pobrać cokolwiek to użytkownik musi być online oraz mieć mniej niż np 100 koncertów (np jak przerwie pobieranie w którymś momencie, to wtedy będzie mieć mniej)
+            if (isOnline() && dbMgr.getSize(dbManager.CONCERTS_TABLE) < 100)
+                showDownloadDialog();
 
         //jeśli miasto w Prefs wciąż jest puste to wyświetlamy okienko z prośbą o wpisanie
         if (Prefs.getCity(getApplicationContext()).isEmpty() && Prefs.getStart(getApplicationContext()))
@@ -275,9 +274,7 @@ public class MainActivity extends FragmentActivity {
             else if (curr instanceof AboutFragment)
                 pos = 5;
             currentFragment = pos;
-        }
-        else
-        {
+        } else {
             finish();
         }
         super.onBackPressed();
@@ -338,8 +335,10 @@ public class MainActivity extends FragmentActivity {
         else if (position == 4)
             Log.e("MainActivity", "IMPOSSIBRUUU! Zaminia fragment z pozycji Aktualizuj :O");
         else if (position == 5)
-            fragment = new SettingsFragment();
+            fragment = new FavoriteSpectacle();
         else if (position == 6)
+            fragment = new SettingsFragment();
+        else if (position == 7)
             fragment = new AboutFragment();
         else if (position >= 90 && position < 100) {
             FestivalFragment ffragment = new FestivalFragment();
@@ -394,8 +393,7 @@ public class MainActivity extends FragmentActivity {
         String id;
         Context cont;
 
-        public GetLatLng(Context context)
-        {
+        public GetLatLng(Context context) {
             super();
             cont = context;
         }
@@ -443,7 +441,7 @@ public class MainActivity extends FragmentActivity {
             mapDialog.dismiss();
 //            try
 //            {
-                new DownloadConcerts().execute();
+            new DownloadConcerts().execute();
 //            }
 //            catch (Exception e)
 //            {

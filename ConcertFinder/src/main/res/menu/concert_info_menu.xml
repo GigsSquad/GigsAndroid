@@ -19,6 +19,12 @@
         android:title="@string/share">
     </item>
     <item
+            android:id="@+id/spotify"
+            android:icon="@drawable/ic_action_share"
+            android:showAsAction="ifRoom|collapseActionView"
+            android:title="Spotify">
+    </item>
+    <item
         android:id="@+id/naviagte_icon"
         android:icon="@drawable/ic_action_directions"
         android:showAsAction="ifRoom|collapseActionView"
