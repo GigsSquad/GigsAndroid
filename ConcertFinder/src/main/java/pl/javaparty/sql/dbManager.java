@@ -24,6 +24,7 @@ public class dbManager extends SQLiteOpenHelper {
     private static SQLiteDatabase database;
     public final static String CONCERTS_TABLE = "Concerts";
     public final static String FAVOURITES_TABLE = "Favourites";
+    public final static String FOLLOWING_TABLE = "Following";
     public final static String SEARCH_TABLE = "Search";
     public static String SORT_ORDER = "";
     private Context context;
@@ -47,6 +48,10 @@ public class dbManager extends SQLiteOpenHelper {
     private static String CreateFavouriteTable =
             "CREATE TABLE " + FAVOURITES_TABLE + "(" +
                     "ID INTEGER)";
+
+    private static String CreateFollowingTable =
+            "CREATE TABLE " + FOLLOWING_TABLE + "(" +
+                    "NAME TEXT)";
 
     //nowa tabela na wyszukiwania użytkownika
     private static String CreateSearchTable =
@@ -79,6 +84,7 @@ public class dbManager extends SQLiteOpenHelper {
         db.execSQL(CreateConcertTable);
         db.execSQL(CreateFavouriteTable);
         db.execSQL(CreateSearchTable);
+        db.execSQL(CreateFollowingTable);
     }
 
     @Override
@@ -88,6 +94,7 @@ public class dbManager extends SQLiteOpenHelper {
     public void deleteTables() {
         database.delete(CONCERTS_TABLE, null, null);
         database.delete(FAVOURITES_TABLE, null, null);
+        database.delete(FOLLOWING_TABLE, null, null);
         Log.i("DB", "Tabele usunięte");
     }
 
@@ -158,31 +165,37 @@ public class dbManager extends SQLiteOpenHelper {
         Log.i("DB", "Baza usunięta i stworzona na nowo");
     }
 
-    public boolean checkIfConcertTableChanged()
-    {
+    public boolean checkIfConcertTableChanged() {
         Cursor dbCursor = database.query(CONCERTS_TABLE, null, null, null, null, null, null);
         String[] columnNames = dbCursor.getColumnNames();
-        String substring = CreateConcertTable.substring(CreateConcertTable.indexOf("(")+1);
+        String substring = CreateConcertTable.substring(CreateConcertTable.indexOf("(") + 1);
         String[] newColumns = substring.split(",");
         boolean changed = false;
-        if((columnNames == null && newColumns != null) ||(columnNames != null && newColumns == null) || columnNames.length != newColumns.length)
+        if ((columnNames == null && newColumns != null) || (columnNames != null && newColumns == null) || columnNames.length != newColumns.length)
             changed = true;
-        else
-        {
+        else {
             Log.i("Checking Database", "Sprawdzam poprawnosc tabeli.");
-            for(int i = 0; i<columnNames.length && i<newColumns.length && !changed; i++)
-            {
+            for (int i = 0; i < columnNames.length && i < newColumns.length && !changed; i++) {
 
                 String newColumn = newColumns[i].substring(0, newColumns[i].indexOf(" "));
-                Log.i("Checking Database", newColumns[i] + " " + newColumn + " " + columnNames[i] );
-                if(!columnNames[i].equals(newColumn))
-                {
+                Log.i("Checking Database", newColumns[i] + " " + newColumn + " " + columnNames[i]);
+                if (!columnNames[i].equals(newColumn)) {
                     changed = true;
                 }
             }
         }
 
         return changed;
+    }
+
+    public boolean contains(String value) {
+        boolean contains = false;
+        String[] columns = {"NAME"};
+        Cursor c = database.query(FOLLOWING_TABLE, columns, null, null, null, null, null);
+        while (c.moveToNext() && !contains)
+            contains = value.equals(c.getString(0));
+        c.close();
+        return contains;
     }
 
     public boolean contains(int id) {
@@ -362,6 +375,58 @@ public class dbManager extends SQLiteOpenHelper {
         return new int[]{day, month, year};
     }
 
+
+    /**
+     * metoda dodajaca id obserwowanego artysty do tabeli Artsist
+     */
+    public void addFollowingArtist(String value) {
+        if (!contains(value)) {
+            ContentValues cv = new ContentValues();
+            cv.put("NAME", value);
+            Log.i("FOLL", "Wrzucomo nazwę obserwowanego: " + value);
+            database.insertOrThrow(FOLLOWING_TABLE, null, cv);
+        }
+    }
+
+    public void removeFollowingArtist(String value) {
+        String selection = "NAME = " + value;
+        //	int deleted = database.delete(CONCERTS_TABLE, selection, selectionArgs);
+        database.delete(FAVOURITES_TABLE, selection, null);
+    }
+
+    /**
+     * Metoda uzyskuj�ca ulubione koncerty z tabeli Favourite
+     *
+     * @return tablica concertow awierajaca ulubione koncerty
+     */
+    public Concert[] getAllFollowingArtists() {
+        String[] columns = {"NAME"};
+        Cursor c = database.query(FOLLOWING_TABLE, columns, null, null, null, null, null);
+        Concert[] concerts = new Concert[getSize(FOLLOWING_TABLE)];
+        for (int i = 0; c.moveToNext(); i++) {
+            concerts[i] = getFolConcertByName(c.getString(0));
+        }
+
+        c.close();
+
+        return concerts;
+    }
+
+    public boolean isArtistFollowing(String value) {
+        String[] columns = {"NAME"};
+        boolean following = false;
+        Cursor c = database.query(FOLLOWING_TABLE, columns, null, null, null, null, null);
+        for (int i = 0; c.moveToNext(); i++)
+            // wut? Czo to za niewykorzystane i?
+            //no na chuj drazyc temat
+            if (c.getString(0).equals(value))
+                following = true;
+        c.close();
+
+        return following;
+    }
+
+
     /**
      * metoda dodajaca id ulubionego koncertu do tabeli Favourite
      */
@@ -461,6 +526,11 @@ public class dbManager extends SQLiteOpenHelper {
 
     public Concert[] getFutureConcertsByCity(String city, String filter) {
         String condition = "CITY = '" + city + "' AND ( " + filter + " )";
+        return getFutureConcerts(condition);
+    }
+
+    public Concert[] getFutureConcertsByCity(String city) {
+        String condition = "CITY = '" + city + "'";
         return getFutureConcerts(condition);
     }
 
@@ -595,6 +665,12 @@ public class dbManager extends SQLiteOpenHelper {
         String condition = "ORD = " + id;
         return getConcertsBy(condition)[0]; // id jest unuikalne wiec bedzie to zawsze tablica jednoelementowa
     }
+
+    private Concert getFolConcertByName(String value) {
+        String condition = "ARTIST = '" + value + "'";
+        return getConcertsBy(condition)[0]; // id jest unuikalne wiec bedzie to zawsze tablica jednoelementowa
+    }
+
 
     public void addSearch(int usrId, String artist, String city, int d, int m, int y) {
         if (!searchAlreadyIn(usrId, artist, city)) {

@@ -62,7 +62,7 @@ public class ArtistSearch extends Fragment {
                                     long id) {
 
                 //chowanie sie klawiatury po kliknieciu
-                hideSoftKeyboard(getActivity(),searchBox);
+                hideSoftKeyboard(getActivity(), searchBox);
 
                 String artist = searchBox.getText().toString();
                 String filter = getArguments().getString("CONDITIONS");
@@ -78,9 +78,9 @@ public class ArtistSearch extends Fragment {
                 int usrId = Prefs.getUserID(context);
                 Calendar c = GregorianCalendar.getInstance();
                 int day = c.get(Calendar.DATE);
-                int month = c.get(Calendar.MONTH)+1;
+                int month = c.get(Calendar.MONTH) + 1;
                 int year = c.get(Calendar.YEAR);
-                dbm.addSearch(usrId,artist,null,day,month,year);
+                dbm.addSearch(usrId, artist, null, day, month, year);
 
                 // zapisywanie danych, coby potem przywrocic
                 lastSearching = searchBox.getText().toString();
@@ -89,7 +89,6 @@ public class ArtistSearch extends Fragment {
 
             }
         });
-
 
 
         concertList.setOnItemClickListener(new OnItemClickListener() {
@@ -108,6 +107,7 @@ public class ArtistSearch extends Fragment {
         switchCon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
                 future = isChecked;
                 String artist = lastSearching;
                 String filter = getArguments().getString("CONDITIONS");
@@ -137,12 +137,13 @@ public class ArtistSearch extends Fragment {
         return view;
     }
 
-    private static void hideSoftKeyboard(Context mContext,EditText username){  // dziala, kod ze stacka
-        if(((Activity) mContext).getCurrentFocus()!=null && ((Activity) mContext).getCurrentFocus() instanceof EditText){
-            InputMethodManager imm = (InputMethodManager)mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+    private static void hideSoftKeyboard(Context mContext, EditText username) {  // dziala, kod ze stacka
+        if (((Activity) mContext).getCurrentFocus() != null && ((Activity) mContext).getCurrentFocus() instanceof EditText) {
+            InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(username.getWindowToken(), 0);
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();

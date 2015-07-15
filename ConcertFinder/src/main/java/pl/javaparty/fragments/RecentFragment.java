@@ -34,7 +34,7 @@ public class RecentFragment extends Fragment {
     Button nextButton;
     private int lastPosition = 0;
     private int showedConcerts = 20;
-    public Map<Agencies, Boolean> checkedAgencies;
+    public static Map<Agencies, Boolean> checkedAgencies;
 
     public RecentFragment() {
         super();
@@ -171,7 +171,7 @@ public class RecentFragment extends Fragment {
         }
     }
 
-    private String filterAgencies() {
+    private static String filterAgencies() {
         String returned = "'1'='0'";
         for (Agencies c : checkedAgencies.keySet()) {
             if (checkedAgencies.get(c)) {

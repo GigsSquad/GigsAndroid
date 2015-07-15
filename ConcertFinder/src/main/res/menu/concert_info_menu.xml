@@ -1,34 +1,41 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/favorite_icon"
-        android:icon="@drawable/ic_action_not_important_w"
-        android:showAsAction="always"
-        android:title="@string/favourite">
+            android:id="@+id/favorite_icon"
+            android:icon="@drawable/ic_action_not_important_w"
+            android:showAsAction="always"
+            android:title="@string/favourite">
     </item>
     <item
-        android:id="@+id/website_icon"
-        android:icon="@drawable/ic_action_web_site"
-        android:showAsAction="ifRoom|collapseActionView"
-        android:title="@string/show_in_browser">
+            android:id="@+id/website_icon"
+            android:icon="@drawable/ic_action_web_site"
+            android:showAsAction="ifRoom|collapseActionView"
+            android:title="@string/show_in_browser">
     </item>
     <item
-        android:id="@+id/share"
-        android:icon="@drawable/ic_action_share"
-        android:showAsAction="ifRoom|collapseActionView"
-        android:title="@string/share">
+            android:id="@+id/share"
+            android:icon="@drawable/ic_action_share"
+            android:showAsAction="ifRoom|collapseActionView"
+            android:title="@string/share">
     </item>
     <item
             android:id="@+id/spotify"
             android:icon="@drawable/ic_action_share"
             android:showAsAction="ifRoom|collapseActionView"
-            android:title="Spotify">
+            android:title="Posłuchaj w Spotify">
+    </item>
+
+    <item
+            android:id="@+id/follow"
+            android:icon="@drawable/ic_action_share"
+            android:showAsAction="ifRoom|collapseActionView"
+            android:title="Obserwuj artystę">
     </item>
     <item
-        android:id="@+id/naviagte_icon"
-        android:icon="@drawable/ic_action_directions"
-        android:showAsAction="ifRoom|collapseActionView"
-        android:title="@string/navigate">
+            android:id="@+id/naviagte_icon"
+            android:icon="@drawable/ic_action_directions"
+            android:showAsAction="ifRoom|collapseActionView"
+            android:title="@string/navigate">
     </item>
 
 </menu>

@@ -157,6 +157,10 @@ public class TabConcertInfo extends Fragment {
         inflater.inflate(R.menu.concert_info_menu, menu);
         if (dbm.isConcertFavourite(ID))
             menu.getItem(0).setIcon(R.drawable.ic_action_important_w);
+        if (dbm.isArtistFollowing(artist.getText().toString()))
+            menu.getItem(4).setTitle("Przestań obserować");
+        else
+            menu.getItem(4).setTitle("Obserwuj");
     }
 
     @Override
@@ -188,6 +192,21 @@ public class TabConcertInfo extends Fragment {
                         "com.spotify.music.MainActivity"));
                 intent.putExtra(SearchManager.QUERY, artist.getText().toString());
                 this.startActivity(intent);
+                return true;
+
+            case R.id.follow:
+
+                if (dbm.isArtistFollowing(artist.getText().toString()))// wyjebujemy
+                {
+                    item.setTitle("Przestań obserwować");
+                    dbm.removeFollowingArtist(artist.getText().toString());
+                    item.setIcon(R.drawable.ic_action_not_important_w);
+                } else {
+                    item.setTitle("Obserwuj");
+                    dbm.addFollowingArtist(artist.getText().toString());
+                    item.setIcon(R.drawable.ic_action_important_w);
+                }
+
                 return true;
 
             case R.id.share:

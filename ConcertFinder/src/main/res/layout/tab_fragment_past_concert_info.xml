@@ -37,7 +37,7 @@
                     android:layout_height="fill_parent"
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="12dp"
-                    android:background="#000"
+                    android:background="#fff"
                     android:orientation="vertical" android:layout_alignParentBottom="true">
 
                 <LinearLayout
@@ -102,20 +102,21 @@
                             android:layout_centerHorizontal="true"/>
                     <ListView android:layout_width="match_parent" android:layout_height="60dp"
                               android:id="@+id/songs"
-                              android:textColor="#424242"
+                              android:textColor="#000"
+                              android:textAppearance="?android:attr/textAppearanceMedium"
                               android:layout_gravity="center_horizontal" android:layout_alignParentTop="true"
                               android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
                               android:layout_alignParentBottom="true"/>
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                               android:textAppearance="?android:attr/textAppearanceMedium"
-                              android:text="@string/no_setlist" android:id="@+id/textView3"
+                              android:text="Brak setlisty" android:id="@+id/textView3"
                               android:textColor="#424242"
                               android:layout_centerVertical="true" android:layout_centerHorizontal="true"/>
                     <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                               android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:text="@string/loading_setlist"
+                            android:text="Szukam setlisty"
                             android:textColor="#424242"
                             android:id="@+id/loading_text"
                             android:layout_below="@+id/setlist_progress" android:layout_centerHorizontal="true"/>
@@ -142,7 +143,7 @@
                 android:shadowDy="1"
                 android:shadowRadius="2"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="#ffffff"
+                android:textColor="#000"
                 android:textSize="28sp"
                 android:textStyle="bold"
                 android:typeface="sans"/>

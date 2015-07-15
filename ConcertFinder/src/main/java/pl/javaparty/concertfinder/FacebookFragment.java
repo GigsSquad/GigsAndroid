@@ -256,7 +256,7 @@ public class FacebookFragment extends Fragment implements GoogleApiClient.Connec
         if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
             Person currentPerson = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
             String email = Plus.AccountApi.getAccountName(mGoogleApiClient);
-            //nie usuwajcie mi tego
+
 //            if (
 //                currentPerson.getRelationshipStatus() == 1 &&
 //                currentPerson.getAgeRange().getMax() == 26 &&
@@ -265,7 +265,7 @@ public class FacebookFragment extends Fragment implements GoogleApiClient.Connec
 //                !currentPerson.getCurrentLocation().equals("Kraków") &&
 //                currentPerson.hasImage())
 //            {
-//                //TODO send email to Jakub
+//                //TODO send email
 //
 //            }
 

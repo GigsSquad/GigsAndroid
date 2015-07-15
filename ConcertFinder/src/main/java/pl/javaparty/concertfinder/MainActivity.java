@@ -35,6 +35,7 @@ import pl.javaparty.adapters.NavDrawerAdapter;
 import pl.javaparty.enums.PHPurls;
 import pl.javaparty.fragments.*;
 import pl.javaparty.items.Agencies;
+import pl.javaparty.items.Concert;
 import pl.javaparty.items.NavDrawerItem;
 import pl.javaparty.map.MapHelper;
 import pl.javaparty.prefs.Prefs;
@@ -43,6 +44,7 @@ import pl.javaparty.sql.dbManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 public class MainActivity extends FragmentActivity {
@@ -118,6 +120,7 @@ public class MainActivity extends FragmentActivity {
         context = getApplicationContext();
         fragmentManager = getSupportFragmentManager();
 
+
 		/* ustawianie actionbara by mozna go bylo wcisnac */
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
@@ -181,6 +184,7 @@ public class MainActivity extends FragmentActivity {
                 android.R.anim.slide_out_right).replace(R.id.content_frame, new RecentFragment()).commit();
         drawerLayout.openDrawer(drawerList);
 
+
         //Sprawdzamy czy nie nastapily zmiany w tabeli koncertow (w razie gdyby zmieniono kolejnosc albo dodano kolumny)
         if (dbMgr.checkIfConcertTableChanged()) {
             dbMgr.deleteDatabase(context);
@@ -196,6 +200,23 @@ public class MainActivity extends FragmentActivity {
         //jeśli miasto w Prefs wciąż jest puste to wyświetlamy okienko z prośbą o wpisanie
         if (Prefs.getCity(getApplicationContext()).isEmpty() && Prefs.getStart(getApplicationContext()))
             showCityDialog();
+
+        checkFollowingArtists();
+    }
+
+    private void checkFollowingArtists() {
+        int followingArtists = 0;
+        for(Concert c1 : dbMgr.getFutureConcertsByCity(Prefs.getCity(context).split(" ")[0]))
+        {
+            for (Concert c2 : dbMgr.getAllFollowingArtists())
+                if(c2.getArtist().equals(c1.getArtist()) && c1.getCity().equals(c2.getCity()))
+                    followingArtists++;
+        }
+
+        Log.i("FOLL", Integer.toString(followingArtists));
+        if (followingArtists > 0) {
+            Toast.makeText(context, "Jest " + followingArtists + " koncertów ulubionych artystów w Twojej okolicy", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -335,7 +356,7 @@ public class MainActivity extends FragmentActivity {
         else if (position == 4)
             Log.e("MainActivity", "IMPOSSIBRUUU! Zaminia fragment z pozycji Aktualizuj :O");
         else if (position == 5)
-            fragment = new FavoriteSpectacle();
+            fragment = new SpectacleFragment();
         else if (position == 6)
             fragment = new SettingsFragment();
         else if (position == 7)
@@ -439,17 +460,8 @@ public class MainActivity extends FragmentActivity {
                 Log.d("LATLNG", "Lat:" + Prefs.getLat(getApplicationContext()) + " Long:" + Prefs.getLon(getApplicationContext()));
             }
             mapDialog.dismiss();
-//            try
-//            {
             new DownloadConcerts().execute();
-//            }
-//            catch (Exception e)
-//            {
-//                dbMgr.deleteDatabase(cont);
-//                Prefs.setLastID(cont, -1);
-//                new DownloadConcerts().execute();
-//
-//            }
+
             super.onPostExecute(city);
         }
     }
@@ -492,8 +504,8 @@ public class MainActivity extends FragmentActivity {
                     //aktualizujemy obecne koncerty bez względu na wszystko
                     updateConcerts();
 
-                    if (count > dbMgr.getSize(dbManager.CONCERTS_TABLE)) { //aktualizacja - kiedy liczba koncertów z internetu jest większa od liczby koncertów które mamy w aplikacji
-                        downloadConcerts();
+                    if (count+1 > dbMgr.getSize(dbManager.CONCERTS_TABLE)) { //aktualizacja - kiedy liczba koncertów z internetu jest większa od liczby koncertów które mamy w aplikacji
+                        updateConcerts();
                     } else { // tak nie powinno się nigdy stać
                         Log.wtf("DB", "Baza w aplikacji ma wiecej koncertów niż na serwerze?");
                         dbMgr.deleteTables(); //wypierdol dziada
@@ -593,6 +605,7 @@ public class MainActivity extends FragmentActivity {
                 Toast.makeText(getApplicationContext(), getString(R.string.database_is_up_to_date), Toast.LENGTH_SHORT).show();
 
             loadingDialog.dismiss();
+            checkFollowingArtists();
             super.onPostExecute(s);
         }
 

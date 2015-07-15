@@ -2,6 +2,7 @@ package pl.javaparty.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -143,7 +144,6 @@ public class TabPastConcertInfo extends Fragment {
     }
 
 
-
     private class GetSetlist extends AsyncTask<Void, Void, Void> {
 
         ArrayAdapter<String> adapter;
@@ -154,7 +154,16 @@ public class TabPastConcertInfo extends Fragment {
                 Log.i("ASYNC", "back");
                 ArrayList<String> setlist = SetList.getSetlist(artistName, city, d, m, y);
                 Log.i("ASYNC", "songs: " + setlist.size());
-                adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, setlist);
+                adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, setlist) {
+
+                    @Override
+                    public View getView(int position, View convertView, ViewGroup parent) {
+                        View view = super.getView(position, convertView, parent);
+                        TextView textView = (TextView) view.findViewById(android.R.id.text1);
+                        textView.setTextColor(Color.BLUE);
+                        return view;
+                    }
+                };
                 Log.i("ASYNC", "back_done");
             } catch (Exception e) {
 
@@ -166,6 +175,7 @@ public class TabPastConcertInfo extends Fragment {
         protected void onPostExecute(Void result) {
             if (adapter != null) {
                 lv.setAdapter(adapter);
+
                 lv.setVisibility(View.VISIBLE);
                 Toast.makeText(getActivity(), getString(R.string.setlist_hint), Toast.LENGTH_LONG);
             } else
