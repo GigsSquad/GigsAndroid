@@ -38,7 +38,6 @@ public class RecentFragment extends Fragment {
 
     public RecentFragment() {
         super();
-
         checkedAgencies = Agencies.AgenciesMethods.initialize();
     }
 
@@ -120,7 +119,7 @@ public class RecentFragment extends Fragment {
     public void refresh() {
         // concertsAdapter = new ConcertAdapter(getActivity(), cutArray(dbm.getAllConcerts(filterAgencies())));
         concertsAdapter.changeData(cutArray(dbm.getFutureConcerts(filterAgencies())));
-        //concertsListView.setAdapter(concertsAdapter);
+        concertsListView.setAdapter(concertsAdapter);
     }
 
     @Override

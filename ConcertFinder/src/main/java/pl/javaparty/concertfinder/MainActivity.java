@@ -63,9 +63,9 @@ public class MainActivity extends FragmentActivity {
     MapHelper mapHelper;
 
     /* Fragmenty */
-    FragmentManager fragmentManager;
+    static FragmentManager fragmentManager;
     private int currentFragment = 1;
-    private Bundle arguments;
+    private static Bundle arguments;
 
     /* Baza */
     static dbManager dbMgr;
@@ -101,17 +101,15 @@ public class MainActivity extends FragmentActivity {
         ArrayList<String> events = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.events_submenu)));
 
         navDrawerItems = new ArrayList<>();
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(1, -1)));
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(2, -1)));
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(3, -1)));
+        navDrawerItems.add(new NavDrawerItem("Szukaj", navMenuIcons.getResourceId(0, -1)));
+        navDrawerItems.add(new NavDrawerItem("Najbliższe koncerty", navMenuIcons.getResourceId(1, -1)));
+        navDrawerItems.add(new NavDrawerItem("Minione koncerty", navMenuIcons.getResourceId(1, -1)));
+        navDrawerItems.add(new NavDrawerItem("Twoje koncerty", navMenuIcons.getResourceId(2, -1)));
         navDrawerItems.add(new NavDrawerItem("Spektakle", navMenuIcons.getResourceId(0, -1)));
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(4, -1)));
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[6], navMenuIcons.getResourceId(5, -1)));
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[7], navMenuIcons.getResourceId(4, -1), agencies));//TODO icona
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[8], navMenuIcons.getResourceId(3, -1), ticketers));
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[9]/*TODO!*/, navMenuIcons.getResourceId(3, -1), events));
+        navDrawerItems.add(new NavDrawerItem("Preferencje", navMenuIcons.getResourceId(4, -1)));
+        navDrawerItems.add(new NavDrawerItem("Agencje", navMenuIcons.getResourceId(4, -1), agencies));//TODO icona
+        navDrawerItems.add(new NavDrawerItem("Bileterie", navMenuIcons.getResourceId(3, -1), ticketers));
+        navDrawerItems.add(new NavDrawerItem("Festiwale", navMenuIcons.getResourceId(3, -1), events));
 
         navMenuIcons.recycle();
         mapHelper = new MapHelper(this);
@@ -146,16 +144,12 @@ public class MainActivity extends FragmentActivity {
             public boolean onGroupClick(ExpandableListView parent, View v,
                                         int groupPosition, long id) {
                 if (navDrawerItems.get(groupPosition).getSubmenu() == null) {
+
                     drawerLayout.closeDrawers();
-                    if (groupPosition == 4) {
-                        if (isOnline())
-                            new GetLatLng(getApplicationContext()).execute(); //nowa lepsza kurwa funkcja stary
-                        else
-                            Toast.makeText(getApplication(), getString(R.string.no_connection), Toast.LENGTH_SHORT).show();
-                    } else if (currentFragment != groupPosition)
-                        changeFragment(groupPosition);
+                    changeFragment(groupPosition);
                     return true;
                 }
+                changeFragment(groupPosition);
                 return false;
             }
 
@@ -343,7 +337,7 @@ public class MainActivity extends FragmentActivity {
         // No call for super(). Bug on API Level > 11. lol
     }
 
-    private void changeFragment(int position) {
+    public static void changeFragment(int position) {
         Fragment fragment = null;
         if (position == 0)
             fragment = new SearchFragment();
@@ -354,12 +348,10 @@ public class MainActivity extends FragmentActivity {
         else if (position == 3)
             fragment = new FavoriteFragment();
         else if (position == 4)
-            Log.e("MainActivity", "IMPOSSIBRUUU! Zaminia fragment z pozycji Aktualizuj :O");
-        else if (position == 5)
             fragment = new SpectacleFragment();
-        else if (position == 6)
+        else if (position == 5)
             fragment = new SettingsFragment();
-        else if (position == 7)
+        else if (position == 6)
             fragment = new AboutFragment();
         else if (position >= 90 && position < 100) {
             FestivalFragment ffragment = new FestivalFragment();
@@ -376,9 +368,6 @@ public class MainActivity extends FragmentActivity {
 
             fragment = rfragment;
         }
-
-        if (position != 4)// takie zabezpieczenie choc to sie nie powinno wydarzyc
-            currentFragment = position;
 
         if (fragment != null) {
             updateCounters();
