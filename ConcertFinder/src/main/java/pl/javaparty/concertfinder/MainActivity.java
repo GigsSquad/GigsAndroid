@@ -105,11 +105,11 @@ public class MainActivity extends FragmentActivity {
         navDrawerItems.add(new NavDrawerItem("Najbliższe koncerty", navMenuIcons.getResourceId(1, -1)));
         navDrawerItems.add(new NavDrawerItem("Minione koncerty", navMenuIcons.getResourceId(1, -1)));
         navDrawerItems.add(new NavDrawerItem("Twoje koncerty", navMenuIcons.getResourceId(2, -1)));
-        navDrawerItems.add(new NavDrawerItem("Spektakle", navMenuIcons.getResourceId(0, -1)));
+        navDrawerItems.add(new NavDrawerItem("Spektakle", navMenuIcons.getResourceId(3, -1)));
         navDrawerItems.add(new NavDrawerItem("Preferencje", navMenuIcons.getResourceId(4, -1)));
         navDrawerItems.add(new NavDrawerItem("Agencje", navMenuIcons.getResourceId(4, -1), agencies));//TODO icona
-        navDrawerItems.add(new NavDrawerItem("Bileterie", navMenuIcons.getResourceId(3, -1), ticketers));
-        navDrawerItems.add(new NavDrawerItem("Festiwale", navMenuIcons.getResourceId(3, -1), events));
+        navDrawerItems.add(new NavDrawerItem("Bileterie", navMenuIcons.getResourceId(4, -1), ticketers));
+        navDrawerItems.add(new NavDrawerItem("Festiwale", navMenuIcons.getResourceId(4, -1), events));
 
         navMenuIcons.recycle();
         mapHelper = new MapHelper(this);

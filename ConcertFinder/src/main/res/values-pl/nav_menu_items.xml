@@ -18,9 +18,8 @@
         <item>@drawable/ic_action_search</item>
         <item>@drawable/ic_action_view_as_list</item>
         <item>@drawable/ic_action_good</item>
-        <item>@drawable/ic_action_refresh</item>
+        <item>@drawable/ic_action_theatre</item>
         <item>@drawable/ic_action_settings</item>
-        <item>@drawable/ic_action_about</item>
     </array>
 
     <string-array name="events_submenu">
