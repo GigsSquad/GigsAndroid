@@ -392,7 +392,8 @@ public class SettingsFragment extends Fragment {
                         JSONconcert.getString("updated"),
                         JSONconcert.getString("lat"),
                         JSONconcert.getString("lon"),
-                        distance);
+                        distance,
+                        JSONconcert.getString("entrance_fee"));
 
                 loadingDialog.incrementProgressBy(1);
             }
@@ -429,7 +430,8 @@ public class SettingsFragment extends Fragment {
                         JSONconcert.getString("updated"),
                         JSONconcert.getString("lat"),
                         JSONconcert.getString("lon"),
-                        distance);
+                        distance,
+                        JSONconcert.getString("entrance_fee"));
 
                 loadingDialog.incrementProgressBy(1);
             }

@@ -6,7 +6,7 @@ package pl.javaparty.enums;
  */
 public enum PHPurls {
     main("http://musicart.nazwa.pl/android/"),
-    getConcerts(main + "get_concerts.php"),
+    getConcerts(main + "test/get_concerts.php"),
     insertComment(main + "insert_comment.php"),
     getComments(main + "get_comments.php"),
     login(main + "login.php"),

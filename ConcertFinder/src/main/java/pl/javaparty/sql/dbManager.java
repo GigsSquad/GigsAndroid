@@ -42,7 +42,8 @@ public class dbManager extends SQLiteOpenHelper {
                     "UPDATED DATE," +
                     "LAT TEXT," +
                     "LON TEXT," +
-                    "DIST REAL)";
+                    "DIST REAL," +
+                    "ENTRANCE_FEE INTEGER)";
 
     // nowa tabela zawieraj�ca ulubione koncerty
     private static String CreateFavouriteTable =
@@ -108,9 +109,9 @@ public class dbManager extends SQLiteOpenHelper {
     }
 
     public void addConcert(long id, String artist, String city, String spot,
-                           int day, int month, int year, String agency, String url, String updated, String lat, String lon, double distance) {
+                           int day, int month, int year, String agency, String url, String updated, String lat, String lon, double distance, String entrance_fee) {
 
-        String sql = "INSERT INTO " + CONCERTS_TABLE + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO " + CONCERTS_TABLE + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
         try {
             SQLiteStatement statement = database.compileStatement(sql);
             statement.clearBindings();
@@ -127,17 +128,18 @@ public class dbManager extends SQLiteOpenHelper {
             statement.bindString(11, lat);
             statement.bindString(12, lon);
             statement.bindDouble(13, distance);
+            statement.bindString(14, entrance_fee);
             statement.execute();
         } catch (SQLiteConstraintException sqlce) {
             Log.i("DB", "Takie samo id, więc update");
-            updateConcert(id, artist, city, spot, day, month, year, agency, url, updated, lat, lon, distance);
+            updateConcert(id, artist, city, spot, day, month, year, agency, url, updated, lat, lon, distance, entrance_fee);
         }
     }
 
     public void updateConcert(long id, String artist, String city, String spot,
-                              int day, int month, int year, String agency, String url, String updated, String lat, String lon, double distance) {
+                              int day, int month, int year, String agency, String url, String updated, String lat, String lon, double distance, String entrance_fee) {
 
-        String sql = "UPDATE " + CONCERTS_TABLE + " SET artist = ?, city = ?, spot = ?, day = ?, month = ?, year = ?, agency = ?, url = ?, updated = ?, lat = ?, lon = ?, dist = ? WHERE ord = ?";
+        String sql = "UPDATE " + CONCERTS_TABLE + " SET artist = ?, city = ?, spot = ?, day = ?, month = ?, year = ?, agency = ?, url = ?, updated = ?, lat = ?, lon = ?, dist = ?, entrance_fee = ? WHERE ord = ?";
 
         SQLiteStatement statement = database.compileStatement(sql);
         statement.clearBindings();
@@ -153,7 +155,8 @@ public class dbManager extends SQLiteOpenHelper {
         statement.bindString(10, lat);
         statement.bindString(11, lon);
         statement.bindDouble(12, distance);
-        statement.bindLong(13, id);
+        statement.bindString(13, entrance_fee);
+        statement.bindLong(14, id);
         statement.execute();
     }
 
