@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import pl.javaparty.prefs.Prefs;
+import pl.javaparty.prefs.PrefsSingleton;
 
 public class SplashScreen extends FragmentActivity {
 
@@ -15,7 +15,7 @@ public class SplashScreen extends FragmentActivity {
         super.onCreate(savedInstanceState);
 
         Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
-        int prefsUserId = Prefs.getUserID(getApplicationContext());
+        int prefsUserId = PrefsSingleton.getInstance().getUserID(getApplicationContext());
 
         Log.i("LOGIN", "ID w Prefs" + prefsUserId);
 

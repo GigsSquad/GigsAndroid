@@ -13,7 +13,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import pl.javaparty.adapters.ConcertAdapter;
-import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.fragments.FilterDialogFragment.FilterDialogListener;
 import pl.javaparty.items.Agencies;
@@ -30,7 +29,6 @@ public class RecentFragment extends Fragment {
     ConcertAdapter concertsAdapter;
     ListView concertsListView;
     Context context;
-    dbManager dbm;
     Button nextButton;
     private int lastPosition = 0;
     private int showedConcerts = 20;
@@ -47,8 +45,6 @@ public class RecentFragment extends Fragment {
         getActivity().getActionBar().setTitle(getString(R.string.upcoming_concerts));
         context = inflater.getContext();
         concertsListView = (ListView) view.findViewById(R.id.recentList);
-        dbm = MainActivity.getDBManager();
-
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -72,7 +68,7 @@ public class RecentFragment extends Fragment {
 
         concertsListView.addFooterView(nextButton);
         Calendar localCalendar = Calendar.getInstance(TimeZone.getDefault());
-        concertsAdapter = new ConcertAdapter(getActivity(), cutArray(dbm.getFutureConcerts(filterAgencies())));
+        concertsAdapter = new ConcertAdapter(getActivity(), cutArray(dbManager.getInstance(context).getFutureConcerts(filterAgencies())));
 
         concertsListView.setAdapter(concertsAdapter);
         concertsListView.setEmptyView(view.findViewById(R.id.emptyList));
@@ -104,10 +100,10 @@ public class RecentFragment extends Fragment {
         //fc4355eb184e82380296c170cc0bd2dc664fc195 cut array
         if (array != null && array.length != 0) {
             Log.i("EMPTYLIST", String.valueOf(array.length));
-            if (showedConcerts >= array.length - 1) //dbm.getSize(dbManager.CONCERTS_TABLE) - 1) {
+            if (showedConcerts >= array.length - 1) //dbManager.getInstance(context).getSize(dbManager.CONCERTS_TABLE) - 1) {
             {
                 showedConcerts = array.length - 1;
-                //showedConcerts = dbm.getSize(dbManager.CONCERTS_TABLE) - 1;
+                //showedConcerts = dbManager.getInstance(context).getSize(dbManager.CONCERTS_TABLE) - 1;
                 nextButton.setVisibility(View.GONE);
                 return array;
             } else
@@ -117,8 +113,8 @@ public class RecentFragment extends Fragment {
     }
 
     public void refresh() {
-        // concertsAdapter = new ConcertAdapter(getActivity(), cutArray(dbm.getAllConcerts(filterAgencies())));
-        concertsAdapter.changeData(cutArray(dbm.getFutureConcerts(filterAgencies())));
+        // concertsAdapter = new ConcertAdapter(getActivity(), cutArray(dbManager.getInstance(context).getAllConcerts(filterAgencies())));
+        concertsAdapter.changeData(cutArray(dbManager.getInstance(context).getFutureConcerts(filterAgencies())));
         concertsListView.setAdapter(concertsAdapter);
     }
 

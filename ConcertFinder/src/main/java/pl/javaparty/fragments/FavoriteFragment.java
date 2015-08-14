@@ -10,13 +10,11 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import pl.javaparty.adapters.ConcertAdapter;
-import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.items.Concert;
 import pl.javaparty.sql.dbManager;
 
 public class FavoriteFragment extends Fragment {
-	private dbManager dbm;
 	private ListView list;
 	private ConcertAdapter adapter;
 
@@ -25,10 +23,9 @@ public class FavoriteFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_favourite, container, false);
 
         getActivity().getActionBar().setTitle(getString(R.string.favourite));
-        dbm = MainActivity.getDBManager();// przekazujemy dbm od mainActivity
 		list = (ListView) view.findViewById(R.id.FavouriteList);
 
-		adapter = new ConcertAdapter(getActivity(), dbm.getAllFavouriteConcert());
+		adapter = new ConcertAdapter(getActivity(), dbManager.getInstance(getActivity().getApplicationContext()).getAllFavouriteConcert());
 		list.setAdapter(adapter);
 
 		list.setOnItemClickListener(new OnItemClickListener() {
@@ -55,7 +52,7 @@ public class FavoriteFragment extends Fragment {
 
 	public void refresh()
 	{
-		adapter = new ConcertAdapter(getActivity(), dbm.getAllFavouriteConcert());
+		adapter = new ConcertAdapter(getActivity(), dbManager.getInstance(getActivity().getApplicationContext()).getAllFavouriteConcert());
 		list.setAdapter(adapter);
 	}
 

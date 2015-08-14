@@ -12,7 +12,6 @@ import pl.javaparty.concertfinder.R;
 
 public class AboutFragment extends Fragment {
 
-
     private static final int CLICK_NR = 4;
     int clicks = CLICK_NR;
 

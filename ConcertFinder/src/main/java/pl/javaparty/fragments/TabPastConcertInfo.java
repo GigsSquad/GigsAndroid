@@ -14,14 +14,11 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
-import com.google.android.gms.maps.model.LatLng;
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.imageloader.ImageLoader;
 import pl.javaparty.items.Concert;
 import pl.javaparty.jsoup.SetList;
-import pl.javaparty.map.MapHelper;
-import pl.javaparty.prefs.Prefs;
 import pl.javaparty.sql.dbManager;
 
 import java.util.ArrayList;
@@ -29,8 +26,8 @@ import java.util.ArrayList;
 public class TabPastConcertInfo extends Fragment {
 
     private ImageView image;
-    private static dbManager dbm;
     private int ID;
+    Context context;
     private ListView lv;
     private TextView tv, artist, placeTV, dateTV, loadTV;
     private ProgressBar pbar;
@@ -48,18 +45,16 @@ public class TabPastConcertInfo extends Fragment {
         lv = (ListView) view.findViewById(R.id.songs);
         pbar = (ProgressBar) view.findViewById(R.id.setlist_progress);
         loadTV = (TextView) view.findViewById(R.id.loading_text);
-        dbm = MainActivity.getDBManager();
-
+        context = inflater.getContext();
         setHasOptionsMenu(true);
 
         ID = (getArguments().getInt("ID", -1)); // -1 bo bazadanych numeruje od 1 a nie od 0
-        dbm = MainActivity.getDBManager();
 
-        Concert con = dbm.getConcertByID(ID);
+        Concert con = dbManager.getInstance(context).getConcertByID(ID);
         artistName = con.getArtist();
         city = con.getCity();
         place = con.getPlace();
-        int[] date = dbm.dateArray(ID);
+        int[] date = dbManager.getInstance(context).dateArray(ID);
         d = date[0];
         m = date[1];
         y = date[2];
@@ -83,7 +78,7 @@ public class TabPastConcertInfo extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.concert_info_menu, menu);
-        if (dbm.isConcertFavourite(ID))
+        if (dbManager.getInstance(context).isConcertFavourite(ID))
             menu.getItem(0).setIcon(R.drawable.ic_action_important_w);
     }
 
@@ -91,12 +86,12 @@ public class TabPastConcertInfo extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.favorite_icon:
-                if (dbm.isConcertFavourite(ID))// wyjebujemy
+                if (dbManager.getInstance(context).isConcertFavourite(ID))// wyjebujemy
                 {
-                    dbm.removeFavouriteConcert(ID);
+                    dbManager.getInstance(context).removeFavouriteConcert(ID);
                     item.setIcon(R.drawable.ic_action_not_important_w);
                 } else {
-                    dbm.addFavouriteConcert(ID);
+                    dbManager.getInstance(context).addFavouriteConcert(ID);
                     item.setIcon(R.drawable.ic_action_important_w);
                 }
 
@@ -104,14 +99,14 @@ public class TabPastConcertInfo extends Fragment {
                 return true;
             case R.id.website_icon:
                 Intent websiteIntent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse(dbm.getUrl(ID)));
+                        Uri.parse(dbManager.getInstance(context).getUrl(ID)));
                 startActivity(websiteIntent);
                 return true;
 
             case R.id.share:
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, dbm.getArtist(ID) + ", " + dbm.getCity(ID) + " (" + dbm.getDate(ID) + ")");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, dbManager.getInstance(context).getArtist(ID) + ", " + dbManager.getInstance(context).getCity(ID) + " (" + dbManager.getInstance(context).getDate(ID) + ")");
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
                 return true;

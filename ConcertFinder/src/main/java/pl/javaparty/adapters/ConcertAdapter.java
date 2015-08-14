@@ -15,6 +15,7 @@ import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.imageloader.ImageLoader;
 import pl.javaparty.items.Concert;
+import pl.javaparty.sql.dbManager;
 
 import java.util.ArrayList;
 
@@ -77,13 +78,13 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
         titleString = titleString.replace(": ", "\n");
 
         int length = titleString.length();
-        //Log.i("MAPS", "Lat:" + Prefs.getLat(getContext()) + "\nLon:" + Prefs.getLon(getContext()));
+        //Log.i("MAPS", "Lat:" + PrefsSingleton.getInstance()..getLat(getContext()) + "\nLon:" + PrefsSingleton.getInstance()..getLon(getContext()));
         holder.title.setText(titleString); // + "\n" + rowItem.getDistance() + "\nLat: " + rowItem.getLat() + "\nLon" + rowItem.getLon());
         holder.title.setTextSize(50 - (length / 3));
         holder.place.setText(getPreparedPlace(rowItem.getPlace()));
         holder.date.setText(rowItem.dateToString());
 
-        if (MainActivity.getDBManager().isConcertFavourite(rowItem.getID()))
+        if (dbManager.getInstance(getContext()).isConcertFavourite(rowItem.getID()))
             holder.fav.setImageResource(R.drawable.ic_action_important);
         else
             holder.fav.setImageResource(R.drawable.ic_action_not_important);

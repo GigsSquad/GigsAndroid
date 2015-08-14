@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -34,7 +33,7 @@ import pl.javaparty.concertfinder.R;
 import pl.javaparty.enums.PHPurls;
 import pl.javaparty.imageloader.FileExplorer;
 import pl.javaparty.map.MapHelper;
-import pl.javaparty.prefs.Prefs;
+import pl.javaparty.prefs.PrefsSingleton;
 import pl.javaparty.sql.JSONthing;
 import pl.javaparty.sql.dbManager;
 
@@ -49,7 +48,6 @@ public class SettingsFragment extends Fragment {
     RadioButton distanceSort, dateSort;
     Context context;
     ArrayAdapter<CharSequence> adapter;
-    static dbManager dbm;
     ProgressDialog mapDialog;
     ProgressDialog loadingDialog;
     MapHelper mapHelper;
@@ -76,7 +74,6 @@ public class SettingsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
         context = inflater.getContext();
         getActivity().getActionBar().setTitle(getString(R.string.action_settings));
-        dbm = MainActivity.getDBManager();// przekazujemy dbm od mainActivity
         citySearchBox = (AutoCompleteTextView) view.findViewById(R.id.cityAutoComplete);
         saveButton = (Button) view.findViewById(R.id.saveSettingsButton);
         clearButton = (Button) view.findViewById(R.id.clearFilesButton);
@@ -96,15 +93,15 @@ public class SettingsFragment extends Fragment {
 
         citySearchBox.setThreshold(1);
 
-        if (Prefs.getCity(getActivity()) != null)
-            citySearchBox.setText(Prefs.getCity(getActivity()));
+        if (PrefsSingleton.getInstance().getCity(getActivity()) != null)
+            citySearchBox.setText(PrefsSingleton.getInstance().getCity(getActivity()));
 
         saveButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Prefs.setCity(getActivity(), citySearchBox.getText().toString());
+                PrefsSingleton.getInstance().setCity(getActivity(), citySearchBox.getText().toString());
 
-                Prefs.setSortOrder(getActivity(), sortOrder);
+                PrefsSingleton.getInstance().setSortOrder(getActivity(), sortOrder);
                 Log.i("SETTINGS", "Zapisano");
                 Log.i("SETTINGS", "Miasto: " + citySearchBox.getText().toString());
 
@@ -178,10 +175,10 @@ public class SettingsFragment extends Fragment {
                             FileExplorer f = new FileExplorer(getActivity());
                             f.clear();
                             Log.i("SETTINGS", "Usunięto obrazki z dysku");
-                            dbm.deleteTables();
+                            dbManager.getInstance(getActivity().getApplicationContext()).deleteTables();
                             Log.i("SETTINGS", "Wyczyszczono bazę");
                             MainActivity.updateCounters();
-                            Prefs.setLastID(getActivity(), -1);
+                            PrefsSingleton.getInstance().setLastID(getActivity(), -1);
                             Toast.makeText(getActivity(), getString(R.string.cleared), Toast.LENGTH_SHORT).show();
                         }
                     })
@@ -199,7 +196,7 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        sortOrder = Prefs.getSortOrder(getActivity());
+        sortOrder = PrefsSingleton.getInstance().getSortOrder(getActivity());
         if (sortOrder.equals("DIST")) {
             distanceSort.setChecked(true);
             dateSort.setChecked(false);
@@ -262,12 +259,12 @@ public class SettingsFragment extends Fragment {
             mapDialog.setMessage("Łączę się z Google Maps");
             mapDialog.show();
             jsonthing = new JSONthing();
-            id = String.valueOf(Prefs.getUserID(context)); //stirng żeby się PHPy nie srały
+            id = String.valueOf(PrefsSingleton.getInstance().getUserID(context)); //stirng żeby się PHPy nie srały
         }
 
         @Override
         protected String doInBackground(String... args) {
-            String city = Prefs.getCity(context);
+            String city = PrefsSingleton.getInstance().getCity(context);
             if (!city.isEmpty()) {
                 if (!id.equals("-1"))
                     updateServerLatLng(city);
@@ -292,9 +289,9 @@ public class SettingsFragment extends Fragment {
         @Override
         protected void onPostExecute(String city) {
             if (!city.isEmpty()) {
-                Prefs.setLat(context, String.valueOf(latlng.latitude));
-                Prefs.setLon(context, String.valueOf(latlng.longitude));
-                Log.d("LATLNG", "Lat:" + Prefs.getLat(context) + " Long:" + Prefs.getLon(context));
+                PrefsSingleton.getInstance().setLat(context, String.valueOf(latlng.latitude));
+                PrefsSingleton.getInstance().setLon(context, String.valueOf(latlng.longitude));
+                Log.d("LATLNG", "Lat:" + PrefsSingleton.getInstance().getLat(context) + " Long:" + PrefsSingleton.getInstance().getLon(context));
             }
             mapDialog.dismiss();
             new DownloadConcerts().execute();
@@ -327,7 +324,7 @@ public class SettingsFragment extends Fragment {
             try {
                 success = mJsonObject.getInt("success");
                 jsonLastId = Integer.parseInt(mJsonObject.getString("last_id"));
-                prefsLastId = Prefs.getLastID(context);
+                prefsLastId = PrefsSingleton.getInstance().getLastID(context);
                 count = mJsonObject.getInt("count");
                 //chłopcy i dziewczęta pamiętajmy iż last_id != count
 
@@ -336,21 +333,21 @@ public class SettingsFragment extends Fragment {
                     loadingDialog.setMax(prefsLastId + jsonLastId);
 
                     Log.i("DBSettings", "ID - Prefs: " + prefsLastId + " JSON: " + jsonLastId);
-                    Log.i("DBSettings", "COUNT - Prefs: " + dbm.getSize(dbManager.CONCERTS_TABLE) + " JSON: " + count);
+                    Log.i("DBSettings", "COUNT - Prefs: " + dbManager.getInstance(context).getSize(dbManager.CONCERTS_TABLE) + " JSON: " + count);
 
                     //aktualizujemy obecne koncerty bez względu na wszystko
 //                    updateConcerts();
 
-                    dbm.deleteTables(); //wypierdol dziada
-                    Prefs.setLastID(context, -1); // zmieniamy ostatnie id na początkowe
+                    dbManager.getInstance(context).deleteTables(); //wypierdol dziada
+                    PrefsSingleton.getInstance().setLastID(context, -1); // zmieniamy ostatnie id na początkowe
                     downloadConcerts(); //i zapełnij od nowa
 
-//                    if (count + 1 > dbm.getSize(dbManager.CONCERTS_TABLE)) { //aktualizacja - kiedy liczba koncertów z internetu jest większa od liczby koncertów które mamy w aplikacji
+//                    if (count + 1 > dbManager.getInstance(context).getSize(dbManager.CONCERTS_TABLE)) { //aktualizacja - kiedy liczba koncertów z internetu jest większa od liczby koncertów które mamy w aplikacji
 //                        updateConcerts();
 //                    } else { // tak nie powinno się nigdy stać
 //                        Log.wtf("DBSettings", "Baza w aplikacji ma wiecej koncertów niż na serwerze?");
-//                        dbm.deleteTables(); //wypierdol dziada
-//                        Prefs.setLastID(context, -1); // zmieniamy ostatnie id na początkowe
+//                        dbManager.getInstance(context).deleteTables(); //wypierdol dziada
+//                        PrefsSingleton.getInstance().setLastID(context, -1); // zmieniamy ostatnie id na początkowe
 //                        downloadConcerts(); //i zapełnij od nowa
 //                    }
                 }
@@ -365,13 +362,13 @@ public class SettingsFragment extends Fragment {
         //Aktualizuje koncerty
         protected void updateConcerts() throws JSONException {
             //współrzędne z prefs wpisane do latLng
-            LatLng latLng = new LatLng(Double.parseDouble(Prefs.getLon(context)), Double.parseDouble(Prefs.getLat(context)));
+            LatLng latLng = new LatLng(Double.parseDouble(PrefsSingleton.getInstance().getLon(context)), Double.parseDouble(PrefsSingleton.getInstance().getLat(context)));
 
             loadingDialog.setMax(count - prefsLastId);
-            Prefs.setLastID(context, jsonLastId);
+            PrefsSingleton.getInstance().setLastID(context, jsonLastId);
             JSONArray mJsonArray = mJsonObject.getJSONArray("concerts");
             double distance;
-            dbm.beginTransaction();
+            dbManager.getInstance(context).beginTransaction();
             for (int i = 0; i < mJsonArray.length(); i++) {
                 JSONObject JSONconcert = mJsonArray.getJSONObject(i);
                 if (latLng.longitude != -1) {
@@ -379,7 +376,7 @@ public class SettingsFragment extends Fragment {
                 } else {
                     distance = 0;
                 }
-                dbm.updateConcert(
+                dbManager.getInstance(context).updateConcert(
                         JSONconcert.getInt("id"),
                         JSONconcert.getString("artist"),
                         JSONconcert.getString("city"),
@@ -397,19 +394,19 @@ public class SettingsFragment extends Fragment {
 
                 loadingDialog.incrementProgressBy(1);
             }
-            dbm.endTransaction();
+            dbManager.getInstance(context).endTransaction();
             updateNeeded = true;
         }
 
         //Pobiera nowe koncerty
         protected void downloadConcerts() throws JSONException {
             //współrzędne z prefs wpisane do latLng
-            LatLng latLng = new LatLng(Double.parseDouble(Prefs.getLon(context)), Double.parseDouble(Prefs.getLat(context)));
+            LatLng latLng = new LatLng(Double.parseDouble(PrefsSingleton.getInstance().getLon(context)), Double.parseDouble(PrefsSingleton.getInstance().getLat(context)));
 
-            Prefs.setLastID(context, jsonLastId);
+            PrefsSingleton.getInstance().setLastID(context, jsonLastId);
             JSONArray mJsonArray = mJsonObject.getJSONArray("concerts");
             double distance;
-            dbm.beginTransaction();
+            dbManager.getInstance(context).beginTransaction();
             for (int i = 0; i < mJsonArray.length(); i++) {
                 JSONObject JSONconcert = mJsonArray.getJSONObject(i);
                 if (latLng.longitude != -1)
@@ -417,7 +414,7 @@ public class SettingsFragment extends Fragment {
                 else
                     distance = 0;
 
-                dbm.addConcert(
+                dbManager.getInstance(context).addConcert(
                         JSONconcert.getInt("id"),
                         JSONconcert.getString("artist"),
                         JSONconcert.getString("city"),
@@ -435,7 +432,7 @@ public class SettingsFragment extends Fragment {
 
                 loadingDialog.incrementProgressBy(1);
             }
-            dbm.endTransaction();
+            dbManager.getInstance(context).endTransaction();
             updateNeeded = true;
         }
 
@@ -465,18 +462,18 @@ public class SettingsFragment extends Fragment {
             mapDialog.setMessage("Łączę się z Google Maps");
             mapDialog.show();
             jsonthing = new JSONthing();
-            id = String.valueOf(Prefs.getUserID(getActivity().getApplicationContext())); //stirng żeby się PHPy nie srały
+            id = String.valueOf(PrefsSingleton.getInstance().getUserID(getActivity().getApplicationContext())); //stirng żeby się PHPy nie srały
         }
 
         @Override
         protected String doInBackground(String... params) {
-            String city = Prefs.getCity(getActivity());
+            String city = PrefsSingleton.getInstance().getCity(getActivity());
 
             if (!city.isEmpty()) {
                 if (!id.equals("-1"))
                     updateServerLatLng(city);
                 latlng = MapHelper.getLatLongFromAddress(city);
-                MainActivity.getDBManager().update(latlng);
+                dbManager.getInstance(context).update(latlng);
             }
             return city;
         }
@@ -496,8 +493,8 @@ public class SettingsFragment extends Fragment {
         @Override
         protected void onPostExecute(String city) {
             if (!city.isEmpty()) {
-                Prefs.setLat(getActivity(), String.valueOf(latlng.latitude));
-                Prefs.setLon(getActivity(), String.valueOf(latlng.longitude));
+                PrefsSingleton.getInstance().setLat(getActivity(), String.valueOf(latlng.latitude));
+                PrefsSingleton.getInstance().setLon(getActivity(), String.valueOf(latlng.longitude));
             }
             mapDialog.dismiss();
             super.onPostExecute(city);

@@ -12,13 +12,33 @@ import com.google.android.gms.maps.model.LatLng;
 import pl.javaparty.items.Agencies;
 import pl.javaparty.items.Concert;
 import pl.javaparty.map.MapHelper;
-import pl.javaparty.prefs.Prefs;
+import pl.javaparty.prefs.PrefsSingleton;
 
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashSet;
 
 public class dbManager extends SQLiteOpenHelper {
+
+    private static volatile dbManager INSTANCE;
+
+    private dbManager(Context context) {
+        super(context, DATABASE_NAME, null, 1);
+        this.context = context;
+        database = getWritableDatabase();
+        setSortOrder(context);
+    }
+
+    public static dbManager getInstance(Context context) {
+        if (INSTANCE == null) {
+            synchronized (dbManager.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new dbManager(context);
+                }
+            }
+        }
+        return INSTANCE;
+    }
 
     private final static String DATABASE_NAME = "baza.db";
     private static SQLiteDatabase database;
@@ -27,7 +47,7 @@ public class dbManager extends SQLiteOpenHelper {
     public final static String FOLLOWING_TABLE = "Following";
     public final static String SEARCH_TABLE = "Search";
     public static String SORT_ORDER = "";
-    private Context context;
+    private static Context context;
     private static String CreateConcertTable =
             "CREATE TABLE " + CONCERTS_TABLE + "(" +
                     "ORD INTEGER PRIMARY KEY," +
@@ -64,16 +84,9 @@ public class dbManager extends SQLiteOpenHelper {
                     "MONTH INTEGER," +
                     "YEAR INTEGER)";
 
-    public dbManager(Context context) {
-        super(context, DATABASE_NAME, null, 1);
-        this.context = context;
-
-        database = getWritableDatabase();
-        setSortOrder(context);
-    }
 
     private static void setSortOrder(Context context) {
-        SORT_ORDER = Prefs.getSortOrder(context);
+        SORT_ORDER = PrefsSingleton.getInstance().getSortOrder(context);
     }
 
     public void close() {
@@ -163,8 +176,8 @@ public class dbManager extends SQLiteOpenHelper {
     public void deleteDatabase(Context context) {
         database.close();
         context.deleteDatabase(DATABASE_NAME);
-        Prefs.setLastID(context, -1);
-        new dbManager(context); //jakie to jest glupie :D a najlepsze ze dziala xD
+        PrefsSingleton.getInstance().setLastID(context, -1);
+//        new dbManager(context); //jakie to jest glupie :D a najlepsze ze dziala xD
         Log.i("DB", "Baza usunięta i stworzona na nowo");
     }
 

@@ -23,7 +23,6 @@ import pl.javaparty.sql.dbManager;
 public class TabConcertGoogleMap extends Fragment {
 
 	static int ID;
-	static dbManager dbm;
 	private static View view;
 	private static GoogleMap mMap;
 	private static FragmentManager fragmentManager;
@@ -41,16 +40,16 @@ public class TabConcertGoogleMap extends Fragment {
 		mMap.setMyLocationEnabled(true); // pokazuje naszą pozycje
 		LatLng latLng;
 
-		//Log.i("MAP", "RAW: " + Double.parseDouble(dbm.getLat(ID) + " " + Double.parseDouble(dbm.getLon(ID))));
+		//Log.i("MAP", "RAW: " + Double.parseDouble(dbManager.getInstance(context).getLat(ID) + " " + Double.parseDouble(dbManager.getInstance(context).getLon(ID))));
 		try {
 
-			latLng = new LatLng(Double.parseDouble(dbm.getLat(ID)), Double.parseDouble(dbm.getLon(ID)));
+			latLng = new LatLng(Double.parseDouble(dbManager.getInstance(context).getLat(ID)), Double.parseDouble(dbManager.getInstance(context).getLon(ID)));
 
 			if (latLng.latitude == 0 || latLng.longitude == 0)
 				throw new NumberFormatException();
 
-			mMap.addMarker(new MarkerOptions().position(latLng).title(dbm.getCity(ID) + " " + dbm.getSpot(ID))
-					.snippet(dbm.getArtist(ID) + " " + dbm.getDate(ID))); // ustawia marker
+			mMap.addMarker(new MarkerOptions().position(latLng).title(dbManager.getInstance(context).getCity(ID) + " " + dbManager.getInstance(context).getSpot(ID))
+					.snippet(dbManager.getInstance(context).getArtist(ID) + " " + dbManager.getInstance(context).getDate(ID))); // ustawia marker
 			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f)); // przybliza do markera
 		} catch (NumberFormatException nfe) {
             Toast.makeText(context, context.getString(R.string.wrong_adress), Toast.LENGTH_SHORT).show();
@@ -62,8 +61,6 @@ public class TabConcertGoogleMap extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
 		ID = getArguments().getInt("ID", -1);
 		context = getActivity();
-		dbm = MainActivity.getDBManager();
-
 		setHasOptionsMenu(true);
 
 		if (container == null)
@@ -122,7 +119,7 @@ public class TabConcertGoogleMap extends Fragment {
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.concert_map_menu, menu);
-		if (dbm.isConcertFavourite(ID))
+		if (dbManager.getInstance(context).isConcertFavourite(ID))
 			menu.getItem(0).setIcon(R.drawable.ic_action_important_w);
 
 	}
@@ -131,33 +128,33 @@ public class TabConcertGoogleMap extends Fragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.favorite_icon:
-			if (dbm.isConcertFavourite(ID))// wyjebujemy
+			if (dbManager.getInstance(context).isConcertFavourite(ID))// wyjebujemy
 			{
-				dbm.removeFavouriteConcert(ID);
+				dbManager.getInstance(context).removeFavouriteConcert(ID);
 				item.setIcon(R.drawable.ic_action_not_important_w);
 			} else {
-				dbm.addFavouriteConcert(ID);
+				dbManager.getInstance(context).addFavouriteConcert(ID);
 				item.setIcon(R.drawable.ic_action_important_w);
 			}
 			MainActivity.updateCounters();
 			return true;
 		case R.id.website_icon:
 			Intent websiteIntent = new Intent(Intent.ACTION_VIEW,
-					Uri.parse(dbm.getUrl(ID)));
+					Uri.parse(dbManager.getInstance(context).getUrl(ID)));
 			startActivity(websiteIntent);
 			return true;
 
 		case R.id.share:
 			Intent sendIntent = new Intent();
 			sendIntent.setAction(Intent.ACTION_SEND);
-			sendIntent.putExtra(Intent.EXTRA_TEXT, dbm.getArtist(ID) + ", " + dbm.getCity(ID) + " (" + dbm.getDate(ID) + ")");
+			sendIntent.putExtra(Intent.EXTRA_TEXT, dbManager.getInstance(context).getArtist(ID) + ", " + dbManager.getInstance(context).getCity(ID) + " (" + dbManager.getInstance(context).getDate(ID) + ")");
 			sendIntent.setType("text/plain");
 			startActivity(sendIntent);
 			return true;
 
 		case R.id.naviagte_icon:
 			Intent navIntent = new Intent(Intent.ACTION_VIEW,
-					Uri.parse("http://maps.google.com/maps?saddr=&daddr=" + dbm.getCity(ID) + " " + dbm.getSpot(ID)));
+					Uri.parse("http://maps.google.com/maps?saddr=&daddr=" + dbManager.getInstance(context).getCity(ID) + " " + dbManager.getInstance(context).getSpot(ID)));
 			startActivity(navIntent);
 			return true;
 

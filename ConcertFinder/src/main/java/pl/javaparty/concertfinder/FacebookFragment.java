@@ -29,7 +29,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import pl.javaparty.enums.PHPurls;
-import pl.javaparty.prefs.Prefs;
+import pl.javaparty.prefs.PrefsSingleton;
 import pl.javaparty.sql.JSONthing;
 
 import java.text.ParseException;
@@ -137,7 +137,7 @@ public class FacebookFragment extends Fragment implements GoogleApiClient.Connec
                             columns[4] = "";
                         }
 
-                        Prefs.setCity(getActivity(), columns[4]);
+                        PrefsSingleton.getInstance().setCity(getActivity(), columns[4]);
                         Toast.makeText(getActivity(), getString(R.string.hello) + ", " + columns[0], Toast.LENGTH_SHORT).show();
                         if (isAdded() && isOnline())
                             new loginUser(columns).execute();
@@ -296,7 +296,7 @@ public class FacebookFragment extends Fragment implements GoogleApiClient.Connec
             sdf.applyPattern(DB_FORMAT);
             columns[3] = sdf.format(date);
 
-            Prefs.setCity(getActivity(), columns[4]);
+            PrefsSingleton.getInstance().setCity(getActivity(), columns[4]);
             Toast.makeText(getActivity(), getString(R.string.hello) + ", " + columns[0], Toast.LENGTH_SHORT).show();
             if (isAdded() && isOnline())
                 new loginUser(columns).execute();
@@ -367,7 +367,7 @@ public class FacebookFragment extends Fragment implements GoogleApiClient.Connec
         @Override
         protected void onPostExecute(Integer userId) {
             Log.i("LOGIN", "ID zapisany do Prefs: " + userId);
-            Prefs.setUserID(getActivity(), userId);
+            PrefsSingleton.getInstance().setUserID(getActivity(), userId);
             loadingDialog.dismiss();
             startActivity(mainActivity);
             super.onPostExecute(userId);

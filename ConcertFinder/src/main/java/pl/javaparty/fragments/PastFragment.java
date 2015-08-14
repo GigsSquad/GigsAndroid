@@ -12,7 +12,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import pl.javaparty.adapters.ConcertAdapter;
-import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.fragments.FilterDialogFragment.FilterDialogListener;
 import pl.javaparty.items.Agencies;
@@ -27,7 +26,6 @@ public class PastFragment extends Fragment {
     ConcertAdapter adapter;
     ListView lv;
     Context context;
-    dbManager dbm;
     Button nextButton;
     private int lastPosition = 0;
     private int showedConcerts = 20;
@@ -46,7 +44,6 @@ public class PastFragment extends Fragment {
         getActivity().getActionBar().setTitle(getString(R.string.past_concerts));
         context = inflater.getContext();
         lv = (ListView) view.findViewById(R.id.recentList);
-        dbm = MainActivity.getDBManager();
 
         setHasOptionsMenu(true);
 
@@ -68,7 +65,7 @@ public class PastFragment extends Fragment {
 
         lv.addFooterView(nextButton);
 
-        adapter = new ConcertAdapter(getActivity(), cutArray(dbm.getPastConcerts(Agencies.AgenciesMethods.filterAgencies(checkedAgencies))));
+        adapter = new ConcertAdapter(getActivity(), cutArray(dbManager.getInstance(context).getPastConcerts(Agencies.AgenciesMethods.filterAgencies(checkedAgencies))));
         lv.setAdapter(adapter);
         lv.setEmptyView(view.findViewById(R.id.emptyList));
 
@@ -117,7 +114,7 @@ public class PastFragment extends Fragment {
     public void refresh()
     {
         //adapter = new ConcertAdapter(getActivity(), cutArray(dbm.getAllConcerts(filterAgencies())));
-        adapter.changeData(cutArray(dbm.getPastConcerts(Agencies.AgenciesMethods.filterAgencies(checkedAgencies))));
+        adapter.changeData(cutArray(dbManager.getInstance(context).getPastConcerts(Agencies.AgenciesMethods.filterAgencies(checkedAgencies))));
         //lv.setAdapter(adapter);
     }
 

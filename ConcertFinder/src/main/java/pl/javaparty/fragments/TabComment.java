@@ -20,7 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.enums.PHPurls;
-import pl.javaparty.prefs.Prefs;
+import pl.javaparty.prefs.PrefsSingleton;
 import pl.javaparty.sql.JSONthing;
 
 import java.util.ArrayList;
@@ -60,7 +60,7 @@ public class TabComment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (isOnline()) {
-                    if (Prefs.getUserID(getActivity()) != -1)
+                    if (PrefsSingleton.getInstance().getUserID(getActivity()) != -1)
                         new InsertComment().execute();
                     else
                         Toast.makeText(getActivity(), "Tylko zalogowani użytkownicy mogą komentować", Toast.LENGTH_LONG).show();
@@ -93,11 +93,11 @@ public class TabComment extends Fragment {
         @Override
         protected String doInBackground(String... args) {
             List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("user_id", Prefs.getUserID(getActivity()) + ""));
+            params.add(new BasicNameValuePair("user_id", PrefsSingleton.getInstance().getUserID(getActivity()) + ""));
             params.add(new BasicNameValuePair("concert_id", getArguments().getInt("ID", -1) + ""));
             params.add(new BasicNameValuePair("comment", commentField.getText().toString()));
 
-            Log.i("InsertComment", "user_id: " + Prefs.getUserID(getActivity()));
+            Log.i("InsertComment", "user_id: " + PrefsSingleton.getInstance().getUserID(getActivity()));
             Log.i("InsertComment", "concert_id: " + getArguments().getInt("ID", -1));
             Log.i("InsertComment", "comment: " + commentField.getText().toString());
 

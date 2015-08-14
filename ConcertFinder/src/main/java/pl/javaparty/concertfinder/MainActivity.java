@@ -38,13 +38,12 @@ import pl.javaparty.items.Agencies;
 import pl.javaparty.items.Concert;
 import pl.javaparty.items.NavDrawerItem;
 import pl.javaparty.map.MapHelper;
-import pl.javaparty.prefs.Prefs;
+import pl.javaparty.prefs.PrefsSingleton;
 import pl.javaparty.sql.JSONthing;
 import pl.javaparty.sql.dbManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 public class MainActivity extends FragmentActivity {
@@ -66,9 +65,6 @@ public class MainActivity extends FragmentActivity {
     static FragmentManager fragmentManager;
     private int currentFragment = 1;
     private static Bundle arguments;
-
-    /* Baza */
-    static dbManager dbMgr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,8 +109,6 @@ public class MainActivity extends FragmentActivity {
 
         navMenuIcons.recycle();
         mapHelper = new MapHelper(this);
-
-        dbMgr = new dbManager(getApplicationContext());
         context = getApplicationContext();
         fragmentManager = getSupportFragmentManager();
 
@@ -180,19 +174,19 @@ public class MainActivity extends FragmentActivity {
 
 
         //Sprawdzamy czy nie nastapily zmiany w tabeli koncertow (w razie gdyby zmieniono kolejnosc albo dodano kolumny)
-        if (dbMgr.checkIfConcertTableChanged()) {
-            dbMgr.deleteDatabase(context);
+        if (dbManager.getInstance(context).checkIfConcertTableChanged()) {
+            dbManager.getInstance(context).deleteDatabase(context);
             if (isOnline()) {
                 Toast.makeText(context, "Po aktualizacji konieczne jest ponowne pobranie bazy.", Toast.LENGTH_LONG).show();
                 new DownloadConcerts().execute();
             }
         } else
             //żeby pobrać cokolwiek to użytkownik musi być online oraz mieć mniej niż np 100 koncertów (np jak przerwie pobieranie w którymś momencie, to wtedy będzie mieć mniej)
-            if (isOnline() && dbMgr.getSize(dbManager.CONCERTS_TABLE) < 100)
+            if (isOnline() && dbManager.getInstance(context).getSize(dbManager.CONCERTS_TABLE) < 100)
                 showDownloadDialog();
 
         //jeśli miasto w Prefs wciąż jest puste to wyświetlamy okienko z prośbą o wpisanie
-        if (Prefs.getCity(getApplicationContext()).isEmpty() && Prefs.getStart(getApplicationContext()))
+        if (PrefsSingleton.getInstance().getCity(getApplicationContext()).isEmpty() && PrefsSingleton.getInstance().getStart(getApplicationContext()))
             showCityDialog();
 
         checkFollowingArtists();
@@ -200,10 +194,9 @@ public class MainActivity extends FragmentActivity {
 
     private void checkFollowingArtists() {
         int followingArtists = 0;
-        for(Concert c1 : dbMgr.getFutureConcertsByCity(Prefs.getCity(context).split(" ")[0]))
-        {
-            for (Concert c2 : dbMgr.getAllFollowingArtists())
-                if(c2.getArtist().equals(c1.getArtist()) && c1.getCity().equals(c2.getCity()))
+        for (Concert c1 : dbManager.getInstance(context).getFutureConcertsByCity(PrefsSingleton.getInstance().getCity(context).split(" ")[0])) {
+            for (Concert c2 : dbManager.getInstance(context).getAllFollowingArtists())
+                if (c2.getArtist().equals(c1.getArtist()) && c1.getCity().equals(c2.getCity()))
                     followingArtists++;
         }
 
@@ -223,7 +216,7 @@ public class MainActivity extends FragmentActivity {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.COUNTIES, android.R.layout.simple_dropdown_item_1line);
         input.setAdapter(adapter);
 
-        Prefs.setStart(getApplicationContext(), false); // żeby już nie pytało o miasto, infomacja o tym że apk już kiedyś była uruchamiana
+        PrefsSingleton.getInstance().setStart(getApplicationContext(), false); // żeby już nie pytało o miasto, infomacja o tym że apk już kiedyś była uruchamiana
 
         new AlertDialog.Builder(MainActivity.this)
                 .setTitle("Wprowadź swoje miasto")
@@ -233,7 +226,7 @@ public class MainActivity extends FragmentActivity {
                 .setPositiveButton("Zapisz", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         if (!input.getText().toString().isEmpty()) {
-                            Prefs.setCity(getApplicationContext(), input.getText().toString());
+                            PrefsSingleton.getInstance().setCity(getApplicationContext(), input.getText().toString());
                             Toast.makeText(getApplication(), "Dziękujemy, " + input.getText().toString(), Toast.LENGTH_SHORT).show();
                         }
 
@@ -259,7 +252,7 @@ public class MainActivity extends FragmentActivity {
                     public void onClick(DialogInterface dialog, int whichButton) {
 
                         //jeśli nie ma pobranyuch jeszcze współrzędnych dla swojego miasta, czyli w Prefs LAT i LON są na -1 to łączy sie z mapami żeby pobrać
-                        if (Prefs.getLon(getApplication()).equals("-1") || Prefs.getLat(getApplication()).equals("-1"))
+                        if (PrefsSingleton.getInstance().getLon(getApplication()).equals("-1") || PrefsSingleton.getInstance().getLat(getApplication()).equals("-1"))
                             new GetLatLng(getApplicationContext()).execute();
                         else // w przeciwnym wypadku od razu przechodzimy do pobierania kocnertów
                             new DownloadConcerts().execute();
@@ -338,36 +331,8 @@ public class MainActivity extends FragmentActivity {
     }
 
     public static void changeFragment(int position) {
-        Fragment fragment = null;
-        if (position == 0)
-            fragment = new SearchFragment();
-        else if (position == 1)
-            fragment = new RecentFragment();
-        else if (position == 2)
-            fragment = new PastFragment();
-        else if (position == 3)
-            fragment = new FavoriteFragment();
-        else if (position == 4)
-            fragment = new SpectacleFragment();
-        else if (position == 5)
-            fragment = new SettingsFragment();
-        else if (position == 6)
-            fragment = new AboutFragment();
-        else if (position >= 90 && position < 100) {
-            FestivalFragment ffragment = new FestivalFragment();
-            if (position % 90 == 0)
-                ffragment.setFestival("Jarocin Festival", R.drawable.jarocin);
-            else if (position % 90 == 1)
-                ffragment.setFestival("Life Festival Oświęcim", R.drawable.lifefestival);
-            fragment = ffragment;
-        } else if (position >= 100) {
-            RecentFragment rfragment = new RecentFragment();
-            for (Agencies ch : rfragment.checkedAgencies.keySet())
-                if (ch.fragmentNumber != position)
-                    rfragment.checkedAgencies.put(ch, false);
-
-            fragment = rfragment;
-        }
+        FragmentsFabric fabric = new FragmentsFabric();
+        Fragment fragment = fabric.produceFragment(position);
 
         if (fragment != null) {
             updateCounters();
@@ -381,20 +346,16 @@ public class MainActivity extends FragmentActivity {
     }
 
     public static void updateCounters() {
-        navDrawerItems.get(1).setCount("" + dbMgr.getSize(dbManager.CONCERTS_TABLE));
+        navDrawerItems.get(1).setCount("" + dbManager.getInstance(context).getSize(dbManager.CONCERTS_TABLE));
         navDrawerItems.get(1).setCounterVisibility(true);
 
         //TODO: setCount dla Past (nie miałem czasu już, sry)
 
-        navDrawerItems.get(3).setCount("" + dbMgr.getSize(dbManager.FAVOURITES_TABLE));
+        navDrawerItems.get(3).setCount("" + dbManager.getInstance(context).getSize(dbManager.FAVOURITES_TABLE));
         navDrawerItems.get(3).setCounterVisibility(true);
 
         adapter = new NavDrawerAdapter(context, navDrawerItems);
         drawerList.setAdapter(adapter);
-    }
-
-    public static dbManager getDBManager() {
-        return dbMgr;
     }
 
     class GetLatLng extends AsyncTask<String, Void, String> {
@@ -414,12 +375,12 @@ public class MainActivity extends FragmentActivity {
             mapDialog.setMessage("Łączę się z Google Maps");
             mapDialog.show();
             jsonthing = new JSONthing();
-            id = String.valueOf(Prefs.getUserID(getApplication())); //stirng żeby się PHPy nie srały
+            id = String.valueOf(PrefsSingleton.getInstance().getUserID(getApplication())); //stirng żeby się PHPy nie srały
         }
 
         @Override
         protected String doInBackground(String... args) {
-            String city = Prefs.getCity(getApplicationContext());
+            String city = PrefsSingleton.getInstance().getCity(getApplicationContext());
             if (!city.isEmpty()) {
                 if (!id.equals("-1"))
                     updateServerLatLng(city);
@@ -444,9 +405,9 @@ public class MainActivity extends FragmentActivity {
         @Override
         protected void onPostExecute(String city) {
             if (!city.isEmpty()) {
-                Prefs.setLat(getApplicationContext(), String.valueOf(latlng.latitude));
-                Prefs.setLon(getApplicationContext(), String.valueOf(latlng.longitude));
-                Log.d("LATLNG", "Lat:" + Prefs.getLat(getApplicationContext()) + " Long:" + Prefs.getLon(getApplicationContext()));
+                PrefsSingleton.getInstance().setLat(getApplicationContext(), String.valueOf(latlng.latitude));
+                PrefsSingleton.getInstance().setLon(getApplicationContext(), String.valueOf(latlng.longitude));
+                Log.d("LATLNG", "Lat:" + PrefsSingleton.getInstance().getLat(getApplicationContext()) + " Long:" + PrefsSingleton.getInstance().getLon(getApplicationContext()));
             }
             mapDialog.dismiss();
             new DownloadConcerts().execute();
@@ -479,7 +440,7 @@ public class MainActivity extends FragmentActivity {
             try {
                 success = mJsonObject.getInt("success");
                 jsonLastId = Integer.parseInt(mJsonObject.getString("last_id"));
-                prefsLastId = Prefs.getLastID(getApplicationContext());
+                prefsLastId = PrefsSingleton.getInstance().getLastID(getApplicationContext());
                 count = mJsonObject.getInt("count");
                 //chłopcy i dziewczęta pamiętajmy iż last_id != count
 
@@ -488,17 +449,17 @@ public class MainActivity extends FragmentActivity {
                     loadingDialog.setMax(prefsLastId + jsonLastId);
 
                     Log.i("DB", "ID - Prefs: " + prefsLastId + " JSON: " + jsonLastId);
-                    Log.i("DB", "COUNT - Prefs: " + dbMgr.getSize(dbManager.CONCERTS_TABLE) + " JSON: " + count);
+                    Log.i("DB", "COUNT - Prefs: " + dbManager.getInstance(context).getSize(dbManager.CONCERTS_TABLE) + " JSON: " + count);
 
                     //aktualizujemy obecne koncerty bez względu na wszystko
                     updateConcerts();
 
-                    if (count+1 > dbMgr.getSize(dbManager.CONCERTS_TABLE)) { //aktualizacja - kiedy liczba koncertów z internetu jest większa od liczby koncertów które mamy w aplikacji
+                    if (count + 1 > dbManager.getInstance(context).getSize(dbManager.CONCERTS_TABLE)) { //aktualizacja - kiedy liczba koncertów z internetu jest większa od liczby koncertów które mamy w aplikacji
                         updateConcerts();
                     } else { // tak nie powinno się nigdy stać
                         Log.wtf("DB", "Baza w aplikacji ma wiecej koncertów niż na serwerze?");
-                        dbMgr.deleteTables(); //wypierdol dziada
-                        Prefs.setLastID(getApplicationContext(), -1); // zmieniamy ostatnie id na początkowe
+                        dbManager.getInstance(context).deleteTables(); //wypierdol dziada
+                        PrefsSingleton.getInstance().setLastID(getApplicationContext(), -1); // zmieniamy ostatnie id na początkowe
                         downloadConcerts(); //i zapełnij od nowa
                     }
                 }
@@ -513,13 +474,13 @@ public class MainActivity extends FragmentActivity {
         //Aktualizuje koncerty
         protected void updateConcerts() throws JSONException {
             //współrzędne z prefs wpisane do latLng
-            LatLng latLng = new LatLng(Double.parseDouble(Prefs.getLon(getApplicationContext())), Double.parseDouble(Prefs.getLat(getApplicationContext())));
+            LatLng latLng = new LatLng(Double.parseDouble(PrefsSingleton.getInstance().getLon(getApplicationContext())), Double.parseDouble(PrefsSingleton.getInstance().getLat(getApplicationContext())));
 
             loadingDialog.setMax(count - prefsLastId);
-            Prefs.setLastID(getApplicationContext(), jsonLastId);
+            PrefsSingleton.getInstance().setLastID(getApplicationContext(), jsonLastId);
             JSONArray mJsonArray = mJsonObject.getJSONArray("concerts");
             double distance;
-            dbMgr.beginTransaction();
+            dbManager.getInstance(context).beginTransaction();
             for (int i = 0; i < mJsonArray.length(); i++) {
                 JSONObject JSONconcert = mJsonArray.getJSONObject(i);
                 if (latLng.longitude != -1)
@@ -527,7 +488,7 @@ public class MainActivity extends FragmentActivity {
                 else
                     distance = 0;
 
-                dbMgr.updateConcert(
+                dbManager.getInstance(context).updateConcert(
                         JSONconcert.getInt("id"),
                         JSONconcert.getString("artist"),
                         JSONconcert.getString("city"),
@@ -545,19 +506,19 @@ public class MainActivity extends FragmentActivity {
 
                 loadingDialog.incrementProgressBy(1);
             }
-            dbMgr.endTransaction();
+            dbManager.getInstance(context).endTransaction();
             updateNeeded = true;
         }
 
         //Pobiera nowe koncerty
         protected void downloadConcerts() throws JSONException {
             //współrzędne z prefs wpisane do latLng
-            LatLng latLng = new LatLng(Double.parseDouble(Prefs.getLon(getApplicationContext())), Double.parseDouble(Prefs.getLat(getApplicationContext())));
+            LatLng latLng = new LatLng(Double.parseDouble(PrefsSingleton.getInstance().getLon(getApplicationContext())), Double.parseDouble(PrefsSingleton.getInstance().getLat(getApplicationContext())));
 
-            Prefs.setLastID(getApplicationContext(), jsonLastId);
+            PrefsSingleton.getInstance().setLastID(getApplicationContext(), jsonLastId);
             JSONArray mJsonArray = mJsonObject.getJSONArray("concerts");
             double distance;
-            dbMgr.beginTransaction();
+            dbManager.getInstance(context).beginTransaction();
             for (int i = 0; i < mJsonArray.length(); i++) {
                 JSONObject JSONconcert = mJsonArray.getJSONObject(i);
                 if (latLng.longitude != -1)
@@ -565,7 +526,7 @@ public class MainActivity extends FragmentActivity {
                 else
                     distance = 0;
 
-                dbMgr.addConcert(
+                dbManager.getInstance(context).addConcert(
                         JSONconcert.getInt("id"),
                         JSONconcert.getString("artist"),
                         JSONconcert.getString("city"),
@@ -583,7 +544,7 @@ public class MainActivity extends FragmentActivity {
 
                 loadingDialog.incrementProgressBy(1);
             }
-            dbMgr.endTransaction();
+            dbManager.getInstance(context).endTransaction();
             updateNeeded = true;
         }
 

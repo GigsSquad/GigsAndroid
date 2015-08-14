@@ -3,7 +3,7 @@
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false" defaultCharsetForPropertiesFiles="UTF-8">
     <file url="file://$PROJECT_DIR$/ConcertFinder/src/main/java/pl/javaparty/imageloader/ImageLoader.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ConcertFinder/src/main/java/pl/javaparty/imageloader/MemoryCache.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ConcertFinder/src/main/java/pl/javaparty/prefs/Prefs.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ConcertFinder/src/main/java/pl/javaparty/prefs/PrefsSingleton.java" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

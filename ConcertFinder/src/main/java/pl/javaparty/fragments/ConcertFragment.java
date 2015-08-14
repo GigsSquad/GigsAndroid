@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTabHost;
 import android.view.MenuItem;
-import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
+import pl.javaparty.sql.dbManager;
 
 public class ConcertFragment extends FragmentActivity {
 
@@ -19,7 +19,7 @@ public class ConcertFragment extends FragmentActivity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         ID = getIntent().getExtras().getInt("ID", -1);
-        boolean happened = MainActivity.getDBManager().getConcertByID(ID).happened();
+        boolean happened = dbManager.getInstance(getApplicationContext()).getConcertByID(ID).happened();
 
         mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
         mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);

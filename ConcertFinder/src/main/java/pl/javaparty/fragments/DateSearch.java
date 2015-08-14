@@ -17,7 +17,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ListView;
 import pl.javaparty.adapters.ConcertAdapter;
-import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.items.Concert;
 import pl.javaparty.sql.dbManager;
@@ -29,7 +28,6 @@ public class DateSearch extends Fragment {
     Context context;
     ListView concertList;
     ConcertAdapter adapter;
-    dbManager dbm;
     Button bFrom, bTo, bSearch;
     int dF, mF, yF, dT, mT, yT;
     private String lastSearching;
@@ -37,7 +35,6 @@ public class DateSearch extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = inflater.inflate(R.layout.tab_search_date, container, false);
         getActivity().getActionBar().setTitle(getString(R.string.search_by_place));
-        dbm = MainActivity.getDBManager();// przekazujemy dbm od mainActivity
         context = inflater.getContext();
         concertList = (ListView) view.findViewById(R.id.concertListPlace);
         bFrom = (Button) view.findViewById(R.id.bFr);
@@ -85,8 +82,8 @@ public class DateSearch extends Fragment {
             public void onClick(View v) {
                 String filter = getArguments().getString("CONDITIONS");
                 // Log.i("DATE",filter);
-                Log.i("DATE", "Ilość: " + dbm.getConcertsByDateRange(dF, mF, yF, dT, mT, yT, filter).length);
-                adapter = new ConcertAdapter(context, dbm.getConcertsByDateRange(dF, mF, yF, dT, mT, yT, filter));
+                Log.i("DATE", "Ilość: " + dbManager.getInstance(context).getConcertsByDateRange(dF, mF, yF, dT, mT, yT, filter).length);
+                adapter = new ConcertAdapter(context, dbManager.getInstance(context).getConcertsByDateRange(dF, mF, yF, dT, mT, yT, filter));
                 concertList.setAdapter(adapter);
                 lastSearching = dF + "." + mF + "." + yF + " - " + dT + "." + mT + "." + yT;
                 getActivity().getActionBar().setTitle(getString(R.string.search) + ": " + lastSearching);
