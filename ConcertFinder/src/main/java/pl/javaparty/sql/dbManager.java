@@ -40,14 +40,14 @@ public class dbManager extends SQLiteOpenHelper {
         return INSTANCE;
     }
 
+    private SQLiteDatabase database;
     private final static String DATABASE_NAME = "baza.db";
-    private static SQLiteDatabase database;
     public final static String CONCERTS_TABLE = "Concerts";
     public final static String FAVOURITES_TABLE = "Favourites";
     public final static String FOLLOWING_TABLE = "Following";
     public final static String SEARCH_TABLE = "Search";
-    public static String SORT_ORDER = "";
-    private static Context context;
+    private static String SORT_ORDER = "";
+    private Context context;
     private static String CreateConcertTable =
             "CREATE TABLE " + CONCERTS_TABLE + "(" +
                     "ORD INTEGER PRIMARY KEY," +
@@ -85,7 +85,7 @@ public class dbManager extends SQLiteOpenHelper {
                     "YEAR INTEGER)";
 
 
-    private static void setSortOrder(Context context) {
+    private  void setSortOrder(Context context) {
         SORT_ORDER = PrefsSingleton.getInstance().getSortOrder(context);
     }
 
