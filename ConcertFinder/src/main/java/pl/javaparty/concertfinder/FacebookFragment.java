@@ -29,8 +29,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import pl.javaparty.enums.PHPurls;
-import pl.javaparty.prefs.PrefsSingleton;
+import pl.javaparty.prefs.Prefs;
 import pl.javaparty.sql.JSONthing;
+import pl.javaparty.utils.UtilsObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -105,12 +106,6 @@ public class FacebookFragment extends Fragment implements GoogleApiClient.Connec
         return view;
     }
 
-    private boolean isOnline() {
-        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
-    }
-
     /* FACEBOOK */
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
         if (state.isOpened()) {
@@ -121,7 +116,7 @@ public class FacebookFragment extends Fragment implements GoogleApiClient.Connec
 
                 @Override
                 public void onCompleted(GraphUser user, Response response) {
-                    if (user != null && isOnline()) {
+                    if (user != null && UtilsObject.isOnline(getActivity())) {
                         String[] columns = new String[10];
                         columns[0] = user.getFirstName().trim();
                         columns[1] = user.getLastName().trim();
@@ -137,9 +132,9 @@ public class FacebookFragment extends Fragment implements GoogleApiClient.Connec
                             columns[4] = "";
                         }
 
-                        PrefsSingleton.getInstance().setCity(getActivity(), columns[4]);
+                        Prefs.getInstance(getActivity()).setCity(columns[4]);
                         Toast.makeText(getActivity(), getString(R.string.hello) + ", " + columns[0], Toast.LENGTH_SHORT).show();
-                        if (isAdded() && isOnline())
+                        if (isAdded() && UtilsObject.isOnline(getActivity()))
                             new loginUser(columns).execute();
                         else
                             Toast.makeText(getActivity().getApplicationContext(), "Brak połączenia", Toast.LENGTH_SHORT).show();
@@ -296,9 +291,9 @@ public class FacebookFragment extends Fragment implements GoogleApiClient.Connec
             sdf.applyPattern(DB_FORMAT);
             columns[3] = sdf.format(date);
 
-            PrefsSingleton.getInstance().setCity(getActivity(), columns[4]);
+            Prefs.getInstance(getActivity()).setCity(columns[4]);
             Toast.makeText(getActivity(), getString(R.string.hello) + ", " + columns[0], Toast.LENGTH_SHORT).show();
-            if (isAdded() && isOnline())
+            if (isAdded() && UtilsObject.isOnline(getActivity()))
                 new loginUser(columns).execute();
             else
                 Toast.makeText(getActivity().getApplicationContext(), "Brak połączenia", Toast.LENGTH_SHORT).show();
@@ -367,7 +362,7 @@ public class FacebookFragment extends Fragment implements GoogleApiClient.Connec
         @Override
         protected void onPostExecute(Integer userId) {
             Log.i("LOGIN", "ID zapisany do Prefs: " + userId);
-            PrefsSingleton.getInstance().setUserID(getActivity(), userId);
+            Prefs.getInstance(getActivity()).setUserID(userId);
             loadingDialog.dismiss();
             startActivity(mainActivity);
             super.onPostExecute(userId);

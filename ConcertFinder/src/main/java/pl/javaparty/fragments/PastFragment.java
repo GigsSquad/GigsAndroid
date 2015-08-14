@@ -16,7 +16,7 @@ import pl.javaparty.concertfinder.R;
 import pl.javaparty.fragments.FilterDialogFragment.FilterDialogListener;
 import pl.javaparty.items.Agencies;
 import pl.javaparty.items.Concert;
-import pl.javaparty.sql.dbManager;
+import pl.javaparty.sql.DatabaseManager;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -65,7 +65,7 @@ public class PastFragment extends Fragment {
 
         lv.addFooterView(nextButton);
 
-        adapter = new ConcertAdapter(getActivity(), cutArray(dbManager.getInstance(context).getPastConcerts(Agencies.AgenciesMethods.filterAgencies(checkedAgencies))));
+        adapter = new ConcertAdapter(getActivity(), cutArray(DatabaseManager.getInstance(context).getPastConcerts(Agencies.AgenciesMethods.filterAgencies(checkedAgencies))));
         lv.setAdapter(adapter);
         lv.setEmptyView(view.findViewById(R.id.emptyList));
 
@@ -98,9 +98,9 @@ public class PastFragment extends Fragment {
         if (array != null &&  array.length != 0)
         {
             Log.i("EMPTYLIST", String.valueOf(array.length));
-            if (showedConcerts >= array.length - 1) //dbm.getSize(dbManager.CONCERTS_TABLE) - 1)
+            if (showedConcerts >= array.length - 1) //dbm.getSize(DatabaseManager.CONCERTS_TABLE) - 1)
             {
-                //showedConcerts = dbm.getSize(dbManager.CONCERTS_TABLE) - 1;
+                //showedConcerts = dbm.getSize(DatabaseManager.CONCERTS_TABLE) - 1;
                 showedConcerts = array.length - 1;
                 nextButton.setVisibility(View.GONE);
                 return array;
@@ -114,7 +114,7 @@ public class PastFragment extends Fragment {
     public void refresh()
     {
         //adapter = new ConcertAdapter(getActivity(), cutArray(dbm.getAllConcerts(filterAgencies())));
-        adapter.changeData(cutArray(dbManager.getInstance(context).getPastConcerts(Agencies.AgenciesMethods.filterAgencies(checkedAgencies))));
+        adapter.changeData(cutArray(DatabaseManager.getInstance(context).getPastConcerts(Agencies.AgenciesMethods.filterAgencies(checkedAgencies))));
         //lv.setAdapter(adapter);
     }
 

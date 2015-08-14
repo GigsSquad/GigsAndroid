@@ -34,13 +34,12 @@ public class FragmentsFabric {
             fragment = ffragment;
         } else if (position >= 100) {
             RecentFragment rfragment = new RecentFragment();
-            for (Agencies ch : rfragment.checkedAgencies.keySet())
+            for (Agencies ch : RecentFragment.checkedAgencies.keySet())
                 if (ch.fragmentNumber != position)
-                    rfragment.checkedAgencies.put(ch, false);
+                    RecentFragment.checkedAgencies.put(ch, false);
 
             fragment = rfragment;
         }
-
         return fragment;
     }
 }

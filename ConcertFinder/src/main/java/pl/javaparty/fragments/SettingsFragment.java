@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -22,24 +21,16 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.LoginButton;
-import com.google.android.gms.maps.model.LatLng;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import pl.javaparty.concertfinder.LatLngConnector;
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
-import pl.javaparty.enums.PHPurls;
 import pl.javaparty.imageloader.FileExplorer;
 import pl.javaparty.map.MapHelper;
-import pl.javaparty.prefs.PrefsSingleton;
-import pl.javaparty.sql.JSONthing;
-import pl.javaparty.sql.dbManager;
+import pl.javaparty.prefs.Prefs;
+import pl.javaparty.sql.DatabaseManager;
+import pl.javaparty.utils.UtilsObject;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class SettingsFragment extends Fragment {
 
@@ -93,20 +84,20 @@ public class SettingsFragment extends Fragment {
 
         citySearchBox.setThreshold(1);
 
-        if (PrefsSingleton.getInstance().getCity(getActivity()) != null)
-            citySearchBox.setText(PrefsSingleton.getInstance().getCity(getActivity()));
+        if (Prefs.getInstance(context).getCity() != null)
+            citySearchBox.setText(Prefs.getInstance(context).getCity());
 
         saveButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                PrefsSingleton.getInstance().setCity(getActivity(), citySearchBox.getText().toString());
+                Prefs.getInstance(context).setCity(citySearchBox.getText().toString());
 
-                PrefsSingleton.getInstance().setSortOrder(getActivity(), sortOrder);
+                Prefs.getInstance(context).setSortOrder(sortOrder);
                 Log.i("SETTINGS", "Zapisano");
                 Log.i("SETTINGS", "Miasto: " + citySearchBox.getText().toString());
 
                 Toast.makeText(getActivity(), getString(R.string.saved), Toast.LENGTH_SHORT).show();
-                new GetLatLng().execute();
+                new LatLngConnector(context).execute();
             }
 
         });
@@ -123,8 +114,8 @@ public class SettingsFragment extends Fragment {
         downloadButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isOnline())
-                    new GetLatLng2(context).execute(); //nowa lepsza kurwa funkcja stary
+                if (UtilsObject.isOnline(context))
+                    new LatLngConnector(context).execute();
                 else
                     Toast.makeText(context, getString(R.string.no_connection), Toast.LENGTH_SHORT).show();
             }
@@ -175,10 +166,10 @@ public class SettingsFragment extends Fragment {
                             FileExplorer f = new FileExplorer(getActivity());
                             f.clear();
                             Log.i("SETTINGS", "Usunięto obrazki z dysku");
-                            dbManager.getInstance(getActivity().getApplicationContext()).deleteTables();
+                            DatabaseManager.getInstance(getActivity().getApplicationContext()).deleteTables();
                             Log.i("SETTINGS", "Wyczyszczono bazę");
                             MainActivity.updateCounters();
-                            PrefsSingleton.getInstance().setLastID(getActivity(), -1);
+                            Prefs.getInstance(getActivity()).setLastID(-1);
                             Toast.makeText(getActivity(), getString(R.string.cleared), Toast.LENGTH_SHORT).show();
                         }
                     })
@@ -196,7 +187,7 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        sortOrder = PrefsSingleton.getInstance().getSortOrder(getActivity());
+        sortOrder = Prefs.getInstance(context).getSortOrder();
         if (sortOrder.equals("DIST")) {
             distanceSort.setChecked(true);
             dateSort.setChecked(false);
@@ -240,264 +231,4 @@ public class SettingsFragment extends Fragment {
         uiHelper.onSaveInstanceState(outState);
     }
 
-
-    //za mało dostaję zeby to zrobić porządnie, lol
-    class GetLatLng2 extends AsyncTask<String, Void, String> {
-        LatLng latlng;
-        JSONthing jsonthing;
-        String id;
-        Context cont;
-
-        public GetLatLng2(Context context) {
-            super();
-            cont = context;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mapDialog.setMessage("Łączę się z Google Maps");
-            mapDialog.show();
-            jsonthing = new JSONthing();
-            id = String.valueOf(PrefsSingleton.getInstance().getUserID(context)); //stirng żeby się PHPy nie srały
-        }
-
-        @Override
-        protected String doInBackground(String... args) {
-            String city = PrefsSingleton.getInstance().getCity(context);
-            if (!city.isEmpty()) {
-                if (!id.equals("-1"))
-                    updateServerLatLng(city);
-                latlng = MapHelper.getLatLongFromAddress(city);
-            }
-            return city;
-        }
-
-        /**
-         * Aktualizuje miasto użytkownia na to któe pisał w okienku
-         *
-         * @param city
-         */
-        protected void updateServerLatLng(String city) {
-            List<NameValuePair> params = new ArrayList<>();
-            params.add(new BasicNameValuePair("location", city.split(" ")[0]));
-            params.add(new BasicNameValuePair("user_id", id));
-            jsonthing.makeHttpRequest(PHPurls.updateUser.toString(), "GET", params); //TIGHT and ELEGANT
-        }
-
-
-        @Override
-        protected void onPostExecute(String city) {
-            if (!city.isEmpty()) {
-                PrefsSingleton.getInstance().setLat(context, String.valueOf(latlng.latitude));
-                PrefsSingleton.getInstance().setLon(context, String.valueOf(latlng.longitude));
-                Log.d("LATLNG", "Lat:" + PrefsSingleton.getInstance().getLat(context) + " Long:" + PrefsSingleton.getInstance().getLon(context));
-            }
-            mapDialog.dismiss();
-            new DownloadConcerts().execute();
-
-            super.onPostExecute(city);
-        }
-    }
-
-    class DownloadConcerts extends AsyncTask<String, Void, String> {
-
-        boolean updateNeeded = false;
-        int success, jsonLastId, prefsLastId, count;
-        JSONObject mJsonObject;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            loadingDialog.setMessage(getString(R.string.database_update));
-            loadingDialog.setProgress(0);
-            loadingDialog.setMax(1);
-            loadingDialog.show();
-        }
-
-        @Override
-        protected String doInBackground(String... args) {
-
-            List<NameValuePair> params = new ArrayList<>();
-            mJsonObject = JSONthing.getThisShit(PHPurls.getConcerts, params);
-
-            try {
-                success = mJsonObject.getInt("success");
-                jsonLastId = Integer.parseInt(mJsonObject.getString("last_id"));
-                prefsLastId = PrefsSingleton.getInstance().getLastID(context);
-                count = mJsonObject.getInt("count");
-                //chłopcy i dziewczęta pamiętajmy iż last_id != count
-
-                //jak poprawnie pobierzemy z internetów
-                if (success == 1) {
-                    loadingDialog.setMax(prefsLastId + jsonLastId);
-
-                    Log.i("DBSettings", "ID - Prefs: " + prefsLastId + " JSON: " + jsonLastId);
-                    Log.i("DBSettings", "COUNT - Prefs: " + dbManager.getInstance(context).getSize(dbManager.CONCERTS_TABLE) + " JSON: " + count);
-
-                    //aktualizujemy obecne koncerty bez względu na wszystko
-//                    updateConcerts();
-
-                    dbManager.getInstance(context).deleteTables(); //wypierdol dziada
-                    PrefsSingleton.getInstance().setLastID(context, -1); // zmieniamy ostatnie id na początkowe
-                    downloadConcerts(); //i zapełnij od nowa
-
-//                    if (count + 1 > dbManager.getInstance(context).getSize(dbManager.CONCERTS_TABLE)) { //aktualizacja - kiedy liczba koncertów z internetu jest większa od liczby koncertów które mamy w aplikacji
-//                        updateConcerts();
-//                    } else { // tak nie powinno się nigdy stać
-//                        Log.wtf("DBSettings", "Baza w aplikacji ma wiecej koncertów niż na serwerze?");
-//                        dbManager.getInstance(context).deleteTables(); //wypierdol dziada
-//                        PrefsSingleton.getInstance().setLastID(context, -1); // zmieniamy ostatnie id na początkowe
-//                        downloadConcerts(); //i zapełnij od nowa
-//                    }
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        //Aktualizuje koncerty
-        protected void updateConcerts() throws JSONException {
-            //współrzędne z prefs wpisane do latLng
-            LatLng latLng = new LatLng(Double.parseDouble(PrefsSingleton.getInstance().getLon(context)), Double.parseDouble(PrefsSingleton.getInstance().getLat(context)));
-
-            loadingDialog.setMax(count - prefsLastId);
-            PrefsSingleton.getInstance().setLastID(context, jsonLastId);
-            JSONArray mJsonArray = mJsonObject.getJSONArray("concerts");
-            double distance;
-            dbManager.getInstance(context).beginTransaction();
-            for (int i = 0; i < mJsonArray.length(); i++) {
-                JSONObject JSONconcert = mJsonArray.getJSONObject(i);
-                if (latLng.longitude != -1) {
-                    distance = mapHelper.inaccurateDistanceTo(Double.parseDouble(JSONconcert.getString("lat")), Double.parseDouble(JSONconcert.getString("lon")), latLng);
-                } else {
-                    distance = 0;
-                }
-                dbManager.getInstance(context).updateConcert(
-                        JSONconcert.getInt("id"),
-                        JSONconcert.getString("artist"),
-                        JSONconcert.getString("city"),
-                        JSONconcert.getString("spot"),
-                        JSONconcert.getInt("day"),
-                        JSONconcert.getInt("month"),
-                        JSONconcert.getInt("year"),
-                        JSONconcert.getString("agency"),
-                        JSONconcert.getString("url"),
-                        JSONconcert.getString("updated"),
-                        JSONconcert.getString("lat"),
-                        JSONconcert.getString("lon"),
-                        distance,
-                        JSONconcert.getString("entrance_fee"));
-
-                loadingDialog.incrementProgressBy(1);
-            }
-            dbManager.getInstance(context).endTransaction();
-            updateNeeded = true;
-        }
-
-        //Pobiera nowe koncerty
-        protected void downloadConcerts() throws JSONException {
-            //współrzędne z prefs wpisane do latLng
-            LatLng latLng = new LatLng(Double.parseDouble(PrefsSingleton.getInstance().getLon(context)), Double.parseDouble(PrefsSingleton.getInstance().getLat(context)));
-
-            PrefsSingleton.getInstance().setLastID(context, jsonLastId);
-            JSONArray mJsonArray = mJsonObject.getJSONArray("concerts");
-            double distance;
-            dbManager.getInstance(context).beginTransaction();
-            for (int i = 0; i < mJsonArray.length(); i++) {
-                JSONObject JSONconcert = mJsonArray.getJSONObject(i);
-                if (latLng.longitude != -1)
-                    distance = mapHelper.inaccurateDistanceTo(Double.parseDouble(JSONconcert.getString("lat")), Double.parseDouble(JSONconcert.getString("lon")), latLng);
-                else
-                    distance = 0;
-
-                dbManager.getInstance(context).addConcert(
-                        JSONconcert.getInt("id"),
-                        JSONconcert.getString("artist"),
-                        JSONconcert.getString("city"),
-                        JSONconcert.getString("spot"),
-                        JSONconcert.getInt("day"),
-                        JSONconcert.getInt("month"),
-                        JSONconcert.getInt("year"),
-                        JSONconcert.getString("agency"),
-                        JSONconcert.getString("url"),
-                        JSONconcert.getString("updated"),
-                        JSONconcert.getString("lat"),
-                        JSONconcert.getString("lon"),
-                        distance,
-                        JSONconcert.getString("entrance_fee"));
-
-                loadingDialog.incrementProgressBy(1);
-            }
-            dbManager.getInstance(context).endTransaction();
-            updateNeeded = true;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            loadingDialog.dismiss();
-            super.onPostExecute(s);
-        }
-
-    }
-
-    private boolean isOnline() {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
-    }
-
-
-    class GetLatLng extends AsyncTask<String, Void, String> {
-        LatLng latlng;
-        JSONthing jsonthing;
-        String id;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mapDialog.setMessage("Łączę się z Google Maps");
-            mapDialog.show();
-            jsonthing = new JSONthing();
-            id = String.valueOf(PrefsSingleton.getInstance().getUserID(getActivity().getApplicationContext())); //stirng żeby się PHPy nie srały
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            String city = PrefsSingleton.getInstance().getCity(getActivity());
-
-            if (!city.isEmpty()) {
-                if (!id.equals("-1"))
-                    updateServerLatLng(city);
-                latlng = MapHelper.getLatLongFromAddress(city);
-                dbManager.getInstance(context).update(latlng);
-            }
-            return city;
-        }
-
-        /**
-         * Aktualizuje miasto użytkownia na to któe pisał w okienku
-         *
-         * @param city
-         */
-        protected void updateServerLatLng(String city) {
-            List<NameValuePair> params = new ArrayList<>();
-            params.add(new BasicNameValuePair("user_id", id));
-            params.add(new BasicNameValuePair("location", city));
-            jsonthing.makeHttpRequest(PHPurls.updateUser.toString(), "POST", params); //TIGHT and ELEGANT
-        }
-
-        @Override
-        protected void onPostExecute(String city) {
-            if (!city.isEmpty()) {
-                PrefsSingleton.getInstance().setLat(getActivity(), String.valueOf(latlng.latitude));
-                PrefsSingleton.getInstance().setLon(getActivity(), String.valueOf(latlng.longitude));
-            }
-            mapDialog.dismiss();
-            super.onPostExecute(city);
-        }
-    }
 }

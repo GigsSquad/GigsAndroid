@@ -15,8 +15,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import pl.javaparty.adapters.ConcertAdapter;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.items.Concert;
-import pl.javaparty.prefs.PrefsSingleton;
-import pl.javaparty.sql.dbManager;
+import pl.javaparty.prefs.Prefs;
+import pl.javaparty.sql.DatabaseManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,8 +47,8 @@ public class ArtistSearch extends Fragment {
 
         String filter = getArguments().getString("CONDITIONS");
         Log.i("FILTRUJE", filter);
-        ArrayList<String> artists = new ArrayList<>(Arrays.asList(dbManager.getInstance(context).getArtists(filter)));
-        adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, dbManager.getInstance(context).getFutureArtists(filter));
+        ArrayList<String> artists = new ArrayList<>(Arrays.asList(DatabaseManager.getInstance(context).getArtists(filter)));
+        adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, DatabaseManager.getInstance(context).getFutureArtists(filter));
 
         searchBox.setAdapter(adapterSearchBox);
         searchBox.setThreshold(1);
@@ -64,20 +64,20 @@ public class ArtistSearch extends Fragment {
                 String artist = searchBox.getText().toString();
                 String filter = getArguments().getString("CONDITIONS");
                 adapter = new ConcertAdapter(getActivity(), future ?
-                        dbManager.getInstance(context).getFutureConcertsByArtist(artist, filter) : dbManager.getInstance(context).getPastConcertsByArtist(artist, filter));
+                        DatabaseManager.getInstance(context).getFutureConcertsByArtist(artist, filter) : DatabaseManager.getInstance(context).getPastConcertsByArtist(artist, filter));
                 adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line,
-                        future ? dbManager.getInstance(context).getFutureArtists(filter) : dbManager.getInstance(context).getPastArtists(filter));
+                        future ? DatabaseManager.getInstance(context).getFutureArtists(filter) : DatabaseManager.getInstance(context).getPastArtists(filter));
                 searchBox.setAdapter(adapterSearchBox);
                 searchBox.setThreshold(1);
                 concertList.setAdapter(adapter);
 
                 //wrzucenie szukania do lokalnej
-                int usrId = PrefsSingleton.getInstance().getUserID(context);
+                int usrId = Prefs.getInstance(context).getUserID();
                 Calendar c = GregorianCalendar.getInstance();
                 int day = c.get(Calendar.DATE);
                 int month = c.get(Calendar.MONTH) + 1;
                 int year = c.get(Calendar.YEAR);
-                dbManager.getInstance(context).addSearch(usrId, artist, null, day, month, year);
+                DatabaseManager.getInstance(context).addSearch(usrId, artist, null, day, month, year);
 
                 // zapisywanie danych, coby potem przywrocic
                 lastSearching = searchBox.getText().toString();
@@ -109,9 +109,9 @@ public class ArtistSearch extends Fragment {
                 String artist = lastSearching;
                 String filter = getArguments().getString("CONDITIONS");
                 adapter = new ConcertAdapter(getActivity(), future ?
-                        dbManager.getInstance(context).getFutureConcertsByArtist(artist, filter) : dbManager.getInstance(context).getPastConcertsByArtist(artist, filter));
+                        DatabaseManager.getInstance(context).getFutureConcertsByArtist(artist, filter) : DatabaseManager.getInstance(context).getPastConcertsByArtist(artist, filter));
                 adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line,
-                        future ? dbManager.getInstance(context).getFutureArtists(filter) : dbManager.getInstance(context).getPastArtists(filter));
+                        future ? DatabaseManager.getInstance(context).getFutureArtists(filter) : DatabaseManager.getInstance(context).getPastArtists(filter));
                 searchBox.setAdapter(adapterSearchBox);
                 searchBox.setThreshold(1);
                 concertList.setAdapter(adapter);
@@ -154,13 +154,13 @@ public class ArtistSearch extends Fragment {
 
     public void refresh() {
         String filter = getArguments().getString("CONDITIONS");
-        //adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, dbManager.getInstance(context).getArtists(filter));
+        //adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, DatabaseManager.getInstance(context).getArtists(filter));
         if (adapter != null) {
-            adapter.changeData(dbManager.getInstance(context).getConcertsByArtist(lastSearching, filter));
+            adapter.changeData(DatabaseManager.getInstance(context).getConcertsByArtist(lastSearching, filter));
         }
 
         adapterSearchBox.clear();
-        adapterSearchBox.addAll(dbManager.getInstance(context).getArtists(filter));
+        adapterSearchBox.addAll(DatabaseManager.getInstance(context).getArtists(filter));
         adapterSearchBox.notifyDataSetChanged();
         //searchBox.setAdapter(adapterSearchBox);
     }

@@ -18,7 +18,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
-import pl.javaparty.sql.dbManager;
+import pl.javaparty.sql.DatabaseManager;
+import pl.javaparty.utils.UtilsObject;
 
 public class TabConcertGoogleMap extends Fragment {
 
@@ -40,16 +41,16 @@ public class TabConcertGoogleMap extends Fragment {
 		mMap.setMyLocationEnabled(true); // pokazuje naszą pozycje
 		LatLng latLng;
 
-		//Log.i("MAP", "RAW: " + Double.parseDouble(dbManager.getInstance(context).getLat(ID) + " " + Double.parseDouble(dbManager.getInstance(context).getLon(ID))));
+		//Log.i("MAP", "RAW: " + Double.parseDouble(DatabaseManager.getInstance(context).getLat(ID) + " " + Double.parseDouble(DatabaseManager.getInstance(context).getLon(ID))));
 		try {
 
-			latLng = new LatLng(Double.parseDouble(dbManager.getInstance(context).getLat(ID)), Double.parseDouble(dbManager.getInstance(context).getLon(ID)));
+			latLng = new LatLng(Double.parseDouble(DatabaseManager.getInstance(context).getLat(ID)), Double.parseDouble(DatabaseManager.getInstance(context).getLon(ID)));
 
 			if (latLng.latitude == 0 || latLng.longitude == 0)
 				throw new NumberFormatException();
 
-			mMap.addMarker(new MarkerOptions().position(latLng).title(dbManager.getInstance(context).getCity(ID) + " " + dbManager.getInstance(context).getSpot(ID))
-					.snippet(dbManager.getInstance(context).getArtist(ID) + " " + dbManager.getInstance(context).getDate(ID))); // ustawia marker
+			mMap.addMarker(new MarkerOptions().position(latLng).title(DatabaseManager.getInstance(context).getCity(ID) + " " + DatabaseManager.getInstance(context).getSpot(ID))
+					.snippet(DatabaseManager.getInstance(context).getArtist(ID) + " " + DatabaseManager.getInstance(context).getDate(ID))); // ustawia marker
 			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f)); // przybliza do markera
 		} catch (NumberFormatException nfe) {
             Toast.makeText(context, context.getString(R.string.wrong_adress), Toast.LENGTH_SHORT).show();
@@ -80,7 +81,7 @@ public class TabConcertGoogleMap extends Fragment {
 
 		fragmentManager = getChildFragmentManager();
 
-		if (isOnline()) {
+		if (UtilsObject.isOnline(context)) {
 			setUpMapIfNeeded();
 		} else {
             Toast.makeText(getActivity(), context.getString(R.string.no_connection), Toast.LENGTH_LONG).show();
@@ -93,20 +94,14 @@ public class TabConcertGoogleMap extends Fragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		if (mMap != null && isOnline())
+		if (mMap != null && UtilsObject.isOnline(context))
 			setUpMap();
 
 		if (mMap == null) {
 			mMap = ((SupportMapFragment) fragmentManager.findFragmentById(R.id.location_map)).getMap();
-			if (mMap != null && isOnline())
+			if (mMap != null && UtilsObject.isOnline(context))
 				setUpMap();
 		}
-	}
-
-	private boolean isOnline() {
-		ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo netInfo = cm.getActiveNetworkInfo();
-		return netInfo != null && netInfo.isConnectedOrConnecting();
 	}
 
 	@Override
@@ -119,7 +114,7 @@ public class TabConcertGoogleMap extends Fragment {
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.concert_map_menu, menu);
-		if (dbManager.getInstance(context).isConcertFavourite(ID))
+		if (DatabaseManager.getInstance(context).isConcertFavourite(ID))
 			menu.getItem(0).setIcon(R.drawable.ic_action_important_w);
 
 	}
@@ -128,33 +123,33 @@ public class TabConcertGoogleMap extends Fragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.favorite_icon:
-			if (dbManager.getInstance(context).isConcertFavourite(ID))// wyjebujemy
+			if (DatabaseManager.getInstance(context).isConcertFavourite(ID))// wyjebujemy
 			{
-				dbManager.getInstance(context).removeFavouriteConcert(ID);
+				DatabaseManager.getInstance(context).removeFavouriteConcert(ID);
 				item.setIcon(R.drawable.ic_action_not_important_w);
 			} else {
-				dbManager.getInstance(context).addFavouriteConcert(ID);
+				DatabaseManager.getInstance(context).addFavouriteConcert(ID);
 				item.setIcon(R.drawable.ic_action_important_w);
 			}
 			MainActivity.updateCounters();
 			return true;
 		case R.id.website_icon:
 			Intent websiteIntent = new Intent(Intent.ACTION_VIEW,
-					Uri.parse(dbManager.getInstance(context).getUrl(ID)));
+					Uri.parse(DatabaseManager.getInstance(context).getUrl(ID)));
 			startActivity(websiteIntent);
 			return true;
 
 		case R.id.share:
 			Intent sendIntent = new Intent();
 			sendIntent.setAction(Intent.ACTION_SEND);
-			sendIntent.putExtra(Intent.EXTRA_TEXT, dbManager.getInstance(context).getArtist(ID) + ", " + dbManager.getInstance(context).getCity(ID) + " (" + dbManager.getInstance(context).getDate(ID) + ")");
+			sendIntent.putExtra(Intent.EXTRA_TEXT, DatabaseManager.getInstance(context).getArtist(ID) + ", " + DatabaseManager.getInstance(context).getCity(ID) + " (" + DatabaseManager.getInstance(context).getDate(ID) + ")");
 			sendIntent.setType("text/plain");
 			startActivity(sendIntent);
 			return true;
 
 		case R.id.naviagte_icon:
 			Intent navIntent = new Intent(Intent.ACTION_VIEW,
-					Uri.parse("http://maps.google.com/maps?saddr=&daddr=" + dbManager.getInstance(context).getCity(ID) + " " + dbManager.getInstance(context).getSpot(ID)));
+					Uri.parse("http://maps.google.com/maps?saddr=&daddr=" + DatabaseManager.getInstance(context).getCity(ID) + " " + DatabaseManager.getInstance(context).getSpot(ID)));
 			startActivity(navIntent);
 			return true;
 

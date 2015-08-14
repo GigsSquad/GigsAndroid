@@ -11,13 +11,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.imageloader.ImageLoader;
 import pl.javaparty.items.Concert;
-import pl.javaparty.sql.dbManager;
+import pl.javaparty.sql.DatabaseManager;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class ConcertAdapter extends ArrayAdapter<Concert> {
 
@@ -36,8 +36,7 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
 
     private static ArrayList<Concert> toArrL(Concert[] items) {
         ArrayList<Concert> ar = new ArrayList<Concert>();
-        for (Concert c : items)
-            ar.add(c);
+        Collections.addAll(ar, items);
         return ar;
     }
 
@@ -78,13 +77,13 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
         titleString = titleString.replace(": ", "\n");
 
         int length = titleString.length();
-        //Log.i("MAPS", "Lat:" + PrefsSingleton.getInstance()..getLat(getContext()) + "\nLon:" + PrefsSingleton.getInstance()..getLon(getContext()));
+        //Log.i("MAPS", "Lat:" + Prefs.getInstance(context)..getLat(getContext()) + "\nLon:" + Prefs.getInstance(context)..getLon(getContext()));
         holder.title.setText(titleString); // + "\n" + rowItem.getDistance() + "\nLat: " + rowItem.getLat() + "\nLon" + rowItem.getLon());
         holder.title.setTextSize(50 - (length / 3));
         holder.place.setText(getPreparedPlace(rowItem.getPlace()));
         holder.date.setText(rowItem.dateToString());
 
-        if (dbManager.getInstance(getContext()).isConcertFavourite(rowItem.getID()))
+        if (DatabaseManager.getInstance(getContext()).isConcertFavourite(rowItem.getID()))
             holder.fav.setImageResource(R.drawable.ic_action_important);
         else
             holder.fav.setImageResource(R.drawable.ic_action_not_important);

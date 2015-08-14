@@ -2,8 +2,6 @@ package pl.javaparty.fragments;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -20,8 +18,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.enums.PHPurls;
-import pl.javaparty.prefs.PrefsSingleton;
+import pl.javaparty.prefs.Prefs;
 import pl.javaparty.sql.JSONthing;
+import pl.javaparty.utils.UtilsObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,11 +35,12 @@ public class TabComment extends Fragment {
     ListView commentListView;
     EditText commentField;
     TextView concertInfo;
+    Context context;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = inflater.inflate(R.layout.tab_fragment_comment, container, false);
-
+        context = inflater.getContext();
 
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -59,8 +59,8 @@ public class TabComment extends Fragment {
         addComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isOnline()) {
-                    if (PrefsSingleton.getInstance().getUserID(getActivity()) != -1)
+                if (UtilsObject.isOnline(context)) {
+                    if (Prefs.getInstance(getActivity()).getUserID() != -1)
                         new InsertComment().execute();
                     else
                         Toast.makeText(getActivity(), "Tylko zalogowani użytkownicy mogą komentować", Toast.LENGTH_LONG).show();
@@ -76,7 +76,7 @@ public class TabComment extends Fragment {
 
     @Override
     public void onResume() {
-        if (isOnline())
+        if (UtilsObject.isOnline(context))
             new DownloadComments().execute();
         super.onResume();
     }
@@ -93,11 +93,11 @@ public class TabComment extends Fragment {
         @Override
         protected String doInBackground(String... args) {
             List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("user_id", PrefsSingleton.getInstance().getUserID(getActivity()) + ""));
+            params.add(new BasicNameValuePair("user_id", Prefs.getInstance(getActivity()).getUserID() + ""));
             params.add(new BasicNameValuePair("concert_id", getArguments().getInt("ID", -1) + ""));
             params.add(new BasicNameValuePair("comment", commentField.getText().toString()));
 
-            Log.i("InsertComment", "user_id: " + PrefsSingleton.getInstance().getUserID(getActivity()));
+            Log.i("InsertComment", "user_id: " + Prefs.getInstance(getActivity()).getUserID());
             Log.i("InsertComment", "concert_id: " + getArguments().getInt("ID", -1));
             Log.i("InsertComment", "comment: " + commentField.getText().toString());
 
@@ -174,12 +174,4 @@ public class TabComment extends Fragment {
             super.onPostExecute(s);
         }
     }
-
-    private boolean isOnline() {
-        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
-    }
-
-
 }

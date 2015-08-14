@@ -19,7 +19,7 @@ import pl.javaparty.concertfinder.R;
 import pl.javaparty.imageloader.ImageLoader;
 import pl.javaparty.items.Concert;
 import pl.javaparty.jsoup.SetList;
-import pl.javaparty.sql.dbManager;
+import pl.javaparty.sql.DatabaseManager;
 
 import java.util.ArrayList;
 
@@ -50,11 +50,11 @@ public class TabPastConcertInfo extends Fragment {
 
         ID = (getArguments().getInt("ID", -1)); // -1 bo bazadanych numeruje od 1 a nie od 0
 
-        Concert con = dbManager.getInstance(context).getConcertByID(ID);
+        Concert con = DatabaseManager.getInstance(context).getConcertByID(ID);
         artistName = con.getArtist();
         city = con.getCity();
         place = con.getPlace();
-        int[] date = dbManager.getInstance(context).dateArray(ID);
+        int[] date = DatabaseManager.getInstance(context).dateArray(ID);
         d = date[0];
         m = date[1];
         y = date[2];
@@ -78,7 +78,7 @@ public class TabPastConcertInfo extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.concert_info_menu, menu);
-        if (dbManager.getInstance(context).isConcertFavourite(ID))
+        if (DatabaseManager.getInstance(context).isConcertFavourite(ID))
             menu.getItem(0).setIcon(R.drawable.ic_action_important_w);
     }
 
@@ -86,12 +86,12 @@ public class TabPastConcertInfo extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.favorite_icon:
-                if (dbManager.getInstance(context).isConcertFavourite(ID))// wyjebujemy
+                if (DatabaseManager.getInstance(context).isConcertFavourite(ID))// wyjebujemy
                 {
-                    dbManager.getInstance(context).removeFavouriteConcert(ID);
+                    DatabaseManager.getInstance(context).removeFavouriteConcert(ID);
                     item.setIcon(R.drawable.ic_action_not_important_w);
                 } else {
-                    dbManager.getInstance(context).addFavouriteConcert(ID);
+                    DatabaseManager.getInstance(context).addFavouriteConcert(ID);
                     item.setIcon(R.drawable.ic_action_important_w);
                 }
 
@@ -99,14 +99,14 @@ public class TabPastConcertInfo extends Fragment {
                 return true;
             case R.id.website_icon:
                 Intent websiteIntent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse(dbManager.getInstance(context).getUrl(ID)));
+                        Uri.parse(DatabaseManager.getInstance(context).getUrl(ID)));
                 startActivity(websiteIntent);
                 return true;
 
             case R.id.share:
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, dbManager.getInstance(context).getArtist(ID) + ", " + dbManager.getInstance(context).getCity(ID) + " (" + dbManager.getInstance(context).getDate(ID) + ")");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, DatabaseManager.getInstance(context).getArtist(ID) + ", " + DatabaseManager.getInstance(context).getCity(ID) + " (" + DatabaseManager.getInstance(context).getDate(ID) + ")");
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
                 return true;
@@ -179,12 +179,5 @@ public class TabPastConcertInfo extends Fragment {
             loadTV.setVisibility(View.INVISIBLE);
         }
     }
-
-    private boolean isOnline() {
-        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
-    }
-
 }
 

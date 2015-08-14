@@ -14,8 +14,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import pl.javaparty.adapters.ConcertAdapter;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.items.Concert;
-import pl.javaparty.prefs.PrefsSingleton;
-import pl.javaparty.sql.dbManager;
+import pl.javaparty.prefs.Prefs;
+import pl.javaparty.sql.DatabaseManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,7 +45,7 @@ public class PlaceSearch extends Fragment {
         concertList = (ListView) view.findViewById(R.id.concertListPlace);
         switchCon = (Switch) view.findViewById(R.id.switchCon2);
         String filter = getArguments().getString("CONDITIONS");
-        ArrayList<String> cities = new ArrayList<>(Arrays.asList(dbManager.getInstance(context).getCities(filter)));
+        ArrayList<String> cities = new ArrayList<>(Arrays.asList(DatabaseManager.getInstance(context).getCities(filter)));
         adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, cities);
 
         searchBox.setAdapter(adapterSearchBox);
@@ -62,16 +62,16 @@ public class PlaceSearch extends Fragment {
                 String city = searchBox.getText().toString();
                 String filter = getArguments().getString("CONDITIONS");
                 adapter = new ConcertAdapter(getActivity(), future ?
-                        dbManager.getInstance(context).getFutureConcertsByCity(city, filter) : dbManager.getInstance(context).getPastConcertsByCity(city, filter));
+                        DatabaseManager.getInstance(context).getFutureConcertsByCity(city, filter) : DatabaseManager.getInstance(context).getPastConcertsByCity(city, filter));
                 concertList.setAdapter(adapter);
 
                 //wrzucenie szukania do lokalnej
-                int usrId = PrefsSingleton.getInstance().getUserID(context);
+                int usrId = Prefs.getInstance(context).getUserID();
                 Calendar c = GregorianCalendar.getInstance();
                 int day = c.get(Calendar.DATE);
                 int month = c.get(Calendar.MONTH)+1;
                 int year = c.get(Calendar.YEAR);
-                dbManager.getInstance(context).addSearch(usrId, null, city, day, month, year);
+                DatabaseManager.getInstance(context).addSearch(usrId, null, city, day, month, year);
 
                 // zapisywanie danych, coby potem przywrocic
                 lastSearching = searchBox.getText().toString();
@@ -100,7 +100,7 @@ public class PlaceSearch extends Fragment {
                 String city = lastSearching;
                 String filter = getArguments().getString("CONDITIONS");
                 adapter = new ConcertAdapter(getActivity(), future ?
-                        dbManager.getInstance(context).getFutureConcertsByCity(city, filter) : dbManager.getInstance(context).getPastConcertsByCity(city, filter));
+                        DatabaseManager.getInstance(context).getFutureConcertsByCity(city, filter) : DatabaseManager.getInstance(context).getPastConcertsByCity(city, filter));
                 concertList.setAdapter(adapter);
                 // zapisywanie danych, coby potem przywrocic
                 getActivity().getActionBar().setTitle(getString(R.string.search) + ": " + city);
@@ -139,18 +139,18 @@ public class PlaceSearch extends Fragment {
 
     public void refresh() {
 //		String filter = getArguments().getString("CONDITIONS");
-//		adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, dbManager.getInstance(context).getCities(filter));
+//		adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, DatabaseManager.getInstance(context).getCities(filter));
 //
 //		searchBox.setAdapter(adapterSearchBox);
 
         String filter = getArguments().getString("CONDITIONS");
-        //adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, dbManager.getInstance(context).getCities(filter));
+        //adapterSearchBox = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, DatabaseManager.getInstance(context).getCities(filter));
         if (adapter != null) {
-            adapter.changeData(dbManager.getInstance(context).getConcertsByCity(lastSearching, filter));
+            adapter.changeData(DatabaseManager.getInstance(context).getConcertsByCity(lastSearching, filter));
         }
 
         adapterSearchBox.clear();
-        adapterSearchBox.addAll(dbManager.getInstance(context).getCities(filter));
+        adapterSearchBox.addAll(DatabaseManager.getInstance(context).getCities(filter));
         adapterSearchBox.notifyDataSetChanged();
     }
 }

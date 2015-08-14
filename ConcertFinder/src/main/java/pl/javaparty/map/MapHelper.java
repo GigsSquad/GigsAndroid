@@ -17,7 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import pl.javaparty.prefs.PrefsSingleton;
+import pl.javaparty.prefs.Prefs;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,7 +33,7 @@ public class MapHelper {
 
     public MapHelper(Context context) {
         geoCoder = new Geocoder(context);
-        hometownString = PrefsSingleton.getInstance().getCity(context);
+        hometownString = Prefs.getInstance(context).getCity();
     }
 
     //wynik zwracany w jakimś gównie a nie w kilometrach

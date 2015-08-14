@@ -12,7 +12,7 @@ import android.widget.ListView;
 import pl.javaparty.adapters.ConcertAdapter;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.items.Concert;
-import pl.javaparty.sql.dbManager;
+import pl.javaparty.sql.DatabaseManager;
 
 public class FavoriteFragment extends Fragment {
 	private ListView list;
@@ -25,7 +25,7 @@ public class FavoriteFragment extends Fragment {
         getActivity().getActionBar().setTitle(getString(R.string.favourite));
 		list = (ListView) view.findViewById(R.id.FavouriteList);
 
-		adapter = new ConcertAdapter(getActivity(), dbManager.getInstance(getActivity().getApplicationContext()).getAllFavouriteConcert());
+		adapter = new ConcertAdapter(getActivity(), DatabaseManager.getInstance(getActivity().getApplicationContext()).getAllFavouriteConcert());
 		list.setAdapter(adapter);
 
 		list.setOnItemClickListener(new OnItemClickListener() {
@@ -52,7 +52,7 @@ public class FavoriteFragment extends Fragment {
 
 	public void refresh()
 	{
-		adapter = new ConcertAdapter(getActivity(), dbManager.getInstance(getActivity().getApplicationContext()).getAllFavouriteConcert());
+		adapter = new ConcertAdapter(getActivity(), DatabaseManager.getInstance(getActivity().getApplicationContext()).getAllFavouriteConcert());
 		list.setAdapter(adapter);
 	}
 

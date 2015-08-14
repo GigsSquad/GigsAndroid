@@ -13,7 +13,7 @@ import android.widget.TextView;
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.items.Concert;
-import pl.javaparty.sql.dbManager;
+import pl.javaparty.sql.DatabaseManager;
 
 public class TabConcertMap extends Fragment {
 
@@ -33,7 +33,7 @@ public class TabConcertMap extends Fragment {
 
         ID = (getArguments().getInt("ID", -1)); // -1 bo bazadanych numeruje od 1 a nie od 0
 
-        Concert con = dbManager.getInstance(context).getConcertByID(ID);
+        Concert con = DatabaseManager.getInstance(context).getConcertByID(ID);
         final String artist = con.getArtist();
         String city = con.getCity();
 
@@ -48,7 +48,7 @@ public class TabConcertMap extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.concert_info_menu, menu);
-        if (dbManager.getInstance(context).isConcertFavourite(ID))
+        if (DatabaseManager.getInstance(context).isConcertFavourite(ID))
             menu.getItem(0).setIcon(R.drawable.ic_action_important_w);
     }
 
@@ -56,12 +56,12 @@ public class TabConcertMap extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.favorite_icon:
-                if (dbManager.getInstance(context).isConcertFavourite(ID))// wyjebujemy
+                if (DatabaseManager.getInstance(context).isConcertFavourite(ID))// wyjebujemy
                 {
-                    dbManager.getInstance(context).removeFavouriteConcert(ID);
+                    DatabaseManager.getInstance(context).removeFavouriteConcert(ID);
                     item.setIcon(R.drawable.ic_action_not_important_w);
                 } else {
-                    dbManager.getInstance(context).addFavouriteConcert(ID);
+                    DatabaseManager.getInstance(context).addFavouriteConcert(ID);
                     item.setIcon(R.drawable.ic_action_important_w);
                 }
 
@@ -69,14 +69,14 @@ public class TabConcertMap extends Fragment {
                 return true;
             case R.id.website_icon:
                 Intent websiteIntent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse(dbManager.getInstance(context).getUrl(ID)));
+                        Uri.parse(DatabaseManager.getInstance(context).getUrl(ID)));
                 startActivity(websiteIntent);
                 return true;
 
             case R.id.share:
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, dbManager.getInstance(context).getArtist(ID) + ", " + dbManager.getInstance(context).getCity(ID) + " (" + dbManager.getInstance(context).getDate(ID) + ")");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, DatabaseManager.getInstance(context).getArtist(ID) + ", " + DatabaseManager.getInstance(context).getCity(ID) + " (" + DatabaseManager.getInstance(context).getDate(ID) + ")");
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
                 return true;

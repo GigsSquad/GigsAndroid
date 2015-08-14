@@ -19,7 +19,7 @@ import android.widget.ListView;
 import pl.javaparty.adapters.ConcertAdapter;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.items.Concert;
-import pl.javaparty.sql.dbManager;
+import pl.javaparty.sql.DatabaseManager;
 
 import java.util.Calendar;
 
@@ -82,8 +82,8 @@ public class DateSearch extends Fragment {
             public void onClick(View v) {
                 String filter = getArguments().getString("CONDITIONS");
                 // Log.i("DATE",filter);
-                Log.i("DATE", "Ilość: " + dbManager.getInstance(context).getConcertsByDateRange(dF, mF, yF, dT, mT, yT, filter).length);
-                adapter = new ConcertAdapter(context, dbManager.getInstance(context).getConcertsByDateRange(dF, mF, yF, dT, mT, yT, filter));
+                Log.i("DATE", "Ilość: " + DatabaseManager.getInstance(context).getConcertsByDateRange(dF, mF, yF, dT, mT, yT, filter).length);
+                adapter = new ConcertAdapter(context, DatabaseManager.getInstance(context).getConcertsByDateRange(dF, mF, yF, dT, mT, yT, filter));
                 concertList.setAdapter(adapter);
                 lastSearching = dF + "." + mF + "." + yF + " - " + dT + "." + mT + "." + yT;
                 getActivity().getActionBar().setTitle(getString(R.string.search) + ": " + lastSearching);
