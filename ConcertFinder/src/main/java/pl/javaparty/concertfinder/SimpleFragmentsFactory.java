@@ -7,7 +7,7 @@ import pl.javaparty.items.Agencies;
 /**
  * Created by jakub on 8/14/15.
  */
-public class FragmentsFabric {
+public class SimpleFragmentsFactory {
 
     public Fragment produceFragment(int position) {
         Fragment fragment = null;

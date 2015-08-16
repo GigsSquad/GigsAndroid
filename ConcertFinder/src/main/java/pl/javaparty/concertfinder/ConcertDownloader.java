@@ -32,13 +32,13 @@ public class ConcertDownloader extends AsyncTask<String, Void, String> implement
     private Context context;
     private ProgressDialog dialog;
     private MapHelper mapHelper;
-    private ProgressDialogFabric fabric;
+    private DialogFactory fabric;
 
     public ConcertDownloader(Context context) {
         this.context = context;
         mapHelper = new MapHelper(context);
         latLng = new LatLng(Double.parseDouble(Prefs.getInstance(context).getLon()), Double.parseDouble(Prefs.getInstance(context).getLat()));
-        fabric = new ProgressDialogFabric(context);
+        fabric = new DialogFactory(context);
         dialog = fabric.produceDialog(DialogType.progress);
     }
 

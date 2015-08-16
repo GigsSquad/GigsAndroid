@@ -1,8 +1,6 @@
 package pl.javaparty.concertfinder;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -15,13 +13,12 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.Toast;
 import pl.javaparty.adapters.NavDrawerAdapter;
+import pl.javaparty.enums.DialogType;
 import pl.javaparty.fragments.*;
 import pl.javaparty.items.Agencies;
 import pl.javaparty.items.Concert;
@@ -42,13 +39,13 @@ public class MainActivity extends FragmentActivity implements Observer {
     private Context context;
     private ActionBarDrawerToggle drawerToggle;
     private DrawerLayout drawerLayout;
-    private Bundle arguments;
     TypedArray navMenuIcons;
     String[] navMenuTitles;
-    FragmentsFabric fabric;
+    SimpleFragmentsFactory fabric;
     Fragment fragment;
     ConcertDownloader concertDownloader;
     LatLngConnector latLngConnector;
+    private Bundle arguments;
 
     /* Fragmenty */
     static FragmentManager fragmentManager;
@@ -59,7 +56,7 @@ public class MainActivity extends FragmentActivity implements Observer {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = getApplicationContext();
-        fabric = new FragmentsFabric();
+        fabric = new SimpleFragmentsFactory();
 
         navMenuTitles = getResources().getStringArray(R.array.nav_menu);
         navMenuIcons = getResources().obtainTypedArray(R.array.nav_menu_icons);
@@ -69,6 +66,7 @@ public class MainActivity extends FragmentActivity implements Observer {
 
         concertDownloader = new ConcertDownloader(context);
         concertDownloader.register(this);
+
         latLngConnector = new LatLngConnector(context);
 
         ArrayList<String> agencies = new ArrayList<>();//Arrays.asList(getResources().getStringArray(R.array.agencje_submenu)));
@@ -150,11 +148,12 @@ public class MainActivity extends FragmentActivity implements Observer {
 
         drawerLayout.openDrawer(drawerList);
         validateDatabase();
-//        showDownloadDialog();
         changeFragment(1);
+
         //jeśli miasto w Prefs wciąż jest puste to wyświetlamy okienko z prośbą o wpisanie
         if (Prefs.getInstance(context).getCity().isEmpty() && Prefs.getInstance(context).getStart()) {
-            showCityDialog();
+            DialogFactory dialogFactory = new DialogFactory(context);
+            dialogFactory.produceAlertDialog(DialogType.location).show();
         }
 
         checkFollowingArtists();
@@ -163,10 +162,11 @@ public class MainActivity extends FragmentActivity implements Observer {
     public void changeFragment(int position) {
         fragment = fabric.produceFragment(position);
 
-        if (fragment instanceof RecentFragment)
-            concertDownloader.register((RecentFragment) fragment);
+//        if (fragment instanceof RecentFragment)
+//            concertDownloader.register((RecentFragment) fragment);
 
-        fragment.setArguments(arguments);
+//        arguments = new Bundle();
+//        fragment.setArguments(arguments);
         fragmentManager
                 .beginTransaction()
                 .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
@@ -196,65 +196,6 @@ public class MainActivity extends FragmentActivity implements Observer {
         if (followingArtists > 0) {
             Toast.makeText(context, "Jest " + followingArtists + " koncertów ulubionych artystów w Twojej okolicy", Toast.LENGTH_LONG).show();
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    private void showCityDialog() {
-        final AutoCompleteTextView input = new AutoCompleteTextView(this);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.COUNTIES, android.R.layout.simple_dropdown_item_1line);
-        input.setAdapter(adapter);
-
-        Prefs.getInstance(context).setStart(false); // żeby już nie pytało o miasto, infomacja o tym że apk już kiedyś była uruchamiana
-
-        new AlertDialog.Builder(MainActivity.this)
-                .setTitle("Wprowadź swoje miasto")
-                .setMessage("Potrzebujemy nazwy Twojej miejscowości, aby dobrze posortować koncerty :)")
-                .setView(input)
-                .setCancelable(true)
-                .setPositiveButton("Zapisz", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        if (!input.getText().toString().isEmpty()) {
-                            Prefs.getInstance(context).setCity(input.getText().toString());
-                            Toast.makeText(getApplication(), "Dziękujemy, " + input.getText().toString(), Toast.LENGTH_SHORT).show();
-                        }
-
-                        //jeśli online to od razu łączymy sie z mapami i pobieramy latlng
-                        if (UtilsObject.isOnline(context))
-                            new LatLngConnector(getApplicationContext()).execute();
-                    }
-                }).setNegativeButton("Anuluj", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        }).show();
-    }
-
-    private void showDownloadDialog() {
-
-        new AlertDialog.Builder(MainActivity.this)
-                .setTitle("Czy chcesz teraz pobrać koncerty z bazy?")
-                .setMessage("Może zająć nam to kilka minut.")
-                .setCancelable(true)
-                .setPositiveButton("Pobierz", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-
-                        //jeśli nie ma pobranyuch jeszcze współrzędnych dla swojego miasta, czyli w Prefs LAT i LON są na -1 to łączy sie z mapami żeby pobrać
-                        if (Prefs.getInstance(context).getLon().equals("-1") || Prefs.getInstance(context).getLat().equals("-1")) {
-                            latLngConnector.execute();
-                        } else { // w przeciwnym wypadku od razu przechodzimy do pobierania kocnertów
-                            concertDownloader.execute();
-                        }
-                    }
-                }).setNegativeButton("Później", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-            }
-
-        }).show();
     }
 
     @Override
@@ -305,7 +246,6 @@ public class MainActivity extends FragmentActivity implements Observer {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
         drawerToggle.syncState();
         refresh();
     }

@@ -35,7 +35,7 @@ public class LatLngConnector extends AsyncTask<String, Void, String> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        ProgressDialogFabric dialogFabric = new ProgressDialogFabric(context);
+        DialogFactory dialogFabric = new DialogFactory(context);
         dialog = dialogFabric.produceDialog(DialogType.simple);
         dialog.setMessage("Łączę się z Google Maps");
         dialog.show();
