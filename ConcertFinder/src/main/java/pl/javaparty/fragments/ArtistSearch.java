@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import pl.javaparty.adapters.ConcertAdapter;
+import pl.javaparty.concertfinder.Observer;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.items.Concert;
 import pl.javaparty.prefs.Prefs;
@@ -23,7 +24,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-public class ArtistSearch extends Fragment {
+public class ArtistSearch extends Fragment implements Observer{
 
     AutoCompleteTextView searchBox;
     Switch switchCon;

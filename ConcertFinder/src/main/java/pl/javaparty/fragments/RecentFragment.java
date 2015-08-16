@@ -13,6 +13,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import pl.javaparty.adapters.ConcertAdapter;
+import pl.javaparty.concertfinder.Observer;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.fragments.FilterDialogFragment.FilterDialogListener;
 import pl.javaparty.items.Agencies;
@@ -24,7 +25,7 @@ import java.util.Calendar;
 import java.util.Map;
 import java.util.TimeZone;
 
-public class RecentFragment extends Fragment {
+public class RecentFragment extends Fragment implements Observer {
 
     ConcertAdapter concertsAdapter;
     ListView concertsListView;
@@ -38,6 +39,7 @@ public class RecentFragment extends Fragment {
         super();
         checkedAgencies = Agencies.AgenciesMethods.initialize();
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
@@ -112,6 +114,7 @@ public class RecentFragment extends Fragment {
         return new Concert[0];
     }
 
+    @Override
     public void refresh() {
         // concertsAdapter = new ConcertAdapter(getActivity(), cutArray(DatabaseManager.getInstance(context).getAllConcerts(filterAgencies())));
         concertsAdapter.changeData(cutArray(DatabaseManager.getInstance(context).getFutureConcerts(filterAgencies())));

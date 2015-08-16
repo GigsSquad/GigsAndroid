@@ -11,34 +11,35 @@ public class FragmentsFabric {
 
     public Fragment produceFragment(int position) {
         Fragment fragment = null;
-        if (position == 0)
+        if (position == 0) {
             fragment = new SearchFragment();
-        else if (position == 1)
+        } else if (position == 1) {
             fragment = new RecentFragment();
-        else if (position == 2)
+        } else if (position == 2) {
             fragment = new PastFragment();
-        else if (position == 3)
+        } else if (position == 3) {
             fragment = new FavoriteFragment();
-        else if (position == 4)
+        } else if (position == 4) {
             fragment = new SpectacleFragment();
-        else if (position == 5)
+        } else if (position == 5) {
             fragment = new SettingsFragment();
-        else if (position == 6)
+        } else if (position == 6) {
             fragment = new AboutFragment();
-        else if (position >= 90 && position < 100) {
-            FestivalFragment ffragment = new FestivalFragment();
-            if (position % 90 == 0)
-                ffragment.setFestival("Jarocin Festival", R.drawable.jarocin);
-            else if (position % 90 == 1)
-                ffragment.setFestival("Life Festival Oświęcim", R.drawable.lifefestival);
-            fragment = ffragment;
-        } else if (position >= 100) {
-            RecentFragment rfragment = new RecentFragment();
-            for (Agencies ch : RecentFragment.checkedAgencies.keySet())
-                if (ch.fragmentNumber != position)
-                    RecentFragment.checkedAgencies.put(ch, false);
+        } else if (position >= 90 && position < 100) {
+            fragment = new FestivalFragment();
 
-            fragment = rfragment;
+            if (position % 90 == 0) {
+                ((FestivalFragment) fragment).setFestival("Jarocin Festival", R.drawable.jarocin);
+            } else if (position % 90 == 1) {
+                ((FestivalFragment) fragment).setFestival("Life Festival Oświęcim", R.drawable.lifefestival);
+            }
+        } else if (position >= 100) {
+            fragment = new RecentFragment();
+            for (Agencies ch : RecentFragment.checkedAgencies.keySet()) {
+                if (ch.fragmentNumber != position) {
+                    RecentFragment.checkedAgencies.put(ch, false);
+                }
+            }
         }
         return fragment;
     }

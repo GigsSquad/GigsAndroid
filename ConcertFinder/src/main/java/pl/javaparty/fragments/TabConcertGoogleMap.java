@@ -131,7 +131,6 @@ public class TabConcertGoogleMap extends Fragment {
 				DatabaseManager.getInstance(context).addFavouriteConcert(ID);
 				item.setIcon(R.drawable.ic_action_important_w);
 			}
-			MainActivity.updateCounters();
 			return true;
 		case R.id.website_icon:
 			Intent websiteIntent = new Intent(Intent.ACTION_VIEW,

@@ -33,35 +33,43 @@ import pl.javaparty.utils.UtilsObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity implements Observer {
 
     /* Drawer */
-    private static ArrayList<NavDrawerItem> navDrawerItems;
-    private static NavDrawerAdapter adapter;
-    private static ExpandableListView drawerList;
-    private static Context context;
+    private ArrayList<NavDrawerItem> navDrawerItems;
+    private NavDrawerAdapter adapter;
+    private ExpandableListView drawerList;
+    private Context context;
     private ActionBarDrawerToggle drawerToggle;
     private DrawerLayout drawerLayout;
+    private Bundle arguments;
     TypedArray navMenuIcons;
     String[] navMenuTitles;
     FragmentsFabric fabric;
     Fragment fragment;
+    ConcertDownloader concertDownloader;
+    LatLngConnector latLngConnector;
 
     /* Fragmenty */
     static FragmentManager fragmentManager;
     private int currentFragment = 1;
-    private static Bundle arguments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        context = getApplicationContext();
         fabric = new FragmentsFabric();
+
         navMenuTitles = getResources().getStringArray(R.array.nav_menu);
         navMenuIcons = getResources().obtainTypedArray(R.array.nav_menu_icons);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerList = (ExpandableListView) findViewById(R.id.left_drawer);
         drawerList.setGroupIndicator(null);
+
+        concertDownloader = new ConcertDownloader(context);
+        concertDownloader.register(this);
+        latLngConnector = new LatLngConnector(context);
 
         ArrayList<String> agencies = new ArrayList<>();//Arrays.asList(getResources().getStringArray(R.array.agencje_submenu)));
         ArrayList<String> ticketers = new ArrayList<>();
@@ -87,9 +95,7 @@ public class MainActivity extends FragmentActivity {
         navDrawerItems.add(new NavDrawerItem("Festiwale", navMenuIcons.getResourceId(4, -1), events));
         navMenuIcons.recycle();
 
-        context = getApplicationContext();
         fragmentManager = getSupportFragmentManager();
-
 
 		/* ustawianie actionbara by mozna go bylo wcisnac */
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -142,11 +148,10 @@ public class MainActivity extends FragmentActivity {
             }
         });
 
-        changeFragment(0);
         drawerLayout.openDrawer(drawerList);
         validateDatabase();
 //        showDownloadDialog();
-
+        changeFragment(1);
         //jeśli miasto w Prefs wciąż jest puste to wyświetlamy okienko z prośbą o wpisanie
         if (Prefs.getInstance(context).getCity().isEmpty() && Prefs.getInstance(context).getStart()) {
             showCityDialog();
@@ -158,13 +163,15 @@ public class MainActivity extends FragmentActivity {
     public void changeFragment(int position) {
         fragment = fabric.produceFragment(position);
 
+        if (fragment instanceof RecentFragment)
+            concertDownloader.register((RecentFragment) fragment);
+
         fragment.setArguments(arguments);
         fragmentManager
                 .beginTransaction()
                 .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
                 .replace(R.id.content_frame, fragment)
                 .addToBackStack(null).commitAllowingStateLoss();
-        updateCounters();
     }
 
     private void validateDatabase() {
@@ -237,10 +244,11 @@ public class MainActivity extends FragmentActivity {
                     public void onClick(DialogInterface dialog, int whichButton) {
 
                         //jeśli nie ma pobranyuch jeszcze współrzędnych dla swojego miasta, czyli w Prefs LAT i LON są na -1 to łączy sie z mapami żeby pobrać
-                        if (Prefs.getInstance(context).getLon().equals("-1") || Prefs.getInstance(context).getLat().equals("-1"))
-                            new LatLngConnector(getApplicationContext()).execute();
-                        else // w przeciwnym wypadku od razu przechodzimy do pobierania kocnertów
-                            new ConcertDownloader(context).execute();
+                        if (Prefs.getInstance(context).getLon().equals("-1") || Prefs.getInstance(context).getLat().equals("-1")) {
+                            latLngConnector.execute();
+                        } else { // w przeciwnym wypadku od razu przechodzimy do pobierania kocnertów
+                            concertDownloader.execute();
+                        }
                     }
                 }).setNegativeButton("Później", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
@@ -291,10 +299,7 @@ public class MainActivity extends FragmentActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // toggle nav drawer on selecting action bar app icon/title
-        if (drawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return drawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -302,7 +307,7 @@ public class MainActivity extends FragmentActivity {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
         drawerToggle.syncState();
-        updateCounters();
+        refresh();
     }
 
     @Override
@@ -316,7 +321,8 @@ public class MainActivity extends FragmentActivity {
         // No call for super(). Bug on API Level > 11. lol
     }
 
-    public static void updateCounters() {
+    @Override
+    public void refresh() {
         navDrawerItems.get(1).setCount("" + DatabaseManager.getInstance(context).getSize(DatabaseManager.CONCERTS_TABLE));
         navDrawerItems.get(1).setCounterVisibility(true);
 
@@ -328,5 +334,4 @@ public class MainActivity extends FragmentActivity {
         adapter = new NavDrawerAdapter(context, navDrawerItems);
         drawerList.setAdapter(adapter);
     }
-
 }

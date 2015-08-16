@@ -10,11 +10,12 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import pl.javaparty.adapters.ConcertAdapter;
+import pl.javaparty.concertfinder.Observer;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.items.Concert;
 import pl.javaparty.sql.DatabaseManager;
 
-public class FavoriteFragment extends Fragment {
+public class FavoriteFragment extends Fragment implements Observer {
 	private ListView list;
 	private ConcertAdapter adapter;
 

@@ -5,14 +5,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
 import android.util.Log;
 import android.view.*;
+import pl.javaparty.concertfinder.Observer;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.fragments.FilterDialogFragment.FilterDialogListener;
 import pl.javaparty.items.Agencies;
 
 import java.util.Map;
 
-//FILTRY TODO!!!!!
-public class SearchFragment extends Fragment {
+public class SearchFragment extends Fragment implements Observer {
 
     private FragmentTabHost mTabHost;
     //private boolean[] checked;
@@ -75,7 +75,7 @@ public class SearchFragment extends Fragment {
                         }
                         conditions.putString("CONDITIONS", Agencies.AgenciesMethods.filterAgencies(checkedAgencies));
                         //mTabHost.invalidate();
-                        refreshTab();
+                        refresh();
                         //mTabHost.getTabWidget().getChildAt(mTabHost.getCurrentTab())
                     }
 
@@ -104,7 +104,8 @@ public class SearchFragment extends Fragment {
 
     }
 
-    private void refreshTab() {
+    @Override
+    public void refresh() {
         int currentTab = mTabHost.getCurrentTab();
         Log.i("FILTER", "Refresh " + currentTab);
         if (currentTab == 0) {

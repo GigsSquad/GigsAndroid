@@ -7,8 +7,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -21,6 +19,7 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.LoginButton;
+import pl.javaparty.concertfinder.ConcertDownloader;
 import pl.javaparty.concertfinder.LatLngConnector;
 import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
@@ -43,6 +42,7 @@ public class SettingsFragment extends Fragment {
     ProgressDialog loadingDialog;
     MapHelper mapHelper;
     String sortOrder = "YEAR,MONTH,DAY";
+    ConcertDownloader concertDownloader;
 
     private static final String TAG = "Facebook";
     private UiLifecycleHelper uiHelper;
@@ -58,6 +58,7 @@ public class SettingsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         uiHelper = new UiLifecycleHelper(getActivity(), callback);
         uiHelper.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -73,6 +74,8 @@ public class SettingsFragment extends Fragment {
         dateSort = (RadioButton) view.findViewById(R.id.radioButtonDate);
         mapDialog = new ProgressDialog(getActivity());
         mapDialog.setCancelable(false);
+
+        concertDownloader = new ConcertDownloader(context);
 
         mapHelper = new MapHelper(getActivity());
         loadingDialog = new ProgressDialog(getActivity());
@@ -115,7 +118,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (UtilsObject.isOnline(context))
-                    new LatLngConnector(context).execute();
+                    concertDownloader.execute();
                 else
                     Toast.makeText(context, getString(R.string.no_connection), Toast.LENGTH_SHORT).show();
             }
@@ -168,8 +171,9 @@ public class SettingsFragment extends Fragment {
                             Log.i("SETTINGS", "Usunięto obrazki z dysku");
                             DatabaseManager.getInstance(getActivity().getApplicationContext()).deleteTables();
                             Log.i("SETTINGS", "Wyczyszczono bazę");
-                            MainActivity.updateCounters();
                             Prefs.getInstance(getActivity()).setLastID(-1);
+                            ConcertDownloader concertDownloader = new ConcertDownloader(getActivity());
+                            concertDownloader.notifyObservers();
                             Toast.makeText(getActivity(), getString(R.string.cleared), Toast.LENGTH_SHORT).show();
                         }
                     })

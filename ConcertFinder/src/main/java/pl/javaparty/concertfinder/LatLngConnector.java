@@ -38,7 +38,7 @@ public class LatLngConnector extends AsyncTask<String, Void, String> {
         ProgressDialogFabric dialogFabric = new ProgressDialogFabric(context);
         dialog = dialogFabric.produceDialog(DialogType.simple);
         dialog.setMessage("Łączę się z Google Maps");
-//        dialog.show();
+        dialog.show();
 
         jsonthing = new JSONthing();
         id = String.valueOf(Prefs.getInstance(context).getUserID()); //stirng żeby się PHPy nie srały
@@ -76,7 +76,8 @@ public class LatLngConnector extends AsyncTask<String, Void, String> {
             Log.d("LATLNG", "Lat:" + Prefs.getInstance(context).getLat() + " Long:" + Prefs.getInstance(context).getLon());
         }
         dialog.dismiss();
-        new ConcertDownloader(context).execute();
+        ConcertDownloader concertDownloader = new ConcertDownloader(context);
+        concertDownloader.execute();
         super.onPostExecute(city);
     }
 }

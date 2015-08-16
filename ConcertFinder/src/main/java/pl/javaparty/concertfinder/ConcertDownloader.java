@@ -23,16 +23,16 @@ import java.util.List;
 /**
  * Created by jakub on 8/14/15.
  */
-public class ConcertDownloader extends AsyncTask<String, Void, String> {
+public class ConcertDownloader extends AsyncTask<String, Void, String> implements Observable {
 
-    boolean updateNeeded = false;
-    int success, jsonLastId, prefsLastId, count;
-    LatLng latLng;
-    JSONObject mJsonObject;
-    Context context;
-    ProgressDialog dialog;
-    MapHelper mapHelper;
-    ProgressDialogFabric fabric;
+    private static List<Observer> observerList = new ArrayList<>();
+    private int success, jsonLastId, prefsLastId, count;
+    private LatLng latLng;
+    private JSONObject mJsonObject;
+    private Context context;
+    private ProgressDialog dialog;
+    private MapHelper mapHelper;
+    private ProgressDialogFabric fabric;
 
     public ConcertDownloader(Context context) {
         this.context = context;
@@ -101,7 +101,6 @@ public class ConcertDownloader extends AsyncTask<String, Void, String> {
             dialog.incrementProgressBy(1);
         }
         DatabaseManager.getInstance(context).endTransaction();
-        updateNeeded = true;
     }
 
 
@@ -123,14 +122,25 @@ public class ConcertDownloader extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String s) {
-//        updateCounters();
-//        if (updateNeeded)
-//            changeFragment(currentFragment);// odswieza dany fragment po synchronizacji bazy
-//        else
+        notifyObservers();
         Toast.makeText(context, context.getString(R.string.database_is_up_to_date), Toast.LENGTH_SHORT).show();
 
         dialog.dismiss();
-//        checkFollowingArtists();
         super.onPostExecute(s);
+    }
+
+    @Override
+    public void register(Observer o) {
+        observerList.add(o);
+    }
+
+    @Override
+    public void remove(Observer o) {
+        observerList.remove(o);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (Observer o : observerList) o.refresh();
     }
 }
