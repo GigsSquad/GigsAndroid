@@ -1,9 +1,6 @@
 package pl.javaparty.map;
 
 import android.content.Context;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
 import android.util.Log;
 import com.google.android.gms.maps.model.LatLng;
 import org.apache.http.HttpEntity;
@@ -15,97 +12,74 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import pl.javaparty.prefs.Prefs;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class MapHelper {
-    private Geocoder geoCoder;
-
-    private Address hometownAddress; // to z ustawie�
     private String hometownString;
+    private Context context;
 
     public MapHelper(Context context) {
-        geoCoder = new Geocoder(context);
+        this.context = context;
         hometownString = Prefs.getInstance(context).getCity();
     }
 
-    //wynik zwracany w jakimś gównie a nie w kilometrach
-    //obliczam odległość między dwoma punktami z pitagorasa
-    public double inaccurateDistanceTo(double lat, double lon, LatLng hometown) { //slicznie to wyglada
-        double a = Math.abs(lat - hometown.latitude);
-        double b = Math.abs(lon - hometown.longitude);
-        return (Math.sqrt((a * a) + (b * b)));
-    }
-
-
-    public int distanceTo(final LatLng spot) {
+    private void getHometownCoords() {
         LatLng hometownLatLng = MapHelper.getLatLongFromAddress(hometownString);
+        Prefs.getInstance(context).setLat(String.valueOf(hometownLatLng.latitude));
+        Prefs.getInstance(context).setLon(String.valueOf(hometownLatLng.longitude));
+    }
 
-        Log.i("MAP", "Miasto:" + spot);
-        float[] distanceFloat = new float[3];
+    private double haversine(double lat1, double lon1, double lat2, double lon2) {
+        final double R = 6372.8; // In kilometers
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+        lat1 = Math.toRadians(lat1);
+        lat2 = Math.toRadians(lat2);
 
-        try {
-            Location.distanceBetween(
-                    hometownLatLng.longitude, hometownLatLng.latitude,//bylo odwrotnie lat i long, moze mialo tak byc?
-                    spot.latitude, spot.longitude,
-                    distanceFloat);
-        } catch (NullPointerException ne) {
-            return 0;
+        double a = Math.pow(Math.sin(dLat / 2), 2) + Math.pow(Math.sin(dLon / 2), 2) * Math.cos(lat1) * Math.cos(lat2);
+        double c = 2 * Math.asin(Math.sqrt(a));
+        return R * c;
+    }
+
+    public double distanceFromHometown(LatLng destination) {
+        boolean noHometownCoords = (Prefs.getInstance(context).getLat().equals("-1") || Prefs.getInstance(context).getLon().equals("-1"));
+        if (noHometownCoords) {
+            getHometownCoords();
         }
-        Log.i("MAP", "Dystans w km: " + (int) (distanceFloat[0] / 1000));
-        return (int) (distanceFloat[0] / 1000);
+
+        double originLat = Double.parseDouble(Prefs.getInstance(context).getLat());
+        double originLon = Double.parseDouble(Prefs.getInstance(context).getLon());
+
+        Log.i("MAP", "Koncert, lat: " + destination.latitude + " lon: " + destination.longitude);
+        Log.i("MAP", "Hometown, lat: " + originLat + " lon: " + originLon);
+        return haversine(destination.latitude, destination.longitude, originLat, originLon);
     }
 
-    private Address getAddress(String place) {
-        int tryDownload = 0;
-        List<Address> addressList;
-        while (tryDownload++ < 5) {
-            try {
-                addressList = geoCoder.getFromLocationName(place, 1);
-                if (addressList.size() > 0)
-                    return addressList.get(0);
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException | IOException | NullPointerException e) {
-                e.printStackTrace();
-            }
+    public double distanceFromHometown(double latitude, double longitude) {
+        boolean noHometownCoords = (Prefs.getInstance(context).getLat().equals("-1") || Prefs.getInstance(context).getLon().equals("-1"));
+        if (noHometownCoords) {
+            getHometownCoords();
         }
-        return null;
+
+        double originLat = Double.parseDouble(Prefs.getInstance(context).getLat());
+        double originLon = Double.parseDouble(Prefs.getInstance(context).getLon());
+
+        Log.i("MAP", "Koncert, lat: " + latitude + " lon: " + longitude);
+        Log.i("MAP", "Hometown, lat: " + originLat + " lon: " + originLon);
+        return haversine(latitude, longitude, originLat, originLon);
     }
 
-    public LatLng getLatLng(String place) {
-        LatLng latLng;
-
-        if (!hometownAddress.hasLatitude() && !hometownAddress.hasLongitude()) {
-            hometownAddress = getAddress(place);
-        }
-        latLng = new LatLng(hometownAddress.getLatitude(), hometownAddress.getLongitude());
-        return latLng;
+    public double distanceBetween(LatLng origin, LatLng destination) {
+        Log.i("MAP", "Skąd: , lat: " + origin.latitude + " lon: " + origin.longitude);
+        Log.i("MAP", "Do: , lat: " + destination.latitude + " lon: " + destination.longitude);
+        return haversine(destination.latitude, destination.longitude, origin.latitude, origin.longitude);
     }
-
-
-    public LatLng getAlternateLatLng(String city) throws JSONException, IOException {
-        JSONObject jso = getJSON(city.replace(" ", "+") + "&format=json").getJSONObject(0);
-        Log.d("MAPS", jso.toString());
-        return new LatLng(Double.parseDouble(jso.getString("lat")), Double.parseDouble(jso.getString("lon")));
-    }
-
-    private JSONArray getJSON(String params) throws IOException, JSONException {
-        String url_front = "http://nominatim.openstreetmap.org/search?q=";
-        Document doc = Jsoup.connect(url_front + params).ignoreContentType(true).get();
-        String docContent = doc.toString().split("<body>")[1].split("</body>")[0];
-        return docContent.equals("[]") ? null : new JSONArray(docContent);
-    }
-
 
     public static LatLng getLatLongFromAddress(String address) {
-
         StringBuilder stringBuilder = new StringBuilder();
 
         try {
@@ -138,39 +112,13 @@ public class MapHelper {
             double lat = ((JSONArray) jsonObject.get("results")).getJSONObject(0)
                     .getJSONObject("geometry").getJSONObject("location")
                     .getDouble("lat");
-            Log.d("LATLNGcity", address);
-            Log.d("LATLNGlatitude", "" + lat);
-            Log.d("LATLNGlongitude", "" + lng);
+            Log.i("MAP", "City: " + address);
+            Log.i("MAP", "Lat: " + lat);
+            Log.i("MAP", "Long: " + lng);
             return new LatLng(lat, lng);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return new LatLng(52.232938, 21.0611941);
-    }
-
-
-    public LatLng getLocationFromAddress(String strAddress, Context context) {
-
-        Geocoder coder = new Geocoder(context);
-        List<Address> address;
-        LatLng p1 = null;
-
-        try {
-            address = coder.getFromLocationName(strAddress, 5);
-            if (address == null) {
-                return null;
-            }
-            Address location = address.get(0);
-            location.getLatitude();
-            location.getLongitude();
-
-            p1 = new LatLng((int) (location.getLatitude() * 1E6),
-                    (int) (location.getLongitude() * 1E6));
-
-            return p1;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 }

@@ -53,7 +53,7 @@ public class TabPastConcertInfo extends Fragment {
         Concert con = DatabaseManager.getInstance(context).getConcertByID(ID);
         artistName = con.getArtist();
         city = con.getCity();
-        place = con.getPlace();
+        place = con.getSpot();
         int[] date = DatabaseManager.getInstance(context).dateArray(ID);
         d = date[0];
         m = date[1];

@@ -26,34 +26,30 @@ import java.util.List;
 public class ConcertDownloader extends AsyncTask<String, Void, String> implements Observable {
 
     private static List<Observer> observerList = new ArrayList<>();
-    private int success, jsonLastId, prefsLastId, count;
-    private LatLng latLng;
+    private int jsonLastId;
     private JSONObject mJsonObject;
     private Context context;
     private ProgressDialog dialog;
     private MapHelper mapHelper;
-    private DialogFactory fabric;
 
     public ConcertDownloader(Context context) {
         this.context = context;
         mapHelper = new MapHelper(context);
-        latLng = new LatLng(Double.parseDouble(Prefs.getInstance(context).getLon()), Double.parseDouble(Prefs.getInstance(context).getLat()));
-        fabric = new DialogFactory(context);
+        DialogFactory fabric = new DialogFactory(context);
         dialog = fabric.produceDialog(DialogType.progress);
     }
 
     public void process() throws JSONException {
         List<NameValuePair> params = new ArrayList<>();
         mJsonObject = JSONthing.getThisShit(PHPurls.getConcerts, params);
-        success = mJsonObject.getInt("success");
+        int success = mJsonObject.getInt("success");
         jsonLastId = Integer.parseInt(mJsonObject.getString("last_id"));
-        prefsLastId = Prefs.getInstance(context).getLastID();
-        count = mJsonObject.getInt("count");
+        int prefsLastId = Prefs.getInstance(context).getLastID();
+        int count = mJsonObject.getInt("count");
         //chłopcy i dziewczęta pamiętajmy iż last_id != count
 
-        //jak poprawnie pobierzemy z internetów
         if (success == 1) {
-            dialog.setMax(prefsLastId + jsonLastId);
+            dialog.setMax(count);
 
             Log.i("DB", "ID - Prefs: " + prefsLastId + " JSON: " + jsonLastId);
             Log.i("DB", "COUNT - Prefs: " + DatabaseManager.getInstance(context).getSize(DatabaseManager.CONCERTS_TABLE) + " JSON: " + count);
@@ -75,10 +71,12 @@ public class ConcertDownloader extends AsyncTask<String, Void, String> implement
         DatabaseManager.getInstance(context).beginTransaction();
         for (int i = 0; i < mJsonArray.length(); i++) {
             JSONObject JSONconcert = mJsonArray.getJSONObject(i);
-            if (latLng.longitude != -1)
-                distance = mapHelper.inaccurateDistanceTo(Double.parseDouble(JSONconcert.getString("lat")), Double.parseDouble(JSONconcert.getString("lon")), latLng);
-            else
-                distance = 0;
+
+            String concertLat = JSONconcert.getString("lat");
+            String concertLon = JSONconcert.getString("lon");
+            LatLng concertLatLng = new LatLng(Double.parseDouble(concertLat), Double.parseDouble(concertLon));
+            distance = mapHelper.distanceFromHometown(concertLatLng);
+            //Log.i("MAP", "Distance saved to DB: " + distance);
 
             List<Object> list = new ArrayList<>();
             list.add(JSONconcert.getInt("id"));

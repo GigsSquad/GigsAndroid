@@ -46,7 +46,6 @@ public class Prefs {
 
     public void setLat(String value) {
         getPrefs().edit().putString("LAT", value).commit();
-        getPrefs().edit().putString("LAT", value).commit();
     }
 
     public void setLon(String value) {

@@ -17,9 +17,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:textSize="26sp"
+                android:textSize="14sp"
                 android:layout_centerHorizontal="true"
-                android:text="Jakub Pomykała\nJakub Amanowicz\nSzymon Bartczak\nRafał Pieniążek"
+                android:text="Programiści:\nJakub Pomykała\nJakub Amanowicz\nSzymon Bartczak\nRafał Pieniążek"
                 android:textAppearance="@style/Theme.AppCompat" android:layout_marginTop="30dp"/>
         <ImageView
                 android:layout_width="wrap_content"

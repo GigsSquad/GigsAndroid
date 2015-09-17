@@ -64,10 +64,10 @@ public class MainActivity extends FragmentActivity implements Observer {
         drawerList = (ExpandableListView) findViewById(R.id.left_drawer);
         drawerList.setGroupIndicator(null);
 
-        concertDownloader = new ConcertDownloader(context);
+        concertDownloader = new ConcertDownloader(MainActivity.this);
         concertDownloader.register(this);
 
-        latLngConnector = new LatLngConnector(context);
+        latLngConnector = new LatLngConnector(MainActivity.this);
 
         ArrayList<String> agencies = new ArrayList<>();//Arrays.asList(getResources().getStringArray(R.array.agencje_submenu)));
         ArrayList<String> ticketers = new ArrayList<>();
@@ -88,9 +88,9 @@ public class MainActivity extends FragmentActivity implements Observer {
         navDrawerItems.add(new NavDrawerItem("Twoje koncerty", navMenuIcons.getResourceId(2, -1)));
         navDrawerItems.add(new NavDrawerItem("Spektakle", navMenuIcons.getResourceId(3, -1)));
         navDrawerItems.add(new NavDrawerItem("Preferencje", navMenuIcons.getResourceId(4, -1)));
+        navDrawerItems.add(new NavDrawerItem("Informacje", navMenuIcons.getResourceId(4, -1)));
         navDrawerItems.add(new NavDrawerItem("Agencje", navMenuIcons.getResourceId(4, -1), agencies));//TODO icona
         navDrawerItems.add(new NavDrawerItem("Bileterie", navMenuIcons.getResourceId(4, -1), ticketers));
-        navDrawerItems.add(new NavDrawerItem("Festiwale", navMenuIcons.getResourceId(4, -1), events));
         navMenuIcons.recycle();
 
         fragmentManager = getSupportFragmentManager();
@@ -148,7 +148,7 @@ public class MainActivity extends FragmentActivity implements Observer {
 
         drawerLayout.openDrawer(drawerList);
         validateDatabase();
-        changeFragment(1);
+
 
         //jeśli miasto w Prefs wciąż jest puste to wyświetlamy okienko z prośbą o wpisanie
         if (Prefs.getInstance(context).getCity().isEmpty() && Prefs.getInstance(context).getStart()) {
@@ -156,6 +156,10 @@ public class MainActivity extends FragmentActivity implements Observer {
             dialogFactory.produceAlertDialog(DialogType.location).show();
         }
 
+        if (DatabaseManager.getInstance(context).getSize(DatabaseManager.CONCERTS_TABLE) < 50) {
+            if (UtilsObject.isOnline(context))
+                concertDownloader.execute();
+        }
         checkFollowingArtists();
     }
 
@@ -167,15 +171,18 @@ public class MainActivity extends FragmentActivity implements Observer {
 
 //        arguments = new Bundle();
 //        fragment.setArguments(arguments);
-        fragmentManager
-                .beginTransaction()
-                .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                .replace(R.id.content_frame, fragment)
-                .addToBackStack(null).commitAllowingStateLoss();
+        if (fragment != null) {
+            fragmentManager
+                    .beginTransaction()
+                    .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                    .replace(R.id.content_frame, fragment)
+                    .addToBackStack(null).commitAllowingStateLoss();
+        }
     }
 
     private void validateDatabase() {
         if (!DatabaseManager.getInstance(context).isValid()) {
+            Log.e("DB", "Baza jest zła!");
             DatabaseManager.getInstance(context).deleteDatabase(context);
             if (UtilsObject.isOnline(context)) {
                 Toast.makeText(context, "Po aktualizacji konieczne jest ponowne pobranie bazy.", Toast.LENGTH_LONG).show();
@@ -273,5 +280,6 @@ public class MainActivity extends FragmentActivity implements Observer {
 
         adapter = new NavDrawerAdapter(context, navDrawerItems);
         drawerList.setAdapter(adapter);
+        changeFragment(1);
     }
 }

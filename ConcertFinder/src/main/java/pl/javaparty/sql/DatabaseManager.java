@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
-import com.google.android.gms.maps.model.LatLng;
 import pl.javaparty.items.Agencies;
 import pl.javaparty.items.Concert;
 import pl.javaparty.map.MapHelper;
@@ -19,6 +18,7 @@ import java.util.*;
 public class DatabaseManager extends SQLiteOpenHelper {
 
     private static volatile DatabaseManager INSTANCE;
+
 
     private DatabaseManager(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -62,6 +62,8 @@ public class DatabaseManager extends SQLiteOpenHelper {
                     "LON TEXT," +
                     "DIST REAL," +
                     "ENTRANCE_FEE INTEGER)";
+
+    private String[] allColumns = {"ORD", "ARTIST", "CITY", "SPOT", "DAY", "MONTH", "YEAR", "AGENCY", "URL", "LAT", "LON", "DIST", "ENTRANCE_FEE"};
 
     // nowa tabela zawieraj�ca ulubione koncerty
     private static String CreateFavouriteTable =
@@ -125,42 +127,41 @@ public class DatabaseManager extends SQLiteOpenHelper {
             String insertSQL = "INSERT INTO " + CONCERTS_TABLE + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
             SQLiteStatement statement = database.compileStatement(insertSQL);
             statement.clearBindings();
-            i = 0;
-            statement.bindLong(1, (int) list.get(i++));
-            statement.bindString(2, (String) list.get(i++));
-            statement.bindString(3, (String) list.get(i++));
-            statement.bindString(4, (String) list.get(i++));
-            statement.bindLong(5, (int) list.get(i++));
-            statement.bindLong(6, (int) list.get(i++));
-            statement.bindLong(7, (int) list.get(i++));
-            statement.bindString(8, (String) list.get(i++));
-            statement.bindString(9, (String) list.get(i++));
-            statement.bindString(10, (String) list.get(i++));
-            statement.bindString(11, (String) list.get(i++));
-            statement.bindString(12, (String) list.get(i++));
-            statement.bindDouble(13, (double) list.get(i++));
-            statement.bindString(14, (String) list.get(i));
+            statement.bindLong(1, (int) list.get(0));
+            statement.bindString(2, (String) list.get(1));
+            statement.bindString(3, (String) list.get(2));
+            statement.bindString(4, (String) list.get(3));
+            statement.bindLong(5, (int) list.get(4));
+            statement.bindLong(6, (int) list.get(5));
+            statement.bindLong(7, (int) list.get(6));
+            statement.bindString(8, (String) list.get(7));
+            statement.bindString(9, (String) list.get(8));
+            statement.bindString(10, (String) list.get(9));
+            statement.bindString(11, (String) list.get(10));
+            statement.bindString(12, (String) list.get(11));
+            statement.bindDouble(13, (double) list.get(12));
+            statement.bindString(14, (String) list.get(13));
             statement.execute();
         } catch (SQLiteConstraintException sqlce) {
             Log.i("DB", "Takie samo id, więc update");
             String updateSQL = "UPDATE " + CONCERTS_TABLE + " SET artist = ?, city = ?, spot = ?, day = ?, month = ?, year = ?, agency = ?, url = ?, updated = ?, lat = ?, lon = ?, dist = ?, entrance_fee = ? WHERE ord = ?";
             SQLiteStatement statement = database.compileStatement(updateSQL);
             statement.clearBindings();
-            i = 0;
-            statement.bindString(1, (String) list.get(i++));
-            statement.bindString(2, (String) list.get(i++));
-            statement.bindString(3, (String) list.get(i++));
-            statement.bindLong(4, (int) list.get(i++));
-            statement.bindLong(5, (int) list.get(i++));
-            statement.bindLong(6, (int) list.get(i++));
-            statement.bindString(7, (String) list.get(i++));
-            statement.bindString(8, (String) list.get(i++));
-            statement.bindString(9, (String) list.get(i++));
-            statement.bindString(10, (String) list.get(i++));
-            statement.bindString(11, (String) list.get(i++));
-            statement.bindDouble(12, (double) list.get(i++));
-            statement.bindString(13, (String) list.get(i++));
-            statement.bindLong(14, (int) list.get(i));
+            i = 1;
+            statement.bindString(1, (String) list.get(1));
+            statement.bindString(2, (String) list.get(2));
+            statement.bindString(3, (String) list.get(3));
+            statement.bindLong(4, (int) list.get(4));
+            statement.bindLong(5, (int) list.get(5));
+            statement.bindLong(6, (int) list.get(6));
+            statement.bindString(7, (String) list.get(7));
+            statement.bindString(8, (String) list.get(8));
+            statement.bindString(9, (String) list.get(9));
+            statement.bindString(10, (String) list.get(10));
+            statement.bindString(11, (String) list.get(11));
+            statement.bindDouble(12, (double) list.get(12));
+            statement.bindString(13, (String) list.get(13));
+            statement.bindLong(14, (int) list.get(0));
             statement.execute();
         }
     }
@@ -175,6 +176,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     /**
      * Sprawdza poprawnosc bazy danych
+     *
      * @return true - poprawna
      * false - zła i została usunieta
      */
@@ -223,9 +225,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     public Cursor getData() {
-        String[] columns = {"ORD", "ARTIST", "CITY", "SPOT", "DAY", "MONTH", "YEAR", "AGENCY", "UPDATED", "URL", "LAT", "LON", "DIST"};
-        // dodane pobieranie ID na pocz�tku
-        Cursor c = database.query(CONCERTS_TABLE, columns, null, null, null, null, null);
+        Cursor c = database.query(CONCERTS_TABLE, allColumns, null, null, null, null, null);
         return c;
     }
 
@@ -400,9 +400,8 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     public void removeFollowingArtist(String value) {
-        String selection = "NAME = " + value;
-        //	int deleted = database.delete(CONCERTS_TABLE, selection, selectionArgs);
-        database.delete(FAVOURITES_TABLE, selection, null);
+        String selection = "NAME = '" + value + "'";
+        database.delete(FOLLOWING_TABLE, selection, null);
     }
 
     /**
@@ -507,9 +506,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     private Concert[] getConcertsBy(String condition) {
-        String[] columns = {"ORD", "ARTIST", "CITY", "SPOT", "DAY", "MONTH", "YEAR", "AGENCY", "URL", "LAT", "LON", "DIST"};
-
-        Cursor c = database.query(CONCERTS_TABLE, columns, condition, null, null, null, SORT_ORDER);
+        Cursor c = database.query(CONCERTS_TABLE, allColumns, condition, null, null, null, SORT_ORDER);
 
         Concert[] concerts = new Concert[c.getCount()];
         for (int i = 0; c.moveToNext(); i++) {
@@ -605,7 +602,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     public Concert[] getConcertsByDateRange(int dF, int mF, int yF, int dT, int mT, int yT, String filter) {
-        String[] columns = {"ORD", "ARTIST", "CITY", "SPOT", "DAY", "MONTH", "YEAR", "AGENCY", "URL", "LAT", "LON", "DIST"};
         String condition = "(YEAR > ? OR (YEAR = ? AND MONTH > ?) OR (YEAR = ? AND MONTH = ? AND DAY >= ?))"
                 + "AND (YEAR < ? OR (YEAR = ? AND MONTH < ?) OR (YEAR = ? AND MONTH = ? AND DAY <= ?)) "
                 + "AND (" + filter + ")";
@@ -624,7 +620,9 @@ public class DatabaseManager extends SQLiteOpenHelper {
                 String.valueOf(dT)
         };
         //Cursor c = database.query(CONCERTS_TABLE, columns, condition, selectionArgs, null, null, SORT_ORDER);
-        Cursor c = database.query(true, CONCERTS_TABLE, columns, condition, selectionArgs, null, null, SORT_ORDER, null);
+        Log.i("DB", "SortOrder: " + SORT_ORDER);
+        setSortOrder(context);
+        Cursor c = database.query(true, CONCERTS_TABLE, allColumns, condition, selectionArgs, null, null, SORT_ORDER, null);
         Concert[] concerts = new Concert[c.getCount()];
         for (int i = 0; c.moveToNext(); i++) {
             concerts[i] = new Concert(c.getInt(0), c.getString(1), c.getString(2), c.getString(3),
@@ -635,9 +633,8 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
 
-    public void update(LatLng latLng) {
+    public void updateDistance() {
         setSortOrder(context);
-
         String[] columns = {"ORD", "LAT", "LON"};
         MapHelper mapHelper = new MapHelper(context);
         Cursor c = database.query(CONCERTS_TABLE, columns, null, null, null, null, null);
@@ -648,7 +645,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         for (int i = 0; c.moveToNext(); i++) { //trolololo nie uzywam i co Pan na to
             //String selectSql = "SELECT lat, lon" + CONCERTS_TABLE + " VALUES WHERE ORD = ?;";
             long id = c.getInt(0);
-            distance = mapHelper.inaccurateDistanceTo(Double.parseDouble(c.getString(1)), Double.parseDouble(c.getString(2)), latLng);
+            distance = mapHelper.distanceFromHometown(Double.parseDouble(c.getString(1)), Double.parseDouble(c.getString(2)));
             cv.put("DIST", distance);
             database.update(CONCERTS_TABLE, cv, "ORD=" + id, null);
         }
@@ -675,7 +672,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
             cv.put("DAY", d);
             cv.put("MONTH", m);
             cv.put("YEAR", y);
-            Log.i("SEARCH", "Wrzucomo [usrId = " + usrId + " ][artist = " + artist + " ][city = " + city + "]" +
+            Log.i("SEARCH", "Wrzucono [usrId = " + usrId + " ][artist = " + artist + " ][city = " + city + "]" +
                     "[data: " + d + "." + m + "." + y + "]");
             database.insertOrThrow(SEARCH_TABLE, null, cv);
         } else
