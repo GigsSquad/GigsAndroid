@@ -101,6 +101,7 @@ public class SettingsFragment extends Fragment {
 
                 Toast.makeText(getActivity(), getString(R.string.saved), Toast.LENGTH_SHORT).show();
                 new LatLngConnector(context).execute();
+
             }
 
         });

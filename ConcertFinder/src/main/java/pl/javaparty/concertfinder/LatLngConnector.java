@@ -78,6 +78,7 @@ public class LatLngConnector extends AsyncTask<String, Void, String> {
         dialog.dismiss();
         ConcertDownloader concertDownloader = new ConcertDownloader(context);
         concertDownloader.execute();
+
         super.onPostExecute(city);
     }
 }

@@ -13,6 +13,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import pl.javaparty.adapters.ConcertAdapter;
+import pl.javaparty.concertfinder.ConcertDownloader;
 import pl.javaparty.concertfinder.Observer;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.fragments.FilterDialogFragment.FilterDialogListener;
@@ -34,12 +35,13 @@ public class RecentFragment extends Fragment implements Observer {
     private int lastPosition = 0;
     private int showedConcerts = 20;
     public static Map<Agencies, Boolean> checkedAgencies;
+    ConcertDownloader concertDownloader;
 
     public RecentFragment() {
         super();
+
         checkedAgencies = Agencies.AgenciesMethods.initialize();
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
@@ -47,6 +49,8 @@ public class RecentFragment extends Fragment implements Observer {
         getActivity().getActionBar().setTitle(getString(R.string.upcoming_concerts));
         context = inflater.getContext();
         concertsListView = (ListView) view.findViewById(R.id.recentList);
+        concertDownloader = new ConcertDownloader(context);
+        concertDownloader.register(this);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -67,9 +71,7 @@ public class RecentFragment extends Fragment implements Observer {
             }
         });
 
-
         concertsListView.addFooterView(nextButton);
-        Calendar localCalendar = Calendar.getInstance(TimeZone.getDefault());
         concertsAdapter = new ConcertAdapter(getActivity(), cutArray(DatabaseManager.getInstance(context).getFutureConcerts(filterAgencies())));
 
         concertsListView.setAdapter(concertsAdapter);
@@ -97,9 +99,7 @@ public class RecentFragment extends Fragment implements Observer {
         concertsListView.setSelection(lastPosition);
     }
 
-
     private Concert[] cutArray(Concert[] array) {
-        //fc4355eb184e82380296c170cc0bd2dc664fc195 cut array
         if (array != null && array.length != 0) {
             Log.i("EMPTYLIST", String.valueOf(array.length));
             if (showedConcerts >= array.length - 1) //DatabaseManager.getInstance(context).getSize(DatabaseManager.CONCERTS_TABLE) - 1) {
@@ -116,8 +116,9 @@ public class RecentFragment extends Fragment implements Observer {
 
     @Override
     public void refresh() {
-        // concertsAdapter = new ConcertAdapter(getActivity(), cutArray(DatabaseManager.getInstance(context).getAllConcerts(filterAgencies())));
+        Log.i("RF", "Update danych");
         concertsAdapter.changeData(cutArray(DatabaseManager.getInstance(context).getFutureConcerts(filterAgencies())));
+//        concertsAdapter = new ConcertAdapter(getActivity(), cutArray(DatabaseManager.getInstance(context).getFutureConcerts(filterAgencies())));
         concertsListView.setAdapter(concertsAdapter);
     }
 

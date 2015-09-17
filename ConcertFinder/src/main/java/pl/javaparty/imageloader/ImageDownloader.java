@@ -29,7 +29,7 @@ public class ImageDownloader {
 
 	private static String getBandPictureAdress(String bandName) throws IOException {
 		Document doc = Jsoup.connect(LASTFM_URL + URLEncoder.encode(bandName, "UTF-8")).timeout(30000).get();
-		Element imgClass = doc.getElementsByClass("resource-images").first();
+		Element imgClass = doc.getElementsByClass("avatar").first();
 		Element imgTag = imgClass.select("img").first();
 		return imgTag.attr("src");
 	}

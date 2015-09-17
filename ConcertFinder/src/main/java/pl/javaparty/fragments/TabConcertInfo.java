@@ -4,8 +4,6 @@ import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -14,16 +12,14 @@ import android.provider.CalendarContract;
 import android.provider.CalendarContract.Events;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.gms.maps.model.LatLng;
-import pl.javaparty.concertfinder.MainActivity;
 import pl.javaparty.concertfinder.R;
 import pl.javaparty.imageloader.ImageLoader;
+import pl.javaparty.items.Concert;
 import pl.javaparty.jsoup.TicketPrices;
 import pl.javaparty.map.MapHelper;
 import pl.javaparty.prefs.Prefs;
@@ -38,6 +34,7 @@ public class TabConcertInfo extends Fragment {
     MapHelper mapHelper;
     Context context;
     int ID;
+    Concert currentConcert;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
@@ -53,25 +50,29 @@ public class TabConcertInfo extends Fragment {
         ticketsDetails2 = (TextView) view.findViewById(R.id.ticketsDetails2);
         ticketsDetails3 = (TextView) view.findViewById(R.id.ticketsDetails3);
         context = inflater.getContext();
+        mapHelper = new MapHelper(context);
         setHasOptionsMenu(true);
 
         ID = (getArguments().getInt("ID", -1));
+        currentConcert = DatabaseManager.getInstance(getActivity().getApplicationContext()).getConcertByID(ID);
 
-        String artistName = DatabaseManager.getInstance(getActivity().getApplicationContext()).getArtist(ID);
+        String artistName = currentConcert.getArtist();
         getActivity().getActionBar().setTitle(artistName);
 
         ImageLoader.init(inflater.getContext()).DisplayImage(artistName, image);
-        new calculateDistance().execute();
-
         artistName = artistName.replace(" - ", "\n");
         artistName = artistName.replace(": ", ":\n");
 
         artist.setText(artistName);
-        place.setText(DatabaseManager.getInstance(context).getCity(ID) + " " + DatabaseManager.getInstance(context).getSpot(ID));
-        date.setText(DatabaseManager.getInstance(context).getConcertByID(ID).dateToString());
+        place.setText(currentConcert.getCity() + " " + currentConcert.getSpot());
+        date.setText(currentConcert.dateToString());
 
-        int days = DatabaseManager.getInstance(context).getConcertByID(ID).daysTo();
-        //Log.i("daysLeftToBegining",Integer.toString(days));
+        String hometownFromPrefs = Prefs.getInstance(context).getCity();
+        String distanceInKm = String.valueOf((int) mapHelper.distanceFromHometown(currentConcert.getLatLng()));
+
+        distance.setText(distanceInKm + "km " + getString(R.string.distance_to) + " " + hometownFromPrefs);
+
+        int days = currentConcert.daysTo();
         if (days < 0) {
             howlong.setVisibility(View.GONE);
         } else if (days == 0) {
@@ -90,7 +91,7 @@ public class TabConcertInfo extends Fragment {
                 intent.setType("vnd.android.cursor.item/event");
                 intent.putExtra(Events.TITLE, artist.getText());
                 intent.putExtra(Events.EVENT_LOCATION, place.getText());
-                intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, DatabaseManager.getInstance(context).getConcertByID(ID).getCalendar().getTimeInMillis());
+                intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, currentConcert.getCalendar().getTimeInMillis());
                 intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true);
                 // intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
                 // DatabaseManager.getInstance(context).getConcertByID(ID).getCalendar().getTimeInMillis() + ilość_godzin*(60 * 60 * 1000));
@@ -102,10 +103,10 @@ public class TabConcertInfo extends Fragment {
         //Pobieranie cen biletów
         if (UtilsObject.isOnline(context)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                new TicketPrices(DatabaseManager.getInstance(context).getUrl(ID), DatabaseManager.getInstance(context).getAgency(ID), ticketsDetails1, ticketsDetails2, ticketsDetails3)
+                new TicketPrices(currentConcert.getUrl(), currentConcert.getAgency(), ticketsDetails1, ticketsDetails2, ticketsDetails3)
                         .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             } else {
-                new TicketPrices(DatabaseManager.getInstance(context).getUrl(ID), DatabaseManager.getInstance(context).getAgency(ID), ticketsDetails1, ticketsDetails2, ticketsDetails3).execute();
+                new TicketPrices(currentConcert.getUrl(), currentConcert.getAgency(), ticketsDetails1, ticketsDetails2, ticketsDetails3).execute();
 
             }
         } else {
@@ -116,7 +117,7 @@ public class TabConcertInfo extends Fragment {
             @Override
             public void onClick(View v) {
 
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(DatabaseManager.getInstance(context).getUrl(ID)));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(currentConcert.getUrl()));
                 startActivity(browserIntent);
 
             }
@@ -126,7 +127,7 @@ public class TabConcertInfo extends Fragment {
 
             @Override
             public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(DatabaseManager.getInstance(context).getUrl(ID)));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(currentConcert.getUrl()));
                 startActivity(browserIntent);
 
             }
@@ -137,7 +138,7 @@ public class TabConcertInfo extends Fragment {
             @Override
             public void onClick(View v) {
 
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(DatabaseManager.getInstance(context).getUrl(ID)));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(currentConcert.getUrl()));
                 startActivity(browserIntent);
             }
         });
@@ -171,7 +172,7 @@ public class TabConcertInfo extends Fragment {
                 return true;
             case R.id.website_icon:
                 Intent websiteIntent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse(DatabaseManager.getInstance(context).getUrl(ID)));
+                        Uri.parse(currentConcert.getUrl()));
                 startActivity(websiteIntent);
                 return true;
 
@@ -181,20 +182,20 @@ public class TabConcertInfo extends Fragment {
                 intent.setComponent(new ComponentName(
                         "com.spotify.music",
                         "com.spotify.music.MainActivity"));
-                intent.putExtra(SearchManager.QUERY, artist.getText().toString());
+                intent.putExtra(SearchManager.QUERY, currentConcert.getArtist());
                 this.startActivity(intent);
                 return true;
 
             case R.id.follow:
 
-                if (DatabaseManager.getInstance(context).isArtistFollowing(artist.getText().toString()))// wyjebujemy
+                if (DatabaseManager.getInstance(context).isArtistFollowing(currentConcert.getArtist()))// wyjebujemy
                 {
                     item.setTitle("Przestań obserwować");
-                    DatabaseManager.getInstance(context).removeFollowingArtist(artist.getText().toString());
+                    DatabaseManager.getInstance(context).removeFollowingArtist(currentConcert.getArtist());
                     item.setIcon(R.drawable.ic_action_not_important_w);
                 } else {
                     item.setTitle("Obserwuj");
-                    DatabaseManager.getInstance(context).addFollowingArtist(artist.getText().toString());
+                    DatabaseManager.getInstance(context).addFollowingArtist(currentConcert.getArtist());
                     item.setIcon(R.drawable.ic_action_important_w);
                 }
 
@@ -203,14 +204,14 @@ public class TabConcertInfo extends Fragment {
             case R.id.share:
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, DatabaseManager.getInstance(context).getArtist(ID) + ", " + DatabaseManager.getInstance(context).getCity(ID) + " (" + DatabaseManager.getInstance(context).getDate(ID) + ")");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, currentConcert.getArtist() + ", " + currentConcert.getCity() + " (" + DatabaseManager.getInstance(context).getDate(ID) + ")");
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
                 return true;
 
             case R.id.naviagte_icon:
                 Intent navIntent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("http://maps.google.com/maps?saddr=&daddr=" + DatabaseManager.getInstance(context).getCity(ID) + " " + DatabaseManager.getInstance(context).getSpot(ID)));
+                        Uri.parse("http://maps.google.com/maps?saddr=&daddr=" + currentConcert.getCity() + " " + currentConcert.getSpot()));
                 startActivity(navIntent);
                 return true;
 
@@ -219,52 +220,4 @@ public class TabConcertInfo extends Fragment {
         }
     }
 
-    private class calculateDistance extends AsyncTask<Void, Void, Void> {
-        int distanceInt;
-        String hometown;
-        LatLng latlng;
-
-        @Override
-        protected void onPreExecute() {
-            distanceInt = 0;
-            distance.setVisibility(View.GONE);
-            mapHelper = new MapHelper(getActivity());
-            hometown = Prefs.getInstance(context).getCity();
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            try {
-                latlng = new LatLng(Double.parseDouble(DatabaseManager.getInstance(context).getLon(ID)), Double.parseDouble(DatabaseManager.getInstance(context).getLat(ID)));
-            } catch (NumberFormatException nfe) {
-                Toast.makeText(getActivity(), getString(R.string.wrong_adress), Toast.LENGTH_SHORT).show();
-                Log.w("MAP", "Brak adresu");
-            } finally {
-                if (latlng.latitude != 0 || latlng.longitude != 0)
-                    distanceInt = mapHelper.distanceTo(latlng);
-                else
-                    distanceInt = 0;
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            if (isAdded()) {
-                try {
-                    distance.setText(distanceInt + "km " + getString(R.string.distance_to) + " " + hometown);
-                } catch (NullPointerException npe) {
-                    distance.setText(distanceInt + "km " + getString(R.string.distance_to) + " " + getString(R.string.hometown));
-                } catch (IllegalStateException ise) {
-                    //trorelolol
-                } finally {
-                    if (distanceInt != 0)
-                        distance.setVisibility(View.VISIBLE);
-                }
-            }
-            super.onPostExecute(result);
-        }
-    }
 }

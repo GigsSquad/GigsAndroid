@@ -80,7 +80,7 @@ public class ConcertAdapter extends ArrayAdapter<Concert> {
         //Log.i("MAPS", "Lat:" + Prefs.getInstance(context)..getLat(getContext()) + "\nLon:" + Prefs.getInstance(context)..getLon(getContext()));
         holder.title.setText(titleString); // + "\n" + rowItem.getDistance() + "\nLat: " + rowItem.getLat() + "\nLon" + rowItem.getLon());
         holder.title.setTextSize(50 - (length / 3));
-        holder.place.setText(getPreparedPlace(rowItem.getPlace()));
+        holder.place.setText(getPreparedPlace(rowItem.getSpot()));
         holder.date.setText(rowItem.dateToString());
 
         if (DatabaseManager.getInstance(getContext()).isConcertFavourite(rowItem.getID()))

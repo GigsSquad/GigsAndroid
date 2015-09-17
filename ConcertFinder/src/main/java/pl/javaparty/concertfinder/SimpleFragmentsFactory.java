@@ -25,14 +25,6 @@ public class SimpleFragmentsFactory {
             fragment = new SettingsFragment();
         } else if (position == 6) {
             fragment = new AboutFragment();
-        } else if (position >= 90 && position < 100) {
-            fragment = new FestivalFragment();
-
-            if (position % 90 == 0) {
-                ((FestivalFragment) fragment).setFestival("Jarocin Festival", R.drawable.jarocin);
-            } else if (position % 90 == 1) {
-                ((FestivalFragment) fragment).setFestival("Life Festival Oświęcim", R.drawable.lifefestival);
-            }
         } else if (position >= 100) {
             fragment = new RecentFragment();
             for (Agencies ch : RecentFragment.checkedAgencies.keySet()) {
